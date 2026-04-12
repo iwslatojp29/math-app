@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="theme-color" content="#1f3a5f"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<title>学コン 2026年5月 分析解説アプリ</title>
+<style>
+:root {
+  --bg: #f4f6fb;
+  --panel: #ffffff;
+  --panel-soft: #f8fbff;
+  --line: #d8e0ef;
+  --text: #1d2736;
+  --muted: #5f6b7a;
+  --accent: #1f5fa9;
+  --accent-2: #0f3761;
+  --accent-soft: #edf5ff;
+  --warn-soft: #fff7ea;
+  --danger-soft: #fff5f5;
+  --success-soft: #f4fbf6;
+  --shadow: 0 8px 24px rgba(20,40,80,0.08);
+  --scale: 1;
+}
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #eef3fb 0%, #f7f9fc 100%);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+  line-height: 1.72;
+}
+body {
+  min-height: 100vh;
+}
+.problem-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #17304d, #264d7a);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(20,40,80,0.22);
+}
+.problem-nav .nav-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  margin-right: 2px;
+  opacity: 0.95;
+}
+.nav-chip {
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.18s ease, border-color 0.18s ease;
+}
+.nav-chip:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.18);
+}
+.nav-chip.active {
+  background: #ffd86b;
+  color: #2f2a17;
+  border-color: #ffd86b;
+}
+.toolbar {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.toolbar button {
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.14);
+  color: #fff;
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.toolbar button:hover {
+  background: rgba(255,255,255,0.22);
+}
+.size-btn {
+  width: 34px;
+  padding: 0;
+  text-align: center;
+}
+#size-label {
+  min-width: 48px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+main {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+.site-header {
+  background: linear-gradient(135deg, #ffffff, #eef5ff);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.site-header h1 {
+  margin: 0 0 8px;
+  font-size: calc(2rem * var(--scale));
+  line-height: 1.25;
+}
+.site-header p {
+  margin: 6px 0;
+  font-size: calc(1rem * var(--scale));
+}
+.hero-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+.hero-pill {
+  background: var(--accent-soft);
+  color: var(--accent-2);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: calc(0.9rem * var(--scale));
+  border: 1px solid #d7e7ff;
+}
+.notice {
+  margin-top: 16px;
+  background: var(--warn-soft);
+  border: 1px solid #f0ddaf;
+  border-left: 5px solid #d49f20;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: calc(0.96rem * var(--scale));
+}
+.source-note {
+  margin: 0 auto 18px;
+  max-width: 1000px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 8px rgba(20,40,80,0.04);
+}
+.source-note p {
+  margin: 0;
+  font-size: calc(0.94rem * var(--scale));
+}
+.problem-analysis {
+  max-width: 1000px;
+  margin: 0 auto 22px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+  scroll-margin-top: 96px;
+}
+.problem-analysis[hidden] {
+  display: none !important;
+}
+.problem-analysis header {
+  border-bottom: 1px dashed #d5deeb;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+.problem-analysis h1 {
+  margin: 0 0 10px;
+  line-height: 1.28;
+  font-size: calc(1.55rem * var(--scale));
+}
+.problem-analysis h2 {
+  margin-top: 26px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 4px solid #d6b656;
+  font-size: calc(1.16rem * var(--scale));
+  line-height: 1.35;
+}
+.problem-analysis h3 {
+  margin-top: 14px;
+  margin-bottom: 8px;
+  font-size: calc(1.02rem * var(--scale));
+}
+.problem-analysis p,
+.problem-analysis li,
+.problem-analysis th,
+.problem-analysis td,
+.problem-analysis aside {
+  font-size: calc(0.98rem * var(--scale));
+}
+.problem-analysis ul,
+.problem-analysis ol {
+  margin: 8px 0 0 1.2em;
+}
+.problem-analysis .meta {
+  color: var(--muted);
+}
+.problem-analysis table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.problem-analysis th,
+.problem-analysis td {
+  border: 1px solid #c8d3e5;
+  padding: 9px 10px;
+  vertical-align: top;
+}
+.problem-analysis th {
+  background: #eef3fb;
+  text-align: left;
+}
+.answer, .answer-box, .self-explain, .danger-zone, .transfer-test, .app-card, .problem-analysis aside {
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.answer, .answer-box {
+  background: #eef6ff;
+  border: 1px solid #d8e8ff;
+}
+.self-explain {
+  background: #fffcef;
+  border: 1px solid #f0e2a4;
+}
+.danger-zone {
+  background: var(--danger-soft);
+  border: 1px solid #f2d4d4;
+}
+.transfer-test {
+  background: var(--success-soft);
+  border: 1px solid #d6eadb;
+}
+.problem-analysis aside {
+  background: #f7f9ff;
+  border: 1px solid #dde5ff;
+}
+details {
+  border: 1px solid #e1e7f2;
+  background: #fbfcff;
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-top: 10px;
+}
+summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.compact li {
+  margin-bottom: 5px;
+}
+.app-footer {
+  max-width: 1000px;
+  margin: 18px auto 0;
+  color: var(--muted);
+  font-size: calc(0.9rem * var(--scale));
+  text-align: center;
+  padding: 8px 0 24px;
+}
+.floating-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 500;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 14px;
+  background: #17304d;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(20,40,80,0.2);
+  cursor: pointer;
+}
+.floating-top:hover {
+  background: #264d7a;
+}
+@media (max-width: 900px) {
+  main {
+    padding: 18px 12px 48px;
+  }
+  .problem-analysis {
+    padding: 18px 16px;
+  }
+  .site-header {
+    padding: 20px 18px;
+  }
+  .toolbar {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 600px) {
+  .problem-nav {
+    padding: 10px 12px;
+  }
+  .nav-chip {
+    padding: 7px 10px;
+  }
+  .toolbar button {
+    padding: 6px 9px;
+    font-size: 0.76rem;
+  }
+  .site-header h1 {
+    font-size: calc(1.6rem * var(--scale));
+  }
+}
+</style>
+</head>
+<body>
+<div class="problem-nav">
+  <span class="nav-label">表示:</span>
+  <button class="nav-chip active" data-target="all" type="button">すべて</button>
+  <button class="nav-chip active" data-target="p01" type="button">01</button> <button class="nav-chip" data-target="p02" type="button">02</button> <button class="nav-chip" data-target="p03" type="button">03</button> <button class="nav-chip" data-target="p04" type="button">04</button>
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <button class="size-btn" id="size-down" type="button" title="文字を小さく">−</button>
+      <span id="size-label">100%</span>
+      <button class="size-btn" id="size-up" type="button" title="文字を大きく">＋</button>
+      <button id="size-reset" type="button">戻す</button>
+    </div>
+    <div class="toolbar-group">
+      <button id="open-all-details" type="button">詳細を開く</button>
+      <button id="close-all-details" type="button">詳細を閉じる</button>
+      <button id="print-page" type="button">印刷</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <header class="site-header">
+    <h1>学コン 2026年5月 分析解説アプリ</h1>
+    <p><strong>形式:</strong> 単体で開ける、1ファイル完結のHTMLアプリ版</p>
+    <p><strong>内容:</strong> 学コン 2026年5月の第1問〜第4問の分析解説を、ブラウザで見やすい形にまとめたもの</p>
+    <p><strong>特徴:</strong> 問題ごとの切り替え表示、文字サイズ変更、詳細解説の一括開閉、印刷に対応</p>
+    <div class="hero-row">
+      <span class="hero-pill">オフラインでも閲覧しやすい単体HTML</span>
+      <span class="hero-pill">問題ごとの表示切替</span>
+      <span class="hero-pill">文字サイズ保存</span>
+      <span class="hero-pill">詳細解説の一括開閉</span>
+    </div>
+    <div class="notice">
+      <strong>使い方</strong><br/>
+      上のボタンで「すべて表示」または「問題ごとの単独表示」を切り替えられる。文字サイズは端末に記憶される。印刷ボタンで紙やPDFにも出力しやすい。
+    </div>
+  </header>
+
+  <section class="source-note">
+<p><strong>作成元:</strong> アップロードされた分析指示書と学コン問題PDFをもとに作成したHTMLです。</p>
+</section>
+
+  <section id="content-area">
+    <article class="problem-analysis" data-problem="p01" id="p01">
+<header>
+<h1>第1問　消しゴムの個数</h1>
+<p><strong>表向きの分野:</strong> 整数の文章題・買い物</p>
+<p><strong>実際に効いている見方:</strong> 23での合同算、上限評価、9での調整</p>
+<p><strong>構造的な急所:</strong> 92円・161円・207円はすべて23の倍数で、125円だけが23で割ると10余る。つまり、合計6000円の23での余りは「中の個数」だけで決まる。</p>
+<p><strong>一言でいう勝ち筋:</strong> まず23で見て中の個数を固定し、そのあと23で割った式で特大の個数を最大化する。</p>
+<div class="answer">
+<p><strong>答え:</strong> (1) 20　(2) 2個、25個　(3) 25個</p>
+</div>
+</header>
+<section>
+<h2>1. 解く前の観察タイム</h2>
+<ol class="compact">
+<li><strong>何を求める問題か:</strong> 6000円という合計から、4種類の個数の条件をしぼる問題である。特に(2)は「中の個数」、(3)は「特大を最大にする」ことが中心。</li>
+<li><strong>不自然・特殊な条件:</strong> 値段が 92, 125, 161, 207 と並んでいて、3つだけ同じ数で割れそうな並びになっている。</li>
+<li><strong>数字の意味:</strong> 92=4×23、161=7×23、207=9×23、125=5×23+10。23が見える。</li>
+<li><strong>図の対称性・特別な位置関係:</strong> 図はない。図形ではなく、値段を「余り」に翻訳するのが本質。</li>
+<li><strong>表向きの分野と本質の分野:</strong> 表向きは買い物の文章題だが、本質は合同算と整数条件の整理。</li>
+</ol>
+</section>
+<section>
+<h2>2. 初見での観察の順番</h2>
+<ol>
+<li>
+<strong>まず見ること:</strong> 4つの値段を同じ数で割れないか試す。
+        <p>理由: 合計金額の問題で、値段の多くが同じ法でそろうと、ある種類の個数だけが余りを決める形がよく出る。</p>
+</li>
+<li>
+<strong>次に見ること:</strong> 23で割った余りを表にする。
+        <p>理由: 92,161,207 が0、125だけが10になるので、中の個数がほぼ一発で決まる。</p>
+</li>
+<li>
+<strong>その次に確認すること:</strong> 中の個数の候補が何個あるか上限で切る。
+        <p>理由: 合同式で無限に出てくる候補も、合計6000円・各1個以上という条件で有限個になる。</p>
+</li>
+<li>
+<strong>最後にやること:</strong> 特大を最大にするため、他の3種類をできるだけ安くしつつ、9で割った余りを合わせる。
+        <p>理由: 特大207円は23で割ると9に対応するので、23で割ったあとの式は「4,5,7,9」の整数問題になる。</p>
+</li>
+</ol>
+</section>
+<section>
+<h2>3. 入口候補</h2>
+<section>
+<h3>候補A　23での余りを見る</h3>
+<p><strong>何を見て立つ候補か:</strong> 92,161,207が23の倍数で、125だけがずれる。</p>
+<p><strong>最初に試す操作:</strong> 6000÷23 の余りを出し、125円の個数だけで余りを説明できるか調べる。</p>
+<p><strong>うまくいくサイン:</strong> 10×(中の個数) ≡ 6000 (mod 23) の1本にまとまる。</p>
+<p><strong>うまくいかないサイン:</strong> 2種類以上が余りを持っていて、式がまだ散らかる。</p>
+<p><strong>第一候補にする理由:</strong> 一番強い条件を最短で使えるから。</p>
+</section>
+<section>
+<h3>候補B　1個ずつ引いて残りを整理する</h3>
+<p><strong>何を見て立つ候補か:</strong> 「どれも1個以上」があるので、まず1個ずつ確保したくなる。</p>
+<p><strong>最初に試す操作:</strong> 585円を引いて、残り5415円を4種類にどう配るかを見る。</p>
+<p><strong>うまくいくサイン:</strong> 残りが23の倍数なので、合同算に乗せやすい。</p>
+<p><strong>うまくいかないサイン:</strong> ただ引いただけで、どの種類が余りを決めるか見えてこない。</p>
+<p><strong>第一候補にしない理由 / 第二候補にする理由:</strong> 見通しはよくなるが、最初の決定打は23の余りの方が強い。</p>
+</section>
+<section>
+<h3>候補C　特大を最大にするため安い物を最小にする</h3>
+<p><strong>何を見て立つ候補か:</strong> (3)は最大化なので、他をできるだけ小さくしたい。</p>
+<p><strong>最初に試す操作:</strong> 中の個数の候補ごとに、小・大の合計を最小にできるか調べる。</p>
+<p><strong>うまくいくサイン:</strong> 23で割った式にして、9での余りが合わせられる。</p>
+<p><strong>うまくいかないサイン:</strong> ただ安い順に1個ずつ置くだけでは割り切れない。</p>
+<p><strong>第三候補にする理由:</strong> 候補Aのあとに効く最大化の視点だから。</p>
+</section>
+</section>
+<section>
+<h2>4. 小実験</h2>
+<ul class="compact">
+<li><strong>最初にやる小実験:</strong> 値段を全部23で割った余りだけ並べる。</li>
+<li><strong>どこを小さくするか:</strong> 金額そのものではなく、「余り」に問題を縮小する。</li>
+<li><strong>この実験で観察したいこと:</strong> 余りを作るのが125円だけだと分かれば、中の個数が一気にしぼれる。</li>
+<li><strong>本番へ戻すときの見方:</strong> 余りで個数を決めたあと、実額に戻して存在確認と最大化をする。</li>
+</ul>
+</section>
+<section>
+<h2>5. 困ったときの6つの武器</h2>
+<ul class="compact">
+<li><strong>具体的な数で試す:</strong> 有効。中の個数が2個や25個で本当に作れるか、小さい組を1つ作ってみる。</li>
+<li><strong>逆から考える:</strong> 有効。(3)は「特大を最大」にしたいので、他を最小にする方向から考える。</li>
+<li><strong>図や表に整理する:</strong> 余り表が有効。23で割った余りだけを書くと構造が見える。</li>
+<li><strong>条件を一つ外す:</strong> 有効。「1個以上」をいったん忘れると中の個数は 2,25,48,… になる。そこから条件を戻すと48が消える。</li>
+<li><strong>似た問題を類推する:</strong> 有効。「1種類だけ余りを持つ」買い物問題は合同算の定番。</li>
+<li><strong>極端な場合を調べる:</strong> 有効。特大を最大にしたいなら、中以外を最小にしたい。</li>
+</ul>
+</section>
+<section>
+<h2>6. 見切りと切り替え</h2>
+<ul class="compact">
+<li><strong>続行してよいサイン:</strong> 23で見たときに中の個数が少数候補にしぼれる。</li>
+<li><strong>行き詰まりのサイン:</strong> 4種類全部を同時に方程式で押し切ろうとして、個数の見通しが立たない。</li>
+<li><strong>切り替え候補:</strong> 実額の式からいったん離れ、余り→23で割った式→9での調整へ切り替える。</li>
+<li><strong>切り替えた直後にやること:</strong> 92,125,161,207 を 23 で見て、0,10,0,0 に直す。</li>
+</ul>
+</section>
+<section>
+<h2>7. 解答解説の詳細分解</h2>
+<details open="">
+<summary>第1手　6000を23で見る</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> なぜ23で割る発想が自然なのだろう？</p>
+</div>
+<p><strong>何をしているか:</strong> 6000÷23 の余りを調べる。</p>
+<p><strong>観察:</strong> 92,161,207 が23の倍数でそろっている。</p>
+<p><strong>仮説:</strong> 合計6000円の23での余りは、中の消しゴムの個数だけで決まるはずだ。</p>
+<p><strong>操作:</strong> 6000 = 23×260 + 20 なので、余りは20。</p>
+<p><strong>確認:</strong> (1)の答えは20。</p>
+<p><strong>なぜ自然か:</strong> 問題文の数字そのものが23を強く示しているから。</p>
+<p><strong>つまずきやすい点:</strong> 6000をただ割るだけで終え、中の個数へつなげないこと。</p>
+</details>
+<details>
+<summary>第2手　中の個数を合同式で決める</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 4種類のうち、23で見たときに余りを作るのはどれ？</p>
+</div>
+<p><strong>何をしているか:</strong> 125円の個数だけで余り20を作る。</p>
+<p><strong>観察:</strong> 125 ≡ 10 (mod 23)、他の3種類は0。</p>
+<p><strong>仮説:</strong> 10×中の個数 ≡ 20 (mod 23) になればよい。</p>
+<p><strong>操作:</strong> 10m ≡ 20 (mod 23) より m ≡ 2 (mod 23)。</p>
+<p><strong>確認:</strong> 中の個数は 2,25,48,… だが、各1個以上より m ≤ 44 なので 2個か25個。</p>
+<p><strong>なぜ自然か:</strong> 一気に「全部の個数」から「中だけの個数」へ落とせるから。</p>
+<p><strong>つまずきやすい点:</strong> 48個も式上は出るが、他3種類を1個ずつ買えないことを落とす。</p>
+</details>
+<details>
+<summary>第3手　23で割った式にして特大を最大化する</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 特大を最大にしたいなら、何を最小にすべきだろう？</p>
+</div>
+<p><strong>何をしているか:</strong> 中の個数ごとに、小・大の負担を最小にして特大を大きくする。</p>
+<p><strong>観察:</strong> 23で割ると、小4、中5、大7、特大9 に対応する。</p>
+<p><strong>仮説:</strong> 4a+7c+9d を使えば、d を大きくするには 4a+7c をできるだけ小さくすればよい。</p>
+<p><strong>操作:</strong>
+        中が2個のとき 4a+7c+9d=250。<br/>
+        dを最大にするには 4a+7c を最小にし、しかも 250-4a-7c が9の倍数である必要がある。<br/>
+        最小は a=1, c=3 のとき 25 なので、d=(250-25)÷9=25。
+      </p>
+<p><strong>確認:</strong> 1小・2中・3大・25特大で実際に6000円になる。</p>
+<p><strong>なぜ自然か:</strong> 最大化は「残りを最小化する」に言い換えると見通しが立つ。</p>
+<p><strong>つまずきやすい点:</strong> 小と大をただ1個ずつにしてしまうと、9で割り切れず止まる。</p>
+</details>
+<details>
+<summary>第4手　もう一つの候補も確かめる</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 候補が2つあるなら、最大化では両方確かめるべきでは？</p>
+</div>
+<p><strong>何をしているか:</strong> 中が25個のときも調べて、本当に25特大が最大かを確定する。</p>
+<p><strong>観察:</strong> 中が25個なら 4a+7c+9d=125。</p>
+<p><strong>仮説:</strong> ここでも 4a+7c を最小にすればよい。</p>
+<p><strong>操作:</strong> 125-4a-7c が9の倍数になる最小は a=3, c=2 で26。よって d=(125-26)÷9=11。</p>
+<p><strong>確認:</strong> 25特大の方が大きいので、最大は25個。</p>
+<p><strong>なぜ自然か:</strong> 候補が少数にしぼれたら、全部見るのが最も安全。</p>
+<p><strong>つまずきやすい点:</strong> 中が2個の場合だけで決め打ちしてしまうこと。</p>
+</details>
+</section>
+<section>
+<h2>8. 別解と多面的理解</h2>
+<ul class="compact">
+<li><strong>別解の候補:</strong> 中の個数を m=2+23k と置き、k=0,1 だけを調べる方法。</li>
+<li><strong>その入口サイン:</strong> 合同式から「23おき」という周期が見えたとき。</li>
+<li><strong>本解との違い:</strong> 本解は余り→上限、別解は余り→一般式。</li>
+<li><strong>教育的に分かりやすい方法:</strong> 23の余り表から入る本解。</li>
+<li><strong>構造がよく見える方法:</strong> 23で割ったあとに 4,5,7,9 の式へ落とす見方。</li>
+</ul>
+</section>
+<section>
+<h2>9. 誤答・失敗データ</h2>
+<ul class="compact">
+<li><strong>起こりやすい誤った入口:</strong> 4本の方程式として一気に連立しようとする。</li>
+<li><strong>なぜ引きずられるか:</strong> 買い物問題を見ると「個数を文字で置く」習慣が先に出やすいから。</li>
+<li><strong>不足していた観察:</strong> 値段の並びが23でそろっていることへの注目。</li>
+<li><strong>修正する最初の一手:</strong> 値段を共通の数で割れないか確かめる。</li>
+<li><strong>この失敗から学ぶこと:</strong> 合計金額問題では、値段の差や余りが入口になることが多い。</li>
+</ul>
+</section>
+<section class="danger-zone">
+<h2>10. 失敗シミュレーション</h2>
+<ul class="compact">
+<li><strong>落とし穴A:</strong> 「とりあえず平均150円くらい」と見て個数のあたりをつける。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> 合計6000円なので平均発想を使いたくなるから。</li>
+<li><strong>危険信号:</strong> 中の個数がはっきり決まらず、(2)で全部を言い切れない。</li>
+<li><strong>切り替え先:</strong> 23での余りへ。</li>
+</ul>
+<ul class="compact">
+<li><strong>落とし穴B:</strong> 特大を最大にするため、小と大を1個ずつに固定してしまう。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> 「最大化=他を最小」が半分だけ正しいから。</li>
+<li><strong>危険信号:</strong> 207で割れず、端数が残る。</li>
+<li><strong>切り替え先:</strong> 23で割った式にして、9で割れるように小と大を調整する。</li>
+</ul>
+</section>
+<section>
+<h2>11. 必要要素マップ</h2>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>この問題での役割</th>
+<th>重要度</th>
+<th>見落とすとどうなるか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>条件の翻訳</td>
+<td>値段を23での余りに変える</td>
+<td>高</td>
+<td>中の個数がしぼれない</td>
+</tr>
+<tr>
+<td>合同算</td>
+<td>10m ≡ 20 (mod 23) を作る</td>
+<td>高</td>
+<td>(2)がぼやける</td>
+</tr>
+<tr>
+<td>上限評価</td>
+<td>m ≤ 44 から 48 を消す</td>
+<td>中</td>
+<td>ありえない候補を残す</td>
+</tr>
+<tr>
+<td>最大化の言い換え</td>
+<td>特大最大 → 他を最小</td>
+<td>高</td>
+<td>(3)で止まる</td>
+</tr>
+<tr>
+<td>見切りと切り替え</td>
+<td>実額の式から余りの式へ移る</td>
+<td>中</td>
+<td>計算量だけが増える</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>12. 条件 → 手法メタ知識ネットワーク</h2>
+<ul class="compact">
+<li>値段の多くが同じ数の倍数になっている → その数での合同算をまず試す</li>
+<li>1種類だけ余りを持つ → その種類の個数が余りを一気に決める</li>
+<li>「最大にせよ」が出る → ほかを最小にする言い換えを考える</li>
+<li>候補が「周期つき」で出た → 上限・下限で切る</li>
+</ul>
+</section>
+<section>
+<h2>13. 解けた後の一般化</h2>
+<ul class="compact">
+<li><strong>次に思い出すべきサイン:</strong> 値段のうち多くが同じ数の倍数になっているとき。</li>
+<li><strong>再利用できる型:</strong> 「余りで1種類の個数を決める → 実額に戻して存在確認 → 最大化」をする型。</li>
+<li><strong>別問題になる境界:</strong> 2種類以上が別々の余りを持つと、1本の合同式では決まらない。</li>
+<li><strong>一言で残す武器:</strong> まず余りで支配している種類を見つける。</li>
+</ul>
+</section>
+<section class="transfer-test">
+<h2>14. 転移テスト</h2>
+<p><strong>別問題:</strong> 4種類の切手があり、1枚の値段はこの順に 84円、101円、126円、168円です。4種類をどれも1枚以上買ったところ合計が5000円でした。101円の切手は何枚考えられますか。また、168円の切手は最多で何枚ですか。</p>
+<p><strong>元の問題と同じ構造である理由:</strong> 84,126,168 は21の倍数で、101だけが21で割った余りを持つ。まず1種類の個数を合同算で固定し、そのあと最大化する流れが同じ。</p>
+<p><strong>再利用する武器:</strong> 「多くが同じ法でそろうかを見る」「余りを作る1種類を探す」「最大化は他を最小にする」。</p>
+<p><strong>子どもへの問い:</strong> この問題では、最初に何で割ると1種類だけが目立つかな？</p>
+</section>
+<section>
+<h2>15. 子ども向け再現手順</h2>
+<ol class="compact">
+<li>値段を見て、同じ数で割れそうな組を探す。</li>
+<li>余りを持つ種類だけで、合計の余りを説明する。</li>
+<li>各1個以上・合計6000円から、その個数の候補を少数にしぼる。</li>
+<li>最大化したい種類があるなら、ほかをできるだけ小さくする。</li>
+<li>最後に本当に作れる組を1つ書いて確かめる。</li>
+</ol>
+</section>
+<aside>
+<h2>16. 指導者向け補足</h2>
+<p>この問題は「合同算を使えるか」だけでなく、「数字の並びから法を見抜けるか」が主題です。(3)では最大化の場面で、ただ最安値を並べるだけでは足りず、9での調整が必要になります。したがって、合同算と最適化の橋渡しを指導するのに向いています。</p>
+</aside>
+</article>
+
+<article class="problem-analysis" data-problem="p02" id="p02">
+<header>
+<h1>第2問　回転する正方形と軌跡</h1>
+<p><strong>表向きの分野:</strong> 図形・回転・軌跡・面積</p>
+<p><strong>実際に効いている見方:</strong> 「動く線分が掃く図形=扇形」「転がる正方形の頂点の軌跡=1/4円弧のつなぎ」「4つの部分の差=個別に求めず和と全体から出す」</p>
+<p><strong>構造的な急所:</strong> 4cmと12cmで3×3の格子ができること、90°回転だからすべて1/4円になること、P自身が回転の中心になる回ではPは動かないこと。</p>
+<p><strong>一言でいう勝ち筋:</strong> 動くものを「線」「点」に分けて追い、最後は共通部分と共通外部分の差を面積の足し算で出す。</p>
+<div class="answer">
+<p><strong>答え:</strong> (1) 25.12cm<sup>2</sup>　(2) Pの軌跡は6本の1/4円弧のつなぎ　(3) 1.12cm<sup>2</sup></p>
+</div>
+</header>
+<section>
+<h2>1. 解く前の観察タイム</h2>
+<ol class="compact">
+<li><strong>何を求める問題か:</strong> (1)は線分PRが動いてできる面積、(2)は点Pの軌跡、(3)はその軌跡が作る4つの部分のうち2つの面積差。</li>
+<li><strong>不自然・特殊な条件:</strong> 90°回転、1辺4cm、外側の正方形は12cmでちょうど3区画になる。</li>
+<li><strong>数字の意味:</strong> 12=4×3 なので、回転の中心候補が4cmごとの格子点に並ぶ。</li>
+<li><strong>図の対称性・特別な位置関係:</strong> 図2と図3では、4cm格子に沿って「ころがる」ので、軌跡は直線ではなく円弧になる。</li>
+<li><strong>表向きの分野と本質の分野:</strong> 表向きは回転図形だが、本質は「どの点が何を中心に回るか」を追う運動の問題。</li>
+</ol>
+</section>
+<section>
+<h2>2. 初見での観察の順番</h2>
+<ol>
+<li>
+<strong>まず見ること:</strong> 動いているのが「正方形全体」なのか「対角線」なのか「頂点P」なのかを分ける。
+        <p>理由: 動く対象を分けると、(1)は扇形、(2)は軌跡、(3)は面積比較と役割が整理される。</p>
+</li>
+<li>
+<strong>次に見ること:</strong> 回転の中心がどこかをはっきりさせる。
+        <p>理由: 90°回転で中心が分かれば、軌跡は1/4円弧に決まる。</p>
+</li>
+<li>
+<strong>その次に確認すること:</strong> 12cmの大正方形を4cm格子で読む。
+        <p>理由: どの格子点を中心に何回回るかが数えやすくなる。</p>
+</li>
+<li>
+<strong>最後にやること:</strong> 図3の4つの部分は別々に求めず、既知の2つの面積と全体16から差を出せないか考える。
+        <p>理由: 直接4つを全部求めると重いが、差だけなら包除で一気に出る。</p>
+</li>
+</ol>
+</section>
+<section>
+<h2>3. 入口候補</h2>
+<section>
+<h3>候補A　回転を扇形・円弧に翻訳する</h3>
+<p><strong>何を見て立つ候補か:</strong> 90°回転と、中心が毎回1点に決まっていること。</p>
+<p><strong>最初に試す操作:</strong> (1)ではPRの長さを出して扇形、(2)ではPがどの中心のまわりを回るか列挙する。</p>
+<p><strong>うまくいくサイン:</strong> 面積も軌跡も「1/4円」で統一できる。</p>
+<p><strong>うまくいかないサイン:</strong> 中心が曖昧で、ただ図を見て曲線を想像してしまう。</p>
+<p><strong>第一候補にする理由:</strong> 問題文の「90°回転」が最強の条件だから。</p>
+</section>
+<section>
+<h3>候補B　座標を置いて点Pを追う</h3>
+<p><strong>何を見て立つ候補か:</strong> 4cm格子があるので座標化しやすい。</p>
+<p><strong>最初に試す操作:</strong> B=(0,0), C=(12,0), D=(12,12), A=(0,12) と置き、Pの位置を順に書く。</p>
+<p><strong>うまくいくサイン:</strong> Pの位置が (0,4)→(8,4)→(12,0)… のように追える。</p>
+<p><strong>うまくいかないサイン:</strong> 数字だけ追って図形の意味が薄れる。</p>
+<p><strong>第一候補にしない理由 / 第二候補にする理由:</strong> 確認には強いが、最初の発想としては扇形の方が自然。</p>
+</section>
+<section>
+<h3>候補C　図3を共通部分と共通外部分で比べる</h3>
+<p><strong>何を見て立つ候補か:</strong> 4つの部分のうち「差だけ」を聞いている。</p>
+<p><strong>最初に試す操作:</strong> X側の部分面積、Y側の部分面積、正方形全体16 を使って差を作れないか考える。</p>
+<p><strong>うまくいくサイン:</strong> 交わる2曲線で区切られた4部分を、個別計算なしで処理できる。</p>
+<p><strong>うまくいかないサイン:</strong> 4つを全部1つずつ求め始める。</p>
+<p><strong>第三候補にする理由:</strong> 軌跡が描けたあとに決め手になる視点だから。</p>
+</section>
+</section>
+<section>
+<h2>4. 小実験</h2>
+<ul class="compact">
+<li><strong>最初にやる小実験:</strong> (1)で、対角線PRだけを取り出して「端Rで90°回すと何ができるか」を考える。</li>
+<li><strong>どこを小さくするか:</strong> 正方形全体ではなく、動く線分1本・点1個に縮める。</li>
+<li><strong>この実験で観察したいこと:</strong> 線分は扇形、点は円弧を描くこと。</li>
+<li><strong>本番へ戻すときの見方:</strong> 図2では「Pという点」を、図3では「2本の円弧に囲まれた部分」を見る。</li>
+</ul>
+</section>
+<section>
+<h2>5. 困ったときの6つの武器</h2>
+<ul class="compact">
+<li><strong>具体的な数で試す:</strong> 有効。4cmと12cmがちょうど3区画になるので、位置を具体的に追いやすい。</li>
+<li><strong>逆から考える:</strong> 有効。Pがどこに戻るか、どこで動かないかを終点からも見られる。</li>
+<li><strong>図や表に整理する:</strong> 必須。中心点の順番を表にするだけでも軌跡の見落としが減る。</li>
+<li><strong>条件を一つ外す:</strong> 有効。辺の長さを1として考えると、同じ形で1/4円弧の連なりになる。</li>
+<li><strong>似た問題を類推する:</strong> 有効。サイコロや正方形を転がす軌跡問題と同型。</li>
+<li><strong>極端な場合を調べる:</strong> 有効。P自身が回転の中心になる回は、Pが動かないことに気づける。</li>
+</ul>
+</section>
+<section>
+<h2>6. 見切りと切り替え</h2>
+<ul class="compact">
+<li><strong>続行してよいサイン:</strong> どの回転も中心が格子点1つに定まっている。</li>
+<li><strong>行き詰まりのサイン:</strong> 図を見ながら「たぶんこういう曲線」と目分量で描き始める。</li>
+<li><strong>切り替え候補:</strong> 座標や格子点の列挙に切り替える。</li>
+<li><strong>切り替えた直後にやること:</strong> Pの位置と回転中心を順に書く。</li>
+</ul>
+</section>
+<section>
+<h2>7. 解答解説の詳細分解</h2>
+<details open="">
+<summary>第1手　(1) 線分PRが掃く面積を扇形にする</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> なぜ「正方形」ではなく「対角線PR」に注目すると楽になるのだろう？</p>
+</div>
+<p><strong>何をしているか:</strong> PRの長さを半径とする90°の扇形の面積を求める。</p>
+<p><strong>観察:</strong> PはRを中心に90°回るので、PRの長さはずっと一定。</p>
+<p><strong>仮説:</strong> 線分PRが通る部分は、半径PRの1/4円になる。</p>
+<p><strong>操作:</strong> PR=4√2。面積は 3.14×(4√2)<sup>2</sup>÷4 = 3.14×32÷4 = 25.12。</p>
+<p><strong>確認:</strong> (1)は25.12cm<sup>2</sup>。</p>
+<p><strong>なぜ自然か:</strong> 回転問題では「長さが一定のもの」は扇形に直結するから。</p>
+<p><strong>つまずきやすい点:</strong> 半径を4と見てしまうこと。半径は辺ではなく対角線PR。</p>
+</details>
+<details>
+<summary>第2手　(2) Pの軌跡を「回転中心の列」で追う</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> どこを中心に回るかが分かれば、Pの軌跡はどんな形になる？</p>
+</div>
+<p><strong>何をしているか:</strong> 正方形PQRSが内側を転がるたびに、Pがどの格子点を中心に1/4円を描くかを並べる。</p>
+<p><strong>観察:</strong> 大正方形は4cmごとの3×3格子になっている。</p>
+<p><strong>仮説:</strong> Pの軌跡は直線ではなく、格子点を中心にする1/4円弧の連続になる。</p>
+<p><strong>操作:</strong> B=(0,0), C=(12,0), D=(12,12), A=(0,12) とすると、Pは
+        (0,4) から出発し、<br/>
+        中心 (4,0), 半径4√2 の1/4円弧で (8,4) へ、<br/>
+        中心 (8,0), 半径4 の1/4円弧で (12,0) へ、<br/>
+        中心 (12,4), 半径4 の1/4円弧で (8,4) へ、<br/>
+        中心 (12,8), 半径4√2 の1/4円弧で (8,12) へ、<br/>
+        中心 (4,12), 半径4 の1/4円弧で (4,8) へ、<br/>
+        中心 (0,8), 半径4 の1/4円弧で (0,4) に戻る。
+      </p>
+<p><strong>確認:</strong> 図2にはこの6本の弧を描けばよい。</p>
+<p><strong>なぜ自然か:</strong> 「転がる」ではなく「毎回、ある頂点を中心に90°回る」と言い換えると、軌跡が見える。</p>
+<p><strong>つまずきやすい点:</strong> 8回転があるのに、Pが動くのは6回だけであること。2回はP自身が中心になるので軌跡は増えない。</p>
+</details>
+<details>
+<summary>第3手　(3) X側とY側の面積を先に読む</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 4つ全部を求めなくても、差だけなら出せないだろうか？</p>
+</div>
+<p><strong>何をしているか:</strong> 色つきの4×4正方形を2本の曲線で4部分に分けたとき、X側とY側の既知面積を使う。</p>
+<p><strong>観察:</strong> X側の曲線は、中心X・半径4の1/4円。Y側の曲線は、中心(12,8)・半径4√2・中心角45°の円の一部。</p>
+<p><strong>仮説:</strong> 「どちらにも属する部分」と「どちらにも属さない部分」の差は、面積の和と全体で出せる。</p>
+<p><strong>操作:</strong>
+        X側の面積を A、Y側の面積を B、色つき正方形全体を16 とする。<br/>
+        A = 1/4×3.14×4<sup>2</sup> = 12.56。<br/>
+        B = 45°の扇形(半径4√2) − たて4・よこ4の直角三角形<br/>
+        = 1/8×3.14×32 − 8 = 12.56 − 8 = 4.56。<br/>
+        4つの部分を「Xだけ」「Yだけ」「両方」「どちらでもない」に分けると、<br/>
+        A+B = 16 + (両方 − どちらでもない)。<br/>
+        よって差は 12.56 + 4.56 − 16 = 1.12。
+      </p>
+<p><strong>確認:</strong> 点Xも点Yも含まない2部分の面積差は1.12cm<sup>2</sup>。</p>
+<p><strong>なぜ自然か:</strong> 差を聞かれているときは、4部分を全部求めるより「和−全体」の方が軽いから。</p>
+<p><strong>つまずきやすい点:</strong> 4つの部分を1つずつ求めようとして、円弧の交点計算に入ってしまうこと。</p>
+</details>
+</section>
+<section>
+<h2>8. 別解と多面的理解</h2>
+<ul class="compact">
+<li><strong>別解の候補:</strong> 座標を置いて円の方程式で交点を出し、積分や図形分割で処理する方法。</li>
+<li><strong>その入口サイン:</strong> 格子点がはっきりしていて、各弧の中心と半径が座標で書けるとき。</li>
+<li><strong>本解との違い:</strong> 別解は正確だが重い。本解は動きの意味がそのまま図形になる。</li>
+<li><strong>教育的に分かりやすい方法:</strong> 「回転→扇形・円弧」の本解。</li>
+<li><strong>構造がよく見える方法:</strong> (3)の包除的な差の出し方。</li>
+</ul>
+</section>
+<section>
+<h2>9. 誤答・失敗データ</h2>
+<ul class="compact">
+<li><strong>起こりやすい誤った入口:</strong> Pの軌跡を折れ線や直線で結んでしまう。</li>
+<li><strong>なぜ引きずられるか:</strong> 正方形の位置だけを見て、回転の中心を見ていないから。</li>
+<li><strong>不足していた観察:</strong> 90°回転なら、点の軌跡は円弧になるという基本事実。</li>
+<li><strong>修正する最初の一手:</strong> 「この回はどこを中心に回っているか」を毎回言葉で言う。</li>
+<li><strong>この失敗から学ぶこと:</strong> 運動系の図形は、図形全体でなく1点・1線分に縮めて見ると整理しやすい。</li>
+</ul>
+</section>
+<section class="danger-zone">
+<h2>10. 失敗シミュレーション</h2>
+<ul class="compact">
+<li><strong>落とし穴A:</strong> (1)で半径を4とする。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> 正方形の辺4cmが目立つから。</li>
+<li><strong>危険信号:</strong> 「対角線PRが通る部分」と書いてあるのに、辺しか見ていない。</li>
+<li><strong>切り替え先:</strong> まずPRの長さを出す。</li>
+</ul>
+<ul class="compact">
+<li><strong>落とし穴B:</strong> (3)で4部分を全部個別に出しにいく。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> 面積問題では全部計算したくなるから。</li>
+<li><strong>危険信号:</strong> 円弧の交点や細かい積み上げに入って、計算が急に重くなる。</li>
+<li><strong>切り替え先:</strong> X側面積 + Y側面積 − 正方形全体 = 差、を使う。</li>
+</ul>
+</section>
+<section>
+<h2>11. 必要要素マップ</h2>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>この問題での役割</th>
+<th>重要度</th>
+<th>見落とすとどうなるか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回転の翻訳</td>
+<td>線分→扇形、点→円弧にする</td>
+<td>高</td>
+<td>形が見えない</td>
+</tr>
+<tr>
+<td>4cm格子</td>
+<td>中心点の列挙をしやすくする</td>
+<td>高</td>
+<td>軌跡が曖昧になる</td>
+</tr>
+<tr>
+<td>動かない回の把握</td>
+<td>Pが中心の回を除く</td>
+<td>中</td>
+<td>弧を描きすぎる</td>
+</tr>
+<tr>
+<td>包除の発想</td>
+<td>4部分の差を軽く出す</td>
+<td>高</td>
+<td>(3)が重くなる</td>
+</tr>
+<tr>
+<td>図の読み替え</td>
+<td>正方形全体でなく点Pだけを追う</td>
+<td>中</td>
+<td>運動の本質を取り逃す</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>12. 条件 → 手法メタ知識ネットワーク</h2>
+<ul class="compact">
+<li>90°回転 + 中心が固定 → 1/4円弧や扇形をまず疑う</li>
+<li>正方形が格子ぴったりに動く → 頂点の軌跡は格子点中心の弧として追える</li>
+<li>「差だけ」を聞かれる → 個別計算より和と全体で出せないか考える</li>
+<li>点が回転中心になる回がある → その回は軌跡が増えない</li>
+</ul>
+</section>
+<section>
+<h2>13. 解けた後の一般化</h2>
+<ul class="compact">
+<li><strong>次に思い出すべきサイン:</strong> 線分や頂点が回転する問題を見たとき。</li>
+<li><strong>再利用できる型:</strong> 「動くものを1点・1線分に縮める」「軌跡は円弧」「差は包除で出す」。</li>
+<li><strong>別問題になる境界:</strong> 回転角が90°でない、または中心が連続的に動くと、単純な1/4円弧ではなくなる。</li>
+<li><strong>一言で残す武器:</strong> 動きを図形へ翻訳する。</li>
+</ul>
+</section>
+<section class="transfer-test">
+<h2>14. 転移テスト</h2>
+<p><strong>別問題:</strong> 正方形のガラス窓の左上に散水口Xがあり、半径4mの水が1/4円の形で届きます。窓の右外側にも別の散水口があり、そこからは半径4√2m・中心角45°の水が窓の一部に届きます。2本の水の境界線で窓が4つに分かれたとき、どちらの散水口も含まない2部分の面積差を求めなさい。</p>
+<p><strong>元の問題と同じ構造である理由:</strong> 2本の曲線が正方形を4つに分けるが、求めたいのは差なので、個別計算でなく「片側面積どうしの和 − 全体」で出せる。</p>
+<p><strong>再利用する武器:</strong> 1/4円・扇形・包除。</p>
+<p><strong>子どもへの問い:</strong> 4つ全部を出さなくても、差だけならどんな足し算・引き算で出せそう？</p>
+</section>
+<section>
+<h2>15. 子ども向け再現手順</h2>
+<ol class="compact">
+<li>何が動くかを「点」「線分」に分ける。</li>
+<li>回転の中心を毎回はっきりさせる。</li>
+<li>90°回転なら、まず1/4円弧や扇形を考える。</li>
+<li>軌跡は格子点を中心に順番に描く。</li>
+<li>面積差だけを聞かれたら、全部個別に出さず、和と全体で出せないか考える。</li>
+</ol>
+</section>
+<aside>
+<h2>16. 指導者向け補足</h2>
+<p>この問題は「回転の面積」と「軌跡」と「包除」が1問に入っていますが、共通しているのは“動くものを縮めて見る”ことです。正方形全体を追わせると混乱しやすいので、(1)はPR、(2)はP、(3)は色つき4×4正方形の中だけ、と対象を細くする指導が効果的です。</p>
+</aside>
+</article>
+
+<article class="problem-analysis" data-problem="p03" id="p03">
+<header>
+<h1>第3問　3人の速さ</h1>
+<p><strong>表向きの分野:</strong> 速さ・出会い</p>
+<p><strong>実際に効いている見方:</strong> 「6分後にB着」を距離BC=6×花子の速さに翻訳すること、休憩6分を花子の最後の6分と対応させること</p>
+<p><strong>構造的な急所:</strong> Cは単なる途中点ではなく、花子と太郎の出会い点であり、同時に次郎の出発点でもある。さらに休憩6分がぴったり入っているので、時間差がきれいに消える。</p>
+<p><strong>一言でいう勝ち筋:</strong> BCを6分ぶんの距離に直し、ACを使って太郎と次郎の速さを花子で表し、差126から花子を先に決める。</p>
+<div class="answer">
+<p><strong>答え:</strong> (1) アとエ　(2) 63m/分　(3) 54m/分</p>
+</div>
+</header>
+<section>
+<h2>1. 解く前の観察タイム</h2>
+<ol class="compact">
+<li><strong>何を求める問題か:</strong> 3人の速さを比べたり、具体的に花子さん・太郎さんの速さを求める問題。</li>
+<li><strong>不自然・特殊な条件:</strong> 「花子さんは太郎さんとCですれ違い、その6分後にBに着いた」「次郎さんはAで6分休憩した」がぴったり同じ6分で置かれている。</li>
+<li><strong>数字の意味:</strong> 819m は最終的に分ける全体距離、126m/分は次郎と太郎の差、6分はCからBまでの花子の距離を作る。</li>
+<li><strong>図の対称性・特別な位置関係:</strong> A—C—B の一直線。Cは全員にとって重要な地点。</li>
+<li><strong>表向きの分野と本質の分野:</strong> 表向きは速さだが、本質は距離の置き換えと、同じ時刻に対応する時間の整理。</li>
+</ol>
+</section>
+<section>
+<h2>2. 初見での観察の順番</h2>
+<ol>
+<li>
+<strong>まず見ること:</strong> 花子さんがCからBまで6分で進んだこと。
+        <p>理由: これで BC = 6×花子の速さ と書ける。Cの位置がいきなり数式になる。</p>
+</li>
+<li>
+<strong>次に見ること:</strong> 出会いまでの時間は花子さんも太郎さんも同じこと。
+        <p>理由: AC と BC を、それぞれ花子と太郎の速さで結べる。</p>
+</li>
+<li>
+<strong>その次に確認すること:</strong> 次郎さんの「移動時間」と花子さんの「Cまでの時間」が等しいこと。
+        <p>理由: どちらも全体の到着時刻から6分を引いた時間だから。</p>
+</li>
+<li>
+<strong>最後にやること:</strong> 太郎・次郎を花子で表し、差126を使う。
+        <p>理由: 3人を別々に追うより、1人を基準にまとめる方が軽い。</p>
+</li>
+</ol>
+</section>
+<section>
+<h2>3. 入口候補</h2>
+<section>
+<h3>候補A　花子さんの速さを基準にしてCの位置を決める</h3>
+<p><strong>何を見て立つ候補か:</strong> 「6分後にB」という強い条件。</p>
+<p><strong>最初に試す操作:</strong> 花子の速さを h として BC=6h, AC=819-6h と置く。</p>
+<p><strong>うまくいくサイン:</strong> 太郎・次郎の速さがどちらも h と AC で表せる。</p>
+<p><strong>うまくいかないサイン:</strong> Cの位置をただの未知数にして、式が増える。</p>
+<p><strong>第一候補にする理由:</strong> 6分の条件を最も強く使えるから。</p>
+</section>
+<section>
+<h3>候補B　3人の総時間で連立方程式を作る</h3>
+<p><strong>何を見て立つ候補か:</strong> 同時出発・同時到着・休憩があるので、時間表を作りたくなる。</p>
+<p><strong>最初に試す操作:</strong> 出会いまでの時間、到着までの時間を全部文字で置く。</p>
+<p><strong>うまくいくサイン:</strong> 文字の数が増えすぎない。</p>
+<p><strong>うまくいかないサイン:</strong> Cの位置、会う時刻、速さの3種類が同時に未知になって重い。</p>
+<p><strong>第一候補にしない理由 / 第二候補にする理由:</strong> 解けるが、6分の意味がぼやけやすい。</p>
+</section>
+<section>
+<h3>候補C　相対速度だけで押す</h3>
+<p><strong>何を見て立つ候補か:</strong> 出会い・すれ違いの問題だから。</p>
+<p><strong>最初に試す操作:</strong> 花子と太郎の和速さでAC,BCを扱おうとする。</p>
+<p><strong>うまくいくサイン:</strong> Cの位置がすぐに書ける。</p>
+<p><strong>うまくいかないサイン:</strong> 次郎の休憩6分が処理しづらい。</p>
+<p><strong>第三候補にする理由:</strong> この問題の決め手は相対速度よりも6分の対応関係にあるから。</p>
+</section>
+</section>
+<section>
+<h2>4. 小実験</h2>
+<ul class="compact">
+<li><strong>最初にやる小実験:</strong> 花子の速さを h と仮に置いて、CからBまでの距離だけ先に書く。</li>
+<li><strong>どこを小さくするか:</strong> 819m全体ではなく、最後の6分ぶんだけを見る。</li>
+<li><strong>この実験で観察したいこと:</strong> Cが「未知の点」から「819-6hで表せる点」に変わること。</li>
+<li><strong>本番へ戻すときの見方:</strong> Cの位置が決まれば、出会いまでの時間と次郎の移動時間が比較できる。</li>
+</ul>
+</section>
+<section>
+<h2>5. 困ったときの6つの武器</h2>
+<ul class="compact">
+<li><strong>具体的な数で試す:</strong> 有効。最後の6分を距離に直すとBCが具体化する。</li>
+<li><strong>逆から考える:</strong> 有効。B到着から6分戻るとCが見える。</li>
+<li><strong>図や表に整理する:</strong> 必須。A—C—B の線分図が有効。</li>
+<li><strong>条件を一つ外す:</strong> 有効。次郎の休憩6分がなければどうなるか考えると、この6分の意味が浮く。</li>
+<li><strong>似た問題を類推する:</strong> 有効。「最後の何分」という条件は距離に直すのが定番。</li>
+<li><strong>極端な場合を調べる:</strong> 中。CがB寄りかA寄りかを考えると、BC=6h が自然になる。</li>
+</ul>
+</section>
+<section>
+<h2>6. 見切りと切り替え</h2>
+<ul class="compact">
+<li><strong>続行してよいサイン:</strong> BC=6h から AC まで1本で書ける。</li>
+<li><strong>行き詰まりのサイン:</strong> Cの距離、出会い時刻、3人の速さを全部別文字で置いてしまう。</li>
+<li><strong>切り替え候補:</strong> 「花子基準」に戻す。</li>
+<li><strong>切り替えた直後にやること:</strong> BC=6h、AC=819-6h と書く。</li>
+</ul>
+</section>
+<section>
+<h2>7. 解答解説の詳細分解</h2>
+<details open="">
+<summary>第1手　花子さんの最後の6分からBCを出す</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 「6分後にBに着いた」は、何を距離に変えられる？</p>
+</div>
+<p><strong>何をしているか:</strong> 花子さんの速さを h m/分 と置き、BC=6h とする。</p>
+<p><strong>観察:</strong> 花子さんはCで太郎さんと会ったあと、6分でBまで行っている。</p>
+<p><strong>仮説:</strong> CからBまでの距離は、花子さんの6分間の進む距離だ。</p>
+<p><strong>操作:</strong> BC=6h、したがって AC=819-6h。</p>
+<p><strong>確認:</strong> Cの位置が h だけで表せた。</p>
+<p><strong>なぜ自然か:</strong> 「最後の何分」は、速さ×時間で距離に直すのが最も強いから。</p>
+<p><strong>つまずきやすい点:</strong> BCを未知数のまま残してしまうこと。</p>
+</details>
+<details>
+<summary>第2手　太郎さんの速さを h で表す</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 花子さんと太郎さんは、Cに着くまで同じ何を共有している？</p>
+</div>
+<p><strong>何をしているか:</strong> 出会いまでの時間が同じことから、太郎さんの速さ t を表す。</p>
+<p><strong>観察:</strong> 出会いまでの時間は 花子: AC/h、太郎: BC/t。</p>
+<p><strong>仮説:</strong> AC/h = BC/t が成り立つ。</p>
+<p><strong>操作:</strong> t = h×BC/AC = h×(6h)/(819-6h)。</p>
+<p><strong>確認:</strong> 太郎さんの速さも h と AC で書けた。</p>
+<p><strong>なぜ自然か:</strong> 出会い問題では「同じ時刻」を見つけるのが最優先だから。</p>
+<p><strong>つまずきやすい点:</strong> 和速さに飛びついて、Cまでの個別距離を使わないこと。</p>
+</details>
+<details>
+<summary>第3手　次郎さんの移動時間は花子さんのCまでの時間と等しい</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 休憩6分は、どの時間と打ち消し合うだろう？</p>
+</div>
+<p><strong>何をしているか:</strong> 次郎さんの「移動だけの時間」を花子さんの「Cまでの時間」に合わせる。</p>
+<p><strong>観察:</strong> 花子さんは Cまで来てから6分でBに着く。次郎さんは移動後に6分休憩してからBへ行き、花子さんと同時にBへ着く。</p>
+<p><strong>仮説:</strong> 花子さんの全体時間 − 6分 = 次郎さんの移動時間。</p>
+<p><strong>操作:</strong> 次郎さんの移動距離は CA+AB = AC+819。よって
+        j = h×(AC+819)/AC。
+      </p>
+<p><strong>確認:</strong> 3人のうち2人が、花子さん基準で同じ形に乗った。</p>
+<p><strong>なぜ自然か:</strong> 問題文で6分が2回出るときは、引き算で時間をそろえられることが多いから。</p>
+<p><strong>つまずきやすい点:</strong> 次郎さんの休憩6分を独立した別条件としてしか見ないこと。</p>
+</details>
+<details>
+<summary>第4手　差126から花子さんの速さを先に決める</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> t と j を別々に求めなくても、差だけなら簡単にできない？</p>
+</div>
+<p><strong>何をしているか:</strong> j-t を計算して、2h になることを使う。</p>
+<p><strong>観察:</strong> t = h×BC/AC、j = h×(AC+819)/AC、しかも BC=819-AC。</p>
+<p><strong>仮説:</strong> j-t は大きく整理できる。</p>
+<p><strong>操作:</strong>
+        j-t = h×{(AC+819)-BC}/AC
+        = h×{(AC+819)-(819-AC)}/AC
+        = h×2AC/AC
+        = 2h。<br/>
+        これが126なので h=63。<br/>
+        よって BC=378, AC=441。出会いまでの時間は 441÷63=7分。<br/>
+        したがって t=378÷7=54。
+      </p>
+<p><strong>確認:</strong> 花子63、太郎54、次郎180。</p>
+<p><strong>なぜ自然か:</strong> 差126が与えられているなら、差の式を作るのが最短だから。</p>
+<p><strong>つまずきやすい点:</strong> 先に太郎と次郎を個別に出そうとして計算を重くすること。</p>
+</details>
+<details>
+<summary>第5手　(1)の等しい組を読む</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> j-t=2h から、h+t と j-h の関係はどうなる？</p>
+</div>
+<p><strong>何をしているか:</strong> 数値を入れなくても等しい組を見抜く。</p>
+<p><strong>観察:</strong> j=t+2h。</p>
+<p><strong>仮説:</strong> j-h = t+h。</p>
+<p><strong>操作:</strong> したがって、花子と太郎の速さの和 = 花子と次郎の速さの差。</p>
+<p><strong>確認:</strong> (1)はアとエ。</p>
+<p><strong>なぜ自然か:</strong> 差126の条件を最も直接使っているから。</p>
+<p><strong>つまずきやすい点:</strong> (1)を最後まで保留し、数値が出るまで待ってしまうこと。</p>
+</details>
+</section>
+<section>
+<h2>8. 別解と多面的理解</h2>
+<ul class="compact">
+<li><strong>別解の候補:</strong> Cまでの時間を7分と仮定して逆算し、BCとACを出す方法。</li>
+<li><strong>その入口サイン:</strong> 819が 63×13, 54×? のように割りやすいとき。</li>
+<li><strong>本解との違い:</strong> 別解は数当てに寄る。本解は6分の意味がきれいに構造化される。</li>
+<li><strong>教育的に分かりやすい方法:</strong> BC=6h から入る本解。</li>
+<li><strong>構造がよく見える方法:</strong> j-t=2h を作る見方。</li>
+</ul>
+</section>
+<section>
+<h2>9. 誤答・失敗データ</h2>
+<ul class="compact">
+<li><strong>起こりやすい誤った入口:</strong> Cを単なる未知点として置き、速さも時間も全部文字にする。</li>
+<li><strong>なぜ引きずられるか:</strong> 速さの文章題では「文字を増やす」方が安心に見えるから。</li>
+<li><strong>不足していた観察:</strong> 「6分後にB」という条件がBCを直接作ること。</li>
+<li><strong>修正する最初の一手:</strong> 最後の6分を距離に変換する。</li>
+<li><strong>この失敗から学ぶこと:</strong> 時間差が同じ数で2回出るときは、引いてそろえる発想が有効。</li>
+</ul>
+</section>
+<section class="danger-zone">
+<h2>10. 失敗シミュレーション</h2>
+<ul class="compact">
+<li><strong>落とし穴A:</strong> 相対速度だけで押し切ろうとする。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> 出会い問題だから。</li>
+<li><strong>危険信号:</strong> 次郎さんの休憩6分が処理できず、式が増える。</li>
+<li><strong>切り替え先:</strong> まずBC=6h を作る。</li>
+</ul>
+<ul class="compact">
+<li><strong>落とし穴B:</strong> 126を最後まで使わない。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> 先に全員の速さを全部求めたくなるから。</li>
+<li><strong>危険信号:</strong> 太郎・次郎を個別に出す式が複雑になる。</li>
+<li><strong>切り替え先:</strong> 差126に合わせて j-t を先に作る。</li>
+</ul>
+</section>
+<section>
+<h2>11. 必要要素マップ</h2>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>この問題での役割</th>
+<th>重要度</th>
+<th>見落とすとどうなるか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>時間→距離の翻訳</td>
+<td>BC=6h を作る</td>
+<td>高</td>
+<td>Cがただの未知点のまま残る</td>
+</tr>
+<tr>
+<td>同時刻の利用</td>
+<td>出会いまでの時間、移動時間をそろえる</td>
+<td>高</td>
+<td>式がばらばらになる</td>
+</tr>
+<tr>
+<td>休憩時間の処理</td>
+<td>次郎の全体時間から6分を引く</td>
+<td>高</td>
+<td>次郎の式が重い</td>
+</tr>
+<tr>
+<td>差の式づくり</td>
+<td>j-t=2h を作る</td>
+<td>高</td>
+<td>126が活きない</td>
+</tr>
+<tr>
+<td>線分図</td>
+<td>A-C-Bの位置関係を保つ</td>
+<td>中</td>
+<td>距離対応を取り違える</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>12. 条件 → 手法メタ知識ネットワーク</h2>
+<ul class="compact">
+<li>「会ってから6分後に到着」 → その区間距離を速さ×時間で置く</li>
+<li>同じ数字の休憩時間と到着差が出る → 全体時間から引いてそろえる</li>
+<li>差の情報が与えられる → 個別値より差の式を先に作る</li>
+<li>途中点Cが共通条件に何度も出る → Cを基準点として距離を整理する</li>
+</ul>
+</section>
+<section>
+<h2>13. 解けた後の一般化</h2>
+<ul class="compact">
+<li><strong>次に思い出すべきサイン:</strong> 「最後の何分」「休憩何分後に同時到着」のように同じ時間差が並ぶとき。</li>
+<li><strong>再利用できる型:</strong> 距離を1人の速さで置き、他の人の速さをその人基準で表す型。</li>
+<li><strong>別問題になる境界:</strong> 休憩時間と到着差が一致しないと、ここまできれいには消えない。</li>
+<li><strong>一言で残す武器:</strong> 同じ時間差は、引いてそろえる。</li>
+</ul>
+</section>
+<section class="transfer-test">
+<h2>14. 転移テスト</h2>
+<p><strong>別問題:</strong> A町からB町まで900mあります。健太さんはAからBへ、同時に優子さんはBからAへ、翔さんはAとBの間のCからAへ出発しました。健太さんは優子さんとCで会い、その5分後にBへ着きました。翔さんはAで5分休んでからBへ向かい、健太さんと同時にBへ着きました。さらに翔さんは優子さんより毎分100m速いです。健太さんと優子さんの速さを求めなさい。</p>
+<p><strong>元の問題と同じ構造である理由:</strong> 「出会ってから到着までの5分」と「休憩5分」が対応し、Cの位置を1人の速さで表して差の式を作れる。</p>
+<p><strong>再利用する武器:</strong> 最後の5分を距離にする、休憩を引いて時間をそろえる、差を先に作る。</p>
+<p><strong>子どもへの問い:</strong> まずCからBまでの距離を、誰の速さで書く？</p>
+</section>
+<section>
+<h2>15. 子ども向け再現手順</h2>
+<ol class="compact">
+<li>「最後の何分」を見つけたら、その区間を距離にする。</li>
+<li>一直線の図に A-C-B を書き、全体から残りを出す。</li>
+<li>出会いまで・到着までの「同じ時間」をそろえる。</li>
+<li>3人全部を別々に求めようとせず、1人基準でまとめる。</li>
+<li>差が与えられたら、差の式を先に作る。</li>
+</ol>
+</section>
+<aside>
+<h2>16. 指導者向け補足</h2>
+<p>この問題の伸びどころは、相対速度よりも「時間差を距離に変える」「同じ6分を引いて時間をそろえる」ことです。速さの難問でありがちな“方程式を増やすだけ”の解き方から、条件の翻訳へ切り替える練習に向いています。</p>
+</aside>
+</article>
+
+<article class="problem-analysis" data-problem="p04" id="p04">
+<header>
+<h1>第4問　水槽の水位の周期</h1>
+<p><strong>表向きの分野:</strong> 規則性・水量変化</p>
+<p><strong>実際に効いている見方:</strong> 1Lがそのまま1cmに対応すること、14cmを0に移して「&lt;0 なら +x、0以上なら -y」にすること、周期を (x+y)/gcd(x,y) で読むこと</p>
+<p><strong>構造的な急所:</strong> 底面積1000cm<sup>2</sup> なので 1L = 1cm の高さ変化になる。条件分岐は「14を境に入れる/ぬく」だけなので、14を基準にした周期問題へ変わる。</p>
+<p><strong>一言でいう勝ち筋:</strong> 水位を 14cm からの差に置き換え、毎分「xずつ進む円周運動」と見る。</p>
+<div class="answer">
+<p><strong>答え:</strong> (1) 9分後、9分後　(2)(ア) 1:9、3:7、7:3、9:1　(2)(イ) (1,9), (3,7), (6,14), (14,6), (21,9), (28,12), (35,15), (54,6)</p>
+</div>
+</header>
+<section>
+<h2>1. 解く前の観察タイム</h2>
+<ol class="compact">
+<li><strong>何を求める問題か:</strong> 初めて高さ8cmに戻る時刻と、そのような(x,y)の全探索。</li>
+<li><strong>不自然・特殊な条件:</strong> 底面積1000cm<sup>2</sup>、1Lごと、14cm未満なら入れる・14cm以上ならぬく、という条件分岐。</li>
+<li><strong>数字の意味:</strong> 1L=1000cm<sup>3</sup> なので、高さは1Lにつき1cm変わる。8cmと14cmの差は6cm。</li>
+<li><strong>図の対称性・特別な位置関係:</strong> 図はないが、14cmを境に上側と下側を行き来する。</li>
+<li><strong>表向きの分野と本質の分野:</strong> 表向きは水槽だが、本質は条件分岐つきの周期・合同算。</li>
+</ol>
+</section>
+<section>
+<h2>2. 初見での観察の順番</h2>
+<ol>
+<li>
+<strong>まず見ること:</strong> 1Lが何cmぶんに当たるか。
+        <p>理由: ここが分からないと、水量問題のまま重くなる。今回は1L=1cmで一気に簡単化する。</p>
+</li>
+<li>
+<strong>次に見ること:</strong> 14cmを基準にした差で見る。
+        <p>理由: 「14未満なら+x、14以上なら-y」という条件が、そのまま符号で整理できる。</p>
+</li>
+<li>
+<strong>その次に確認すること:</strong> 毎分の変化が mod (x+y) で同じ動きになるか。
+        <p>理由: -y は +x して (x+y) を1周戻ることと同じだから。</p>
+</li>
+<li>
+<strong>最後にやること:</strong> 周期が10になる比を決め、あとは水槽の範囲0〜70に収まるかを調べる。
+        <p>理由: 周期と安全条件を分けると整理しやすい。</p>
+</li>
+</ol>
+</section>
+<section>
+<h2>3. 入口候補</h2>
+<section>
+<h3>候補A　14cmからの差で周期を見る</h3>
+<p><strong>何を見て立つ候補か:</strong> 条件分岐が14cmだけで決まっている。</p>
+<p><strong>最初に試す操作:</strong> d = 水位−14 と置く。</p>
+<p><strong>うまくいくサイン:</strong> d&lt;0 なら +x、d≥0 なら -y という単純な規則になる。</p>
+<p><strong>うまくいかないサイン:</strong> 水量と高さを別々に持ち続ける。</p>
+<p><strong>第一候補にする理由:</strong> 周期の本質が最短で見えるから。</p>
+</section>
+<section>
+<h3>候補B　足した回数と引いた回数を数える</h3>
+<p><strong>何を見て立つ候補か:</strong> 8cmに戻るなら、増えた合計と減った合計は同じになる。</p>
+<p><strong>最初に試す操作:</strong> 加えた回数をa回、抜いた回数をb回として ax=by を作る。</p>
+<p><strong>うまくいくサイン:</strong> x:y が b:a で決まる。</p>
+<p><strong>うまくいかないサイン:</strong> どの順で足す・引くかまでは決まらない。</p>
+<p><strong>第二候補にする理由:</strong> 比を出す補助にはよいが、周期そのものは候補Aの方が速い。</p>
+</section>
+<section>
+<h3>候補C　実際に並べて規則を読む</h3>
+<p><strong>何を見て立つ候補か:</strong> 例として(4,6)の並びが問題文に書かれている。</p>
+<p><strong>最初に試す操作:</strong> 2,3個の例で並びを作る。</p>
+<p><strong>うまくいくサイン:</strong> x+y や gcd が周期に関係しそうだと見える。</p>
+<p><strong>うまくいかないサイン:</strong> 全探索に入り、理由が見えない。</p>
+<p><strong>第三候補にする理由:</strong> 発見には使えるが、本解そのものにはしにくい。</p>
+</section>
+</section>
+<section>
+<h2>4. 小実験</h2>
+<ul class="compact">
+<li><strong>最初にやる小実験:</strong> 問題文の例 (4,6) を 14cmからの差で書き直す。</li>
+<li><strong>どこを小さくするか:</strong> 水位そのものではなく、14からどれだけ上か下かに縮める。</li>
+<li><strong>この実験で観察したいこと:</strong> +4 と -6 が、mod 10 ではどちらも「+4」と同じ働きをしていること。</li>
+<li><strong>本番へ戻すときの見方:</strong> 周期が (x+y)/gcd(x,y) だと見えたら、具体例も全探索も同じ型で処理できる。</li>
+</ul>
+</section>
+<section>
+<h2>5. 困ったときの6つの武器</h2>
+<ul class="compact">
+<li><strong>具体的な数で試す:</strong> 有効。(4,6), (2,7), (8,10) を数分だけ並べると周期の匂いが出る。</li>
+<li><strong>逆から考える:</strong> 有効。8cmに戻るには増減の合計が0になる必要がある。</li>
+<li><strong>図や表に整理する:</strong> 有効。水位の列を書くと、14をまたぐ位置が見える。</li>
+<li><strong>条件を一つ外す:</strong> 有効。まずは0〜70の制限を後回しにし、周期だけを見る。</li>
+<li><strong>似た問題を類推する:</strong> 有効。正負が切り替わる点をまたぐ数列・ゲーム得点の問題と同型。</li>
+<li><strong>極端な場合を調べる:</strong> 有効。xが大きすぎるとあふれ、yが大きすぎると空になる。</li>
+</ul>
+</section>
+<section>
+<h2>6. 見切りと切り替え</h2>
+<ul class="compact">
+<li><strong>続行してよいサイン:</strong> d=水位−14 に直したあと、毎分の変化が「+x か -y」にそろう。</li>
+<li><strong>行き詰まりのサイン:</strong> 水位を1分ずつ延々と書き続けている。</li>
+<li><strong>切り替え候補:</strong> mod (x+y) の周期に切り替える。</li>
+<li><strong>切り替えた直後にやること:</strong> d&lt;0 なら d+x、d≥0 なら d-y = d+x-(x+y) と書く。</li>
+</ul>
+</section>
+<section>
+<h2>7. 解答解説の詳細分解</h2>
+<details open="">
+<summary>第1手　1L=1cm と読む</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> なぜこの問題で底面積1000cm<sup>2</sup> が与えられているのだろう？</p>
+</div>
+<p><strong>何をしているか:</strong> 水の量の出し入れを、高さの増減に変える。</p>
+<p><strong>観察:</strong> 1L=1000cm<sup>3</sup>、底面積が1000cm<sup>2</sup>。</p>
+<p><strong>仮説:</strong> 1L入れるごとに高さは1cm増える。</p>
+<p><strong>操作:</strong> xL入れる→高さ+x cm、yLぬく→高さ-y cm。</p>
+<p><strong>確認:</strong> 水量問題ではなく整数列の問題になった。</p>
+<p><strong>なぜ自然か:</strong> 与えられた1000がぴったり1Lと対応しているから。</p>
+<p><strong>つまずきやすい点:</strong> Lとcmを別物として持ち続けること。</p>
+</details>
+<details>
+<summary>第2手　14cmからの差にして周期を出す</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 条件分岐の境目が14なら、どこを0に置くと見やすい？</p>
+</div>
+<p><strong>何をしているか:</strong> d = 水位−14 と置いて、変化を mod (x+y) で見る。</p>
+<p><strong>観察:</strong> 始めの高さ8cmは d=-6。さらに d&lt;0 なら +x、d≥0 なら -y。</p>
+<p><strong>仮説:</strong> -y は +x してから (x+y) を1周戻るのと同じなので、毎分「+x ずつ進む」円周運動になる。</p>
+<p><strong>操作:</strong> y≥6 のとき、始点 d=-6 が区間 [-y, x) に入り、以後
+        d は mod (x+y) で毎分 +x ずつ進む。したがって初めて元に戻るのは
+        (x+y)/gcd(x,y) 分後。
+      </p>
+<p><strong>確認:</strong> 例 (4,6) では 10/gcd(4,6)=10/2=5 で、問題文の例と一致する。</p>
+<p><strong>なぜ自然か:</strong> 条件分岐を残したまま追うより、境目を0に移すと「同じ操作の繰り返し」に見えるから。</p>
+<p><strong>つまずきやすい点:</strong> 周期を x+y そのものだと思って gcd を落とすこと。</p>
+</details>
+<details>
+<summary>第3手　(1) の2問を一気に処理する</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> もう1分ずつ書く必要はある？</p>
+</div>
+<p><strong>何をしているか:</strong> 周期公式を代入する。</p>
+<p><strong>観察:</strong> どちらも y≥6 を満たしている。</p>
+<p><strong>仮説:</strong> 初めて8cmに戻る時刻は (x+y)/gcd(x,y)。</p>
+<p><strong>操作:</strong>
+        (2,7) では (2+7)/gcd(2,7)=9。<br/>
+        (8,10) では (8+10)/gcd(8,10)=18/2=9。
+      </p>
+<p><strong>確認:</strong> どちらも9分後。</p>
+<p><strong>なぜ自然か:</strong> 同じ型に入ったら、具体的な列を書かずに済むから。</p>
+<p><strong>つまずきやすい点:</strong> 1つ目は列で、2つ目は式で、と方法をばらばらにすること。</p>
+</details>
+<details>
+<summary>第4手　(2)(ア) 10分周期の比を決める</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> xとyの共通因数を取りのぞくと、周期はどう見える？</p>
+</div>
+<p><strong>何をしているか:</strong> x=ga, y=gb（a:bを最簡比）として a+b=10 を作る。</p>
+<p><strong>観察:</strong> (x+y)/gcd(x,y) = (ga+gb)/g = a+b。</p>
+<p><strong>仮説:</strong> 初めて10分後に戻るなら a+b=10。</p>
+<p><strong>操作:</strong> a,b を互いに素な正整数として a+b=10 を満たす組は
+        (1,9),(3,7),(7,3),(9,1)。
+      </p>
+<p><strong>確認:</strong> x:y は 1:9、3:7、7:3、9:1 の4通り。</p>
+<p><strong>なぜ自然か:</strong> 周期は比の問題であって、共通倍を持たせても基本周期の形は変わらないから。</p>
+<p><strong>つまずきやすい点:</strong> 1:4 や 2:3 を混ぜてしまうこと。a+b=10 が本体。</p>
+</details>
+<details>
+<summary>第5手　(2)(イ) 各比ごとに安全なgをしぼる</summary>
+<div class="self-explain">
+<p><strong>先に考えよう:</strong> 周期が10でも、水槽からあふれたり空になったりしたら使えない。どこを見れば早い？</p>
+</div>
+<p><strong>何をしているか:</strong> 4つの比ごとに、最初の数分だけ見て g の範囲を決める。</p>
+<p><strong>観察:</strong> 問題の後半では安全条件だけを見ればよい。</p>
+<p><strong>仮説:</strong> 各比は数分の動きを見るだけで g が決まる。</p>
+<p><strong>操作:</strong>
+<br/><strong>1:9</strong> のとき (x,y)=(g,9g)。14以上になった直後の高さHは前が14未満なので H&lt;14+g。<br/>
+        そこから9g引くと H-9g &lt; 14-8g。g≥2 なら負になる。よって g=1。→ (1,9)
+        <br/><br/>
+<strong>3:7</strong> のとき (x,y)=(3g,7g)。g≥3 なら 8→8+3g (≥17) の次に 7g 引くと 8-4g &lt;0。<br/>
+        よって g=1,2。→ (3,7),(6,14)
+        <br/><br/>
+<strong>7:3</strong> のとき (x,y)=(7g,3g)。まず 8→8+7g→8+4g→8+g。<br/>
+        ここで再び「入れる」側へ戻るには 8+g &lt;14、よって g≤5。<br/>
+        また 3g が小さすぎると戻れないので g≥2。よって g=2,3,4,5。→ (14,6),(21,9),(28,12),(35,15)
+        <br/><br/>
+<strong>9:1</strong> のとき (x,y)=(9g,g)。10分で戻るなら途中は 8+9g, 8+8g, …, 8+g, 8。<br/>
+        最後まで「ぬく」側であるには 8+g ≥14、よって g≥6。<br/>
+        一方、最初にあふれないには 8+9g ≤70、よって g≤6。したがって g=6。→ (54,6)
+      </p>
+<p><strong>確認:</strong> 8通りは
+        (1,9), (3,7), (6,14), (14,6), (21,9), (28,12), (35,15), (54,6)。
+      </p>
+<p><strong>なぜ自然か:</strong> 周期と安全条件を分離すると、全探索が一気に短くなるから。</p>
+<p><strong>つまずきやすい点:</strong> 周期が10になる比だけで終え、安全条件のチェックを忘れること。</p>
+</details>
+</section>
+<section>
+<h2>8. 別解と多面的理解</h2>
+<ul class="compact">
+<li><strong>別解の候補:</strong> 加えた回数a回、抜いた回数b回として ax=by, a+b=10 から比を出し、順序を別途点検する方法。</li>
+<li><strong>その入口サイン:</strong> 「元に戻る」ので増減合計0に注目したとき。</li>
+<li><strong>本解との違い:</strong> 別解は比は出しやすいが、周期の本質が見えにくい。本解は周期まで一気に出る。</li>
+<li><strong>教育的に分かりやすい方法:</strong> 具体例を書いてから d=水位−14 に移る本解。</li>
+<li><strong>構造がよく見える方法:</strong> mod (x+y) の円周運動として見る方法。</li>
+</ul>
+</section>
+<section>
+<h2>9. 誤答・失敗データ</h2>
+<ul class="compact">
+<li><strong>起こりやすい誤った入口:</strong> 1Lと1cmの対応に気づかず、体積計算を続ける。</li>
+<li><strong>なぜ引きずられるか:</strong> 水槽問題だから体積に意識が固定されるから。</li>
+<li><strong>不足していた観察:</strong> 底面積1000cm<sup>2</sup> が1Lとぴったり対応していること。</li>
+<li><strong>修正する最初の一手:</strong> まず1Lで高さが何cm変わるかを出す。</li>
+<li><strong>この失敗から学ぶこと:</strong> 単位変換で問題の見え方が一変することがある。</li>
+</ul>
+</section>
+<section class="danger-zone">
+<h2>10. 失敗シミュレーション</h2>
+<ul class="compact">
+<li><strong>落とし穴A:</strong> ひたすら水位を書き並べて(2)を全探索しようとする。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> 例が並びで示されているから。</li>
+<li><strong>危険信号:</strong> (x,y)の候補が増えた途端に管理できなくなる。</li>
+<li><strong>切り替え先:</strong> 周期 = (x+y)/gcd(x,y) を先に使う。</li>
+</ul>
+<ul class="compact">
+<li><strong>落とし穴B:</strong> 周期10の比だけ出して満足する。</li>
+<li><strong>なぜもっともらしく見えるか:</strong> (2)(ア)までで達成感があるから。</li>
+<li><strong>危険信号:</strong> 実際には負の高さや70超えが混ざる。</li>
+<li><strong>切り替え先:</strong> 各比ごとに最初の数分だけ見て安全条件を点検する。</li>
+</ul>
+</section>
+<section>
+<h2>11. 必要要素マップ</h2>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>この問題での役割</th>
+<th>重要度</th>
+<th>見落とすとどうなるか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>単位変換</td>
+<td>1L=1cm にする</td>
+<td>高</td>
+<td>問題が重いままになる</td>
+</tr>
+<tr>
+<td>条件の平行移動</td>
+<td>14cmを0に移す</td>
+<td>高</td>
+<td>分岐規則が見えない</td>
+</tr>
+<tr>
+<td>周期・合同</td>
+<td>(x+y)/gcd(x,y) を出す</td>
+<td>高</td>
+<td>(2)の探索が大変になる</td>
+</tr>
+<tr>
+<td>比の整理</td>
+<td>a+b=10 の最簡比を出す</td>
+<td>高</td>
+<td>(2)(ア)で漏れや重複が出る</td>
+</tr>
+<tr>
+<td>安全条件チェック</td>
+<td>あふれない・空にならない組に絞る</td>
+<td>高</td>
+<td>不適切な組を答えに入れる</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>12. 条件 → 手法メタ知識ネットワーク</h2>
+<ul class="compact">
+<li>底面積が1Lとちょうど対応する → 体積でなく高さの整数問題に変える</li>
+<li>境目で条件分岐する → 境目を0に移して符号で見る</li>
+<li>+x と -y が交互に現れる → mod (x+y) を疑う</li>
+<li>「初めて10分後に戻る」 → 最簡比で和が10になるかを見る</li>
+<li>周期が分かっても現実条件がある → 最後に範囲チェックを入れる</li>
+</ul>
+</section>
+<section>
+<h2>13. 解けた後の一般化</h2>
+<ul class="compact">
+<li><strong>次に思い出すべきサイン:</strong> ある境目より下なら+a、上なら-b のような切り替え規則を見たとき。</li>
+<li><strong>再利用できる型:</strong> 境目を0に移し、mod (a+b) の周期問題として見る型。</li>
+<li><strong>別問題になる境界:</strong> 増え方・減り方が毎回変わると、この単純周期は崩れる。</li>
+<li><strong>一言で残す武器:</strong> 分岐規則は、基準をずらすと周期になる。</li>
+</ul>
+</section>
+<section class="transfer-test">
+<h2>14. 転移テスト</h2>
+<p><strong>別問題:</strong> あるゲームで得点は最初 -6点です。1分ごとに、得点が負なら x点足し、0以上なら y点引きます。初めて -6点に戻るのが10分後になるような整数の組(x,y)をすべて求めなさい。ただし途中で得点が100点を超えたり-20点未満になったりする組は除きます。</p>
+<p><strong>元の問題と同じ構造である理由:</strong> 14cmを0に移したあとの問題と同じで、「負なら+x、0以上なら-y」の周期問題になっている。</p>
+<p><strong>再利用する武器:</strong> 基準を0に移す、mod (x+y) で周期を見る、最後に範囲条件をチェックする。</p>
+<p><strong>子どもへの問い:</strong> まず何を0に置くと、毎分の規則が一番シンプルになる？</p>
+</section>
+<section>
+<h2>15. 子ども向け再現手順</h2>
+<ol class="compact">
+<li>1Lが高さ何cmかを先に出す。</li>
+<li>境目14cmを0に移して考える。</li>
+<li>「下なら+x、上なら-y」は mod (x+y) の周期だと見る。</li>
+<li>戻る時間は (x+y)/gcd(x,y) を使う。</li>
+<li>最後に、あふれない・空にならない条件でしぼる。</li>
+</ol>
+</section>
+<aside>
+<h2>16. 指導者向け補足</h2>
+<p>この問題は、単位変換・条件分岐・周期・最大公約数が1本につながる良問です。特に「14を0に移す」という発想が、見た目の水槽問題を整数の循環問題へ変えます。難問の入口として非常に教育的です。</p>
+</aside>
+</article>
+  </section>
+
+  <footer class="app-footer">
+    このHTMLアプリは、アップロードされた分析指示書と学コン問題PDFをもとに作成した分析解説の単体版です。
+  </footer>
+</main>
+
+<button class="floating-top" id="back-to-top" type="button">↑ TOP</button>
+
+<script>
+(function() {
+  const root = document.documentElement;
+  const sizeLabel = document.getElementById('size-label');
+  const minScale = 85;
+  const maxScale = 135;
+  const step = 5;
+  const storageKey = 'gakukon_html_app_scale';
+  const filterKey = 'gakukon_html_app_filter';
+
+  function applyScale(value) {
+    const safe = Math.max(minScale, Math.min(maxScale, value));
+    root.style.setProperty('--scale', String(safe / 100));
+    sizeLabel.textContent = safe + '%';
+    localStorage.setItem(storageKey, String(safe));
+    return safe;
+  }
+
+  function readScale() {
+    const saved = parseInt(localStorage.getItem(storageKey) || '100', 10);
+    return Number.isFinite(saved) ? saved : 100;
+  }
+
+  let currentScale = applyScale(readScale());
+
+  document.getElementById('size-down').addEventListener('click', function() {
+    currentScale = applyScale(currentScale - step);
+  });
+  document.getElementById('size-up').addEventListener('click', function() {
+    currentScale = applyScale(currentScale + step);
+  });
+  document.getElementById('size-reset').addEventListener('click', function() {
+    currentScale = applyScale(100);
+  });
+
+  const articles = Array.from(document.querySelectorAll('article.problem-analysis'));
+  const filterButtons = Array.from(document.querySelectorAll('.nav-chip'));
+
+  function setActiveFilter(target) {
+    filterButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.target === target));
+    localStorage.setItem(filterKey, target);
+  }
+
+  function showTarget(target) {
+    if (target === 'all') {
+      articles.forEach(article => article.hidden = false);
+      setActiveFilter('all');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    articles.forEach(article => {
+      article.hidden = article.id !== target;
+    });
+    setActiveFilter(target);
+    const active = document.getElementById(target);
+    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      showTarget(btn.dataset.target);
+    });
+  });
+
+  const savedFilter = localStorage.getItem(filterKey) || 'all';
+  if (savedFilter === 'all' || document.getElementById(savedFilter)) {
+    showTarget(savedFilter);
+  } else {
+    showTarget('all');
+  }
+
+  document.getElementById('open-all-details').addEventListener('click', function() {
+    document.querySelectorAll('details').forEach(el => el.open = true);
+  });
+  document.getElementById('close-all-details').addEventListener('click', function() {
+    document.querySelectorAll('details').forEach(el => el.open = false);
+  });
+  document.getElementById('print-page').addEventListener('click', function() {
+    window.print();
+  });
+  document.getElementById('back-to-top').addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+</body>
+</html>
