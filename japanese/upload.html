@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ページ追加 - 国語</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Hiragino Sans", sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+h1 { color: #333; border-bottom: 3px solid #2196F3; padding-bottom: 10px; }
+.back-link { display: inline-block; margin-bottom: 20px; color: #1a73e8; text-decoration: none; font-weight: bold; }
+.back-link:hover { text-decoration: underline; }
+#password-screen { background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+#password-screen h2 { color: #555; margin-bottom: 20px; }
+#pw-input { padding: 10px 16px; font-size: 1.1em; border: 2px solid #ddd; border-radius: 8px; width: 200px; margin-right: 8px; }
+#pw-btn { padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; }
+#pw-btn:hover { background: #1976D2; }
+#pw-error { color: #e53935; margin-top: 12px; font-size: 0.95em; display: none; }
+#upload-screen { display: none; }
+#drop-zone { border: 3px dashed #2196F3; border-radius: 12px; padding: 60px 20px; text-align: center; background: white; cursor: pointer; transition: background 0.2s; margin-bottom: 20px; }
+#drop-zone.dragover { background: #E3F2FD; border-color: #1565C0; }
+#drop-zone p { font-size: 1.1em; color: #555; margin: 0; }
+#drop-zone .icon { font-size: 3em; margin-bottom: 10px; }
+#file-input { display: none; }
+.token-area { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.token-area label { display: block; font-weight: bold; color: #555; margin-bottom: 8px; }
+.token-area input { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95em; }
+.token-hint { font-size: 0.82em; color: #999; margin-top: 6px; }
+#status-box { display: none; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.status-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; }
+.status-item:last-child { border-bottom: none; }
+.status-icon { font-size: 1.2em; }
+.status-ok { color: #43a047; }
+.status-err { color: #e53935; }
+.status-wait { color: #888; }
+</style>
+</head>
+<body>
+<a class="back-link" href="./index.html">← コンテンツ一覧へ戻る</a>
+<h1>ページを追加する</h1>
+
+<div id="password-screen">
+  <h2>🔒 パスワードを入力してください</h2>
+  <input type="password" id="pw-input" placeholder="パスワード" />
+  <button id="pw-btn">確認</button>
+  <div id="pw-error">パスワードが違います</div>
+</div>
+
+<div id="upload-screen">
+  <div class="token-area">
+    <label>GitHub Personal Access Token</label>
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
+    <div class="token-hint">
+      必要なスコープ: <code>repo</code> または <code>contents: write</code><br>
+      <a href="https://github.com/settings/tokens/new" target="_blank">トークンを作成する →</a>
+    </div>
+  </div>
+
+  <div id="drop-zone">
+    <div class="icon">📂</div>
+    <p>HTMLファイルをここにドラッグ＆ドロップ</p>
+    <p style="font-size:0.85em; color:#999; margin-top:8px;">または クリックして選択</p>
+  </div>
+  <input type="file" id="file-input" accept=".html" multiple />
+
+  <div id="status-box">
+    <h3 style="margin:0 0 12px; color:#333;">処理状況</h3>
+    <div id="status-list"></div>
+  </div>
+</div>
+
+<script>
+const PASSWORD = 'iws';
+const FOLDER = 'japanese';
+const BACK_LINK_HTML = '<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,\'Hiragino Sans\',sans-serif;">← コンテンツ一覧へ戻る</a>';
+
+document.getElementById('pw-btn').addEventListener('click', checkPassword);
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+function checkPassword() {
+  const val = document.getElementById('pw-input').value;
+  if (val === PASSWORD) {
+    document.getElementById('password-screen').style.display = 'none';
+    document.getElementById('upload-screen').style.display = 'block';
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+  }
+}
+
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  handleFiles(Array.from(e.dataTransfer.files));
+});
+fileInput.addEventListener('change', () => { handleFiles(Array.from(fileInput.files)); });
+
+const OWNER = 'iwslatojp29';
+const REPO = 'math-app';
+const BRANCH = 'main';
+
+function injectBackLink(html) {
+  if (html.indexOf('コンテンツ一覧へ戻る') !== -1) return html;
+  if (/<body[^>]*>/i.test(html)) {
+    return html.replace(/<body([^>]*)>/i, '<body$1>\n' + BACK_LINK_HTML + '\n');
+  }
+  return BACK_LINK_HTML + '\n' + html;
+}
+
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+async function handleFiles(files) {
+  const htmlFiles = files.filter(f => f.name.endsWith('.html'));
+  if (htmlFiles.length === 0) { alert('.htmlファイルを選択してください'); return; }
+  const token = document.getElementById('token-input').value.trim();
+  if (!token) { alert('GitHub トークンを入力してください'); return; }
+
+  const statusBox = document.getElementById('status-box');
+  const statusList = document.getElementById('status-list');
+  statusBox.style.display = 'block';
+  statusList.innerHTML = '';
+
+  for (const file of htmlFiles) {
+    const itemId = 'item-' + file.name.replace(/[^a-zA-Z0-9]/g, '_');
+    statusList.innerHTML += `
+      <div class="status-item" id="${itemId}">
+        <span class="status-icon status-wait">⏳</span>
+        <span>${file.name} をアップロード中...</span>
+      </div>`;
+  }
+
+  let indexSha = null;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}/index.html`, {
+      headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    const d = await r.json();
+    indexSha = d.sha;
+  } catch(e) {}
+
+  const uploadedFiles = [];
+
+  for (const file of htmlFiles) {
+    const itemId = 'item-' + file.name.replace(/[^a-zA-Z0-9]/g, '_');
+    const el = document.getElementById(itemId);
+    try {
+      const text = await readFileAsText(file);
+      const titleMatch = text.match(/<title[^>]*>([^<]+)<\/title>/i);
+      const pageTitle = titleMatch ? titleMatch[1].trim() : file.name.replace('.html', '');
+
+      const updatedText = injectBackLink(text);
+      const content = utf8ToBase64(updatedText);
+
+      let existingSha = null;
+      try {
+        const chk = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}/${encodeURIComponent(file.name)}`, {
+          headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (chk.ok) {
+          const cd = await chk.json();
+          existingSha = cd.sha;
+        }
+      } catch(e) {}
+
+      const body = { message: `Add ${file.name}`, content: content, branch: BRANCH };
+      if (existingSha) body.sha = existingSha;
+
+      const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}/${encodeURIComponent(file.name)}`, {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || res.status);
+      }
+
+      uploadedFiles.push({ name: file.name, title: pageTitle });
+      el.innerHTML = `<span class="status-icon status-ok">✅</span><span>${file.name} アップロード完了（タイトル: ${pageTitle}）</span>`;
+    } catch(e) {
+      el.innerHTML = `<span class="status-icon status-err">❌</span><span>${file.name} 失敗: ${e.message}</span>`;
+    }
+  }
+
+  if (uploadedFiles.length > 0 && indexSha) {
+    statusList.innerHTML += `<div class="status-item" id="item-index"><span class="status-icon status-wait">⏳</span><span>index.html を更新中...</span></div>`;
+    try {
+      const idxRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}/index.html`, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      const idxData = await idxRes.json();
+      const b64 = idxData.content.replace(/\n/g, '');
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const currentHtml = new TextDecoder('utf-8').decode(bytes);
+
+      let newCards = '';
+      for (const f of uploadedFiles) {
+        newCards += `  <div class="card">\n    <a href="./${f.name}">${f.title}</a>\n  </div>\n`;
+      }
+      const updatedHtml = currentHtml.replace('</body>', newCards + '</body>');
+
+      const updatedB64 = utf8ToBase64(updatedHtml);
+
+      const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}/index.html`, {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Auto-update index.html', content: updatedB64, sha: idxData.sha, branch: BRANCH })
+      });
+
+      if (!putRes.ok) {
+        const e = await putRes.json();
+        throw new Error(e.message);
+      }
+
+      document.getElementById('item-index').innerHTML = `<span class="status-icon status-ok">✅</span><span>index.html 更新完了！数分後にページに反映されます。</span>`;
+    } catch(e) {
+      document.getElementById('item-index').innerHTML = `<span class="status-icon status-err">❌</span><span>index.html 更新失敗: ${e.message}</span>`;
+    }
+  }
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+</script>
+</body>
+</html>
