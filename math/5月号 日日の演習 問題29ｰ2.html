@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>電車の運賃問題｜センスよく解く</title>
+  <style>
+    :root {
+      --ink: #222;
+      --muted: #666;
+      --paper: #fffdf8;
+      --line: #d9cdb8;
+      --accent: #b86b2b;
+      --accent-soft: #fff0dc;
+      --blue-soft: #eef6ff;
+      --green-soft: #edf8ef;
+      --gray-soft: #f6f3ed;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #f3efe6;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", "Meiryo", sans-serif;
+      line-height: 1.85;
+      letter-spacing: 0.03em;
+    }
+
+    .page {
+      max-width: 920px;
+      margin: 32px auto;
+      padding: 40px clamp(18px, 4vw, 56px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 16px 40px rgba(61, 43, 24, 0.12);
+    }
+
+    header {
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+      border-bottom: 3px double var(--line);
+    }
+
+    .label {
+      display: inline-block;
+      padding: 3px 12px;
+      margin-bottom: 12px;
+      color: #7c3f10;
+      background: var(--accent-soft);
+      border: 1px solid #efc18e;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 4vw, 2.25rem);
+      line-height: 1.35;
+    }
+
+    h2 {
+      margin-top: 48px;
+      padding-left: 14px;
+      border-left: 6px solid var(--accent);
+      font-size: 1.45rem;
+      line-height: 1.45;
+    }
+
+    h3 {
+      margin-top: 32px;
+      font-size: 1.15rem;
+      color: #6f3b16;
+    }
+
+    p {
+      margin: 0.8em 0;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+    }
+
+    .note,
+    .sense,
+    .answer {
+      padding: 18px 20px;
+      margin: 22px 0;
+      border-radius: 14px;
+    }
+
+    .note {
+      background: var(--blue-soft);
+      border: 1px solid #c8def2;
+    }
+
+    .sense {
+      background: var(--green-soft);
+      border: 1px solid #c7e3ca;
+    }
+
+    .answer {
+      background: var(--accent-soft);
+      border: 1px solid #efc18e;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .answer .value {
+      color: #a04500;
+      font-size: 1.25rem;
+    }
+
+    table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+      background: #fff;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    th {
+      background: var(--gray-soft);
+      font-weight: 700;
+    }
+
+    .eq {
+      margin: 12px 0;
+      padding: 10px 14px;
+      background: #fff;
+      border-left: 4px solid #c99559;
+      border-radius: 8px;
+      font-family: "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      font-size: 1.08rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(90px, 1fr));
+      gap: 8px;
+      margin: 18px 0 6px;
+    }
+
+    .route-card {
+      padding: 12px 8px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .route-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 500;
+    }
+
+    .emphasis {
+      font-weight: 700;
+      background: linear-gradient(transparent 62%, #ffe3b6 62%);
+    }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        margin: 0;
+        border-radius: 0;
+      }
+
+      .route-grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        margin: 0;
+        max-width: none;
+        border: none;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="label">中学への算数｜乗り降りと運賃</div>
+      <h1>電車の運賃問題をセンスよく解く</h1>
+      <p class="lead">
+        この問題のコツは、駅ごとの人数ではなく、<span class="emphasis">「どこから乗って、どこで降りたか」</span>の箱で考えることです。
+      </p>
+    </header>
+
+    <section>
+      <h2>まず見るべき6つの箱</h2>
+      <p>
+        駅は A・B・C・D の4つなので、乗車区間は次の6種類だけです。
+      </p>
+
+      <div class="route-grid" aria-label="乗車区間の6つの箱">
+        <div class="route-card">A→B<span>200円</span></div>
+        <div class="route-card">A→C<span>350円</span></div>
+        <div class="route-card">A→D<span>600円</span></div>
+        <div class="route-card">B→C<span>300円</span></div>
+        <div class="route-card">B→D<span>580円</span></div>
+        <div class="route-card">C→D<span>400円</span></div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>区間</th>
+            <th>A→B</th>
+            <th>A→C</th>
+            <th>A→D</th>
+            <th>B→C</th>
+            <th>B→D</th>
+            <th>C→D</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>運賃</th>
+            <td>200円</td>
+            <td>350円</td>
+            <td>600円</td>
+            <td>300円</td>
+            <td>580円</td>
+            <td>400円</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        <p>
+          注意したいのは、<strong>A→C の人は A→B と B→C に分けて払うわけではない</strong>ことです。
+          だから、「区間ごとに乗っている人数」を数えるのではなく、<strong>乗った駅と降りた駅の組</strong>を数えます。
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>（1）</h2>
+      <p>
+        A駅で100人乗ります。B駅で15人降り、B駅では誰も乗りません。
+      </p>
+      <div class="eq">A→B = 15</div>
+
+      <p>
+        A駅から乗ってB駅で降りなかった人は、C駅でも降りないのでD駅まで行きます。
+      </p>
+      <div class="eq">A→D = 100 − 15 = 85</div>
+
+      <p>
+        C駅では20人乗り、誰も降りません。したがって、その20人はD駅まで行きます。
+      </p>
+      <div class="eq">C→D = 20</div>
+
+      <p>合計運賃は、</p>
+      <div class="eq">15×200 + 85×600 + 20×400</div>
+      <div class="eq">= 3000 + 51000 + 8000 = 62000</div>
+
+      <div class="answer">答え：<span class="value">62000円</span></div>
+    </section>
+
+    <section>
+      <h2>（2）</h2>
+      <h3>B駅・C駅の人数関係を整理する</h3>
+      <p>
+        B駅で降りた人数を <strong>x人</strong> とすると、B駅で乗った人数はその4倍なので、
+      </p>
+      <div class="eq">Bで降りた人数 = x，Bで乗った人数 = 4x</div>
+
+      <p>
+        C駅で乗った人数を <strong>y人</strong> とします。C駅で降りた人数は乗った人数の2.5倍で、さらに降りた人数の方が33人多いので、
+      </p>
+      <div class="eq">2.5y − y = 33</div>
+      <div class="eq">1.5y = 33</div>
+      <div class="eq">y = 22</div>
+
+      <p>したがって、</p>
+      <div class="eq">Cで乗った人数 = 22，Cで降りた人数 = 55</div>
+
+      <h3>全体の人数変化を見る</h3>
+      <p>
+        A駅を出た時点で100人。B駅では、降りる人が <strong>x人</strong>、乗る人が <strong>4x人</strong> なので、差し引き <strong>+3x人</strong> です。
+        C駅では55人降りて22人乗るので、差し引き <strong>−33人</strong> です。
+      </p>
+      <p>
+        D駅で94人が全員降りたので、C駅を出た時点の人数は94人です。
+      </p>
+      <div class="eq">100 + 3x − 33 = 94</div>
+      <div class="eq">67 + 3x = 94</div>
+      <div class="eq">3x = 27</div>
+      <div class="eq">x = 9</div>
+
+      <p>つまり、</p>
+      <div class="eq">Bで降りた人数 = 9，Bで乗った人数 = 36</div>
+
+      <h3>6つの箱に分ける</h3>
+      <p>B駅で降りた9人は、A駅から乗った人です。</p>
+      <div class="eq">A→B = 9</div>
+
+      <p>
+        C駅で降りた55人のうち、A駅から乗った人はB駅から乗った人より21人多いとあります。
+        A駅から乗ってC駅で降りた人を <strong>p人</strong>、B駅から乗ってC駅で降りた人を <strong>q人</strong> とします。
+      </p>
+      <div class="eq">p + q = 55</div>
+      <div class="eq">p − q = 21</div>
+      <div class="eq">2p = 76</div>
+      <div class="eq">p = 38，q = 17</div>
+
+      <p>したがって、</p>
+      <div class="eq">A→C = 38，B→C = 17</div>
+
+      <p>
+        A駅から乗った100人のうち、B駅で9人、C駅で38人が降りたので、D駅まで行く人は、
+      </p>
+      <div class="eq">A→D = 100 − 9 − 38 = 53</div>
+
+      <p>
+        B駅から乗った36人のうち、C駅で17人が降りたので、D駅まで行く人は、
+      </p>
+      <div class="eq">B→D = 36 − 17 = 19</div>
+
+      <p>C駅で乗った22人はD駅まで行きます。</p>
+      <div class="eq">C→D = 22</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>区間</th>
+            <th>A→B</th>
+            <th>A→C</th>
+            <th>A→D</th>
+            <th>B→C</th>
+            <th>B→D</th>
+            <th>C→D</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>人数</th>
+            <td>9</td>
+            <td>38</td>
+            <td>53</td>
+            <td>17</td>
+            <td>19</td>
+            <td>22</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>合計運賃は、</p>
+      <div class="eq">9×200 + 38×350 + 53×600 + 17×300 + 19×580 + 22×400</div>
+      <div class="eq">= 1800 + 13300 + 31800 + 5100 + 11020 + 8800</div>
+      <div class="eq">= 71820</div>
+
+      <div class="answer">答え：<span class="value">71820円</span></div>
+    </section>
+
+    <section>
+      <h2>（3）</h2>
+      <p>
+        A駅で100人乗り、B駅で15人降りるので、
+      </p>
+      <div class="eq">A→B = 15</div>
+
+      <p>
+        求めたい「A駅から乗ってC駅で降りた人数」を <strong>x人</strong> とします。
+      </p>
+      <div class="eq">A→C = x</div>
+
+      <p>
+        A駅から乗った100人のうち、15人はB駅で降り、x人はC駅で降ります。
+        だからD駅まで行くA駅出発の人は、
+      </p>
+      <div class="eq">A→D = 100 − 15 − x = 85 − x</div>
+
+      <p>
+        C駅で降りた人は全部で20人。そのうちx人がA駅からの人なので、残りはB駅からの人です。
+      </p>
+      <div class="eq">B→C = 20 − x</div>
+
+      <p>
+        B駅で乗った人は20人。そのうち20−x人がC駅で降りるので、D駅まで行くB駅出発の人は、
+      </p>
+      <div class="eq">B→D = 20 − (20 − x) = x</div>
+
+      <p>C駅で乗った10人はD駅まで行きます。</p>
+      <div class="eq">C→D = 10</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>区間</th>
+            <th>A→B</th>
+            <th>A→C</th>
+            <th>A→D</th>
+            <th>B→C</th>
+            <th>B→D</th>
+            <th>C→D</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>人数</th>
+            <td>15</td>
+            <td>x</td>
+            <td>85−x</td>
+            <td>20−x</td>
+            <td>x</td>
+            <td>10</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>合計運賃は64390円なので、</p>
+      <div class="eq">15×200 + 350x + 600(85−x) + 300(20−x) + 580x + 10×400 = 64390</div>
+      <div class="eq">3000 + 350x + 51000 − 600x + 6000 − 300x + 580x + 4000 = 64390</div>
+      <div class="eq">64000 + 30x = 64390</div>
+      <div class="eq">30x = 390</div>
+      <div class="eq">x = 13</div>
+
+      <div class="answer">答え：<span class="value">13人</span></div>
+    </section>
+
+    <section>
+      <h2>難問力がつく見方</h2>
+      <div class="sense">
+        <p>
+          （3）は、式で解いてもよいですが、もっとセンスよく見るなら、<strong>1人分の入れ替え</strong>に注目します。
+        </p>
+      </div>
+
+      <p>
+        C駅で降りた20人のうち、A駅から来た人を1人増やすと、同時にB駅からC駅で降りる人が1人減ります。
+        そのぶん、D駅まで行く人の内訳も入れ替わります。
+      </p>
+
+      <p>つまり、1人分の入れ替えは、</p>
+      <div class="eq">B→C と A→D の組</div>
+      <p>が、</p>
+      <div class="eq">A→C と B→D の組</div>
+      <p>に変わる、ということです。</p>
+
+      <p>運賃の差は、</p>
+      <div class="eq">(A→C + B→D) − (B→C + A→D)</div>
+      <div class="eq">= (350 + 580) − (300 + 600)</div>
+      <div class="eq">= 930 − 900 = 30</div>
+
+      <p>
+        つまり、<strong>A駅から乗ってC駅で降りる人が1人増えるごとに、合計運賃は30円増えます。</strong>
+      </p>
+
+      <p>もし A→C が0人なら、合計は、</p>
+      <div class="eq">15×200 + 85×600 + 20×300 + 10×400 = 64000</div>
+
+      <p>実際は64390円なので、</p>
+      <div class="eq">64390 − 64000 = 390</div>
+      <p>1人につき30円増えるから、</p>
+      <div class="eq">390 ÷ 30 = 13</div>
+
+      <div class="answer">よって、A駅から乗ってC駅で降りた人は <span class="value">13人</span> です。</div>
+    </section>
+
+    <footer>
+      <p>
+        本質：人数の流れを「駅」ではなく、<strong>出発駅と到着駅の組</strong>で見る。これができると、複雑な乗り降り問題でも一気に整理できます。
+      </p>
+    </footer>
+  </main>
+</body>
+</html>
