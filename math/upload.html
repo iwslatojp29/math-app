@@ -308,7 +308,11 @@
             headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
           });
           const idxData = await idxRes.json();
-          const currentHtml = atob(idxData.content.replace(/\n/g, ''));
+          const b64 = idxData.content.replace(/\n/g, '');
+          const bin = atob(b64);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          const currentHtml = new TextDecoder('utf-8').decode(bytes);
 
           // </body> の直前に新しいカードを挿入
           let newCards = '';
@@ -320,7 +324,10 @@
 `;
           }
           const updatedHtml = currentHtml.replace('</body>', newCards + '</body>');
-          const updatedB64 = btoa(unescape(encodeURIComponent(updatedHtml)));
+          const utf8Bytes = new TextEncoder().encode(updatedHtml);
+          let binStr = '';
+          for (let i = 0; i < utf8Bytes.length; i++) binStr += String.fromCharCode(utf8Bytes[i]);
+          const updatedB64 = btoa(binStr);
 
           const putRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/math/index.html`, {
             method: 'PUT',
