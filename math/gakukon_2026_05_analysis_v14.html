@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>学コン 2026年5月号（1〜4）難問探索分析 v14.0</title><style>
+:root{--bg:#faf9f6;--card:#ffffff;--line:#d9d3c7;--text:#222;--muted:#666;--accent:#7a5c00;--accent-bg:#fff6db;--content-scale:1;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;line-height:1.7;}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 64px;}
+header.site-header{background:linear-gradient(135deg,#f6ecd0,#fff);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+header.site-header h1{margin:0 0 8px;font-size:calc(2rem * var(--content-scale));line-height:1.3;}
+header.site-header p{margin:6px 0;font-size:calc(1rem * var(--content-scale));}
+.notice{background:var(--accent-bg);border-left:4px solid var(--accent);padding:12px 14px;margin-top:16px;border-radius:8px;font-size:calc(.98rem * var(--content-scale));}
+.problem-analysis{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:26px;box-shadow:0 1px 4px rgba(0,0,0,.04);scroll-margin-top:96px;}
+.problem-analysis header{border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px;}
+.problem-analysis h1{margin:0 0 10px;font-size:calc(1.5rem * var(--content-scale));}
+.problem-analysis h2{margin-top:24px;font-size:calc(1.13rem * var(--content-scale));border-left:4px solid #d6b656;padding-left:10px;}
+.problem-analysis h3{margin-top:14px;font-size:calc(1.02rem * var(--content-scale));}
+.problem-analysis p,.problem-analysis li,.problem-analysis th,.problem-analysis td,.problem-analysis aside,.site-footer{font-size:calc(.97rem * var(--content-scale));}
+.problem-analysis ul,.problem-analysis ol{margin:8px 0 0 1.2em;}
+.problem-analysis table{width:100%;border-collapse:collapse;margin-top:10px;}
+.problem-analysis th,.problem-analysis td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;overflow-wrap:anywhere;}
+.problem-analysis th{background:#f4efe3;text-align:left;}
+.problem-nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#2c3e50,#34495e);padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.15);border-bottom:2px solid var(--accent);}
+.problem-nav .nav-label{color:#fff;font-weight:700;font-size:.85rem;margin-right:4px;white-space:nowrap;}
+.problem-nav a{display:inline-block;padding:4px 10px;background:rgba(255,255,255,.12);color:#fff;text-decoration:none;border-radius:6px;font-size:.82rem;font-weight:600;}
+.font-controls{margin-left:auto;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.font-controls button{width:32px;height:32px;border:none;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.font-controls .size-label{color:rgba(255,255,255,.8);font-size:.75rem;min-width:40px;text-align:center;}
+.overview-table{table-layout:fixed;}
+.overview-table th:nth-child(1),.overview-table td:nth-child(1){width:46%;}
+.overview-table th:nth-child(2),.overview-table td:nth-child(2){width:24%;}
+.overview-table th:nth-child(3),.overview-table td:nth-child(3){width:30%;}
+.problem-shot{max-height:430px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px;}
+.problem-shot img{display:block;width:100%;height:auto;}
+.overview-table ul.theme-bullets{margin:0;padding-left:1.05em;}
+.overview-table ul.theme-bullets li{margin-bottom:.28em;}
+.problem-shot-note{margin-top:6px;color:var(--muted);font-size:calc(.88rem * var(--content-scale));}
+.section-indent>:not(h2){margin-left:1.2em;}
+.section-indent>table,.section-indent>aside,.section-indent>section,.section-indent>.details-controls,.section-indent>.representation-box,.section-indent>.setup-box,.section-indent>.mini-card{width:calc(100% - 1.2em);box-sizing:border-box;}
+.reading-table th:nth-child(1),.reading-table td:nth-child(1){width:20%;}
+.reading-table th:nth-child(2),.reading-table td:nth-child(2){width:42%;}
+.reading-table th:nth-child(3),.reading-table td:nth-child(3){width:38%;}
+.representation-box,.setup-box,.mini-card,.accordion-card,aside.appendix-note{background:#fbfbff;border:1px solid #dfe5ff;border-radius:12px;padding:12px 14px;}
+.representation-box p,.setup-box p{margin:6px 0;}
+.details-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.details-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;margin-bottom:10px;}
+.details-btn{min-width:38px;height:38px;padding:0 12px;border-radius:999px;border:1.5px solid #d6b656;background:transparent;color:var(--accent);font-size:.95rem;font-weight:700;cursor:pointer;line-height:1;}
+.details-btn.active{background:#d6b656;color:#fff;}
+.solution-step-table th:nth-child(1),.solution-step-table td:nth-child(1){width:34%;}
+.solution-step-table th:nth-child(2),.solution-step-table td:nth-child(2){width:66%;}
+.plan-cell .step-badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#f6f0e1;font-weight:700;font-size:calc(.88rem * var(--content-scale));margin-bottom:6px;}
+.plan-cell .plan-title{font-weight:700;margin-bottom:6px;}
+.plan-points{margin:0 0 0 1.1em;padding-left:.2em;}
+.plan-points li{margin-bottom:6px;}
+.calc-block{background:#fcfbf8;border:1px solid var(--line);border-radius:10px;padding:8px 10px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:calc(.93rem * var(--content-scale));}
+.setup-list{margin:0 0 0 1.1em;padding-left:.2em;}
+.setup-list li{margin-bottom:6px;}
+.skill-mini th:nth-child(1),.skill-mini td:nth-child(1){width:35%;}
+.reuse-mini th:nth-child(1),.reuse-mini td:nth-child(1){width:34%;}
+.memory-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.accordion-card summary{cursor:pointer;font-weight:700;}
+.accordion-body h4{margin:12px 0 6px;}
+.candidate-points{margin:8px 0 0 1.2em;padding-left:.2em;}
+.trap-table th:nth-child(1),.trap-table td:nth-child(1){width:16%;}
+.site-footer{color:var(--muted);text-align:center;margin-top:36px;}
+@media (max-width:800px){.problem-analysis{padding:18px;}.details-heading{align-items:flex-start;}.details-heading .details-controls{width:100%;justify-content:flex-start;}.memory-grid{grid-template-columns:1fr;}.problem-shot{max-height:360px;}}
+
+.problem-ocr{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;white-space:pre-wrap;line-height:1.8;min-height:10em;font-size:calc(.96rem * var(--content-scale));}
+.overview-table th:nth-child(1),.overview-table td:nth-child(1){width:50%;}
+.overview-table th:nth-child(2),.overview-table td:nth-child(2){width:22%;}
+.overview-table th:nth-child(3),.overview-table td:nth-child(3){width:28%;}
+.overview-table ul.theme-bullets{margin:0;padding-left:.85em;}
+.overview-table ul.theme-bullets li{margin-bottom:.35em;}
+.solution-step-table th:nth-child(1),.solution-step-table td:nth-child(1){width:30%;}
+.solution-step-table th:nth-child(2),.solution-step-table td:nth-child(2){width:70%;}
+.plan-cell{background:#fffdf8;}
+.solution-cell{background:#fff;}
+.solution-cell .calc-block{line-height:1.8;}
+.transfer-answer{margin-top:10px;padding:8px 10px;border-radius:8px;background:#fff7e5;border:1px solid #ead9aa;}
+.work-steps{margin:8px 0 0 1.1em;padding-left:.2em;}
+.work-steps li{margin-bottom:8px;}
+.tool-note{margin-top:10px;background:#fffdf7;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;}
+.ascii-diagram{margin-top:10px;background:#fcfbf8;border:1px solid var(--line);border-radius:10px;padding:8px 10px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+.accordion-body .calc-block{margin-top:10px;}
+</style></head><body><div class="problem-nav" id="problem-nav">
+<span class="nav-label">問題:</span>
+<a href="#p01">1</a>
+<a href="#p02">2</a>
+<a href="#p03">3</a>
+<a href="#p04">4</a>
+<div class="font-controls">
+<button onclick="changeFontSize(-1)" title="文字を小さく">−</button>
+<span class="size-label" id="size-label">100%</span>
+<button onclick="changeFontSize(1)" title="文字を大きく">＋</button>
+</div>
+</div><main><header class="site-header">
+<h1>学コン 2026年5月号（1〜4）難問探索分析 v14.0</h1>
+<p><strong>特集:</strong> 学コン4題を、原文問題→注目点→整理→解答解説の流れで読む</p>
+<p><strong>対象:</strong> 受験算数を一通り学習済みの小5〜6 / 典型題は解けるが、初見でどこに注目し、何をどう整理するかを鍛えたい学習者</p>
+<p><strong>中心命題:</strong> 難問力の中核は、内容知識に支えられた構造認識とメタ認知である。</p>
+<p><strong>方針:</strong> 問題文は PDF / 誌面の問題文を OCR テキスト化して載せ、解答解説は右側を広く取った 2 列で整理します。本解は誌面解説のよい流れを取り入れ、別解は考えの上流を変えて書きます。</p>
+<div class="notice"><strong>読み方のおすすめ</strong><br/>まず問題文を読み、1章と2章でどこに注目し、何を図や表にするか確かめます。次に3章の本解、4章の別解を比べます。最後に7章の転移テストと自作問題で、同じ見方を別の問題へ移してください。</div>
+</header><article class="problem-analysis" id="p01"><header><h1>第1問　23でしぼる買い物の整数問題</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">太郎さんは、家の近くのコンビニへ消しゴムを買いに行きました。
+消しゴムは 小・中・大・特大 の4種類があり、1個あたりの値段はこの順に 92円, 125円, 161円, 207円 です。
+4種類の消しゴムをどれも1個以上買ったら 6000円 でした。
+(1) 6000÷23 を筆算したときの余りを求めなさい。
+(2) 中の消しゴムは何個買ったと考えられますか。考えられる個数をすべて答えなさい。
+(3) 特大の消しゴムは最も多い場合で何個買ったと考えられますか。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：整数の文章題、場合の数。</li><li><strong>実際</strong>：値段を23で見直し、中の125円だけを浮かび上がらせる見方です。</li></ul></td><td>92円・161円・207円は23で割り切れ、125円だけが23で割ると10あまること。ここから中の個数を先にしぼれます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>3つの値段が23の倍数で、1つだけちがうのが最強条件です。こういう「1つだけ残る」形は、難問でいちばん先に疑いたい形です。</td><td>23で割ったあまりだけを見ると、125円の個数だけが式に残る形にする。</td></tr><tr><td>数字・配置・端の意味</td><td>「各1個以上」と「特大を最も多く」が後半のしぼりに効きます。前者で個数の上限が決まり、後者で特大を上から試せます。</td><td>中の個数は多くても44個までと見て、候補を有限個にする。特大は理論上の上限から下げて調べる。</td></tr><tr><td>条件をどのように翻訳するか</td><td>金額のまま4つを同時に追うと重いので、「23で割ったあまり」と「残りの金額」の2段階に分けると整理しやすくなります。</td><td>まず「23で割ったあまりの表」に直し、そのあと候補ごとに残りの金額の式へ戻す。</td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入口 ：23で割ったあまりで中の個数を先にしぼる。</li><li>最初に紙に書くこと ：小・中・大・特大の個数を a,b,c,d として 92a+125b+161c+207d=6000、a,b,c,d は1以上と置く。その下に、92円・161円・207円は23で割り切れ、125円は23で割ると10あまると書く。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">まず (1) を処理して、23の感覚を作る。</div><ul class="plan-points"><li>まず合計を23で見たときのあまりを確かめる。</li><li>あとで125円だけが残る形になるので、ここが土台になる。</li></ul></td><td class="solution-cell"><div class="calc-block">6000 = 23×260 + 20
+→ 23で割ると 20 あまる</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">本体の式を23で割る。</div><ul class="plan-points"><li>3つが23で割り切れて、125円だけが残るのが急所。</li><li>あまりだけを見ると、中の個数だけに話をしぼれる。</li></ul></td><td class="solution-cell"><div class="calc-block">92円、161円、207円は23で割り切れる。
+125円は23で割ると10あまる。
+
+だから、中の個数を b 個とすると
+10×b を23で割ったあまりが 20 になる。
+
+10を7倍すると 70 で、23で割ると 1 あまる。
+そこで両方を7倍すると、b を23で割ったあまりは
+20×7=140 を23で割ったあまりと同じ。
+140 = 23×6 + 2 だから、b は23で割ると 2 あまる。
+
+125×48=6000 をこえるので、中は44個まで。
+したがって b は 2個 または 25個。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">b=2 と b=25 をそれぞれ確かめる。</div><ul class="plan-points"><li>候補は 2個 と 25個 の2本だけなので、1本ずつ確かめればよい。</li><li>最大個数を聞かれているので、特大は上から試す。</li></ul></td><td class="solution-cell"><div class="calc-block">中が2個のとき
+92a+161c+207d=5750
+
+特大を多くしたいので、まず d を大きい方から試す。
+207×26=5382 なので、残りは 368。
+368は 92×4 だから、大が1個も入らずだめ。
+次に d=25 とすると、残りは 575。
+575 = 92×1 + 161×3 だから、(a,c,d)=(1,3,25)。
+
+中が25個のとき
+92a+161c+207d=2875
+たとえば (a,c,d)=(3,2,11) で 2875 になる。
+だから 25個 も実際に買える。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">答えをまとめる。</div><ul class="plan-points"><li>小問ごとの答えを書き分ける。</li><li>(2) は 2個 と 25個 の両方を書く。</li></ul></td><td class="solution-cell"><div class="calc-block">(1) 20
+(2) 中は 2個、25個
+(3) 特大は最大 25個</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：各1個以上を先に引いてから残りの式を見る。まず土台をそろえて、あとから23のあまりへ戻す別解です。</p><p><strong>最初に紙に書くこと</strong>：92+125+161+207=585 と書き、残り 5415円 を考える。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">4種類を1個ずつ買った残り金額に直す。</div><ul class="plan-points"><li>各1個以上の条件を先に消すと、0個以上の問題になる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">残り = 6000-585=5415円</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">残りの式を23で見る。</div><ul class="plan-points"><li>92,161,207 は23で割り切れ、125 だけが10あまる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">5415 を23で割ると 2あまり
+したがって 10×(中の追加個数) のあまりが 2</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">中の個数と特大の最大を出す。</div><ul class="plan-points"><li>最後は本解と同じく候補2本にしぼり、特大を上から試す。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">中は 2個 または25個
+特大の最大は25個</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>4変数のまま全部試そうとする。</td>
+<td>候補が多すぎて進まない。</td>
+<td>まず23で値段を見る。</td>
+<td>大事な条件を見つける力（構造認識）</td>
+</tr>
+<tr>
+<td>正しい方針だが停止</td>
+<td>中が23で割ると2あまる、までは分かったが、そこで止まる。</td>
+<td>実際の候補に落とせない。</td>
+<td>b の上限 <span class="formula-note">44</span> を出す。</td>
+<td>条件を具体的な範囲に戻す力</td>
+</tr>
+<tr>
+<td>最後の詰め</td>
+<td>特大を最大にしたいのに、d を上から見ない。</td>
+<td>最大値を取りこぼす。</td>
+<td>理論上の上限から1つずつ下げる。</td>
+<td>見切りと詰めの制御</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>大事な割り算を見つける力</td><td>23を見つけて中だけを残した。</td></tr><tr><td>条件をしぼる力</td><td>b を 2,25 の2本にした。</td></tr><tr><td>最大を上から試す力</td><td>d=26 がだめ、25 ができると確定した。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>92, 161, 207 が同じ数でそろっている</td><td>共通の割り算で見る</td><td>まず公約数や同じ余りを探す。</td></tr><tr><td>各1個以上</td><td>上限・下限を合わせて見る</td><td>あまりだけで終わらず、上限を使って実際の候補に落とす。</td></tr><tr><td>最も多い場合</td><td>ほかを最小にする</td><td>理論上の上限を先に書く。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>4種類のシールの値段が 33円、47円、55円、66円で、各1枚以上買って合計355円でした。47円のシールは何枚か。さらに66円のシールは最多で何枚か。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>33,55,66 は11の倍数で、47だけが11で割ると3あまります。</li><li>1種類だけ余りが残る構造が元の問題と同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>355を11で割ると 3 あまる。</li><li>したがって 47円シールの枚数を m 枚とすると 3m を11で割ったあまりも3。</li><li>m は11で割ると1あまり。各1枚以上の条件から m=1 と分かる。</li><li>残り金額で66円シールを上から試す。</li></ol><p class="transfer-answer"><strong>答え</strong>：47円は1枚、66円は最大2枚</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>どの値段だけが11で割ったとき特別な余りを持つか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>22円、35円、44円、55円の4種類を各1個以上買って、合計247円になった。35円の品物は何個か。</p><h4>その解答解説</h4><ol class="work-steps"><li>22,44,55 は11の倍数、35は11で2あまる。</li><li>247は11で5あまり。</li><li>2×個数 のあまりが5になる個数を探す。</li></ol><p class="transfer-answer"><strong>答え</strong>：11で見て個数を絞る</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は「同じ数で割ったとき、1種類だけあまりがちがう」ことに気づけるかの診断に向いています。途中で止まる子には、「23で割ると2あまる」のあとに必ず上限を書かせると、具体的な候補へ戻す練習になります。</p>
+</aside></article><article class="problem-analysis" id="p02"><header><h1>第2問　回転する正方形の軌跡と面積</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">1辺4cmの正方形を、90°ずつ回す図形の問題です。
+(1) 図1で、対角線 PR が90°回転するときに通る部分の面積を求めなさい。
+(2) 図2で、1辺12cmの正方形の内側を同じように転がすとき、頂点 P の軌跡を図示しなさい。
+(3) 図3の灰色の 4cm×4cm の正方形の中で、2本の円弧が作る「Xだけに入る部分」と「Yだけに入る部分」の面積の差を求めなさい。
+円周率は3.14とします。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：図形、回転、軌跡、面積。</li><li><strong>実際</strong>：「動くものは何か」を決め、線分なら扇形、頂点なら円弧のつなぎ合わせとして見ることです。</li></ul></td><td>Pの軌跡は1本の円ではなく、回転の中心が順番に移るので複数の1/4円弧の連結になることです。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>(2) の軌跡は1本の円ではなく、中心が変わるたびに別の円弧になるからです。</td><td><ul class="compact plain-lines"><li>まずは 座標を置いて円弧として追う。</li><li>B=(0,0), C=(12,0), D=(12,12), A=(0,12) と置く。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>どの点で折れ、どの点が止まるかを方眼で読むのが安いからです。</td><td><p>Pの位置を (0,4)→(8,4)→(12,0)… と書き出す。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>最後は16cm²の中で2本の曲線が4分割する問題だから、局所化すると楽です。</td><td><ul class="compact plain-lines"><li>X=(4,12), Y=(8,8) と置いて、関係する2本の円弧だけを残す。</li><li>考えやすい形に直すと「灰色の正方形だけ切り出して面積を出す」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：座標を置いて円弧として追う</li><li>最初に紙に書くこと: 大きい正方形を 4cm 方眼の 3×3 と見て、 B=(0,0), C=(12,0), D=(12,12), A=(0,12) と置きます。最初のPは (0,4) です。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：方眼図と局所図。大きい正方形を 3×3 方眼に切り、(3)は灰色の1マスだけを別図にする。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn" data-mode="5" type="button">5</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1) は対角線PRを1本の線分として見る。</div><ul class="plan-points"><li>RからPR上の各点までの距離 0〜4√2 が全部90°回るからです。</li><li>ここでは「90°回転、1辺4cm」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">PR = 4√2
+
+通過部分
+= 半径 4√2、中心R、角 90° の扇形
+= π×(4√2)²×90/360
+= 8π
+= 25.12</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2) はPの位置と回転の中心を順番に書く。</div><ul class="plan-points"><li>各回転ではPは中心から一定距離なので1/4円弧になるからです。</li><li>ここでは「小正方形の1辺が4cm、大正方形の1辺が12cm」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">Pの要点:
+(0,4) → (8,4) → (12,0) → (8,4)
+→ (8,12) → (4,8) → (0,4)
+
+動く円弧の中心:
+(4,0), (8,0), (12,4), (12,8), (4,12), (0,8)</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3) は灰色の 4cm×4cm の正方形だけを切り出す。</div><ul class="plan-points"><li>灰色の正方形の中では、この2本の円弧だけが面積を切っているからです。</li><li>ここでは「図3の灰色部分は 4cm×4cm」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">X = (4,12), Y = (8,8)
+
+赤い円弧:
+中心X、半径4
+
+青い円弧:
+中心(12,8)、半径4√2</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">赤い円弧の内側の面積A、青い円弧の内側の面積Bを出す。</div><ul class="plan-points"><li>差だけなら、AとBの合計から正方形16を引けばよいからです。</li><li>ここでは「青い円弧は 45° 分だけ灰色正方形に入る」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A = 半径4の1/4円
+  = 4π = 12.56
+
+B = 半径4√2、角45°の扇形
+    - 二等辺直角三角形
+  = π×(4√2)²×45/360 - 4×4÷2
+  = 4π - 8
+  = 4.56</div></td></tr><tr data-step="5"><td class="plan-cell"><div class="step-badge">第5手</div><div class="plan-title">最後の差を出して答えをまとめる。</div><ul class="plan-points"><li>4つの部分を一つずつ求めなくてすむ最短ルートです。</li><li>ここでは「灰色正方形の面積は 16」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">差 = A + B - 16
+   = 12.56 + 4.56 - 16
+   = 1.12</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：座標を使わず、誌面解説のように「外側の大きい回った部分」から差を取る。図形分割で押す別解です。</p><p><strong>最初に紙に書くこと</strong>：図2・図3を方眼で見ず、必要な回転部分だけを扇形と三角形に切り出して描く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1) は対角線が回る大外の扇形で出す。</div><ul class="plan-points"><li>線分PRが回ると、大外は半径 4√2 の1/4円になる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">PR=4√2
+面積 = π×(4√2)^2×1/4 = 8π = 25.12</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2) はPの通る要点を図だけで追う。</div><ul class="plan-points"><li>各回転で P は「そのときの中心」から一定距離。</li><li>止まる2回は線が増えない。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">半径4√2 の弧2本と
+半径4 の弧4本を図示</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3) は灰色正方形の中の差だけを見る。</div><ul class="plan-points"><li>誌面解説と同じく、白い部分を全部求めず、赤い部分と青い部分の足し引きにする。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">赤 = 半径4の1/4円 = 4π
+青 = 半径4√2・45°扇形 - 直角二等辺三角形 = 4π-8
+差 = 4π + (4π-8) - 16 = 1.12</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>Pの軌跡を大きい円1本だと思う。</td>
+<td>図2が描けない。</td>
+<td>中心を1回ごとに書く。</td>
+<td>図を段階で見る力</td>
+</tr>
+<tr>
+<td>正しい方針だが停止</td>
+<td>円弧だとは分かったが、どこからどこまでか分からない。</td>
+<td>始点・終点があいまい。</td>
+<td>Pの要点の座標を先に列挙する。</td>
+<td>図や表に直す力</td>
+</tr>
+<tr>
+<td>最後の詰め</td>
+<td>(3) を4部分全部出そうとする。</td>
+<td>計算が長くなる。</td>
+<td>A+B-16 の差の式に切り替える。</td>
+<td>見方を選び直す力</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>動くものを見分ける力</td><td>(1) と (2)(3) の見方を分けた。</td></tr><tr><td>方眼に直す力</td><td>Pの要点と中心を正確に追った。</td></tr><tr><td>面積をまとめて引く力</td><td>(3) を A+B-16 で短く終えた。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>90°回転する</td><td>半径と中心を先に書く</td><td>まず中心と距離を確定する。</td></tr><tr><td>12cm の中に 4cm の正方形</td><td>座標を置く</td><td>大きい図形を小さいマスに切る。</td></tr><tr><td>灰色の 4cm×4cm の部分だけを見る</td><td>大きい図から必要部分だけ切り出す</td><td>関係する部分だけ別図にする。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>1辺5cmの正方形を、1辺15cmの正方形の内側で同じように転がす。対角線が90°回転で通る面積と、灰色の 5cm×5cm の正方形でできる2つの部分の面積差を求めよ。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>小正方形:大正方形=1:3、90°回転、灰色の1マスを見る構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>対角線の長さは 5√2。90°回るので通る部分は半径 5√2 の1/4円。</li><li>頂点Pの軌跡は、中心が順に移る1/4円弧のつなぎ合わせ。</li><li>灰色の 5×5 正方形では、赤い1/4円と青い45°分の扇形−三角形だけを見ればよい。</li></ol><p class="transfer-answer"><strong>答え</strong>：面積は 25π/2、差は 25×(3.14-3)/2=1.75</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>回転問題は、まず半径と中心を書けるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>1辺6cmの正方形を、1辺18cmの正方形の内側で同じように転がす。対角線が90°回る部分の面積を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>対角線の長さは 6√2。</li><li>90°回転なので、通る部分は半径 6√2 の1/4円。</li><li>面積は π×(6√2)^2×1/4 = 18π。</li></ol><p class="transfer-answer"><strong>答え</strong>：18π=56.52cm²（円周率3.14）</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は「軌跡を1本の曲線だと思い込む」癖があるかどうかの診断に向いています。図示が苦手な子には、まずPの位置だけを座標で打たせ、そのあと円弧でつなぐ順にすると安定します。</p>
+</aside></article><article class="problem-analysis" id="p03"><header><h1>第3問　出会い・休憩・同時到着の速さ</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">花子さんは A地点 から 819m 離れた B地点 へ出発しました。
+それと同時に、太郎さんは B地点 から A地点 へ向かい、次郎さんは A地点 と B地点 の間にある C地点 から A地点 へ向かって出発しました。
+3人の速さはそれぞれ一定で、次郎さんの速さは太郎さんより 1分あたり126m 速いです。
+次郎さんはA地点に着くと6分間休けいし、行きと同じ速さでB地点へ向かって出発しました。
+花子さんは太郎さんとC地点ですれ違い、その6分後にB地点へ着きました。花子さんがB地点に着くと同時に次郎さんもB地点に着きました。
+(1) 次のア〜カのうち2つは等しいです。それはどれとどれですか。
+(2) 花子さんの速さ
+(3) 太郎さんの速さ
+を求めなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：速さ。</li><li><strong>実際</strong>：同じ時間、同じ道のりを2通りに表して式をそろえる見方です。</li></ul></td><td>花子さんがCからBまで6分という条件と、次郎さんの「Aまで行って6分休み、そこからBへ行っても同時到着」という条件が、同じ819mに対する2本の式を作ることです。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>会った後の区間 BC が一気に決まるからです。</td><td><ul class="compact plain-lines"><li>まずは t分後にCで会う。</li><li>AC=Ht、BC=Tt、しかも BC=6H と置く。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>休憩の6分が、花子さんの「CからBまで6分」ときれいに対応するからです。</td><td><p>次郎さんの総時間から休憩6分を引いて t と結びつける。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>最後にJとTを結ぶために必須の条件だからです。</td><td><ul class="compact plain-lines"><li>H+T=J-H が出たら代入する準備をする。</li><li>考えやすい形に直すと「J=T+126 を最後にはめる」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：t分後にCで会う</li><li>最初に紙に書くこと: 花子さんの速さを H 、太郎さんを T 、次郎さんを J 、Cですれ違うまでの時間を t 分と置きます。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：一直線の線分図。A──C──B と置き、「会うまで」と「会ってから」を色分けして書く。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">Cですれ違うまでの関係を書く。</div><ul class="plan-points"><li>出会い算では「同じ時刻まで進んだ距離」をそろえるのが基本だからです。</li><li>ここでは「花子さんと太郎さんは同時に出発し、Cで会う」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">AC = Ht
+BC = Tt
+AC + BC = 819
+
+よって
+819 = (H+T)t</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">花子さんの「会ってから6分」を使う。</div><ul class="plan-points"><li>6分という具体時間は、区間BCを固定する強い条件だからです。</li><li>ここでは「Cですれ違ってから6分後にB着」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">花子さんは C→B を 6分で進む
+→ BC = 6H
+
+BC = Tt でもあるから
+Tt = 6H</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">次郎さんの同時到着条件を使う。</div><ul class="plan-points"><li>休憩6分が両辺で打ち消し合い、きれいな式になるからです。</li><li>ここでは「次郎さんはAで6分休み、花子さんと同時にBへ着く」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">花子さんのB到着は t+6 分後
+
+次郎さんは
+C→A に AC/J = Ht/J 分
+休憩 6 分
+A→B に 819/J 分
+
+同時到着より
+Ht/J + 6 + 819/J = t + 6
+→ Ht + 819 = Jt
+→ 819 = (J-H)t</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">速さを解く。</div><ul class="plan-points"><li>同じ819に掛かる時間 t が共通なので、速さ部分だけを比べられます。</li><li>ここでは「J=T+126」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">819 = (H+T)t = (J-H)t
+→ H+T = J-H
+
+J = T + 126 だから
+H + T = T + 126 - H
+2H = 126
+H = 63
+
+BC = 6H = 378
+AC = 819-378 = 441
+t = AC/H = 441/63 = 7
+T = BC/t = 378/7 = 54</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：一直線の線分図を描き、区間 BC と AC を文字で置く。時間 t を先に置かず、区間から速さへ戻す別解です。</p><p><strong>最初に紙に書くこと</strong>：A──C──B の線分図を描き、AC を a m、BC を b m とおく。a+b=819。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">BC を花子さんの6分と結びつける。</div><ul class="plan-points"><li>花子さんは C から B を6分で進むので、b=6H。</li><li>太郎さんは会うまでに BC を進む。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">BC=b=6H
+太郎さんの会うまでの時間 = b/T</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">会うまでの時間を AC でも表す。</div><ul class="plan-points"><li>花子さんは会うまでに AC=a を進む。</li><li>したがって a/H = b/T。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">a/H = b/T
+→ aT=bH</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">次郎さんの往復と同時到着で式を閉じる。</div><ul class="plan-points"><li>次郎さんの移動距離は a+819、休けい6分つき。</li><li>これが花子さんの全時間 a/H+6 と等しい。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">(a+819)/J + 6 = a/H + 6
+→ (a+819)/J = a/H
+J-T=126 と合わせて H, T を出す</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>文章をそのまま追って式を立てようとする。</td>
+<td>誰が何分動いたかが混ざる。</td>
+<td>まず t 分後にCで会う図を作る。</td>
+<td>整理して見る力</td>
+</tr>
+<tr>
+<td>正しい方針だが停止</td>
+<td>819=(H+T)t までは出たが、次が出ない。</td>
+<td>次郎さんの条件を使えない。</td>
+<td>休憩6分が花子さんの「会ってから6分」と打ち消し合うと見る。</td>
+<td>条件を対応づける力</td>
+</tr>
+<tr>
+<td>最後の詰め</td>
+<td>H が出たあと T を別の長い式で出そうとする。</td>
+<td>計算が長くなる。</td>
+<td>BC=6H と t=AC/H から T=BC/t を出す。</td>
+<td>道のり分割の整理</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>同じ時間をそろえる力</td><td>819=(H+T)t を作った。</td></tr><tr><td>区間を分けて見る力</td><td>BC=6H, BC=Tt を作った。</td></tr><tr><td>対応を見つける力</td><td>次郎さんの休憩6分が消える形にした。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>Cで会う</td><td>t分後と置く</td><td>まず出会いまでの時間を文字で置く。</td></tr><tr><td>会ってから6分で着く</td><td>その区間の道のりを速さで表す</td><td>具体時間は区間の固定に使う。</td></tr><tr><td>休憩しても同時到着</td><td>総時間を両方とも書く</td><td>余計な時間を両辺に置いて消せないか見る。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>AとBは600m離れている。花子さんはAからBへ、太郎さんはBからAへ、次郎さんはCからAへ同時に出発する。次郎さんは太郎さんより毎分100m速い。花子さんは太郎さんとCですれ違い、その4分後にBへ着く。次郎さんはAで4分休み、花子さんと同時にBへ着いた。花子さんと太郎さんの速さを求めよ。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>「会うまでの同じ時間」と「同時到着の同じ全時間」を2本の式にする構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>会うまでを t 分とおくと、600=(H+T)t。</li><li>花子さんは C から B を4分で進むので BC=4H。これが太郎さんの BC=Tt と等しい。</li><li>次郎さんの全時間は AC/J + 4 + 600/J、これが花子さんの t+4 と等しい。</li><li>J-T=100 と合わせて H,T を求める。</li></ol><p class="transfer-answer"><strong>答え</strong>：同じ時間と同じ道のりを2本そろえる</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>会うまでの時間と、全体の到着時間を分けて書けるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>AとBは480m離れている。花子さんは太郎さんと出会ってから3分でBへ着いた。次郎さんは太郎さんより毎分60m速く、Aで3分休んで花子さんと同時にBへ着いた。速さを求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>会うまでを t 分とすると 480=(H+T)t。</li><li>BC=3H=Tt。</li><li>次郎さんの全時間も花子さんの全時間に等しい式を作り、J-T=60 と合わせる。</li></ol><p class="transfer-answer"><strong>答え</strong>：同じ時間を2本作る</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は、図を書かずに文章だけで進む子ほど混乱しやすいです。A-C-B の一直線図を必ず書かせ、「会うまで」「会ってから」を色分けすると、6分条件の対応が見えやすくなります。</p>
+</aside></article><article class="problem-analysis" id="p04"><header><h1>第4問　しきい値つき増減の周期</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">底面積が 1000cm²、高さが 70cm の直方体の水そうに、高さ 8cm まで水が入っています。
+1分ごとに、水の高さが 14cm 未満なら xL の水を入れ、14cm以上なら yL の水を出すことを繰り返します。
+ただし、水そうから水があふれる場合や、水がなくなってしまう場合は考えません。
+x,y の組が (4,6) のとき、8cmから始めて1分ごとの水の高さは 8,12,10,14,8,12,… と変化し、5分後に初めて8cmに戻ります。
+(1) (x,y)=(2,7) のとき、および (8,10) のとき、初めて高さ8cmに戻るのは何分後ですか。
+(2) 10分後に初めて高さ8cmに戻る整数の組 (x,y) について、
+  (ア) 考えられる x:y の最も簡単な整数比を4通り答えなさい。
+  (イ) 条件を満たす整数の組を8通り答えなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：規則性、整数、場合分け。</li><li><strong>実際</strong>：水位を「14cmからのずれ」で見て、1回ごとに +x ずつ進む巡回としてとらえる見方です。</li></ul></td><td>14cmを境に増減の向きが変わるので、14cmからのずれを並べると規則が一つにまとまります。誌面解説のよいところは、最初の数分を実際に書いて周期感をつかむ点です。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>「14cm未満なら入れる、14cm以上なら出す」という切り替え条件が最強です。こういう問題は、切り替えの線を0に置き直すと整理しやすくなります。</td><td>14cmを0として、下にいれば +x、上にいれば -y と見る。</td></tr><tr><td>数字・配置・端の意味</td><td>8cmから始めて8cmに戻るには、直前に 8+y cm まで上がっていなければいけません。ここから y は少なくとも 6 と分かります。</td><td>「戻る直前の高さ」に注目して、y が6以上でないと戻れないことを先に書く。</td></tr><tr><td>条件をどのように翻訳するか</td><td>毎分の高さそのものより、「14cmからのずれ」を並べた方が、何分で元に戻るかが見えやすいです。</td><td>(4,6) など小さい例でずれの並びを書き、同じ並びに戻るまでの回数を見てから一般化する。</td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入口 ：14cmからのずれを追って、同じ並びに戻る回数を見る。</li><li>最初に紙に書くこと ：高さを h cm、14cmからのずれを d=h-14 と置く。8cmスタートなので最初は d=-6。下にいれば +x、上にいれば -y と書く。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：高さの表。8cm,12cm,10cm,… のように最初の数分を実際に並べてから規則を見る。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn" data-mode="5" type="button">5</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">まず、Lをcmに直す。</div><ul class="plan-points"><li>Lの問題ではなく高さの問題に直す。</li><li>ここを直すと、あとが全部 cm でそろう。</li></ul></td><td class="solution-cell"><div class="calc-block">底面積は1000cm²。
+1Lは1000cm³だから、高さは1cm変わる。
+よって、xL 入れると x cm 上がり、yL 出すと y cm 下がる。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">14cmからのずれで表す。</div><ul class="plan-points"><li>14cmを0にすると、切り替え条件が見やすい。</li><li>「上に出たら1周ぶん戻る」形で考える。</li></ul></td><td class="solution-cell"><div class="calc-block">d=h-14 とおく。
+14cm未満なら d は x だけ増える。
+14cm以上なら d は y だけ減る。
+
+たとえば d=-6 から始めると、毎回 x ずつ進み、上にはみ出したぶんは x+y だけ引いて元の区間に戻る形になる。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(1)を確かめる。</div><ul class="plan-points"><li>小問(1)は、実際に並べて確かめると安心。</li><li>戻るまでの回数が両方とも9分だと見える。</li></ul></td><td class="solution-cell"><div class="calc-block">(2,7) のとき
+-6, -4, -2, 0, -7, -5, -3, -1, 1, -6
+→ 9分で元に戻る
+
+(8,10) のとき
+-6, 2, -8, 0, -10, -2, 6, -4, 4, -6
+→ 9分で元に戻る</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">10分で初めて戻る比を出す。</div><ul class="plan-points"><li>先に最も簡単な比へ落とすと、候補が一気に少なくなる。</li><li>「初めて戻る」は、もっと短い周期がないことを表す。</li></ul></td><td class="solution-cell"><div class="calc-block">x と y を、いっしょに割れるいちばん大きい数 g で割って
+x=gp、y=gq とする。
+このとき p と q は互いにこれ以上いっしょに割れない。
+
+同じ並びに戻るまでの回数は p+q 回になるので、
+10分で初めて戻るなら p+q=10。
+
+和が10で、互いにこれ以上いっしょに割れない正の整数の組は
+(1,9),(3,7),(7,3),(9,1)。
+したがって比は
+x:y=1:9, 3:7, 7:3, 9:1。</div></td></tr><tr data-step="5"><td class="plan-cell"><div class="step-badge">第5手</div><div class="plan-title">実際にできる組だけを残す。</div><ul class="plan-points"><li>比が合っても、実際に戻れない組は消す。</li><li>戻る直前の高さと、あふれ・出しすぎを最後に確かめる。</li></ul></td><td class="solution-cell"><div class="calc-block">1:9 → 8+y が14以上になるには y=9 だけ
+→ (1,9)
+
+3:7 → y は 7 または14
+→ (3,7),(6,14)
+
+7:3 → y は6,9,12,15
+→ (14,6),(21,9),(28,12),(35,15)
+
+9:1 → y は6だけ
+→ (54,6)</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：最初の数分を実際に表に書き、戻る周期の型を見つけてから一般化する。誌面の例 (4,6) 型を先にまねる別解です。</p><p><strong>最初に紙に書くこと</strong>：8cm から始めて、1分ごとの高さを 10〜12分ぶん表にする。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">具体例で周期の見え方をつかむ。</div><ul class="plan-points"><li>(2,7), (8,10) のように小さい組は、表にすると戻る位置が見やすい。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">8 → 10 → 3 → 5 → … のように列を書く</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">14cmより下では +x、14cm以上では -y をくり返す。</div><ul class="plan-points"><li>しきい値14をまたぐたびに、同じ型がくり返される。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">14からのずれ d を並べると
+-6, -6+x, -6+x-y, …</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">初めて戻る回数を調べて比へ直す。</div><ul class="plan-points"><li>表で型が見えたら、最後に最簡比へまとめる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">10分後に初めて戻る組を表で調べ、
+同じ型のものをまとめて比にする</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>Lとcmを別物のまま考える。</td>
+<td>式が立たない。</td>
+<td>底面積1000cm²だから1L=1cmと書く。</td>
+<td>条件を言いかえる力</td>
+</tr>
+<tr>
+<td>正しい方針だが停止</td>
+<td>周期式は出たが y&lt;6 を見ていない。</td>
+<td>戻れない比まで混ざる。</td>
+<td>8cmに戻る直前の高さを考える。</td>
+<td>必要条件を見る力</td>
+</tr>
+<tr>
+<td>最後の詰め</td>
+<td>比だけで満足して g を調べない。</td>
+<td>不可能な組が残る。</td>
+<td>あふれ・負の水位を使って g をふるいにかける。</td>
+<td>見方を選び直す力</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>条件を言いかえる力</td><td>d=h-14 の巡回に変えた。</td></tr><tr><td>周期をまとめる力</td><td>10分条件から比を4通りにした。</td></tr><tr><td>必要条件を先に見る力</td><td>y≥6 を先に出した。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>14cm未満なら入れる、14cm以上なら出す</td><td>しきい値を0に平行移動する</td><td>分かれ目を0に置き直す。</td></tr><tr><td>8cmから始めて8cmに戻る</td><td>最小周期を見る</td><td>戻るまでの最短回数を 最大公約数 で表せないか考える。</td></tr><tr><td>あふれ・出せない組は除く</td><td>比のあとで定数倍を調べる</td><td>候補が出たあとに必ず実現可能性を点検する。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>高さ6cmから始め、10cm未満なら a cm 増やし、10cm以上なら b cm 減らす操作を1分ごとに繰り返す。初めて6cmに戻るのが12分後になるとき、a:b の最簡比をすべて答えよ。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>しきい値からのずれを追うと、下にいるときは +a、上にいるときは -b の巡回になる構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>10cmからのずれ d を書く。スタートは -4。</li><li>1分ごとに d が +a, -b と動く並びを追い、初めて -4 に戻るまでの長さを数える。</li><li>12分で戻るには、最簡比 p:q が p+q=12 を満たす既約比になる。</li></ol><p class="transfer-answer"><strong>答え</strong>：表で数えてから比へまとめる</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>具体例を数分ぶん書いて、戻り方の型をつかめるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>高さ5cmから始め、9cm未満なら 3cm 増やし、9cm以上なら 5cm 減らす。初めて5cmに戻るのは何分後か。</p><h4>その解答解説</h4><ol class="work-steps"><li>5→8→11→6→9→4→7→10→5 と書いていく。</li><li>初めて5cmへ戻るのは8分後。</li></ol><p class="transfer-answer"><strong>答え</strong>：8分後</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は、規則をただ表で追うだけでなく、「どこを0に置き直すと見やすいか」を学ぶのに向いています。例の列を高さ h と 14cmからのずれ d の両方で書かせると、同じ現象を別の見え方で理解しやすくなります。</p>
+</aside></article><footer class="site-footer">学コン 2026年5月号の4題を、rendering_spec / core_pedagogy / quality_checklist の構造に合わせて再構成したHTMLです。</footer></main>
+<script>
+let currentScale = 1;
+function applyScale(){
+  document.documentElement.style.setProperty('--content-scale', currentScale.toFixed(2));
+  const lab = document.getElementById('size-label');
+  if(lab){ lab.textContent = Math.round(currentScale*100) + '%'; }
+}
+function changeFontSize(delta){
+  currentScale = Math.max(0.9, Math.min(1.3, currentScale + delta*0.05));
+  applyScale();
+}
+function setActiveStepButtons(controls, mode){
+  controls.querySelectorAll('.details-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+}
+function applyDetailsMode(section, mode){
+  section.querySelectorAll('tr[data-step]').forEach(row => {
+    if(mode === 'all'){ row.style.display = ''; return; }
+    if(mode === 'close'){ row.style.display = 'none'; return; }
+    row.style.display = row.dataset.step === mode ? '' : 'none';
+  });
+}
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.details-btn');
+  if(!btn) return;
+  const controls = btn.closest('.details-controls');
+  const section = btn.closest('.details-section');
+  if(!controls || !section) return;
+  const mode = btn.dataset.mode;
+  setActiveStepButtons(controls, mode);
+  applyDetailsMode(section, mode);
+});
+document.addEventListener('DOMContentLoaded', () => {
+  applyScale();
+  document.querySelectorAll('.details-section').forEach(section => {
+    const controls = section.querySelector('.details-controls');
+    if(!controls) return;
+    const active = controls.querySelector('.details-btn.active');
+    applyDetailsMode(section, active ? active.dataset.mode : 'all');
+  });
+});
+</script>
+</body></html>
