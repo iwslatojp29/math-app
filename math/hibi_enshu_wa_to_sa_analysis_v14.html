@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>2026年5月　日日の演習「和と差の文章題」解答・難問探索分析 v14.0</title><style>
+:root{--bg:#faf9f6;--card:#ffffff;--line:#d9d3c7;--text:#222;--muted:#666;--accent:#7a5c00;--accent-bg:#fff6db;--content-scale:1;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;line-height:1.7;}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 64px;}
+header.site-header{background:linear-gradient(135deg,#f6ecd0,#fff);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+header.site-header h1{margin:0 0 8px;font-size:calc(2rem * var(--content-scale));line-height:1.3;}
+header.site-header p{margin:6px 0;font-size:calc(1rem * var(--content-scale));}
+.notice{background:var(--accent-bg);border-left:4px solid var(--accent);padding:12px 14px;margin-top:16px;border-radius:8px;font-size:calc(.98rem * var(--content-scale));}
+.problem-analysis{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:26px;box-shadow:0 1px 4px rgba(0,0,0,.04);scroll-margin-top:96px;}
+.problem-analysis header{border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px;}
+.problem-analysis h1{margin:0 0 10px;font-size:calc(1.5rem * var(--content-scale));}
+.problem-analysis h2{margin-top:24px;font-size:calc(1.13rem * var(--content-scale));border-left:4px solid #d6b656;padding-left:10px;}
+.problem-analysis h3{margin-top:14px;font-size:calc(1.02rem * var(--content-scale));}
+.problem-analysis p,.problem-analysis li,.problem-analysis th,.problem-analysis td,.problem-analysis aside,.site-footer{font-size:calc(.97rem * var(--content-scale));}
+.problem-analysis ul,.problem-analysis ol{margin:8px 0 0 1.2em;}
+.problem-analysis table{width:100%;border-collapse:collapse;margin-top:10px;}
+.problem-analysis th,.problem-analysis td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;overflow-wrap:anywhere;}
+.problem-analysis th{background:#f4efe3;text-align:left;}
+.problem-nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#2c3e50,#34495e);padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.15);border-bottom:2px solid var(--accent);}
+.problem-nav .nav-label{color:#fff;font-weight:700;font-size:.85rem;margin-right:4px;white-space:nowrap;}
+.problem-nav a{display:inline-block;padding:4px 10px;background:rgba(255,255,255,.12);color:#fff;text-decoration:none;border-radius:6px;font-size:.82rem;font-weight:600;}
+.font-controls{margin-left:auto;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.font-controls button{width:32px;height:32px;border:none;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.font-controls .size-label{color:rgba(255,255,255,.8);font-size:.75rem;min-width:40px;text-align:center;}
+.overview-table{table-layout:fixed;}
+.overview-table th:nth-child(1),.overview-table td:nth-child(1){width:46%;}
+.overview-table th:nth-child(2),.overview-table td:nth-child(2){width:24%;}
+.overview-table th:nth-child(3),.overview-table td:nth-child(3){width:30%;}
+.problem-shot{max-height:430px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px;}
+.problem-shot img{display:block;width:100%;height:auto;}
+.overview-table ul.theme-bullets{margin:0;padding-left:1.05em;}
+.overview-table ul.theme-bullets li{margin-bottom:.28em;}
+.problem-shot-note{margin-top:6px;color:var(--muted);font-size:calc(.88rem * var(--content-scale));}
+.section-indent>:not(h2){margin-left:1.2em;}
+.section-indent>table,.section-indent>aside,.section-indent>section,.section-indent>.details-controls,.section-indent>.representation-box,.section-indent>.setup-box,.section-indent>.mini-card{width:calc(100% - 1.2em);box-sizing:border-box;}
+.reading-table th:nth-child(1),.reading-table td:nth-child(1){width:20%;}
+.reading-table th:nth-child(2),.reading-table td:nth-child(2){width:42%;}
+.reading-table th:nth-child(3),.reading-table td:nth-child(3){width:38%;}
+.representation-box,.setup-box,.mini-card,.accordion-card,aside.appendix-note{background:#fbfbff;border:1px solid #dfe5ff;border-radius:12px;padding:12px 14px;}
+.representation-box p,.setup-box p{margin:6px 0;}
+.details-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.details-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;margin-bottom:10px;}
+.details-btn{min-width:38px;height:38px;padding:0 12px;border-radius:999px;border:1.5px solid #d6b656;background:transparent;color:var(--accent);font-size:.95rem;font-weight:700;cursor:pointer;line-height:1;}
+.details-btn.active{background:#d6b656;color:#fff;}
+.solution-step-table th:nth-child(1),.solution-step-table td:nth-child(1){width:34%;}
+.solution-step-table th:nth-child(2),.solution-step-table td:nth-child(2){width:66%;}
+.plan-cell .step-badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#f6f0e1;font-weight:700;font-size:calc(.88rem * var(--content-scale));margin-bottom:6px;}
+.plan-cell .plan-title{font-weight:700;margin-bottom:6px;}
+.plan-points{margin:0 0 0 1.1em;padding-left:.2em;}
+.plan-points li{margin-bottom:6px;}
+.calc-block{background:#fcfbf8;border:1px solid var(--line);border-radius:10px;padding:8px 10px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:calc(.93rem * var(--content-scale));}
+.setup-list{margin:0 0 0 1.1em;padding-left:.2em;}
+.setup-list li{margin-bottom:6px;}
+.skill-mini th:nth-child(1),.skill-mini td:nth-child(1){width:35%;}
+.reuse-mini th:nth-child(1),.reuse-mini td:nth-child(1){width:34%;}
+.memory-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.accordion-card summary{cursor:pointer;font-weight:700;}
+.accordion-body h4{margin:12px 0 6px;}
+.candidate-points{margin:8px 0 0 1.2em;padding-left:.2em;}
+.trap-table th:nth-child(1),.trap-table td:nth-child(1){width:16%;}
+.site-footer{color:var(--muted);text-align:center;margin-top:36px;}
+@media (max-width:800px){.problem-analysis{padding:18px;}.details-heading{align-items:flex-start;}.details-heading .details-controls{width:100%;justify-content:flex-start;}.memory-grid{grid-template-columns:1fr;}.problem-shot{max-height:360px;}}
+
+.problem-ocr{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;white-space:pre-wrap;line-height:1.8;min-height:10em;font-size:calc(.96rem * var(--content-scale));}
+.overview-table th:nth-child(1),.overview-table td:nth-child(1){width:50%;}
+.overview-table th:nth-child(2),.overview-table td:nth-child(2){width:22%;}
+.overview-table th:nth-child(3),.overview-table td:nth-child(3){width:28%;}
+.overview-table ul.theme-bullets{margin:0;padding-left:.85em;}
+.overview-table ul.theme-bullets li{margin-bottom:.35em;}
+.solution-step-table th:nth-child(1),.solution-step-table td:nth-child(1){width:30%;}
+.solution-step-table th:nth-child(2),.solution-step-table td:nth-child(2){width:70%;}
+.plan-cell{background:#fffdf8;}
+.solution-cell{background:#fff;}
+.solution-cell .calc-block{line-height:1.8;}
+.transfer-answer{margin-top:10px;padding:8px 10px;border-radius:8px;background:#fff7e5;border:1px solid #ead9aa;}
+.work-steps{margin:8px 0 0 1.1em;padding-left:.2em;}
+.work-steps li{margin-bottom:8px;}
+.tool-note{margin-top:10px;background:#fffdf7;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;}
+.ascii-diagram{margin-top:10px;background:#fcfbf8;border:1px solid var(--line);border-radius:10px;padding:8px 10px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+.accordion-body .calc-block{margin-top:10px;}
+</style></head><body><div class="problem-nav" id="problem-nav">
+<span class="nav-label">問題:</span>
+<a href="#p01">01</a>
+<a href="#p02">02</a>
+<a href="#p07">07</a>
+<a href="#p08">08</a>
+<a href="#p09">09</a>
+<a href="#p11">11</a>
+<a href="#p12">12</a>
+<a href="#p13">13</a>
+<a href="#p14">14</a>
+<a href="#p15">15</a>
+<a href="#p18">18</a>
+<a href="#p19">19</a>
+<a href="#p20">20</a>
+<a href="#p21">21</a>
+<a href="#p22">22</a>
+<a href="#p25">25</a>
+<a href="#p26">26</a>
+<a href="#p27">27</a>
+<a href="#p28">28</a>
+<a href="#p29">29</a>
+<div class="font-controls">
+<button onclick="changeFontSize(-1)" title="文字を小さく">−</button>
+<span class="size-label" id="size-label">100%</span>
+<button onclick="changeFontSize(1)" title="文字を大きく">＋</button>
+</div>
+</div><main><header class="site-header">
+<h1>2026年5月　日日の演習「和と差の文章題」解答・難問探索分析 v14.0</h1>
+<p><strong>特集:</strong> 和と差の文章題を得意にしよう</p>
+<p><strong>対象:</strong> 受験算数を一通り学習済みの小5〜6 / 典型題は解けるが、初見でどこに注目し、何をどう整理するかを鍛えたい学習者</p>
+<p><strong>中心命題:</strong> 難問力の中核は、内容知識に支えられた構造認識とメタ認知である。</p>
+<p><strong>方針:</strong> 問題文は PDF / 誌面の問題文を OCR テキスト化して載せ、解答解説は右側を広く取った 2 列で整理します。本解は誌面解説のよい流れを取り入れ、別解は考えの上流を変えて書きます。</p>
+<div class="notice"><strong>読み方のおすすめ</strong><br/>まず問題文を読み、1章と2章でどこに注目し、何を図や表にするか確かめます。次に3章の本解、4章の別解を比べます。最後に7章の転移テストと自作問題で、同じ見方を別の問題へ移してください。</div>
+</header><article class="problem-analysis" id="p01"><header><h1>05月01　9種類しかない2数和</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">5つの整数 A, B, C, D, E が、小さい順に A&lt;B&lt;C&lt;D&lt;E と並んでいます。
+この5つの整数の中から2つを選んで和をつくると、
+23, 29, 30, 31, 34, 35, 37, 41, 42
+の9種類になりました。
+(1) E-A を求めなさい。
+(2) 和が同じになる2つの式を答えなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：整数の和差</li><li><strong>実際</strong>：10通りの2数和を大小順に並べる“並び表”として見る</li></ul></td><td>5個から2個を選ぶ和は10通りなのに値が9種類しかないので、どこかで和が1組だけ重なります。ここを“順番の問題”として見ると急に整理できます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>5個から2個を選ぶ和は 5C2=10 通りなのに、与えられた値は9種類です。『1組だけ重なりがある』が最強条件です。</td><td><ul class="compact plain-lines"><li>まずは 大小順の2数和を並べて読む。</li><li>10通りの2数和を大小順に並べ、与えられた9個を端から対応させます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>最小の和は A+B=23、最大の和は D+E=42 と読めます。端の値は差を作る材料になります。</td><td><p>3段の『2数和の並び表』を1回書くことです。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>A+B&lt;A+C&lt;A+D&lt;A+E、B+C&lt;B+D&lt;B+E、C+D&lt;C+E&lt;D+E のように、2数和を段々に並べる表現へ翻訳します。</td><td><ul class="compact plain-lines"><li>3段の『2数和の並び表』を1回書くことです。</li><li>考えやすい形に直すと「大小順の2数和を並べて読む」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：大小順の2数和を並べて読む</li><li>最初に紙に書くこと: 10通りの2数和を大小順に並べる。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">10通りの2数和を大小順に並べる。</div><ul class="plan-points"><li>この問題の重心は『和の値』ではなく『和の順番』にあるからです。</li><li>ここでは「5個から2個を選ぶ和が10通り、しかも A＜B＜C＜D＜E」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A+B, A+C, C+E, D+E のような端の和が対応できます。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">A+B=23, A+C=29, C+E=41, D+E=42 と読んで E−A を出す。</div><ul class="plan-points"><li>端に近い和どうしを引くと、中の文字が消えて差が出るからです。</li><li>ここでは「与えられた9個が小さい順に並んでいること」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">E−A=(C+E)−(A+C)=41−29=12。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">37 は C+D と決め、E−D を出す。</div><ul class="plan-points"><li>35 と 41 の間に入る和は C+D しか自然でないからです。</li><li>ここでは「B+E=35 まで読めること」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">E−D=(C+E)−(C+D)=41−37=4。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">A+E=34、B+D=31 を作り、30 は B+C だと決める。</div><ul class="plan-points"><li>29 と 31 の間にある30は、その間に入る B+C しかないからです。</li><li>ここでは「A+E と B+D が読めていること」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A+D=30 と B+C=30 で等しい和の組が決まります。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：実際の5整数を全部出してから答えを取る。順番表を読んだあと、和差算で文字をつぶしていくと、具体的な5数まで復元できます。</p><p><strong>最初に紙に書くこと</strong>：A+B=23, A+C=29, D+E=42 と、30 がどこに入るかを紙に並べて書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">30 が B+C と A+D の両方になることを使う。</div><ul class="plan-points"><li>29 と 31 の間に入る和は 30 だけなので、30 は B+C。</li><li>同じ30を作るもう一方は A+D である。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">A+D=30
+B+C=30
+A+B=23
+A+C=29</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">B と C を出す。</div><ul class="plan-points"><li>(A+C)-(A+B)=C-B=6。</li><li>また B+C=30 だから、和差算で B=12, C=18。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">C-B=29-23=6
+B+C=30
+→ B=(30-6)÷2=12
+→ C=(30+6)÷2=18</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">A,D,E を順に出して答えへ戻る。</div><ul class="plan-points"><li>A+B=23 から A=11。</li><li>A+D=30 から D=19、D+E=42 から E=23。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">A=23-12=11
+D=30-11=19
+E=42-19=23
+E-A=23-11=12
+同じ和は A+D と B+C</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>A+B=23 や D+E=42 が見えるので、まず式を立てたくなります。</td>
+<td>独立でない式が増え、どの和がどこに入るかが見えなくなります。</td>
+<td>2数和の並び表を書き、最小和と最大和を固定します。</td>
+<td>構造認識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>E−A をどう作るかで止まりやすいです。</td>
+<td>E−A をどう作るかで止まりやすいです。</td>
+<td>41−29 のように中の文字が消える引き算が作れないか確認します。</td>
+<td>端の和どうしを引くと差が出ることを見落としています。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>本来何通りかを見る力</td><td>小さい和から大きい和までの並びを固定し、端の和で E−A を作ってから、真ん中の重なりを決めます。</td></tr><tr><td>図や表に直す力</td><td>5個から2個を選ぶ和は10通りなのに値が9種類しかないので、どこかで和が1組だけ重なります。</td></tr><tr><td>大事な条件を見つける力</td><td>5個から2個を選ぶ和は 5C2=10 通りなのに、与えられた値は9種類です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>5個から2個を選ぶ和は 5C2=10 通りなのに、与えられた値は9種類です。『1組だけ重なりがある』が最強条件です。</td><td>大小順の2数和を並べて読む</td><td>まず 大小順の2数和を並べて読む。</td></tr><tr><td>A+B&lt;A+C&lt;A+D&lt;A+E、B+C&lt;B+D&lt;B+E、C+D&lt;C+E&lt;D+E のように、2数和を段々に並べる表現へ翻訳します。</td><td>10通りの2数和を大小順に並べる“並び表”として見る</td><td>まず 10通りの2数和を大小順に並べる“並び表”として見る。</td></tr><tr><td>未知数を5個置いて式を増やし続ける</td><td>順序表へ切り替えます。</td><td>順序表へ切り替えます。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>4つの整数 P＜Q＜R＜S について、2つずつの和6通りのうち5種類だけが 11, 14, 15, 18, 21 でした。S−P を求めなさい。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>本来6通りある2数和が5種類しかないので、どこかで1組だけ重なります。</li><li>端の和から差を作る見方がそのまま使えます。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>6通りの2数和を小さい順に並べる。最小は P+Q=11、最大は R+S=21。</li><li>14 は P+R、18 は Q+S と読めるので、S−P=(Q+S)-(P+Q)=18-11。</li><li>したがって S−P=7。</li></ol><p class="transfer-answer"><strong>答え</strong>：7</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>本来6通りなのに5種類しかないとき、どの和が重なりそうか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>4つの整数 a<b<c<d 11,="" 12,="" 14,="" 17="" 9,="" p="" について、2つずつの和が="" の5種類だけでした。d-a="" を求めなさい。<=""><h4>その解答解説</h4><ol class="work-steps"><li>最小の和は a+b=9、最大の和は c+d=17。</li><li>11 は a+c、14 は b+d と読める。</li><li>よって d-a=(b+d)-(a+b)=14-9=5。</li></ol><p class="transfer-answer"><strong>答え</strong>：5</p></b<c<d></p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>重なり1組を“式不足”と見る子と“順番問題”と見る子で差が出ます。復習では『通り数と種類数のずれ』を見たら一致・重なりを疑う練習を混ぜるとよいです。 次回の mixed review では、整数の和差 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p02"><header><h1>05月02　残金の差で消しゴム代を出す</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">A, B, C の3人は同じ金額を持って買い物に行きました。
+Aさんは えんぴつ2本と消しゴム3個を買って 490円 残り、
+Bさんは えんぴつ3本と消しゴム4個を買って 370円 残り、
+Cさんは えんぴつ1本と消しゴム5個を買って 400円 残りました。
+(1) えんぴつ1本と消しゴム1個を合わせた代金
+(2) 消しゴム1個の代金
+(3) Aさんの最初の所持金
+を求めなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：和と差の文章題</li><li><strong>実際</strong>：残金の差を『買った物の差』に翻訳する</li></ul></td><td>所持金が同じなので、残金の差はそのまま買った物の差です。ここを使うと『鉛筆1本＋消しゴム1個』がすぐ出ます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>3人が同じ金額を持っていた、が最強条件です。</td><td><ul class="compact plain-lines"><li>まずは 残金どうしを比べる。</li><li>AとBの残金差 120円 を、買った物の差として読むところから始めます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>残金 490, 370, 400 の差は、そのまま買い物内容の差です。</td><td><p>AとBの『残金の差』だけを見ることです。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>『AさんはBさんより鉛筆1本と消しゴム1個少なく買っている』のように、買い方の差へ翻訳します。</td><td><p>金額表現を『同額スタートだから買った物の差』に変えます。</p></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：残金どうしを比べる</li><li>最初に紙に書くこと: AとBの残金差を取る。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">AとBの残金差を取る。</div><ul class="plan-points"><li>所持金が同じなら、残金差は買った物の差だからです。</li><li>ここでは「同じ金額を持っていたこと」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">鉛筆1本＋消しゴム1個=120円。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">Aの買い方から鉛筆2本と消しゴム2個を減らして、消しゴム1個だけ買った場合を作る。</div><ul class="plan-points"><li>セット価格 120円 を2回ぶん戻すと、消しゴムだけの形に近づくからです。</li><li>ここでは「鉛筆1本＋消しゴム1個=120円」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A由来の残金 730円、C由来の残金 520円。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">730円と520円の差を3個ぶんの消しゴム代と読む。</div><ul class="plan-points"><li>0本1個 と 0本4個 の差だからです。</li><li>ここでは「買い方をそろえた後の残金」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">消しゴム1個=70円。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">元の買い方に戻して所持金を出す。</div><ul class="plan-points"><li>単価が1つ決まれば、どの人の式でも一発で所持金が出るからです。</li><li>ここでは「消しゴム70円、セット120円」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">鉛筆50円、所持金800円。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：同じ所持金を m 円、えんぴつを x 円、消しゴムを y 円として3本の式を立て、差を取って解く。残金差の見方を式にした別解です。</p><p><strong>最初に紙に書くこと</strong>：m-(2x+3y)=490, m-(3x+4y)=370, m-(x+5y)=400 と書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">3本の式を立てる。</div><ul class="plan-points"><li>同じ m を使えば、引き算で単価の式が出る。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">m-2x-3y=490
+m-3x-4y=370
+m-x-5y=400</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">差を取って x+y と x-2y を出す。</div><ul class="plan-points"><li>上2本を引くと x+y=120。</li><li>1本目と3本目を比べると x-2y=-90。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">(m-2x-3y)-(m-3x-4y)=490-370
+→ x+y=120
+(m-x-5y)-(m-2x-3y)=400-490
+→ x-2y=-90</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">和差で y, x, m を求める。</div><ul class="plan-points"><li>x=2y-90 を x+y=120 に代入する。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">2y-90+y=120
+3y=210
+y=70
+x=50
+m=490+2×50+3×70=800</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>値段の文章題なので方程式に行きたくなります。</td>
+<td>式変形はできても、どこで単価が出るのか見えにくくなります。</td>
+<td>AとBの買い方だけを抜き出し、何が1個ずつ違うかを書きます。</td>
+<td>構造認識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>消しゴムだけにする場面で止まりやすいです。</td>
+<td>消しゴムだけにする場面で止まりやすいです。</td>
+<td>鉛筆1本＋消しゴム1個を、AとCから何回ずつ引けば同じ形に近づく？</td>
+<td>『同じセットを戻す』発想を見落としています。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>残金の差でセット価格を出し、買い方をそろえて単価へ落とします。</td></tr><tr><td>書きかえて整理する力</td><td>所持金が同じなので、残金の差はそのまま買った物の差です。</td></tr><tr><td>大事な条件を見つける力</td><td>3人が同じ金額を持っていた、が最強条件です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>3人が同じ金額を持っていた、が最強条件です。</td><td>残金どうしを比べる</td><td>残金どうしを比べる を思い出して試す。</td></tr><tr><td>『AさんはBさんより鉛筆1本と消しゴム1個少なく買っている』のように、買い方の差へ翻訳します。</td><td>残金の差を『買った物の差』に翻訳する</td><td>残金の差を『買った物の差』に翻訳する を最初の候補にする。</td></tr><tr><td>最初から p,e,m を置いて押し切ろうとする</td><td>残金比較へ戻ります。</td><td>残金比較へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>同じ500円を持ったXさんとYさんが、ノートと消しゴムを買いました。Xはノート2冊と消しゴム3個で140円残り、Yはノート3冊と消しゴム4個で20円残りました。ノート1冊と消しゴム1個の合計はいくらですか。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>2人とも同じ500円を持っているので、残金差は買った物の差です。</li><li>「1冊ずつ、1個ずつ」違うので、まず和のセット価格が出ます。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>残金差は 140-20=120円。</li><li>Yさんは Xさんより ノート1冊と消しゴム1個 多く買っているので、ノート1冊+消しゴム1個=120円。</li></ol><p class="transfer-answer"><strong>答え</strong>：120円</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>同じ金額スタートなら、残金差は何の差か。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>同じ700円を持ったAさんとBさんが、ペンと消しゴムを買いました。Aはペン3本と消しゴム2個で160円残り、Bはペン4本と消しゴム3個で20円残りました。ペン1本と消しゴム1個の合計を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>残金差は 160-20=140円。</li><li>Bさんは Aさんより ペン1本と消しゴム1個 多く買っている。</li><li>したがって ペン1本+消しゴム1個=140円。</li></ol><p class="transfer-answer"><strong>答え</strong>：140円</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は“同額スタート”の構造を見抜けるかどうかで難しさが変わります。類題として『同じ時間』『同じ人数』『同じ距離』の差の問題と混ぜると転移しやすいです。 次回の mixed review では、和と差の文章題 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p07"><header><h1>05月07　入れ替え計算を和差で戻す</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">ある品物 A と B を買おうとしました。
+Aを5個、Bを3個買うつもりで計算すると 5050円 でしたが、
+AとBの値段を逆にして計算していたため、実際に支払った合計は 4790円 でした。
+(1) AとBを1個ずつ買うときの代金の合計
+(2) AとBの代金の差
+(3) A1個の代金
+を求めなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：和と差の文章題</li><li><strong>実際</strong>：入れ替えた2つの合計を足して『8個ずつ』、引いて『2個ぶんの差』と読む</li></ul></td><td>5と3を入れ替えた2本の式を足すと A も B も8個ずつになり、引くと 2個ぶんの差になります。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>5個と3個が入れ替わっている、が最強条件です。</td><td><ul class="compact plain-lines"><li>まずは 足してそろえ、引いて差を出す。</li><li>2本の合計をまず足します。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>5050円と4790円は、足すと『そろう』、引くと『差だけ残る』数字です。</td><td><p>個数の入れ替えを、和差の問題へ変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>3A+5B と 5A+3B を、和と差の2本に翻訳します。</td><td><ul class="compact plain-lines"><li>2本の合計を足すことです。</li><li>考えやすい形に直すと「足してそろえ、引いて差を出す」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：足してそろえ、引いて差を出す</li><li>最初に紙に書くこと: 2本の合計を足す。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">2本の合計を足す。</div><ul class="plan-points"><li>AもBも8個ずつそろうからです。</li><li>ここでは「5と3の入れ替え」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A+B=1230。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">2本の差を取る。</div><ul class="plan-points"><li>増えたB2個ぶんだけが残るからです。</li><li>ここでは「誤計算の方が大きいこと」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">B−A=130。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">和差算でAを出す。</div><ul class="plan-points"><li>A+B と B−A がそろったからです。</li><li>ここでは「(1)(2)の結果」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A=550、B=680。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：2本の合計の平均と差を見る。足す・引くをそのまま行わず、平均4組ずつと差2組ぶんとして読む別解です。</p><p><strong>最初に紙に書くこと</strong>：誤計算 5050円 と実際 4790円 を並べ、平均と差を書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">平均から A+B を出す。</div><ul class="plan-points"><li>2本の平均は、AもBも4個ずつ買った代金に当たる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">(5050+4790)÷2=4920
+4(A+B)=4920
+A+B=1230</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">差から B-A を出す。</div><ul class="plan-points"><li>誤計算の方が260円高い。</li><li>5個と3個を入れ替える差は 2(B-A)。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">5050-4790=260
+2(B-A)=260
+B-A=130</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">和差算で A を出す。</div><ul class="plan-points"><li>A+B と B-A がそろったので和差算。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">A=(1230-130)÷2=550
+B=(1230+130)÷2=680</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>5050と4790の差がすぐ見えるからです。</td>
+<td>(2)以降が全部2倍ずれます。</td>
+<td>『Aを2個Bに交換した』図に描き直します。</td>
+<td>表現切替不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(2)の差の読み方で止まりやすいです。</td>
+<td>(2)の差の読み方で止まりやすいです。</td>
+<td>3A+5B を 5A+3B にするには、何を何個入れ替えた？</td>
+<td>交換回数を見ていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>差を作って見る力</td><td>和を8個ずつにそろえ、差を2個ぶんで読む。</td></tr><tr><td>書きかえて整理する力</td><td>5と3を入れ替えた2本の式を足すと A も B も8個ずつになり、引くと 2個ぶんの差になります。</td></tr><tr><td>大事な条件を見つける力</td><td>5個と3個が入れ替わっている、が最強条件です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>5個と3個が入れ替わっている、が最強条件です。</td><td>足してそろえ、引いて差を出す</td><td>足してそろえ、引いて差を出す を思い出して試す。</td></tr><tr><td>3A+5B と 5A+3B を、和と差の2本に翻訳します。</td><td>入れ替えた2つの合計を足して『8個ずつ』、引いて『2個ぶんの差』と読む</td><td>まず 入れ替えた2つの合計を足して『8個ずつ』、引いて『2個ぶんの差』と読む。</td></tr><tr><td>差260円を1個ぶんの差だと思う</td><td>係数を色分けして、AもBもどうそろうかを書きます。</td><td>係数を色分けして、AもBもどうそろうかを書きます。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>Pを4個、Qを2個買うつもりが、Pを2個、Qを4個で計算したら2200円、実際は2000円でした。PとQを1個ずつ買うといくらですか。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>係数を入れ替えた2本の式は、足すと同じ個数にそろいます。</li><li>平均との差を見ると和がすぐ出ます。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>2200円と2000円の平均は2100円。これは P, Q をそれぞれ3個ずつ買った代金。</li><li>したがって 3(P+Q)=2100。</li><li>よって P+Q=700円。</li></ol><p class="transfer-answer"><strong>答え</strong>：700円</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>入れ替えた2本を足すと、何個ずつそろうか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>Aを6個、Bを2個買うつもりが、Aを2個、Bを6個で計算したら2400円、実際は2080円でした。AとBを1個ずつ買うといくらですか。</p><h4>その解答解説</h4><ol class="work-steps"><li>2本を足すと 8A+8B=4480。</li><li>A+B=4480÷8=560。</li></ol><p class="transfer-answer"><strong>答え</strong>：560円</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>『逆にした』『入れ替えた』が見えたら和差へ、というスキーマ化が狙いです。復習では個数だけでなく速さや人数の入れ替え問題も混ぜるとよいです。 次回の mixed review では、和と差の文章題 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p08"><header><h1>05月08　支払硬貨の合計から人数を戻す</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">1人あたり 180円 の会費を集めました。
+生徒の支払い方は3通りで、100円玉・50円玉・10円玉の枚数と、おつりの表が誌面にあります。
+先生が集めた硬貨は、100円玉 58枚、50円玉 12枚、10円玉 62枚 でした。
+(1) 集まった人数
+(2) 表の ア・イ・ウ に入る人数
+を求めなさい。
+※ 支払い方の3通りの表は誌面どおり。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：表を使う文章題</li><li><strong>実際</strong>：総額→人数→基準払いとの差の順で表を見る</li></ul></td><td>硬貨の総枚数はバラバラでも、総額は一発で出ます。そこから『全員100円2枚払い』を基準にすると、ア・ウ・イの順に決まります。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>1人180円が固定で、集まった硬貨総数が全部分かっています。</td><td><ul class="compact plain-lines"><li>まずは 総額→基準払いとの差。</li><li>全部の硬貨を円に直し、人数を固定します。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>100円58枚、50円12枚、10円62枚はまず総額に変換できます。</td><td><p>枚数の表をまず金額の表に変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>表を『基準の払い方との差』として見ます。</td><td><ul class="compact plain-lines"><li>硬貨を全部お金に直して、総額を出すことです。</li><li>考えやすい形に直すと「総額→基準払いとの差」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：総額→基準払いとの差</li><li>最初に紙に書くこと: 総額を出して人数を決める。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">総額を出して人数を決める。</div><ul class="plan-points"><li>1人180円が固定だからです。</li><li>ここでは「硬貨の総枚数が全部分かること」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">7020円÷180円=39人。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">全員が100円2枚で払った場合と比べる。</div><ul class="plan-points"><li>基準にすると100円硬貨の不足がアの人数に直結するからです。</li><li>ここでは「人数39人」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">本来78枚あるはずの100円硬貨が20枚少ないのでア=20。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">50円硬貨からウを出す。</div><ul class="plan-points"><li>アの人から50円硬貨が1枚ずつ出て、12枚残るからです。</li><li>ここでは「ア=20」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">ウ=8。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">10円硬貨からイを出して確認する。</div><ul class="plan-points"><li>残り1種類になれば最後は一意に決まるからです。</li><li>ここでは「ア,ウが決まっていること」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">イ=11、合計39人で確認。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：表の3行の人数を 文字で置き、総額・100円玉・残りの硬貨の式で順に決める。基準払いではなく、表のまま式にする別解です。</p><p><strong>最初に紙に書くこと</strong>：表の3通りの人数を ア, イ, ウ とおき、まず合計金額から人数39を確定する。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">総額から全体人数を出す。</div><ul class="plan-points"><li>100円玉58枚、50円玉12枚、10円玉62枚の総額を出す。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">100×58+50×12+10×62=7020
+7020÷180=39人</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">100円玉の式でアを出す。</div><ul class="plan-points"><li>表の中で、100円玉が2枚必要な払い方を基準にして100円玉の不足を見る。</li><li>誌面解説と同じく、ここで一番強いのは100円玉の式。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">全員が100円玉2枚なら 78枚 必要。
+実際は 58枚 なので 20枚 足りない。
+この不足をそのまま作る人数が ア=20。</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">残りを50円玉・10円玉で決める。</div><ul class="plan-points"><li>表の各行で50円玉と10円玉が何枚増減するかを見れば、ウ、イの順に決まる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">50円玉の式から ウ=8
+人数の合計より イ=39-20-8=11</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>表に未知数が3つあるので、すぐ式を立てたくなります。</td>
+<td>100円・50円・10円の式が全部同じ重さに見えてしまいます。</td>
+<td>総額7020円を先に書きます。</td>
+<td>メタ認知不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>50円硬貨の扱いで止まりやすいです。</td>
+<td>50円硬貨の扱いで止まりやすいです。</td>
+<td>その硬貨は払ったのか、おつりでもらったのか。</td>
+<td>『アの人は50円を1枚払う』と『おつりで50円を1枚受ける』を分けて見ていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>表に整理する土台</td><td>総額で人数を固定し、100円硬貨の不足を基準に行別人数を戻します。</td></tr><tr><td>図や表に直す力</td><td>硬貨の総枚数はバラバラでも、総額は一発で出ます。</td></tr><tr><td>大事な条件を見つける力</td><td>1人180円が固定で、集まった硬貨総数が全部分かっています。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>1人180円が固定で、集まった硬貨総数が全部分かっています。</td><td>総額→基準払いとの差</td><td>総額→基準払いとの差 を思い出して試す。</td></tr><tr><td>表を『基準の払い方との差』として見ます。</td><td>総額→人数→基準払いとの差の順で表を見る</td><td>まず 総額→人数→基準払いとの差の順で表を見る。</td></tr><tr><td>人数を出す前にア・イ・ウを求めようとする</td><td>全員100円2枚払いを仮定します。</td><td>全員100円2枚払いを仮定します。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>1人230円の会費を集めるとき、100円玉・50円玉・10円玉の総額から人数を求める。全員が100円玉2枚と10円玉3枚で払ったと仮定すると見やすい表を考える。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>総額→人数→基準払いとの差 の順に見る構造が同じです。</li><li>硬貨問題は、まず総額を出して人数を固定するのが最短です。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>100円・50円・10円を全部円に直して総額を出す。</li><li>230円で割って人数を出す。</li><li>その人数が全員同じ払い方をしたと仮定し、実際との不足・超過から各行の人数を決める。</li></ol><p class="transfer-answer"><strong>答え</strong>：まず総額を出して人数を固定する</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>硬貨問題は、まず総額か、それとも人数か。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>1人210円の会費を集めました。集まった硬貨は 100円玉50枚、50円玉18枚、10円玉40枚でした。まず人数を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>総額は 100×50 + 50×18 + 10×40 = 6300円。</li><li>1人210円だから、人数は 6300÷210=30人。</li></ol><p class="transfer-answer"><strong>答え</strong>：30人</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は表の読み取りより『どの量を先に固定するか』が主眼です。総額から人数を出す練習を、募金や会費の問題で混ぜておくと効きます。 次回の mixed review では、表を使う文章題 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p09"><header><h1>05月09　最大最小を除いた平均と全体平均</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">5つの整数 7, 15, 25, 17, □ について、
+もっとも大きい数ともっとも小さい数を除いた3つの数の平均を 〇 とします。
+(1) □ が 19 のとき、〇 の値を求めなさい。
+(2) 5つの整数の平均が 〇 と等しくなるような □ は3通りあります。
+考えられる整数をすべて答えなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：平均</li><li><strong>実際</strong>：□の位置で場合分けする</li></ul></td><td>□ が捨てられる側か残る側かで☆が変わります。値ではなく位置で分けるのが急所です。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>最大と最小を除く、という条件が最強です。</td><td><ul class="compact plain-lines"><li>まずは □の位置で3場合に分ける。</li><li>□が最大か最小か中間かを先に決めます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>固定の数 7 と25 が端になりやすいことが大事です。</td><td><p>値の問題を位置の問題に変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>□を順番上の位置で3つに場合分けします。</td><td><ul class="compact plain-lines"><li>（1）の □=19 をまず処理して、どう3数が残るかを確かめます。</li><li>考えやすい形に直すと「□の位置で3場合に分ける」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：□の位置で3場合に分ける</li><li>最初に紙に書くこと: (1)で □=19 のとき、残る3数を決める。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)で □=19 のとき、残る3数を決める。</div><ul class="plan-points"><li>最大25と最小7を除くからです。</li><li>ここでは「除くのは端の2つ」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">15,17,19 の平均で 17。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">□が最大のケースを処理する。</div><ul class="plan-points"><li>残る3数が 15,17,25 と固定されるからです。</li><li>ここでは「□&gt;25」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">☆=19、全体平均も19より □=31。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">□が最小のケースを処理する。</div><ul class="plan-points"><li>残る3数が 7,15,17 と固定されるからです。</li><li>ここでは「□&lt;7」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">☆=13、□=1。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">□が中間のケースを処理する。</div><ul class="plan-points"><li>除く2数が固定で、☆が (7+25)/2 と等しくなるからです。</li><li>ここでは「7&lt;□&lt;25」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">☆=16、よって □=16。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：平均を式ではなく「和」に直して場合分けする。最大・最小の位置ごとに、残る3数の和がどうなるかで見る別解です。</p><p><strong>最初に紙に書くこと</strong>：7,15,17,25 と □ を数直線の上に置き、□ がどこに入るかを3通りに分ける。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">□ が最大のときを見る。</div><ul class="plan-points"><li>残る3数は 15,17,25。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">残る3数の和=57
+平均=19</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">□ が最小のときを見る。</div><ul class="plan-points"><li>残る3数は 7,15,17。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">残る3数の和=39
+平均=13</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">□ が中に入るときを見る。</div><ul class="plan-points"><li>どれを最大・最小として除くかで残る3数の和が変わる。</li><li>全体平均と同じになる条件は「除いた2数の平均=全体平均」。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">場合を分けて調べると □ は 13, 19, 31 の3通り</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>平均の問題なので数字を入れたくなります。</td>
+<td>31だけ見つけて16や1を落としやすいです。</td>
+<td>□が最大・最小・中間の3欄を書きます。</td>
+<td>メタ認知不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>中間ケースで止まりやすいです。</td>
+<td>中間ケースで止まりやすいです。</td>
+<td>このケースで除かれる2数は本当にどれ？</td>
+<td>除かれるのは 7 と25 のままだと見えていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>平均を合計に戻す力</td><td>□を『最大・最小・どちらでもない』の3ケースに分けます。</td></tr><tr><td>書きかえて整理する力</td><td>□ が捨てられる側か残る側かで☆が変わります。</td></tr><tr><td>大事な条件を見つける力</td><td>最大と最小を除く、という条件が最強です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>最大と最小を除く、という条件が最強です。</td><td>□の位置で3場合に分ける</td><td>□の位置で3場合に分ける を思い出して試す。</td></tr><tr><td>□を順番上の位置で3つに場合分けします。</td><td>□の位置で場合分けする</td><td>□の位置で場合分けする を最初の候補にする。</td></tr><tr><td>□の値だけを追ってケースを作らない</td><td>最大・最小・中間の3区分へ戻ります。</td><td>最大・最小・中間の3区分へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>6, 10, 18, 22, x の5数で最大最小を除いた平均を◇とする。全体平均が◇と等しくなる x を求めなさい。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>「全体平均＝両端を除いた平均」は、除いた2数の平均も同じになると読むのがコツです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>全体平均が◇なら、5個の平均と真ん中3個の平均が同じ。</li><li>したがって、除いた2数の平均もその◇に等しい。</li><li>x の位置を場合分けして、条件を満たす x を求める。</li></ol><p class="transfer-answer"><strong>答え</strong>：場合分けで x が決まる</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>平均が同じなら、外した2つの平均はどうなるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>8, 12, 20, 24, y の5数で、最大最小を除いた平均と全体平均が等しくなる y を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>y の位置を場合分けする。</li><li>全体平均と真ん中3個の平均が等しいので、除いた2数の平均も同じ。</li><li>調べると y=16, 28, 4 の3通り。</li></ol><p class="transfer-answer"><strong>答え</strong>：4, 16, 28</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>平均問題でも、操作の前に『誰が残るか』を決める練習が重要です。中央値・最大最小除去平均と混ぜて復習すると観察の順番が安定します。 次回の mixed review では、平均 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p11"><header><h1>05月11　得点表から各設問の正解人数を戻す</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">30人が8問のテストを受け、配点は 1番2点、2番3点、3番5点 です。
+得点分布は誌面右の表のとおりで、1番を正解した生徒は 18人 います。
+(1) 30人の平均点
+(2) 2番を正解した生徒の人数
+(3) 3番を正解した生徒の人数
+を求めなさい。
+※ 得点分布表は誌面どおり。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：得点の文章題</li><li><strong>実際</strong>：得点を正解パターン表に変換する</li></ul></td><td>5点だけが『3番だけ』と『1番+2番』の2通りあるので、1番正解18人を使って分ける必要があります。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>配点が 2,3,5 なので、5点だけ表し方が2通りあります。</td><td><ul class="compact plain-lines"><li>まずは 得点を正解パターンへ変換する。</li><li>2,3,5,7,8,10 の各得点がどの正解組か表を書きます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>得点 2,3,7,8,10 は正解組が一意です。</td><td><p>点数を○×の表現に変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>得点表を、問題1・2・3の○×表へ翻訳します。</td><td><ul class="compact plain-lines"><li>得点ごとの正解組を6行表にすることです。</li><li>考えやすい形に直すと「得点を正解パターンへ変換する」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：得点を正解パターンへ変換する</li><li>最初に紙に書くこと: 得点と正解組の対応表を作る。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">得点と正解組の対応表を作る。</div><ul class="plan-points"><li>どの得点がどの問題を含むかが一目になるからです。</li><li>ここでは「配点 2,3,5」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">5点だけ2通りあることが残ります。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">平均点を出す。</div><ul class="plan-points"><li>点数分布からは総得点がそのまま出るからです。</li><li>ここでは「人数分布」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">177÷30=5.9。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">1番正解18人を使って5点の内訳を分ける。</div><ul class="plan-points"><li>2点・7点・10点の人は必ず1番正解なので、その残りが『1番2番』型の5点人数だからです。</li><li>ここでは「1番正解18人」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">5点のうち5人が1番+2番。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">2番・3番の正解人数を合計する。</div><ul class="plan-points"><li>対応表が埋まれば足し算だけで済むからです。</li><li>ここでは「5点の分配完了」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">2番17人、3番18人。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：得点分布を「1番が○、2番が○、3番が○」の組合せ表に戻す。点数表から逆に正解組を復元する別解です。</p><p><strong>最初に紙に書くこと</strong>：0点,2点,3点,5点, … の各得点が、どの問題の正解の組に対応するかを一覧にする。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">得点と正解組を対応させる。</div><ul class="plan-points"><li>1番2点、2番3点、3番5点なので、得点から正解組が1通りに読める。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">2点→1番だけ
+3点→2番だけ
+5点→3番だけ
+5点+2点=7点→1番と3番
+…</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">総得点から 2番・3番の総正解数を作る。</div><ul class="plan-points"><li>各得点人数×得点の合計が全体の得点。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">全体平均点×30人 = 総得点
+総得点 = 2×(1番正解人数)+3×(2番正解人数)+5×(3番正解人数)</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">1番正解18人を代入して残りを解く。</div><ul class="plan-points"><li>1番だけの人数と、1番を含む複合得点の人数を整理すると2番・3番が決まる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">1番正解18人 を代入して整理
+→ 2番正解人数、3番正解人数 が決まる</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>点数表だけ見ると5点は1つだからです。</td>
+<td>(2)(3)の人数が全部ずれます。</td>
+<td>5点の欄を2つに分けて書きます。</td>
+<td>内容知識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>1番正解18人の使い方で止まりやすいです。</td>
+<td>1番正解18人の使い方で止まりやすいです。</td>
+<td>1番を必ず含む得点はどれか。</td>
+<td>一意に決まる得点群を先に固定していません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>先に得点→正解パターン表を作り、あいまいな5点だけを最後に分けます。</td></tr><tr><td>図や表に直す力</td><td>5点だけが『3番だけ』と『1番+2番』の2通りあるので、1番正解18人を使って分ける必要があります。</td></tr><tr><td>大事な条件を見つける力</td><td>配点が 2,3,5 なので、5点だけ表し方が2通りあります。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>配点が 2,3,5 なので、5点だけ表し方が2通りあります。</td><td>得点を正解パターンへ変換する</td><td>得点を正解パターンへ変換する を最初の候補にする。</td></tr><tr><td>得点表を、問題1・2・3の○×表へ翻訳します。</td><td>得点を正解パターン表に変換する</td><td>得点を正解パターン表に変換する を最初の候補にする。</td></tr><tr><td>5点を1種類だと思ってしまう</td><td>得点表を書き直します。</td><td>得点表を書き直します。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>配点が1点・4点・6点の3問で、得点分布から各問題の正解人数を求める。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>得点がそのまま「どの問題を正解したか」の記号になります。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>1点,4点,6点,5点,7点,10点,11点 の意味を表にする。</li><li>各得点人数×得点の合計から全体得点を出す。</li><li>1点問題の正解人数など既知条件を代入して残りを解く。</li></ol><p class="transfer-answer"><strong>答え</strong>：得点と正解組の対応表が入口</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>得点を見て、どの問題の組かを読めるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>配点が2点・5点・7点の3問で、得点 0,2,5,7,9,12,14 の人数表から各問の正解人数を求める。</p><h4>その解答解説</h4><ol class="work-steps"><li>まず 2,5,7,7+2,7+5,5+2,2+5+7 の対応表を作る。</li><li>得点分布をその表へ戻し、各問題を含む人数を足す。</li></ol><p class="transfer-answer"><strong>答え</strong>：対応表に戻してから足し合わせる</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は『配点の作り方』という内容知識があるかどうかで差が出ます。小問ごとの○×表を自力で作る練習を数題入れると安定します。 次回の mixed review では、得点の文章題 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p12"><header><h1>05月12　3科目ベン図を2科目ずつ固める</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">50人の生徒が、国語・算数・理科の3つのテストを受けました。
+国語の合格者は 27人、算数の合格者は 21人、理科の合格者は 35人 です。
+国語合格で算数不合格の人は 12人、国語だけ合格の人は 6人 です。
+また、国語不合格で理科合格の人は、国語合格で理科不合格の人の2倍です。
+さらに、算数だけ合格の人の人数は、国語だけ合格の人の人数と同じです。
+(1) 国語と算数の両方に合格した人数
+(2) 3科目とも合格した人数
+を求めなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：集合・ベン図</li><li><strong>実際</strong>：2科目ずつのベン図を先に作る</li></ul></td><td>『国語合格で算数不合格』『国語不合格で理科合格』のような条件は、3科目を一気に処理するより2科目に分けると軽くなります。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>片方に合格・片方に不合格という条件が複数あります。</td><td><ul class="compact plain-lines"><li>まずは 2科目ずつ整理してから中心へ行く。</li><li>国語と算数だけの図を先に作ります。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>国語だけ合格6人、算数だけ合格6人が固定です。</td><td><p>3集合を2集合×2回に分けます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>まずは2科目ベン図、あとで3科目ベン図に移します。</td><td><ul class="compact plain-lines"><li>国語と算数の2科目図だけを1回描くことです。</li><li>考えやすい形に直すと「2科目ずつ整理してから中心へ行く」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：2科目ずつ整理してから中心へ行く</li><li>最初に紙に書くこと: 国語と算数だけのベン図を作る。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：ベン図を2枚（国語×算数、国語×理科）並べて書く。3つ同時に描く前に、2つずつの重なりを固める。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">国語と算数だけのベン図を作る。</div><ul class="plan-points"><li>J∩M が直接出るからです。</li><li>ここでは「国語27、算数21、国語合格で算数不合格12」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">J∩M=15。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">国語と理科だけのベン図で左右の人数を出す。</div><ul class="plan-points"><li>右だけが左だけの2倍、という条件が2科目ならすぐ式になるからです。</li><li>ここでは「理科35、国語27」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">左だけ8人、右だけ16人、重なり19人。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">3科目ベン図へ移して J∩M だけ領域を決める。</div><ul class="plan-points"><li>国語だけ合格が6人と分かっているので、JとSの左だけ8人との差が J∩Mだけになるからです。</li><li>ここでは「国語だけ6人」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">J∩Mだけ=2人。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">J∩M の全体15人から中心を出す。</div><ul class="plan-points"><li>J∩M は『J∩Mだけ + 中心』だからです。</li><li>ここでは「J∩M=15、J∩Mだけ=2」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">中心13人。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：3つの円を一度に描かず、2科目ずつのベン図を2枚つくってから中央へつなぐ。誌面解説のよいところをそのまま使う別解です。</p><p><strong>最初に紙に書くこと</strong>：「国語×算数」のベン図と、「国語×理科」のベン図を2枚ならべて書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">国語×算数のベン図で J∩M を出す。</div><ul class="plan-points"><li>国語27人、算数21人、国語合格で算数不合格12人 をそのまま入れる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">国語∩算数 = 27-12=15人</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">国語×理科のベン図で左右を決める。</div><ul class="plan-points"><li>国語不合格で理科合格の人数が、国語合格で理科不合格の2倍。</li><li>国語だけ合格は6人。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">国語だけ=6人
+国語合格で理科不合格=8人
+国語不合格で理科合格=16人</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">3科目ベン図へ重ねて中心を出す。</div><ul class="plan-points"><li>国語∩算数 の15人のうち、国語だけとの差で国語∩算数だけが出る。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">国語∩算数だけ = 8-6=2人
+したがって 3科目共通 = 15-2=13人</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>集合問題はベン図、という既習知識があるからです。</td>
+<td>空欄が多すぎて、どの差がどこに入るかを見失います。</td>
+<td>JとM、JとS の2枚に分けます。</td>
+<td>表現切替不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>中心13人を出す直前で止まりやすいです。</td>
+<td>中心13人を出す直前で止まりやすいです。</td>
+<td>J∩M の15人のうち、中心以外は何人か。</td>
+<td>J∩M を『中心+J∩Mだけ』に分けていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>J∩M を先に出し、JとSの左右だけ人数を決めてから3科目の中心へ寄せます。</td></tr><tr><td>図や表に直す力</td><td>『国語合格で算数不合格』『国語不合格で理科合格』のような条件は、3科目を一気に処理するより2科目に分けると軽くなります。</td></tr><tr><td>大事な条件を見つける力</td><td>片方に合格・片方に不合格という条件が複数あります。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>片方に合格・片方に不合格という条件が複数あります。</td><td>2科目ずつ整理してから中心へ行く</td><td>2科目ずつ整理してから中心へ行く を思い出して試す。</td></tr><tr><td>まずは2科目ベン図、あとで3科目ベン図に移します。</td><td>2科目ずつのベン図を先に作る</td><td>2科目ずつのベン図を先に作る を思い出して試す。</td></tr><tr><td>3科目ベン図を最初から全部埋める</td><td>まず2科目図に戻ります。</td><td>まず2科目図に戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>A組, B組, C組の3つの委員会で、A26人、B18人、C30人。Aのみ6人、Bのみ6人、AでBでない人10人、AでないCの人はAでCでない人の2倍。A∩B と A∩B∩C を求めなさい。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>3つの集合を一度に描かず、2集合ずつのベン図を2枚つくる構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>AとBのベン図を描き、A∩B を出す。</li><li>AとCのベン図を描き、左右の人数を「2倍」の条件から決める。</li><li>最後に3つのベン図へ重ねて中央を出す。</li></ol><p class="transfer-answer"><strong>答え</strong>：2集合ずつ固めてから中央へ進む</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>3つを一度に描く前に、まず2つずつ描けるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>X, Y, Z の3つのクラブで、X24人、Y20人、Z28人。Xだけ6人、Yだけ4人、X∩Y は12人、XでないZの人はXでZだけの人の2倍。3つとも入る人数を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>XとYのベン図から X∩Y の全体を確認する。</li><li>XとZの2集合図で左右を出す。</li><li>最後に中央を引き算で出す。</li></ol><p class="transfer-answer"><strong>答え</strong>：2集合図を2枚つくる</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>ベン図は『全部の文字を最初に置く』よりも『どこまで縮約できるか』が重要です。2集合→3集合の移行練習を数問混ぜると切り替えが安定します。 次回の mixed review では、集合・ベン図 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p13"><header><h1>05月13　全問正解を保証する最小人数</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">50人が4問のテストを受けました。
+第1問から順に、正解した人数は 45人、38人、40人、□人 でした。
+(1) 第1問と第2問の両方を正解した人数は、何人以上何人以下といえますか。
+(2) 全問正解の人が最低でも1人はいるといえるためには、□ はいくつ以上でなければいけませんか。
+考え方も書きなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：集合の重なり</li><li><strong>実際</strong>：正解より不正解に注目する</li></ul></td><td>全問正解の保証は、4つの不正解グループで50人を覆い切れるかで見ると軽くなります。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>全問正解を『必ず1人いる』という保証条件です。</td><td><ul class="compact plain-lines"><li>まずは 不正解人数へ翻訳する。</li><li>第1〜第3問の不正解人数 5,12,10 を先に書きます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>不正解人数は順に 5,12,10,50−□ と読めます。</td><td><p>第1〜第3問の不正解人数 5,12,10 を書き出すことです。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>(1)は重なりの幅、(2)は不正解グループの被覆へ翻訳します。</td><td><ul class="compact plain-lines"><li>第1〜第3問の不正解人数 5,12,10 を書き出すことです。</li><li>考えやすい形に直すと「不正解人数へ翻訳する」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：不正解人数へ翻訳する</li><li>最初に紙に書くこと: (1)で第1・第2問の重なりの最大最小を出す。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：補集合の表。不正解者の人数を 5,12,10,□ と並べ、全問正解0人の最悪ケースを考える。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)で第1・第2問の重なりの最大最小を出す。</div><ul class="plan-points"><li>2集合の基本幅だからです。</li><li>ここでは「第1問45人、第2問38人、全体50人」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">33〜38。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)で不正解人数を 5,12,10,△ と置く。</div><ul class="plan-points"><li>全問正解の否定は『どれか1問以上不正解』だからです。</li><li>ここでは「全体50人」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block"></div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">不正解グループがなるべく重ならない場合を考える。</div><ul class="plan-points"><li>全問正解がいない状況を作るには、その方が有利だからです。</li><li>ここでは「5+12+10+△ が全員を覆えるか」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">△が23以上なら可能、22以下なら不可能。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">第4問正解者数へ戻す。</div><ul class="plan-points"><li>△は第4問不正解人数だからです。</li><li>ここでは「50人全体」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">□=50−22=28 以上。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：不正解者の集合で考え、全問正解が0人になる最悪の重なりをつくる。補集合で押す別解です。</p><p><strong>最初に紙に書くこと</strong>：第1〜第4問の不正解者数を 5人,12人,10人,50-□人 と書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">不正解者の合計で全問正解0人の可能性を調べる。</div><ul class="plan-points"><li>全問正解が0人なら、50人全員がどれかの不正解集合に入る。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">不正解人数の合計
+=5+12+10+(50-□)</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">最悪の場合は不正解集合をなるべく重ねない。</div><ul class="plan-points"><li>全問正解をなくしたいなら、不正解者はできるだけ別々の人に散らばる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">5+12+10+(50-□) が 50以上 なら、全問正解0人の可能性が残る</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">保証条件へ戻す。</div><ul class="plan-points"><li>全問正解が最低1人いるためには、上の合計が49以下であればよい。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">5+12+10+(50-□)≤49
+77-□≤49
+□≥28</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>『全問正解』という言葉につられるからです。</td>
+<td>条件が増え、下限をつかみにくくなります。</td>
+<td>不正解人数へ一度ひっくり返します。</td>
+<td>メタ認知不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>23と22の境目で迷いやすいです。</td>
+<td>23と22の境目で迷いやすいです。</td>
+<td>不正解グループが重ならなければ何人まで覆えるか。</td>
+<td>『23なら全員が少なくとも1問不正解になり得る』の意味づけが曖昧です。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>(1)は2集合の重なりの幅、(2)は不正解人数の全体被覆で考えます。</td></tr><tr><td>書きかえて整理する力</td><td>全問正解の保証は、4つの不正解グループで50人を覆い切れるかで見ると軽くなります。</td></tr><tr><td>大事な条件を見つける力</td><td>全問正解を『必ず1人いる』という保証条件です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>全問正解を『必ず1人いる』という保証条件です。</td><td>不正解人数へ翻訳する</td><td>不正解人数へ翻訳する を最初の候補にする。</td></tr><tr><td>(1)は重なりの幅、(2)は不正解グループの被覆へ翻訳します。</td><td>正解より不正解に注目する</td><td>正解より不正解に注目する を最初の候補にする。</td></tr><tr><td>(2)で正解者側のベン図をこね回す</td><td>不正解グループの合計へ戻ります。</td><td>不正解グループの合計へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>60人の3問テストで、不正解者数が 8, 15, x 人です。全問正解が必ず1人以上いるための x の上限を求めなさい。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>「全問正解がいない」を作る最悪ケースを見る構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>各問の不正解者数をそのまま足す。</li><li>全問正解が0人なら、この不正解者たちで全員60人をおおえる必要がある。</li><li>よって 8+15+x が59以下なら全問正解1人以上が保証される。</li></ol><p class="transfer-answer"><strong>答え</strong>：x≤36</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>全問正解0人を作るには、不正解者をどう置くと最悪か。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>40人の3問テストで、不正解者数が 5, 9, y 人です。全問正解が必ず1人以上いるための y の範囲を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>全問正解0人なら 5+9+y で全員40人をおおえる必要がある。</li><li>1人以上を保証するには 5+9+y≤39。</li><li>よって y≤25。</li></ol><p class="transfer-answer"><strong>答え</strong>：y≤25</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>『必ず』『少なくとも』が出たら最悪ケースを見る、という方針を言葉で残したい問題です。包含除外の基本範囲と補集合の混合練習に向いています。 次回の mixed review では、集合の重なり の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p14"><header><h1>05月14　中央値はどの2個で決まるか</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">ある小学校6年生8人の反復横とびの回数は
+40, 42, 36, 50, 46, 38, 41, a （回）
+です。
+(1) a の値がわからないとき、このデータの中央値として何通りの値がありますか。
+(2) 平均値が 41.5回 のとき、中央値を求めなさい。
+(3) (2)のとき、上の8個のデータのうち1個が誤りであることがわかりました。
+その1個を正しい数に直したところ、平均値が 4回 大きくなりました。
+正しい数の候補をすべて答えなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：中央値と平均</li><li><strong>実際</strong>：8個の偶数個データでは4番目と5番目だけを見る</li></ul></td><td>中央値に効くのは中央2個だけです。(3)では平均の増分が4なので『どれか1個が4増えた』と読めます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>データが8個で偶数個なので、中央値は中央2個の平均です。</td><td><ul class="compact plain-lines"><li>まずは 中央2個だけを追う。</li><li>固定7個を昇順に並べます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>固定7個を並べると 33,36,40,41,42,46,50 です。</td><td><p>固定7個を小さい順に並べることです。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>a の位置を41や42との前後関係で見る表現に変えます。</td><td><p>値の問題を『中央2個の位置』の問題に変えます。</p></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：中央2個だけを追う</li><li>最初に紙に書くこと: (1)で a の位置による中央ペアを決める。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)で a の位置による中央ペアを決める。</div><ul class="plan-points"><li>8個の中央値は4番目と5番目だからです。</li><li>ここでは「固定7個の並び」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">(40,41),(41,41),(41,42) の3通り。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)で平均41.5から a=44 を出す。</div><ul class="plan-points"><li>合計が決まるからです。</li><li>ここでは「8個平均41.5」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">合計332より a=44。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">a=44 のときの中央値を確認する。</div><ul class="plan-points"><li>44は 42 と46の間に入るからです。</li><li>ここでは「並べ替え済み」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">中央は 41 と42、中央値41.5。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">(3)で平均が4上がったことから、元の誤り候補を絞る。</div><ul class="plan-points"><li>1個だけ修正なので、どれか1個が4だけ増えたと読めるからです。</li><li>ここでは「平均42、中位数43」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">40 または41が誤り候補。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：8個を小さい順に並べ、中央値をつくる2個だけに注目する。平均の条件は和で処理する別解です。</p><p><strong>最初に紙に書くこと</strong>：36,38,40,41,42,46,50 と a を数直線順に置く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">a の位置で中央の2個を決める。</div><ul class="plan-points"><li>8個の中央値は4番目と5番目の平均。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">a が 40以下, 41〜42の間, 46以上 などで中央ペアを場合分けする</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">平均41.5から a を出す。</div><ul class="plan-points"><li>8個の合計は 41.5×8。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">合計 = 332
+既知7個の合計 = 288
+よって a=44</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">誤り修正の条件を和で使う。</div><ul class="plan-points"><li>平均が4上がるなら、全体の合計は 8×4=32 増える。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">誤りの値を x、正しい値を y とすると
+y-x=32
+並び順を保つ候補を調べて絞る</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>平均と混ざると起こりやすい誤解です。</td>
+<td>(3)の候補が広がって止まります。</td>
+<td>中央4番目と5番目に印をつけます。</td>
+<td>内容知識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(3)でどの値が修正されたかで止まりやすいです。</td>
+<td>(3)でどの値が修正されたかで止まりやすいです。</td>
+<td>もし40が44になったら中央2個はどうなるか。</td>
+<td>平均差4と中央値43の両方を同時に見ていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>固定7個を並べ、a の入り方で中央ペアを決め、最後は平均差4から候補を絞ります。</td></tr><tr><td>書きかえて整理する力</td><td>中央値に効くのは中央2個だけです。</td></tr><tr><td>大事な条件を見つける力</td><td>データが8個で偶数個なので、中央値は中央2個の平均です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>データが8個で偶数個なので、中央値は中央2個の平均です。</td><td>中央2個だけを追う</td><td>中央2個だけを追う を思い出して試す。</td></tr><tr><td>a の位置を41や42との前後関係で見る表現に変えます。</td><td>8個の偶数個データでは4番目と5番目だけを見る</td><td>まず 8個の偶数個データでは4番目と5番目だけを見る。</td></tr><tr><td>中央値に全8個が同じ重みで効くと思う</td><td>中央4番目・5番目へ戻ります。</td><td>中央4番目・5番目へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>10個のデータのうち1個だけ誤りで、修正後の平均が3上がり、中央値が2上がった。誤り候補を絞りなさい。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>平均の変化は「合計の差」、中央値の変化は「並び順の中央2個」で読む構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>平均が3上がるなら、合計は 10×3=30 増える。</li><li>一方、中央値が2上がるには、中央2個のどちらかが動く必要がある。</li><li>並び順を保ちながら +30 される候補を絞る。</li></ol><p class="transfer-answer"><strong>答え</strong>：合計の差と中央の位置を同時に見る</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>平均の差は合計の差、中央値の差は中央の位置。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>6個のデータで平均が2上がり、中央値が1上がった。誤りの値と正しい値の差はいくつか。</p><h4>その解答解説</h4><ol class="work-steps"><li>平均が2上がるので、合計は 6×2=12 増える。</li><li>したがって 正しい値−誤りの値 =12。</li></ol><p class="transfer-answer"><strong>答え</strong>：12</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>平均と中央値を同時に扱うと、平均に引っ張られて中央値の観察が薄くなる子が多いです。『中央値は中央だけ』を毎回言わせると安定します。 次回の mixed review では、中央値と平均 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p15"><header><h1>05月15　ヒストグラムを表に直して端と中央を見る</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">47都道府県名をひらがなで書いたときの画数を調べたデータ A を、
+誌面のヒストグラムに表しました。
+(1) もっとも大きい値となる都道府県は1個だけ、もっとも小さい値となる都道府県も1個だけで、
+その差は12画です。データ A のもっとも小さい値を求めなさい。
+(2) さらに、中央値と同じ値となる都道府県は6個、最頻値は中央値より1画だけ大きい、
+平均値の小数第2位を四捨五入した値は 11.7画 であることが分かりました。
+中央値と最頻値を求めなさい。
+※ ヒストグラムは誌面どおり。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：資料の整理</li><li><strong>実際</strong>：ヒストグラム→度数表→最小最大・中央値・平均の順で読む</li></ul></td><td>グラフだけでは値そのものは決まりませんが、度数と補足条件を合わせると端と中央がかなり絞れます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>最大と最小が1個ずつ、差が12、中央値と同じ値が6個、最頻値は中央値より1だけ大きい、が強い条件です。</td><td><ul class="compact plain-lines"><li>まずは 度数表に直して端と24番目を見る。</li><li>5つの階級と度数を表に書き直します。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>度数は 3,14,18,10,2 で、47個の中央値は24番目です。</td><td><p>ヒストグラムを度数表へ書き換えることです。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>ヒストグラムを『階級ごとの個数表』に翻訳します。</td><td><ul class="compact plain-lines"><li>ヒストグラムを度数表へ書き換えることです。</li><li>考えやすい形に直すと「度数表に直して端と24番目を見る」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：度数表に直して端と24番目を見る</li><li>最初に紙に書くこと: ヒストグラムを度数表に直す。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：度数表。ヒストグラムを見たら、そのまま考えず、階級ごとの人数表へ戻す。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">ヒストグラムを度数表に直す。</div><ul class="plan-points"><li>端と中央を読む準備が整うからです。</li><li>ここでは「各階級の本数」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">5つの階級に 3,14,18,10,2 個。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">最小値と最大値を決める。</div><ul class="plan-points"><li>差が12で、しかも最小・最大が1個ずつだからです。</li><li>ここでは「15〜17 画が2個しかないこと」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">最小4、最大16。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">中央値と最頻値を決める。</div><ul class="plan-points"><li>24番目は 9〜11 画の階級に入り、日本語条件で10に絞れるからです。</li><li>ここでは「中央値と同じ値が6個、最頻値はそれより1大きい」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">中央値10、最頻値11。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">AとBの平均・中央値の大小関係を決める。</div><ul class="plan-points"><li>中央値10を6個除くと平均は下がり、x&lt;y から中央値は上がるからです。</li><li>ここでは「Aから中央値10の6個を除いてBを作る」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block"></div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：ヒストグラムを度数表へ戻し、累積度数で中央値、度数の最大で最頻値を見る。表に直して処理する別解です。</p><p><strong>最初に紙に書くこと</strong>：各階級の人数を表に写し、左から累積人数を書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">度数表へ直す。</div><ul class="plan-points"><li>ヒストグラムは「どの値が何個あるか」に戻すと扱いやすい。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">階級ごとの度数表
+累積人数の列も作る</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">端の条件から最小値を決める。</div><ul class="plan-points"><li>最小1個、最大1個、差12画 という条件を同時に使う。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">左端と右端の1個だけの位置を見て
+最小値を決める</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">中央値と最頻値を度数で出す。</div><ul class="plan-points"><li>47個なら中央値は24番目。</li><li>最頻値は度数が最大の値。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">累積度数で24番目を探す
+「中央値と同じ値が6個」「最頻値は中央値より1大きい」を重ねて決める</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>棒の高さが見えているからです。</td>
+<td>24番目や最頻値の判断が曖昧になります。</td>
+<td>度数表を1回必ず書きます。</td>
+<td>表現切替不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>中央値10の確定理由で止まりやすいです。</td>
+<td>中央値10の確定理由で止まりやすいです。</td>
+<td>24番目はどの階級にあるか。その階級のどの値が6個あり得るか。</td>
+<td>24番目がどこに入るかと、同じ値が6個ある条件を結び付けていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>度数表を作り、最小最大を決め、24番目で中央値を定め、最後に平均と中央値の大小関係を比較します。</td></tr><tr><td>図や表に直す力</td><td>グラフだけでは値そのものは決まりませんが、度数と補足条件を合わせると端と中央がかなり絞れます。</td></tr><tr><td>大事な条件を見つける力</td><td>最大と最小が1個ずつ、差が12、中央値と同じ値が6個、最頻値は中央値より1だけ大きい、が強い条件です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>最大と最小が1個ずつ、差が12、中央値と同じ値が6個、最頻値は中央値より1だけ大きい、が強い条件です。</td><td>度数表に直して端と24番目を見る</td><td>まず 度数表に直して端と24番目を見る。</td></tr><tr><td>ヒストグラムを『階級ごとの個数表』に翻訳します。</td><td>ヒストグラム→度数表→最小最大・中央値・平均の順で読む</td><td>まず ヒストグラム→度数表→最小最大・中央値・平均の順で読む。</td></tr><tr><td>グラフをそのまま眺めて値を決めようとする</td><td>度数表へ戻ります。</td><td>度数表へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>テスト点のヒストグラムと「中央値と同じ点が5人」「最頻値は中央値より2高い」という条件から、中央値と最頻値を求める。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>ヒストグラムは度数表へ戻し、累積度数で中央値を見る構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>階級ごとの人数を表に直す。</li><li>累積人数で真ん中の位置を見て中央値を決める。</li><li>度数が最大の値を見て、最頻値はそこから決める。</li></ol><p class="transfer-answer"><strong>答え</strong>：表に直してから累積で見る</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>ヒストグラムはそのまま見ず、まず人数表に戻せるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>あるテストのヒストグラムを度数表に直したところ、20人中10番目と11番目がどちらも72点、もっとも多いのが74点でした。中央値と最頻値を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>20人なので中央値は10番目と11番目の平均。どちらも72点だから中央値72点。</li><li>最頻値は最も多い74点。</li></ol><p class="transfer-answer"><strong>答え</strong>：中央値72点、最頻値74点</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>グラフ問題が苦手な子は、図をそのまま読もうとして止まります。『まず表に直す』を毎回の儀式にすると、他分野にも効きます。 次回の mixed review では、資料の整理 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p18"><header><h1>05月18　個数と代金をつるかめ化する</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">30円のアメ、50円のグミ、90円のチョコレートがあります。
+(1) アメを83個、グミを2個、チョコレートをいくつか買ったところ、代金は1000円でした。チョコレートは何個ですか。
+(2) アメとチョコレートを合わせて20個買ったところ、代金は1140円でした。アメは何個ですか。
+(3) アメとグミとチョコレートを合わせて30個買ったところ、代金は1380円でした。グミとチョコレートの個数が同じとき、アメは何個ですか。
+(4) グミとチョコレートを合わせて20個買う予定でしたが、予定の個数を逆にして買ったところ、代金は予定より320円高くなりました。支払った代金はいくらですか。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：つるかめ算</li><li><strong>実際</strong>：固定個数・同数・入れ替えを使って2種類に落とす</li></ul></td><td>(3)はグミとチョコが同数なので平均70円にまとめられ、(4)は予定と実際の入れ替えなので差40円が効きます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>合計20個、合計30個、グミとチョコが同数、予定個数を逆にした、が強い条件です。</td><td><ul class="compact plain-lines"><li>まずは 固定条件で2種類へ落とす。</li><li>各小問ごとに、まず『何が固定されているか』を決めます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>30,50,90 の3値ですが、50と90の平均70が見えます。</td><td><p>3種類の問題を2種類の面積図へ変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>3種類をそのまま追わず、2種類へまとめる面積図に翻訳します。</td><td><ul class="compact plain-lines"><li>小問ごとに『固定総数』『同数』『入れ替え』のどれかに印をつけることです。</li><li>考えやすい形に直すと「固定条件で2種類へ落とす」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：固定条件で2種類へ落とす</li><li>最初に紙に書くこと: (1)は残り金額を90円で割る。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)は残り金額を90円で割る。</div><ul class="plan-points"><li>チョコ以外の代金が固定だからです。</li><li>ここでは「アメ3個・グミ2個固定」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">チョコ9個。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)は合計20個で普通のつるかめ。</div><ul class="plan-points"><li>個数が固定されているからです。</li><li>ここでは「アメ+チョコ=20」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">アメ11個。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3)はグミとチョコを平均70円で1種類にする。</div><ul class="plan-points"><li>グミとチョコの個数が同じだからです。</li><li>ここでは「グミ個数=チョコ個数」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">アメ18個。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">(4)は予定と実際の図を重ね、差40円で個数差8を出す。</div><ul class="plan-points"><li>90円と50円の差が40円で、総数20個が固定だからです。</li><li>ここでは「予定個数を逆にした」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">実際の支払1560円。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：値段の平均を使って種類をまとめる。つるかめ図にして考える別解です。</p><p><strong>最初に紙に書くこと</strong>：問題ごとに「2種類にまとめる」線分図を書き、平均との差で個数を出す。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(2) は40円と100円のつるかめにする。</div><ul class="plan-points"><li>20個で1140円だから平均は57円。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">平均との差
+100円側 43円
+40円側 17円
+→ 100円の品が6個、40円の品が14個</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(3) はグミとチョコを1組140円でまとめる。</div><ul class="plan-points"><li>グミとチョコが同数なので、2個1組で考える。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">30個のうちアメを a 個とすると
+残りは (30-a)/2 組
+30a + 140×(30-a)/2 = 1380</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(4) は差額320円を1組40円差で割る。</div><ul class="plan-points"><li>個数を入れ替えると、1回の交換で40円ずつ差がつく。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">320÷40=8
+予定と実際の個数差は8個
+そこから実際の個数を戻す</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>商品が3つあるからです。</td>
+<td>式は立つが、どこで簡単になるか見えません。</td>
+<td>固定総数・同数・入れ替えのどれかに印をつけます。</td>
+<td>構造認識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(4)の差40円から先で止まりやすいです。</td>
+<td>(4)の差40円から先で止まりやすいです。</td>
+<td>実際はどちらを多く買ったから高くなったのか。</td>
+<td>320円が『個数差×40円』だと見えていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>まず何を固定できるかを見る。</td></tr><tr><td>書きかえて整理する力</td><td>(3)はグミとチョコが同数なので平均70円にまとめられ、(4)は予定と実際の入れ替えなので差40円が効きます。</td></tr><tr><td>大事な条件を見つける力</td><td>合計20個、合計30個、グミとチョコが同数、予定個数を逆にした、が強い条件です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>合計20個、合計30個、グミとチョコが同数、予定個数を逆にした、が強い条件です。</td><td>固定条件で2種類へ落とす</td><td>固定条件で2種類へ落とす を思い出して試す。</td></tr><tr><td>3種類をそのまま追わず、2種類へまとめる面積図に翻訳します。</td><td>固定個数・同数・入れ替えを使って2種類に落とす</td><td>固定個数・同数・入れ替えを使って2種類に落とす を思い出して試す。</td></tr><tr><td>3種類を最後まで3種類のまま追う</td><td>平均70円か差40円のどちらが使えるかを見ます。</td><td>平均70円か差40円のどちらが使えるかを見ます。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>40円、60円、100円のお菓子を、同数条件や総数条件を使って解く小問セット。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>平均で2種類を1つにまとめると軽くなる構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>同数なら2個1組の平均値段を出す。</li><li>総数が決まっているなら、平均との差で個数を出す。</li><li>予定と実際の個数が入れ替わるときは、1回の交換でいくら差がつくかを見る。</li></ol><p class="transfer-answer"><strong>答え</strong>：平均・差・交換の3つを使い分ける</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>2種類を1つにまとめられないか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>40円のアメと100円のチョコを合わせて20個買い、代金は1360円でした。アメは何個ですか。</p><h4>その解答解説</h4><ol class="work-steps"><li>20個なので平均は 1360÷20=68円。</li><li>100円との差は32円、40円との差は28円。</li><li>高い方が8個、安い方が12個。アメは12個。</li></ol><p class="transfer-answer"><strong>答え</strong>：12個</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>つるかめ算を『生きた道具』として使えるかを見るのに良いセットです。1問ずつ別の入口を言わせると、固定条件への感度が上がります。 次回の mixed review では、つるかめ算 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p19"><header><h1>05月19　余りで候補を一気に減らす果物代</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">りんごは1個 88円、なしは1個 66円 です。
+もも1個の値段は、みかん1個の値段の2倍より23円高く、
+みかん4個ともも3個を買うと 509円 でした。
+(1) みかん1個の値段ともも1個の値段をそれぞれ求めなさい。
+(2) りんご、なし、みかん、ももをどれも1個以上買ったら 5410円 でした。
+  (ア) 考えられるももの個数のうち、最も多いのは何個ですか。
+  (イ) そのとき、りんご・なし・みかんの買い方は全部で何通りありますか。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：整数と余り</li><li><strong>実際</strong>：公約数で割り、余り条件で候補を減らす</li></ul></td><td>(1)は30で割ると 7x+6y=51 になり、x が3の倍数と分かります。(2)は7や21を見るとりんごが7の倍数と分かります。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>210,180,105 には大きい共通因子があります。</td><td><ul class="compact plain-lines"><li>まずは まず割って余りを見る。</li><li>30や15で式を割ります。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>105だけが 30 で割れない、21では全部関係する、という違いが意味を持ちます。</td><td><p>金額式を小さな整数式に変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>金額式を小さな整数の式へ翻訳します。</td><td><ul class="compact plain-lines"><li>式をできるだけ大きい公約数で割ることです。</li><li>考えやすい形に直すと「まず割って余りを見る」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：まず割って余りを見る</li><li>最初に紙に書くこと: (1)を30で割る。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)を30で割る。</div><ul class="plan-points"><li>式が 7x+6y=51 と小さくなり、x が3の倍数だと読めるからです。</li><li>ここでは「210と180と1530が30の倍数」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">もも3個、りんご5個。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)は21や7で割った余りを見る。</div><ul class="plan-points"><li>りんごの係数に強い制約がかかるからです。</li><li>ここでは「210,180,105,2310 の関係」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">りんごは7の倍数。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">候補 7,14,… を現実的な範囲で確認する。</div><ul class="plan-points"><li>倍数条件だけで候補がかなり減っているからです。</li><li>ここでは「各果物1個以上」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">りんご7個。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：先に値段を出し、そのあとももの個数を 7個ごとの表で並べて絞る。余りを使わず、候補表で押す別解です。</p><p><strong>最初に紙に書くこと</strong>：みかんと ももの値段を出したら、ももを 0個,7個,14個,… と表に並べる。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">価格を先に決める。</div><ul class="plan-points"><li>みかん4個ともも3個で509円。</li><li>ももはみかんの2倍より23円高い。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">みかん = 44円
+もも = 111円</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">ももの個数を候補表にする。</div><ul class="plan-points"><li>111円は 7で割ると6あまるので、合計との対応が7個ごとに似た形になる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">ももを 7,14,21,… と試し
+残り金額を 88円,66円,44円 で作れるか表にする</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">最大と通り数を決める。</div><ul class="plan-points"><li>現実に4種類とも1個以上必要。</li><li>最大の候補から先に見る。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">最大のもも個数を決め、
+そのとき残りの式を数えて通り数を出す</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>値段と合計が具体的だからです。</td>
+<td>(2)で時間を使いすぎます。</td>
+<td>まず30や21で割れるか確認します。</td>
+<td>メタ認知不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(2)で何で割るかで止まりやすいです。</td>
+<td>(2)で何で割るかで止まりやすいです。</td>
+<td>この式を7や21で見たとき、どの項だけが特徴的か。</td>
+<td>どの係数だけが余りを出すかを見ていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>大きい共通因子で割ってから、余りや倍数条件で候補を絞ります。</td></tr><tr><td>書きかえて整理する力</td><td>(1)は30で割ると 7x+6y=51 になり、x が3の倍数と分かります。</td></tr><tr><td>大事な条件を見つける力</td><td>210,180,105 には大きい共通因子があります。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>210,180,105 には大きい共通因子があります。</td><td>まず割って余りを見る</td><td>まず まず割って余りを見る。</td></tr><tr><td>金額式を小さな整数の式へ翻訳します。</td><td>公約数で割り、余り条件で候補を減らす</td><td>公約数で割り、余り条件で候補を減らす を思い出して試す。</td></tr><tr><td>割らずに個数を試し始める</td><td>余りの条件に戻ります。</td><td>余りの条件に戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>84円、70円、49円の品物の個数と合計から、特定の品物の個数を求める。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>値段のうち、同じ数で割ったときに1種類だけ違う余りを持つものに注目する構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>84円と70円は7の倍数、49円も7の倍数。別の1種類が7で割ったあまりを持つなら、その個数だけが残る。</li><li>合計金額の余りと照らして個数候補を絞る。</li></ol><p class="transfer-answer"><strong>答え</strong>：余りで1種類だけ残す</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>どの値段だけが余りを作るか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>66円、88円、121円の品物を合計3000円買った。121円の品物の個数は何個になりうるか。</p><h4>その解答解説</h4><ol class="work-steps"><li>66円と88円は22の倍数、121円は22で11あまる。</li><li>3000を22で割ったあまりは 8。</li><li>11×個数 を22で割ったあまりが8になる個数を探す。</li></ol><p class="transfer-answer"><strong>答え</strong>：22で見て候補を絞る</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>『何で割るか』を自力で選べるかを見る問題です。復習では、何種類かの法で見て一番強い条件が出るものを選ばせると良いです。 次回の mixed review では、整数と余り の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p20"><header><h1>05月20　1000円ちょうどの組合せを系統立てて数える</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">80円のおかしA、120円のおかしB、200円のおかしC の3種類があります。
+所持金1000円をちょうど使い切るように買うことにしました。買わない種類があってもかまいません。
+A, B, C の個数を (a, b, c) の形で表すことにします。
+(1) 買うおかしの個数が最も多くなる組
+(2) Cをちょうど2個買う組をすべて
+(3) A, B, C の個数の組合せは全部で何通りか
+を求めなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：整数の組合せ</li><li><strong>実際</strong>：大きい金額式を小さい整数式に縮約する</li></ul></td><td>40で割ると係数が 2,3,5 になり、最大個数も個数数えもかなり見通しがよくなります。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>1000円ちょうどで、80,120,200 に共通因子40があります。</td><td><ul class="compact plain-lines"><li>まずは 40で割って C で場合分けする。</li><li>2A+3B+5C=25 に直します。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>200円は係数5になり、C の場合分けが自然です。</td><td><p>円の問題を小さい整数解へ変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>2A+3B+5C=25 に翻訳します。</td><td><ul class="compact plain-lines"><li>全部を40で割ることです。</li><li>考えやすい形に直すと「40で割って C で場合分けする」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：40で割って C で場合分けする</li><li>最初に紙に書くこと: 40で割って 2A+3B+5C=25 を作る。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">40で割って 2A+3B+5C=25 を作る。</div><ul class="plan-points"><li>計算対象が小さくなるからです。</li><li>ここでは「共通因子40」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">C の最大は5。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(1)は個数最大になるように A+B+C を増やす。</div><ul class="plan-points"><li>最も安い A を多くすれば個数が増えるからです。</li><li>ここでは「A は係数2で最安」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">（11,1,0）。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(2)は C=2 を固定して 2A+3B=15 を解く。</div><ul class="plan-points"><li>1変数減るからです。</li><li>ここでは「C=2」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">（0,5,2）,（3,3,2）,（6,1,2）。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">(3)は C=0〜5 で場合分けして数える。</div><ul class="plan-points"><li>係数5の変数で分けるのが最も軽いからです。</li><li>ここでは「C の範囲」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">全部で15通り。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：合計個数 n を先に置き、1000円との差を「BはAより40円高い」「CはAより120円高い」で見る。80円基準の別解です。</p><p><strong>最初に紙に書くこと</strong>：全部をAにした基準をつくり、B1個は+40円、C1個は+120円 と書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">80円基準へ直す。</div><ul class="plan-points"><li>Aだけなら n 個で 80n 円。</li><li>不足・超過だけを見ればよい。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">80n + 40b + 120c = 1000
+→ 2n + b + 3c = 25</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(1) は n を最大にする。</div><ul class="plan-points"><li>b,c は0以上なので、2n≤25。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">n≤12
+n=12 のとき b+3c=1
+→ (a,b,c)=(11,1,0)</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(2)(3) は c を固定して表で数える。</div><ul class="plan-points"><li>c が決まると b が1本にしぼれる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">c=2 なら 2n+b=19
+また a+b=n から組を全部出す
+同様に c=0,1,2,3,4,5 を調べて合計通り数を出す</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>金額が具体的だからです。</td>
+<td>小問(3)で数え漏れが出ます。</td>
+<td>2,3,5 の式に変えます。</td>
+<td>表現切替不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(1)の最大個数で止まりやすいです。</td>
+<td>(1)の最大個数で止まりやすいです。</td>
+<td>個数を増やすには、どの品物を多くしたいか。</td>
+<td>最安の係数2を最大化する視点が弱いです。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>まず40で割る。</td></tr><tr><td>書きかえて整理する力</td><td>40で割ると係数が 2,3,5 になり、最大個数も個数数えもかなり見通しがよくなります。</td></tr><tr><td>大事な条件を見つける力</td><td>1000円ちょうどで、80,120,200 に共通因子40があります。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>1000円ちょうどで、80,120,200 に共通因子40があります。</td><td>40で割って C で場合分けする</td><td>40で割って C で場合分けする を最初の候補にする。</td></tr><tr><td>2A+3B+5C=25 に翻訳します。</td><td>大きい金額式を小さい整数式に縮約する</td><td>大きい金額式を小さい整数式に縮約する を最初の候補にする。</td></tr><tr><td>1000円のまま全部試す</td><td>まず40で割ります。</td><td>まず40で割ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>60円・90円・150円の切手を900円ちょうど買う組合せを数えなさい。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>公約数で割って小さくしてから、1種類ずつ固定して数える構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>30で割って 2a+3b+5c=30 にする。</li><li>c を0,1,2,… と固定すると、残りは 2a+3b の1本になる。</li><li>そのつど整数解を数えて合計する。</li></ol><p class="transfer-answer"><strong>答え</strong>：まず公約数で小さくする</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>大きい金額は、先に同じ数で割って小さくできないか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>50円・80円・130円の切手を1040円ちょうど買う組合せを数えなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>10で割って 5a+8b+13c=104 にする。</li><li>c を0から固定して、残りを5a+8b の式で数える。</li></ol><p class="transfer-answer"><strong>答え</strong>：1種類を固定して数える</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>整数解の問題で『まず割る』が自然に出るかを見たい問題です。最大化と総数カウントを同じ式から処理する比較学習にも向きます。 次回の mixed review では、整数の組合せ の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p21"><header><h1>05月21　求めるものが違うと式も変わる宇宙つるかめ</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">地球では、つる1羽の足は2本、かめ1匹の足は4本です。
+Y星では、つる1羽の足は3本、かめ1匹の足は5本です。
+G星では、つる1羽とかめ1匹の区別が見た目ではつかず、個体数と足の本数から仕様を逆算します。
+誌面の条件を使って、
+(1) 地球版
+(2) Y星版
+(3) G星版
+の問いに答えなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：つるかめ算</li><li><strong>実際</strong>：同じ数でも、生き物1匹あたりの仕様が変われば別問題と見る</li></ul></td><td>地球版の式を流用してはいけません。各世界で『鶴1羽』『亀1匹』の頭数・足数を定義し直すのが急所です。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>同じ 44 と124 でも、世界ごとに鶴亀の仕様が違います。</td><td><ul class="compact plain-lines"><li>まずは 仕様を書いてから式を作る。</li><li>各世界で鶴と亀の仕様を1行で書きます。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>Y星では鶴が頭2・足4、亀が頭1・足8。G星では逆に仕様そのものを求めます。</td><td><p>数の問題をモデル確認の問題に変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>毎回『鶴=(頭,足), 亀=(頭,足)』を明記して式に翻訳します。</td><td><ul class="compact plain-lines"><li>『鶴=(頭,足), 亀=(頭,足)』を1行で書くことです。</li><li>考えやすい形に直すと「仕様を書いてから式を作る」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：仕様を書いてから式を作る</li><li>最初に紙に書くこと: 地球版を普通のつるかめで解く。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">地球版を普通のつるかめで解く。</div><ul class="plan-points"><li>基準問題だからです。</li><li>ここでは「鶴2本足、亀4本足」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">鶴26、亀18。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">Y星版の仕様で式を立て直す。</div><ul class="plan-points"><li>1羽1匹あたりの数が変わったからです。</li><li>ここでは「鶴(2頭4足)、亀(1頭8足)」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">2ウ+エ=44、4ウ+8エ=124 から ウ=19、エ=6。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">G星版は『13羽・6匹』から仕様逆算をする。</div><ul class="plan-points"><li>個体数が与えられていて、1羽1匹の仕様が未知だからです。</li><li>ここでは「鶴13、亀6」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">鶴の頭2足4、亀の頭3足12。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：未知数を「つるの数・かめの数」だけでなく、「1匹あたり何本か」まで含めて逆算する。仕様逆算の別解です。</p><p><strong>最初に紙に書くこと</strong>：頭数・足数・1匹あたりの足の本数を表に分けて書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">地球版とY星版を普通に解く。</div><ul class="plan-points"><li>既知の仕様なら、頭数と足数の2本で決まる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">頭数の式
+足数の式</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">G星版は1匹あたりの仕様を文字で置く。</div><ul class="plan-points"><li>個体数が分かっているなら、仕様×個体数 の合計で逆に出せる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">つるの足を p 本、かめの足を q 本とすると
+個体数と足数の条件から p,q を決める</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">求めるものが変わると式も変わると確認する。</div><ul class="plan-points"><li>同じ「つるかめ」に見えても、未知数が違えば立てる式も違う。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">個体数を求める式 / 仕様を求める式 の違いを整理する</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>頭と足の数が同じだからです。</td>
+<td>Y星版以降が全部ずれます。</td>
+<td>その世界での鶴と亀の仕様を書きます。</td>
+<td>構造認識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>G星版の仕様逆算で止まりやすいです。</td>
+<td>G星版の仕様逆算で止まりやすいです。</td>
+<td>13個と6個で頭44になるには、1羽あたり頭はいくつか。</td>
+<td>13羽・6匹という個体数固定を使えていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>毎回、1羽1匹の仕様を書いてから式を立てます。</td></tr><tr><td>書きかえて整理する力</td><td>地球版の式を流用してはいけません。</td></tr><tr><td>大事な条件を見つける力</td><td>同じ 44 と124 でも、世界ごとに鶴亀の仕様が違います。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>同じ 44 と124 でも、世界ごとに鶴亀の仕様が違います。</td><td>仕様を書いてから式を作る</td><td>仕様を書いてから式を作る を思い出して試す。</td></tr><tr><td>毎回『鶴=(頭,足), 亀=(頭,足)』を明記して式に翻訳します。</td><td>同じ数でも、生き物1匹あたりの仕様が変われば別問題と見る</td><td>まず 同じ数でも、生き物1匹あたりの仕様が変われば別問題と見る。</td></tr><tr><td>地球版のつるかめをそのまま使う</td><td>仕様を書き直します。</td><td>仕様を書き直します。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>宇宙魚と宇宙鳥について、個体数は既知で、1匹あたりの目と足の数を逆算する。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>求めるものが「個体数」ではなく「1匹あたり何本か」に変わると、式も変わる構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>総個体数と総本数から、1匹あたりの仕様を文字で置く。</li><li>仕様×個体数 の合計として式を作る。</li><li>個体数既知なら、仕様の方を逆算できる。</li></ol><p class="transfer-answer"><strong>答え</strong>：未知数が何かを先に決める</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>何を求めるかが変わったら、未知数も変える。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>宇宙虫Aが6匹、宇宙虫Bが4匹いて、足の合計が44本でした。Aの足はBの足より2本多いとき、AとBの足の本数を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>Bの足を x 本、Aの足を x+2 本とおく。</li><li>6(x+2)+4x=44 を解く。</li><li>10x+12=44 だから x=3.2 …… このように整数条件も見る。</li></ol><p class="transfer-answer"><strong>答え</strong>：仕様を文字で置く</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>公式適用型の子に『式の前にモデル』を意識させるのに良い問題です。条件を変えたつるかめを数題並べて比較させると効果的です。 次回の mixed review では、つるかめ算 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p22"><header><h1>05月22　得点ゲームは2人合計を見る</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">不二子さんと聖子さんの2人でじゃんけんをしました。
+1回ごとに、勝った人は10点、引き分けは5点、負けた人は2点が与えられます。
+(1) 10回して、不二子さんは6回勝ち、2回は引き分けでした。このとき聖子さんの得点は何点ですか。
+(2) 10回して、不二子さんの得点が56点でした。引き分けは何回ですか。
+(3) 何回かしたとき、引き分けは3回で、不二子さんの得点は115点、聖子さんの得点は83点でした。じゃんけんをした回数は何回ですか。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：得点と勝敗</li><li><strong>実際</strong>：2人の合計得点を見る</li></ul></td><td>引き分けは2人合計10点、勝敗がついた回は2人合計12点です。2人を別々に見るより、合計を見る方が軽いです。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>1回ごとの配点が勝ち10、引き分け5、負け2で固定です。</td><td><ul class="compact plain-lines"><li>まずは 2人合計点に直す。</li><li>勝敗あり1回で合計12点、引き分け1回で合計10点を確認します。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>引き分けは2人合計10、勝敗ありは2人合計12になります。</td><td><p>個人の点数をペアの合計点に変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>個人得点を2人合計得点へ翻訳します。</td><td><ul class="compact plain-lines"><li>勝敗あり1回の合計点12を確認することです。</li><li>考えやすい形に直すと「2人合計点に直す」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：2人合計点に直す</li><li>最初に紙に書くこと: (1)は相手の勝ち・分け・負けに言い換える。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：得点表。勝ち・あいこ・負けの「2人合計点」を先に表にする。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)は相手の勝ち・分け・負けに言い換える。</div><ul class="plan-points"><li>勝敗は相手と表裏一体だからです。</li><li>ここでは「10回、本人6勝2分」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">相手は2勝2分6敗で42点。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)は面積図または式で引き分け回数を出す。</div><ul class="plan-points"><li>10回固定なので1変数減るからです。</li><li>ここでは「本人56点」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">引き分け4回。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3)は2人合計点を使う。</div><ul class="plan-points"><li>決着1回あたり合計12点、引き分け1回あたり合計10点だからです。</li><li>ここでは「引き分け3回」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">(115+83)-3×10=168、168÷12=14回が決着、総回数17回。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：2人の得点を別々に追わず、1回あたりの2人合計点を見る。和の一定性から押す別解です。</p><p><strong>最初に紙に書くこと</strong>：勝ち・あいこ・負けの1回あたりの2人合計点を書き出す。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">2人合計点の表を作る。</div><ul class="plan-points"><li>誰が勝っても 10+2=12点、あいこは 5+5=10点。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">勝敗あり1回 → 12点
+あいこ1回 → 10点</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">総回数やあいこ回数を合計点から出す。</div><ul class="plan-points"><li>(3) は2人合計点が最短ルート。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">合計点 = 115+83=198
+あいこ3回で 30点
+残り168点 は 12点ずつ
+→ 残り14回
+計17回</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">個人の得点へ戻す。</div><ul class="plan-points"><li>合計が分かったあとで、勝ち数差を個人得点で調整する。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">必要なら個人点の差から勝ち数差を求める</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>問題文が本人基準だからです。</td>
+<td>(3)で式が増えます。</td>
+<td>1回の総点を書きます。</td>
+<td>表現切替不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(3)で17回に届かず止まりやすいです。</td>
+<td>(3)で17回に届かず止まりやすいです。</td>
+<td>1回決着すると、2人で何点入る？</td>
+<td>引き分けも2人合計10点で数えられることを見落としています。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>1回あたりの2人合計点を先に固定し、引き分け点を引いてから決着回数へ戻します。</td></tr><tr><td>書きかえて整理する力</td><td>引き分けは2人合計10点、勝敗がついた回は2人合計12点です。</td></tr><tr><td>大事な条件を見つける力</td><td>1回ごとの配点が勝ち10、引き分け5、負け2で固定です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>1回ごとの配点が勝ち10、引き分け5、負け2で固定です。</td><td>2人合計点に直す</td><td>2人合計点に直す を思い出して試す。</td></tr><tr><td>個人得点を2人合計得点へ翻訳します。</td><td>2人の合計得点を見る</td><td>まず 2人の合計得点を見る。</td></tr><tr><td>本人の得点だけで全部処理しようとする</td><td>2人合計点へ戻ります。</td><td>2人合計点へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>勝ち8点、引き分け4点、負け1点のゲームで、2人の合計得点から総回数を求める。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>2人合計点を使うと、誰が勝ったかをいったん消して総回数が出せる構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>勝敗あり1回の2人合計は 8+1=9点、引き分けは 4+4=8点。</li><li>あいこの回数が分かれば、残りを9点ずつで数える。</li></ol><p class="transfer-answer"><strong>答え</strong>：まず2人合計を見る</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>1人ずつで重いときは、2人合計が一定にならないか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>勝ち6点、引き分け3点、負け1点のゲームで、2人の合計点が72点、引き分けが4回だった。総回数を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>勝敗あり1回の合計は 7点、あいこ1回の合計は 6点。</li><li>あいこ4回で24点、残り48点。</li><li>48÷7 は割り切れないので、条件の読み直しが必要。</li></ol><p class="transfer-answer"><strong>答え</strong>：まず1回あたりの2人合計点を出す</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>この問題は『相手も一緒に見る』切り替えが主題です。ゲーム系の文章題で、片方だけを見る癖のある子に効きます。 次回の mixed review では、得点と勝敗 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p25"><header><h1>05月25　階段差に注目するじゃんけん</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">長い階段でじゃんけんをくり返します。
+勝った人は5段上がり、負けた人は3段下がり、引き分けは動きません。
+(1) 10回したとき、Aさんがぜんぶ勝った場合の位置を求めなさい。
+(2) 10回したあとで、実際の位置が26段だったときの勝ち数を求めなさい。
+(3) 何回かしたあと、2人の段差に関する条件から位置を求めなさい。
+※ 詳しい条件は誌面どおり。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：移動の文章題</li><li><strong>実際</strong>：個人の高さは+5/-3、2人の段差は1回入れ替えるごとに16縮むと見る</li></ul></td><td>(2)(3)は『Aが全部勝った基準』から何回ひっくり返したかで考えると軽いです。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>勝つと+5、負けると-3 で、1回勝敗を入れ替えるとAの位置は8変わります。</td><td><ul class="compact plain-lines"><li>まずは A全勝基準から交換回数を数える。</li><li>Aが全部勝ったらどうなるかを先に出します。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>2人の段差は、A勝ち1回とB勝ち1回を交換すると16縮みます。</td><td><p>実際のゲームを基準との差へ変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>『A全勝』の基準状態へ翻訳します。</td><td><ul class="compact plain-lines"><li>Aが全部勝った場合を書くことです。</li><li>考えやすい形に直すと「A全勝基準から交換回数を数える」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：A全勝基準から交換回数を数える</li><li>最初に紙に書くこと: (1)はA全勝で最大を出す。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)はA全勝で最大を出す。</div><ul class="plan-points"><li>最大なので他の結果を考える必要がないからです。</li><li>ここでは「5回」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">25段。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)は10回全勝基準50段と実際26段の差を見る。</div><ul class="plan-points"><li>Aの勝ち1回を負け1回に交換するとAの位置は8下がるからです。</li><li>ここでは「10回後26段上」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">差24より3回交換、勝ち7回。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3)は2人の段差を見る。</div><ul class="plan-points"><li>差64段は2人まとめた量なので、1回交換で16変わるからです。</li><li>ここでは「30回後の段差64」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">Aが上なら19回、Bが上なら11回。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：勝ち数を x 回と置き、全勝基準ではなく「1回ごとの差」で式にする。方程式型の別解です。</p><p><strong>最初に紙に書くこと</strong>：勝ちを x 回、負けを y 回、あいこを z 回として x+y+z=回数 を書く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">位置の式を立てる。</div><ul class="plan-points"><li>勝つと +5、負けると -3、あいこは0。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">位置の増加 = 5x - 3y</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">回数条件と合わせる。</div><ul class="plan-points"><li>10回なら x+y+z=10。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">5x-3y = 実際の増加
+x+y+z=10</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">差の条件があるときは2人分をまとめる。</div><ul class="plan-points"><li>2人の段差や合計位置は、1人ずつより式が軽い。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">必要に応じて 2人の合計増加 / 段差 の式へ直す</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>(2)が8で割るので引きずられます。</td>
+<td>勝ち数が半端にずれます。</td>
+<td>『見ているのはAの高さか、2人の差か』を言い直します。</td>
+<td>メタ認知不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(2)と(3)の使い分けで止まりやすいです。</td>
+<td>(2)と(3)の使い分けで止まりやすいです。</td>
+<td>今見ているのはAの位置だけか、それともAとBの差か。</td>
+<td>何の差を見ているかを確認していません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>差を作って見る力</td><td>まず全勝基準を作り、実際との差を1回交換あたりの変化で割ります。</td></tr><tr><td>書きかえて整理する力</td><td>(2)(3)は『Aが全部勝った基準』から何回ひっくり返したかで考えると軽いです。</td></tr><tr><td>大事な条件を見つける力</td><td>勝つと+5、負けると-3 で、1回勝敗を入れ替えるとAの位置は8変わります。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>勝つと+5、負けると-3 で、1回勝敗を入れ替えるとAの位置は8変わります。</td><td>A全勝基準から交換回数を数える</td><td>A全勝基準から交換回数を数える を思い出して試す。</td></tr><tr><td>『A全勝』の基準状態へ翻訳します。</td><td>個人の高さは+5/-3、2人の段差は1回入れ替えるごとに16縮むと見る</td><td>まず 個人の高さは+5/-3、2人の段差は1回入れ替えるごとに16縮むと見る。</td></tr><tr><td>(3)でも8で割ってしまう</td><td>全勝基準に戻ります。</td><td>全勝基準に戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>勝者+4、敗者-2のゲームで、全勝基準から実際の勝ち数を戻す。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>全勝を基準にして差を見る構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>10回全部勝つと +40。</li><li>実際との差が1回負けるごとに何段減るかを見る。</li><li>差から負け回数、そこから勝ち回数を出す。</li></ol><p class="transfer-answer"><strong>答え</strong>：基準を置いて差を見る</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>ぜんぶ勝ちを基準にすると何段か。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>8回のゲームで、勝つと+4、負けると-2。全部勝つと32段上がるが、実際は14段上がった。勝ちは何回か。</p><h4>その解答解説</h4><ol class="work-steps"><li>差は 32-14=18段。</li><li>1回の負けで、+4 のはずが -2 になるので 6段ぶん差がつく。</li><li>18÷6=3 だから負け3回、勝ち5回。</li></ol><p class="transfer-answer"><strong>答え</strong>：5回</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>同じ題材で『A個人の高さ』と『A-Bの差』を使い分ける点がよい教材です。見ている量を言葉で言い直す練習に向いています。 次回の mixed review では、移動の文章題 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p26"><header><h1>05月26　2人の上がった段数の合計で追う</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">長い階段で、栄くんと東さんがじゃんけんをするごとに次のルールで移動します。
+栄くんが勝つと 栄くん+2段、東さん-1段。
+東さんが勝つと 東さん+3段、栄くん-1段。
+あいこだと 栄くん+1段、東さんはそのまま。
+2人とも20段目からスタートします。
+(1) 4回して 1勝1敗2あいこ のとき、栄くんは何段目か。
+(2) 10回後に栄くん29段目、東さん24段目でした。栄くんは何勝何敗何あいこか。
+(3) 18回後に2人がちょうど同じ段にいたとき、その段をすべて求めなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：移動の文章題</li><li><strong>実際</strong>：2人の上がった段数の合計と、同じ段にいる条件を使う</li></ul></td><td>1回ごとの2人合計の増分は 栄勝ち=1、東勝ち=2、引き分け=1 です。(2)は合計13から東勝ち数が出ます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>2人とも20段目スタートで、勝敗ごとの移動規則が非対称です。</td><td><ul class="compact plain-lines"><li>まずは 2人合計の上昇段数を見る。</li><li>勝ち方ごとに2人合計が何段増えるかを小表にします。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>(2)の最終位置 29段目・24段目から、2人合計の上昇は13段と読めます。</td><td><p>各結果で『2人合計が何段増えるか』を表にすることです。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>1回ごとの結果を『2人合計では何段増えるか』に翻訳します。</td><td><ul class="compact plain-lines"><li>各結果で『2人合計が何段増えるか』を表にすることです。</li><li>考えやすい形に直すと「2人合計の上昇段数を見る」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：2人合計の上昇段数を見る</li><li>最初に紙に書くこと: (1)は規則通りに栄くんだけ計算する。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)は規則通りに栄くんだけ計算する。</div><ul class="plan-points"><li>4回と短く、合計を見るより速いからです。</li><li>ここでは「1勝1敗2引き分け」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">23段目。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)は2人合計の上昇13段に注目する。</div><ul class="plan-points"><li>東勝ちだけ合計2段、他は1段増えるからです。</li><li>ここでは「10回後に29段と24段」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">東勝ち3回、東負け5回、引き分け2回。つまり栄5勝3敗2分。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3)は同じ段にいる条件を式にする。</div><ul class="plan-points"><li>栄の位置と東の位置が等しい、が追加の1本になるからです。</li><li>ここでは「18回後に同じ段」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">31段目、32段目。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：勝ち・負け・あいこの3結果を、栄くんと東さんの「合計の増え方」と「差の増え方」の2本で整理する別解です。</p><p><strong>最初に紙に書くこと</strong>：栄勝ち, 東勝ち, あいこ のときの2人合計の増え方を書き並べる。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">1回ごとの合計増分を見る。</div><ul class="plan-points"><li>栄勝ちでも東勝ちでも合計は +1、あいこも +1。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">2人の段の合計は毎回1ずつ増える</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2) は10回後の合計位置から、合計30段を読む。</div><ul class="plan-points"><li>20段目から2人で40段スタート。10回で合計50段。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">10回後の合計位置 = 29+24=53
+差 3段 を個別条件へ戻す</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3) は同じ段にいる条件を差0で書く。</div><ul class="plan-points"><li>差の変化だけを見れば、同じ段かどうかが分かる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">差の変化 = 3×(東勝ち) - 3×(栄勝ち) - 1×(あいこ ではない?)
+最終的に差=0となる組を調べる</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>位置を聞かれているからです。</td>
+<td>(2)で3変数が残り続けます。</td>
+<td>1回ごとの2人合計増分を表にします。</td>
+<td>メタ認知不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(2)の勝敗記録の戻し方で止まりやすいです。</td>
+<td>(2)の勝敗記録の戻し方で止まりやすいです。</td>
+<td>10回のうち、合計2段増える回は何回か。</td>
+<td>東勝ち数が分かると、残りの9?ではなく残り7? との整理が曖昧です。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>個人を別々に追わず、まず2人合計の増分を固定し、必要なときだけ個人へ戻ります。</td></tr><tr><td>書きかえて整理する力</td><td>1回ごとの2人合計の増分は 栄勝ち=1、東勝ち=2、引き分け=1 です。</td></tr><tr><td>大事な条件を見つける力</td><td>2人とも20段目スタートで、勝敗ごとの移動規則が非対称です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>2人とも20段目スタートで、勝敗ごとの移動規則が非対称です。</td><td>2人合計の上昇段数を見る</td><td>まず 2人合計の上昇段数を見る。</td></tr><tr><td>1回ごとの結果を『2人合計では何段増えるか』に翻訳します。</td><td>2人の上がった段数の合計と、同じ段にいる条件を使う</td><td>2人の上がった段数の合計と、同じ段にいる条件を使う を思い出して試す。</td></tr><tr><td>個人の式だけで押す</td><td>2人合計へ戻ります。</td><td>2人合計へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>2人でコマを進めるゲームで、勝敗ごとに合計増分が違う状況から記録を求める。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>2人の合計位置と差の2本で見る構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>スタート時の合計位置を出す。</li><li>1回ごとの合計増分を表にする。</li><li>最後の合計位置と差から、勝ち・負け・あいこを戻す。</li></ol><p class="transfer-answer"><strong>答え</strong>：合計と差の2本に分ける</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>2人の問題は、合計と差に分けられないか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>2人が同じ段から始め、1回ごとに合計が1段ずつ増えるゲームを10回した。最後の合計位置が48段なら、スタートは何段目だったか。</p><h4>その解答解説</h4><ol class="work-steps"><li>10回で合計は10段増える。</li><li>スタートの合計は 48-10=38。</li><li>2人とも同じ段からなので、1人あたり19段目。</li></ol><p class="transfer-answer"><strong>答え</strong>：19段目</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>(1)だけは順に計算し、(2)(3)は合計へ切り替える、というモード切替が学べます。『短いなら直進、長いなら構造化』の訓練に向いています。 次回の mixed review では、移動の文章題 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p27"><header><h1>05月27　倍数でなく余りに注目する果物代</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">りんごは1個88円、なしは1個66円です。
+もも1個の値段は、みかん1個の値段の2倍より23円高く、みかん4個ともも3個を買うと509円でした。
+(1) みかんとももの値段を求めなさい。
+(2) りんご・なし・みかん・ももをどれも1個以上買って5410円になりました。
+  (ア) ももの個数の最大
+  (イ) そのときの買い方の通り数
+を求めなさい。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：整数と余り</li><li><strong>実際</strong>：111円だけが22で割ると1あまることを使う</li></ul></td><td>(2)では 88円・66円・44円はみな22で割り切れ、111円だけが1あまる。だから 5410円を22で割ったときのあまり20が、ももの個数を強くしばる。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>44円・66円・88円は22で割り切れ、111円だけが1あまるのが最強条件です。こういう「1つだけあまりが残る」形は、個数を先にしぼる合図です。</td><td>5410円を22で割ったときのあまり20に注目して、111円のももの個数を先にしぼる。</td></tr><tr><td>数字・配置・端の意味</td><td>各果物を1個以上買うので、最大個数を出すときは他の果物をできるだけ少なくする見方が使えます。</td><td>ももを最大にしたいなら、まず他の3種類を1個ずつにして上から試す。</td></tr><tr><td>条件をどのように翻訳するか</td><td>金額の式をそのまま追うより、「22で割ったあまり」と「残りの金額」に分けると整理しやすくなります。</td><td>最初に22で割ったあまりの表へ直し、そのあと残りの金額の式へ戻す。</td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：まず価格を出し、次に 22で割ったあまり で見る</li><li>最初に紙に書くこと: (1)で価格を出す。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)で価格を出す。</div><ul class="plan-points"><li>後半は具体的な価格が必要だからです。</li><li>ここでは「4みかん+3もも=509、もも=2みかん+23」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">みかん44円、もも111円。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)で 22で割ったあまり を見る。</div><ul class="plan-points"><li>111だけが22で1余り、他はすべて22の倍数だからです。</li><li>ここでは「88,66,44,111」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">ももの個数は 20,42,64,… の形。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">最大個数を現実条件で絞る。</div><ul class="plan-points"><li>64個では金額超過なので、実際に可能な最大は42個だからです。</li><li>ここでは「1個以上買う条件」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">I=42。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">もも42個で残りの式を数える。</div><ul class="plan-points"><li>最大時の残り3種類の解を数えればよいからです。</li><li>ここでは「88x+66y+44z = 5410-111×42」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">II=16通り。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：最大個数を先に置き、残りを 22の倍数条件で確かめる。余り条件を最大化と結びつける別解です。</p><p><strong>最初に紙に書くこと</strong>：ももの個数を m 個として、5410-111m を 88,66,44 で作れるかを見る。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">価格を先に決める。</div><ul class="plan-points"><li>みかん4個ともも3個の式から、もも111円を出す。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">みかん44円
+もも111円</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">最大個数から下へ試す。</div><ul class="plan-points"><li>111円が最も高いので、最大個数は上から見るのが速い。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">m=42,41,40,… と下げて
+残り 5410-111m を調べる</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">残り金額が22の倍数かを確かめる。</div><ul class="plan-points"><li>88,66,44 はすべて22の倍数。</li><li>4種類とも1個以上の条件も同時に見る。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">残り金額を 22 で割り、
+条件を満たす最初の m と、そのときの通り数を出す</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>値段がただの一数値に見えるからです。</td>
+<td>Iで42に届く前に総当たりへ流れます。</td>
+<td>各値段を22で割った余りを書く。</td>
+<td>構造認識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>Iの『少なくとも20個』の意味で止まりやすいです。</td>
+<td>Iの『少なくとも20個』の意味で止まりやすいです。</td>
+<td>5410 を22で見たとき、何の個数だけが余りを運んでくるか。</td>
+<td>商の内側に隠れる余りと外に出る余りの区別が曖昧です。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>(1)で価格を出し、(2)では 22で割ったあまり で ももの個数を絞ってから残りを数えます。</td></tr><tr><td>書きかえて整理する力</td><td>(2)では 88,66,44 はみな22の倍数で、111だけが1余ります。</td></tr><tr><td>大事な条件を見つける力</td><td>ももの値段が『みかんの2倍より23高い』で、22の倍数関係から1だけずれる形になります。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>ももの値段が『みかんの2倍より23高い』で、22の倍数関係から1だけずれる形になります。</td><td>まず価格を出し、次に 22で割ったあまり で見る</td><td>まず まず価格を出し、次に 22で割ったあまり で見る。</td></tr><tr><td>金額式を 22で割ったあまり の余り条件へ翻訳します。</td><td>111円だけが 22 で割ると1余ることを使う</td><td>111円だけが 22 で割ると1余ることを使う を思い出して試す。</td></tr><tr><td>22の倍数ばかり見るのに111を普通の値段としてしか見ない</td><td>余り20の意味を先に読みます。</td><td>余り20の意味を先に読みます。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>66円、88円、121円の品物で合計金額を一定にするとき、121円の品物の個数を最大にする。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>高い品物の最大個数を聞かれたら、まずその個数を上から試し、残りが共通倍数で作れるかを見る構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>121円を m 個買うと残りは N-121m。</li><li>残りを 66円と88円で作るには 22の倍数であることが必要。</li><li>m を大きい方から下げて、初めて条件を満たす m を選ぶ。</li></ol><p class="transfer-answer"><strong>答え</strong>：高い品物は上から試す</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>最大個数は、上から見て残り条件を確かめる。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>77円、99円、143円の品物で合計2860円のとき、143円の品物の個数の最大を求めなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>143円を m 個とすると残りは 2860-143m。</li><li>77円と99円は11の倍数なので、残りも11の倍数でなければならない。</li><li>m を大きい方から下げて調べる。</li></ol><p class="transfer-answer"><strong>答え</strong>：11の倍数条件で調べる</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>「倍数」でなく「22で割ったときのあまり」を見る切り替えが核です。こういう問題では、各値段を同じ数で割ったときのあまりを横に並べて書かせると視点が安定します。</p>
+</aside></article><article class="problem-analysis" id="p28"><header><h1>05月28　いもづる式で残りの解を飛ばす</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">品物Aは1個30円、品物Bは1個52円です。
+(1) AとBを合わせて47個買うと合計2026円になりました。Aは何個ですか。
+(2) 合計金額が2026円で、合計個数が47個でないとき、Aは何個ですか。
+(3) AとBをいくつか買った合計金額が同じで、合計個数が3通りになる場合があります。
+このような場合で、合計金額が最も高くなるのはいくらですか。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：不定方程式</li><li><strong>実際</strong>：最小公倍数780円を単位に解を横へずらす</li></ul></td><td>30円と52円の最小公倍数780円を1回交換すると、合計金額は変わらず個数だけ A+26, B-15 と動きます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>同じ2026円になる解が複数あり、しかも個数が3通りになる条件です。</td><td><ul class="compact plain-lines"><li>まずは 1組見つけて横へずらす。</li><li>(1)を普通のつるかめで1組出します。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>lcm(30,52)=780 が交換単位になります。</td><td><p>(1)で普通につるかめを1回やることです。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>1組の解から横へずらす『いもづる式』に翻訳します。</td><td><ul class="compact plain-lines"><li>(1)で普通につるかめを1回やることです。</li><li>考えやすい形に直すと「1組見つけて横へずらす」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：1組見つけて横へずらす</li><li>最初に紙に書くこと: (1)を普通のつるかめで解く。</li></ul></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn" data-mode="4" type="button">4</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)を普通のつるかめで解く。</div><ul class="plan-points"><li>親になる1組が必要だからです。</li><li>ここでは「47個で2026円」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">(A,B)=(19,28)。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">780円交換を作る。</div><ul class="plan-points"><li>30×26=52×15=780 だからです。</li><li>ここでは「最小公倍数780」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">Aを26増やしBを15減らしても合計金額不変。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(2)は1回交換して次の解を出す。</div><ul class="plan-points"><li>(1)から最も近い別解だからです。</li><li>ここでは「Bがまだ13個残る」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A=45。</div></td></tr><tr data-step="4"><td class="plan-cell"><div class="step-badge">第4手</div><div class="plan-title">(3)は個数が3通りになる最大金額を作る。</div><ul class="plan-points"><li>個数は1回交換ごとに11ずつ動くので、2回まで交換できる最大金額が境目だからです。</li><li>ここでは「親解から2回交換可能」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">3038円。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：30a+52b=一定 を 30で割った余り、52で割った余りで見る。lcm交換ではなく、余りから親解を作る別解です。</p><p><strong>最初に紙に書くこと</strong>：30a+52b=2026 を、30 でも 52 でも見られる形にする。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1) を余りで解く。</div><ul class="plan-points"><li>52b を 30 で見れば、b がしぼれる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">52b=2026-30a
+22b を30で見て b を決める
+→ a=19, b=28</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2) も同じ余りで次の解を出す。</div><ul class="plan-points"><li>1組分かったら、余り条件を保つ次の a,b を探せばよい。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">30で見ても52で見ても成り立つ次の組を出す
+→ a=45</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3) は個数差11に注目する。</div><ul class="plan-points"><li>1回の横ずれで個数和が11変わる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">個数和が3通りになるには 2回分 ずらせる最大の金額を作ればよい
+→ 3038円</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>(1)が解けた安心感があるからです。</td>
+<td>(2)(3)で毎回やり直しになります。</td>
+<td>30円26個と52円15個が同額であることを書きます。</td>
+<td>構造認識不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(3)の最大金額で止まりやすいです。</td>
+<td>(3)の最大金額で止まりやすいです。</td>
+<td>1回交換すると個数合計は何個増えるか。</td>
+<td>個数が1回で11ずつ変わることを見ていません。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>知っている型を使う力</td><td>まず1組見つけ、そこから『+26,-15』で残りの解を出します。</td></tr><tr><td>書きかえて整理する力</td><td>30円と52円の最小公倍数780円を1回交換すると、合計金額は変わらず個数だけ A+26, B-15 と動きます。</td></tr><tr><td>大事な条件を見つける力</td><td>同じ2026円になる解が複数あり、しかも個数が3通りになる条件です。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>同じ2026円になる解が複数あり、しかも個数が3通りになる条件です。</td><td>1組見つけて横へずらす</td><td>1組見つけて横へずらす を思い出して試す。</td></tr><tr><td>1組の解から横へずらす『いもづる式』に翻訳します。</td><td>最小公倍数780円を単位に解を横へずらす</td><td>最小公倍数780円を単位に解を横へずらす を思い出して試す。</td></tr><tr><td>1組見つけてもそこで終わる</td><td>780円交換へ戻ります。</td><td>780円交換へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>24円と40円の切手で同じ合計金額になる買い方を、1組から全部作る。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>最小公倍数ぶんだけ交換すると、合計金額を変えずに個数だけ動く構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>24円と40円の最小公倍数は120円。</li><li>24円を5枚減らして40円を3枚増やす、またはその逆をすると同額交換になる。</li><li>1組の解からこの交換をくり返して、すべての解を出す。</li></ol><p class="transfer-answer"><strong>答え</strong>：120円交換</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>何円ぶんが交換単位になるか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>18円切手と30円切手で、同じ合計金額になる買い方を1組から全部作る。</p><h4>その解答解説</h4><ol class="work-steps"><li>18と30の最小公倍数は90。</li><li>18円を5枚と30円を3枚は同額。</li><li>1組の解から +5,-3 または -5,+3 で横にずらす。</li></ol><p class="transfer-answer"><strong>答え</strong>：90円交換</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>いもづる算の感覚を身につけるのに良い問題です。『最小公倍数で交換』を言葉で残し、別の単価ペアでも同じ動きを確認させると定着します。 次回の mixed review では、不定方程式 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><article class="problem-analysis" id="p29"><header><h1>05月29　運賃表は区間ごとに面積化する</h1><table class="overview-table"><thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead><tbody><tr><td><div class="problem-ocr">A, B, C, D の4つの駅の間を電車が運行しています。
+乗車区間ごとの運賃表が誌面にあり、A駅からB駅、C駅、D駅へ向かう客、B駅からC駅・D駅へ向かう客、C駅からD駅へ向かう客の6種類に分けて考えます。
+(1) 朝、A駅では100人が乗り、B駅では15人が降り、C駅では20人が乗り、D駅で全員が降りました。乗客全員の運賃の合計を求めなさい。
+(2) 昼、A駅で100人が乗り、B駅とC駅の乗降条件が文章で与えられています。乗客全員の運賃の合計を求めなさい。
+(3) 夕方、A駅で100人が乗り、B駅では15人が降り20人が乗り、C駅では20人が降り10人が乗りました。乗客全員の運賃の合計は 64390円 でした。A駅から乗ってC駅で降りた人は何人ですか。
+※ 運賃表は誌面どおり。</div><p class="problem-shot-note">PDF問題文をOCRテキスト化</p></td><td><ul class="theme-bullets"><li><strong>表向き</strong>：乗車人数の文章題</li><li><strong>実際</strong>：OD別の6グループに分けて、区間図・面積図で整理する</li></ul></td><td>人数の流れは『今乗っている人数』と『どこまで行く客か』を分けると見えます。(3)は簡単な区間を引いたあと、残りを630円基準のつるかめにできます。</td></tr></tbody></table></header><section class="section-indent reading-section"><h2>1. 問題文の読み方と初見の時の試し方</h2><table class="reading-table"><thead><tr><th>どこに注目するか？</th><th>なぜ注目するか・どうしたら気づけるか？</th><th>まず試す方針</th></tr></thead><tbody><tr><td>最強条件・不自然条件</td><td>運賃表が OD（乗る駅→降りる駅）ごとに与えられています。</td><td><ul class="compact plain-lines"><li>まずは 6グループに分けて区間図にする。</li><li>6種類の客を記号で置き、BやCでの乗降をその記号で追います。</li></ul></td></tr><tr><td>数字・配置・端の意味</td><td>200,350,600,300,580,400 の6運賃は、区間ごとの客層に対応します。</td><td><p>物語を区間図へ変えます。</p></td></tr><tr><td>条件をどのように翻訳するか</td><td>A→B, A→C, A→D, B→C, B→D, C→D の6グループ図へ翻訳します。</td><td><ul class="compact plain-lines"><li>6種類の客グループを書き分けることです。</li><li>考えやすい形に直すと「6グループに分けて区間図にする」になる。</li></ul></td></tr></tbody></table></section><section class="section-indent setup-section"><h2>2. 最初に書く図・表・式</h2><div class="setup-box representation-box"><ul class="setup-list"><li>入り口 ：6グループに分けて区間図にする</li><li>最初に紙に書くこと: (1)は朝の乗降を6グループに直す。</li></ul><div class="tool-note"><strong>使う算数の道具</strong>：区間図。A→B, A→C, A→D, B→C, B→D, C→D の6グループを駅の区間の上に置く。</div></div></section><section class="section-indent details-section main-solution-section">
+<h2 class="details-heading">3. 解答解説<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2>
+<table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1"><td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">(1)は朝の乗降を6グループに直す。</div><ul class="plan-points"><li>BでもCでも乗る人がいない/降りない人がいるので、単純な3グループに整理できるからです。</li><li>ここでは「A100人、Bで15人降車、Cで20人乗車、Dで全員降車」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A→Dが85人、A→Bが15人、C→Dが20人で 62000円。</div></td></tr><tr data-step="2"><td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">(2)はC駅の条件からB駅の人数を戻す。</div><ul class="plan-points"><li>C降車人数が乗車人数の2.5倍で差33という条件が強いからです。</li><li>ここでは「C駅条件、B駅条件」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">C降車55人、B乗車36人などが出て総額71820円。</div></td></tr><tr data-step="3"><td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">(3)はAB間とCD間以外にかかった運賃を取り出して面積図にする。</div><ul class="plan-points"><li>簡単な200円区間・400円区間を引くと、残りが 600円 と 630円 のつるかめ型になるからです。</li><li>ここでは「総額64390円」という条件を使う。</li></ul></td><td class="solution-cell"><div class="calc-block">A→C は13人。</div></td></tr></tbody></table>
+</section><section class="section-indent alt-section details-section"><h2 class="details-heading">4. 別解<div class="details-controls"><button class="details-btn" data-mode="close" type="button">close</button><button class="details-btn" data-mode="1" type="button">1</button><button class="details-btn" data-mode="2" type="button">2</button><button class="details-btn" data-mode="3" type="button">3</button><button class="details-btn active" data-mode="all" type="button">all</button></div></h2><div class="representation-box"><p><strong>方針とその理由</strong>：OD別の6グループを文字で置き、駅ごとの乗降と総額の方程式で解く。区間図を使わず、未知数表で押す別解です。</p><p><strong>最初に紙に書くこと</strong>：A→B, A→C, A→D, B→C, B→D, C→D の人数を a,b,c,d,e,f と置く。</p></div><table class="step-table solution-step-table"><thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead><tbody><tr data-step="1">
+<td class="plan-cell"><div class="step-badge">第1手</div><div class="plan-title">駅ごとの人数条件を式にする。</div><ul class="plan-points"><li>B駅・C駅の「乗る/降りる」を a〜f で書く。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">A駅: a+b+c = 100
+B駅: a が降り、d+e が乗る
+C駅: b+d が降り、f が乗る</div></td></tr><tr data-step="2">
+<td class="plan-cell"><div class="step-badge">第2手</div><div class="plan-title">総額の式を作る。</div><ul class="plan-points"><li>運賃表から 200a+350b+600c+300d+580e+400f などの形になる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">総額 = 200a+350b+600c+300d+580e+400f</div></td></tr><tr data-step="3">
+<td class="plan-cell"><div class="step-badge">第3手</div><div class="plan-title">簡単な区間を先に処理して残りを解く。</div><ul class="plan-points"><li>A→B, C→D など確定しやすい区間から消すと、残りが軽くなる。</li></ul></td>
+<td class="solution-cell"><div class="calc-block">人数条件で易しい変数から決め、最後に A→C の人数を出す</div></td></tr></tbody></table></section><section class="section-indent">
+<h2>5. つまずきと直し方</h2>
+<table class="trap-table">
+<thead>
+<tr>
+<th>タイプ</th>
+<th>こう考えがち</th>
+<th>どこで止まるか</th>
+<th>すぐ直す一手</th>
+<th>足りなかったもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口ミス</td>
+<td>駅ごとの増減が見えているからです。</td>
+<td>(2)(3)で総額が作れません。</td>
+<td>6グループ記号を書きます。</td>
+<td>表現切替不足</td>
+</tr><tr>
+<td>正しい方針だが停止</td>
+<td>(3)の630円基準で止まりやすいです。</td>
+<td>(3)の630円基準で止まりやすいです。</td>
+<td>200円区間と400円区間で先に確定できる客は誰か。</td>
+<td>簡単な区間を先に引いて残りを標準化する発想が不足しています。</td>
+</tr>
+</tbody>
+</table>
+</section><section class="section-indent memory-section"><h2>6. この問題で残すメモ</h2><div class="memory-grid"><section class="mini-card"><h3>使った力</h3><table class="skill-mini"><thead><tr><th>力</th><th>役目</th></tr></thead><tbody><tr><td>表に整理する土台</td><td>まず6種類の客グループへ分解し、易しい区間を先に確定してから残りを面積図で処理します。</td></tr><tr><td>図や表に直す力</td><td>人数の流れは『今乗っている人数』と『どこまで行く客か』を分けると見えます。</td></tr><tr><td>大事な条件を見つける力</td><td>運賃表が OD（乗る駅→降りる駅）ごとに与えられています。</td></tr></tbody></table></section><section class="mini-card"><h3>再利用メモ</h3><table class="reuse-mini"><thead><tr><th>条件</th><th>見る</th><th>次にやる</th></tr></thead><tbody><tr><td>運賃表が OD（乗る駅→降りる駅）ごとに与えられています。</td><td>6グループに分けて区間図にする</td><td>6グループに分けて区間図にする を最初の候補にする。</td></tr><tr><td>A→B, A→C, A→D, B→C, B→D, C→D の6グループ図へ翻訳します。</td><td>OD別の6グループに分けて、区間図・面積図で整理する</td><td>OD別の6グループに分けて、区間図・面積図で整理する を最初の候補にする。</td></tr><tr><td>今乗っている人数だけを追い、行き先で分けない</td><td>区間図へ戻ります。</td><td>区間図へ戻ります。 を思い出して試す。</td></tr></tbody></table></section></div></section><section class="section-indent transfer-compose-section"><h2>7. 転移テスト問題と自分で作る問題</h2><section class="mini-card transfer-block"><h3>転移テスト問題</h3><p>バス停A,B,Cの区間運賃表から、各区間の客層と総売上を求める。</p><details class="accordion-card"><summary>＋ 解答解説を見る</summary><div class="accordion-body"><h4>同じ構造の理由</h4><ul class="candidate-points"><li>乗客を「どこからどこまで」で分けると、区間ごとの人数と売上が整理できる構造が同じです。</li></ul><h4>解答解説</h4><ol class="work-steps"><li>A→B, A→C, A→D, B→C, B→D, C→D の客に分ける。</li><li>各区間で今乗っている人数をその6種類の和で書く。</li><li>運賃表を掛けて総売上を出す。</li></ol><p class="transfer-answer"><strong>答え</strong>：区間ごとに6グループへ分ける</p></div></details></section><section class="mini-card create-block"><h3>自分で作る問題</h3><ul class="compact"><li>時系列だけでなく、乗車区間ごとに分けられないか。</li></ul><details class="accordion-card"><summary>＋ 自作問題の例と解答を見る</summary><div class="accordion-body"><h4>自作問題の例</h4><p>A,B,Cの3駅の電車で、A→B, A→C, B→C の3種類の客に分けて売上を考える。区間図を書きなさい。</p><h4>その解答解説</h4><ol class="work-steps"><li>A→B, A→C, B→C の3つの記号を置く。</li><li>AB区間には A→B と A→C が乗っている。</li><li>BC区間には A→C と B→C が乗っている。</li></ol><p class="transfer-answer"><strong>答え</strong>：3グループの区間図</p></div></details></section></section><aside class="appendix-note section-indent">
+<h2>付録：指導者向け運用メモ</h2>
+<p>乗車人数問題は、時系列だけを追う子と区間別に分ける子で差が出ます。区間図→面積図の二段変換を定着させる教材として有効です。 次回の mixed review では、乗車人数の文章題 の別表現問題と交互に置き、1週間後と3週間後に短い再テストを入れて spacing すると定着しやすいです。初回は 1〜5章を厚めに伴走し、その後 6章の一部を隠して guidance fading すると効果的です。</p>
+</aside></article><footer class="site-footer">2026年5月号「中学への算数」日日の演習（和と差の文章題）を、v14.0 の 入口の流れ / compact worked solution / 再利用メモ の形でOCRテキスト問題文・誌面解説比較・実戦的な別解を組み込んだ v14.0 版です。</footer></main>
+<script>
+let currentScale = 1;
+function applyScale(){
+  document.documentElement.style.setProperty('--content-scale', currentScale.toFixed(2));
+  const lab = document.getElementById('size-label');
+  if(lab){ lab.textContent = Math.round(currentScale*100) + '%'; }
+}
+function changeFontSize(delta){
+  currentScale = Math.max(0.9, Math.min(1.3, currentScale + delta*0.05));
+  applyScale();
+}
+function setActiveStepButtons(controls, mode){
+  controls.querySelectorAll('.details-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+}
+function applyDetailsMode(section, mode){
+  section.querySelectorAll('tr[data-step]').forEach(row => {
+    if(mode === 'all'){ row.style.display = ''; return; }
+    if(mode === 'close'){ row.style.display = 'none'; return; }
+    row.style.display = row.dataset.step === mode ? '' : 'none';
+  });
+}
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.details-btn');
+  if(!btn) return;
+  const controls = btn.closest('.details-controls');
+  const section = btn.closest('.details-section');
+  if(!controls || !section) return;
+  const mode = btn.dataset.mode;
+  setActiveStepButtons(controls, mode);
+  applyDetailsMode(section, mode);
+});
+document.addEventListener('DOMContentLoaded', () => {
+  applyScale();
+  document.querySelectorAll('.details-section').forEach(section => {
+    const controls = section.querySelector('.details-controls');
+    if(!controls) return;
+    const active = controls.querySelector('.details-btn.active');
+    applyDetailsMode(section, active ? active.dataset.mode : 'all');
+  });
+});
+</script>
+</body></html>
