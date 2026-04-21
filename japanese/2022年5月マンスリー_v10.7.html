@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2022.5月度マンスリーテスト_国語長文 HTML解答解説</title>
+<style>
+:root{--bg:#f5f7fb;--paper:#fff;--ink:#1f2937;--sub:#64748b;--line:#dbe3ef;--accent:#6d28d9;--accent2:#0f766e;--warn:#fff7ed;--soft:#f8fafc;--ok:#ecfdf5;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;line-height:1.86;color:var(--ink);background:linear-gradient(180deg,#f8fafc 0,#eef2ff 100%);}
+.top-panel{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 8px 24px rgba(15,23,42,.08);max-height:34vh;overflow-y:auto;}
+.top-inner{max-width:1480px;margin:0 auto;padding:12px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.print-btn,.jump-btn{font:inherit;font-weight:700;border:1px solid #c4b5fd;border-radius:999px;padding:8px 12px;background:#f5f3ff;color:#3b0764;text-decoration:none;cursor:pointer;white-space:nowrap;}
+.print-btn{background:linear-gradient(135deg,#ede9fe,#ecfeff);color:#312e81;}
+.content{max-width:1200px;margin:0 auto;padding:24px 18px 90px;}
+section,article{background:var(--paper);border:1px solid var(--line);border-radius:24px;margin:18px 0;padding:26px;box-shadow:0 14px 32px rgba(15,23,42,.06);}
+.hero{background:linear-gradient(135deg,#ffffff,#f1f5ff);}
+h1{font-size:clamp(1.45rem,3vw,2.35rem);margin:0 0 10px;line-height:1.35;}
+h2{font-size:1.55rem;border-left:8px solid var(--accent);padding-left:12px;margin:0 0 18px;}
+h3{font-size:1.24rem;margin:20px 0 10px;}
+h4{font-size:1.05rem;margin:18px 0 8px;color:#312e81;}
+.badges,.q-meta,.toc{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.badge,.label,.accuracy,.mini-label{display:inline-block;padding:4px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:700;font-size:.92rem;}
+.accuracy{background:#ecfeff;color:#155e75;}
+.toc a{text-decoration:none;background:#f8fafc;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:#334155;font-weight:700;}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.card,.detail-box,.answer-box,.check-card,.question-copy,.process,.pitfall,.text-block{border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;background:#fff;}
+.card{background:#f8fafc;}
+.answer-box{background:#f0fdf4;border-color:#86efac;}
+.answer-box h4{margin-top:0;color:#166534;}
+.answer-box.small{padding:10px 14px;}
+.question-copy{background:#f8fafc;}
+.question-copy.compact{padding:12px;}
+.process{background:#fff;}
+.pitfall{background:var(--warn);border-color:#fed7aa;}
+.text-block p{margin:.6em 0;}
+.quote{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;}
+.keyword{background:#fef3c7;padding:0 .15em;border-radius:.2em;}
+.claim{background:#ecfdf5;border-bottom:3px solid #10b981;padding:0 .15em;}
+.cause{background:#eff6ff;border-bottom:3px solid #3b82f6;padding:0 .15em;}
+.result{background:#f0fdf4;border-bottom:3px solid #22c55e;padding:0 .15em;}
+.emotion{background:#fce7f3;border-bottom:3px solid #db2777;padding:0 .15em;}
+.trigger{background:#ede9fe;border-bottom:3px solid #7c3aed;padding:0 .15em;}
+.scene{background:#fef9c3;border-bottom:3px solid #eab308;padding:0 .15em;}
+.note{color:var(--sub);font-size:.95rem;}
+ul,ol{padding-left:1.5em;}
+.choice-list{columns:1;}
+.table-wrap{overflow-x:auto;margin:12px 0;}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+th,td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top;line-height:1.7;}
+th{background:#eef2ff;color:#312e81;text-align:left;}
+tr:last-child td{border-bottom:none}td:last-child,th:last-child{border-right:none}
+.choice-table .judge{text-align:center;font-weight:900;font-size:1.1rem;}
+.ok-row{background:#f0fdf4;}
+.q-card{scroll-margin-top:150px;}
+.check-card{background:#fbfdff;border-color:#bfdbfe;}
+.check-card summary{cursor:pointer;font-weight:800;color:#1d4ed8;padding:8px 0;}
+.page-break-before{scroll-margin-top:120px;}
+.final-table td:first-child{font-weight:700;white-space:nowrap;}
+@media (max-width:820px){.grid-2{grid-template-columns:1fr}.content{padding:16px 12px 60px}section,article{padding:18px;border-radius:18px}.top-inner{padding:10px}}
+@page{size:A4 portrait;margin:13mm;}
+@media print{body{background:#fff;font-size:10.5pt}.top-panel{display:none}.content{max-width:none;padding:0}section,article,.card,.detail-box,.answer-box,.check-card,.text-block{box-shadow:none;break-inside:avoid;page-break-inside:avoid}section,article{border-radius:10px;margin:8mm 0;padding:8mm}.page-break-before{break-before:page}a{color:inherit;text-decoration:none}table{font-size:9.4pt;min-width:0}th,td{padding:6px 7px}details{display:block}details>summary{display:none}}
+</style>
+<script>function printPDF(){window.print();}</script>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<nav class="top-panel">
+  <div class="top-inner">
+    <button class="print-btn" onclick="printPDF()">PDF出力</button>
+    <a class="jump-btn" href="#read-diagnosis">本文の読み方診断</a>
+    <a class="jump-btn" href="#section-3">大問3へ</a><a class="jump-btn" href="#section-4">大問4へ</a>
+    <a class="jump-btn" href="#answers">最終答案一覧</a><a class="jump-btn" href="#summary">今回の学習まとめ</a>
+    <a class="jump-btn" href="#q3-1">大問3-問1へ</a><a class="jump-btn" href="#q3-2">大問3-問2へ</a><a class="jump-btn" href="#q3-3">大問3-問3へ</a><a class="jump-btn" href="#q3-4">大問3-問4へ</a><a class="jump-btn" href="#q3-5">大問3-問5へ</a><a class="jump-btn" href="#q3-6">大問3-問6へ</a>
+    <a class="jump-btn" href="#q4-1">大問4-問1へ</a><a class="jump-btn" href="#q4-2">大問4-問2へ</a><a class="jump-btn" href="#q4-3">大問4-問3へ</a><a class="jump-btn" href="#q4-4">大問4-問4へ</a><a class="jump-btn" href="#q4-5">大問4-問5へ</a><a class="jump-btn" href="#q4-6">大問4-問6へ</a><a class="jump-btn" href="#q4-7">大問4-問7へ</a><a class="jump-btn" href="#q4-8">大問4-問8へ</a><a class="jump-btn" href="#q4-9">大問4-問9へ</a>
+  </div>
+</nav>
+<main class="content">
+<section class="hero print-unit">
+  <h1>2022.5月度マンスリーテスト_国語長文 HTML解答解説</h1>
+  <div class="badges"><span class="badge">対象：PDFの長文問題［3］［4］</span><span class="badge">大問3：説明文</span><span class="badge">大問4：物語文</span><span class="badge">v10.7形式</span></div>
+  <p class="note">新しい固定版mdに合わせ、選択肢問題は「選択肢（全文）／合致するところ／合致しないところ／判定」の表に統一し、選択肢問題内だけに折りたたみ式の理解確認テストを置いています。記述答案は、一文で無理にまとめず、二〜三文に分けてもよい構成で示しています。</p>
+  <div class="toc"><a href="#read-diagnosis">本文の読み方診断</a><a href="#section-3">大問3</a><a href="#section-4">大問4</a><a href="#answers">最終答案一覧</a><a href="#summary">今回の学習まとめ</a></div>
+</section>
+
+<section id="read-diagnosis" class="print-unit">
+  <h2>本文の読み方診断</h2>
+  <div class="grid-2">
+    <div class="card"><h3>文章全体の主題・流れ</h3><p>大問3は、アポロ計画の難しさを、年号・距離・費用・人数・月へ行って帰るしくみで説明する文章である。大問4は、友だちができず「かげがうすい」と思いこんでいる「私」が、姉・玲奈ちゃん・ゆうたくんとのやりとりで、自分の見方を変えていく物語である。</p></div>
+    <div class="card"><h3>読みの勝負所</h3><p>説明文では、目立つ数字だけを拾わず、数字が「どれほど難しいか」を説明するために置かれていることを読む。物語文では、動作・セリフを心情に直す。特に「みじめ」「うれしい」「ありがとう」は、直前直後の一語を根拠に、気持ちの変化を段階で追う。</p></div>
+  </div>
+</section>
+
+<section id="section-3" class="page-break-before">
+  <h2>大問3　解き方診断</h2>
+  <div class="grid-2">
+    <div class="card print-unit"><h3>文章ジャンル・設問タイプ</h3><p>文章ジャンル：説明文。設問タイプ：接続語補充、内容把握、抜き出し、空欄補充、役割把握、因果記述、正誤判定。</p></div>
+    <div class="card print-unit"><h3>文章の主題・流れ</h3><p>アポロ計画は、当時の宇宙開発の実績から見ると非常に困難な計画だった。本文は、計画発表時の技術段階、月までの距離、帰還の難しさを示したあと、司令船と着陸船に分ける工夫と、月の岩石研究の成果へ進む。</p></div>
+  </div>
+  <div class="grid-2">
+    <div class="card print-unit"><h3>本文の要約</h3><p>ケネディ大統領が一九六一年に「十年以内に人間を月に着陸させ、安全に地球にもどす」と発表したアポロ計画は、当時の実績から見ると大きな飛躍だった。人が乗る宇宙船の飛行は演説の一か月前に始まったばかりで、月までの約三十八万キロの往復とは比べものにならない。アメリカは巨額の費用と多くの人員を投じ、十年以内に月面着陸を実現した。月から地球へ帰るには燃料を減らす工夫が必要で、司令船を月面に降ろさず、軽い着陸船だけで降りる方法が用いられた。アポロ計画で持ち帰った岩石により、月の表面がどんな岩石でできているかが分かり、月の研究が進んだ。</p></div>
+    <div class="card print-unit"><h3>本文文字数</h3><p>概算約1,600字。数字・時系列・因果説明を追う説明文。</p></div>
+  </div>
+  <div class="card print-unit"><h3>この大問で使う線の凡例・線の引き方</h3><table><thead><tr><th>対応する塾技</th><th>線種（日本語）</th><th>役割</th><th>この大問での使い方</th></tr></thead><tbody><tr><td>塾技1</td><td>キーワード線</td><td>くり返し語を追う。</td><td>アポロ計画、月、司令船、着陸船、岩石に線を引く。</td></tr><tr><td>塾技2</td><td>主張線</td><td>段落の中心を押さえる。</td><td>「とんでもない計画」「一番大きなこと」を中心に読む。</td></tr><tr><td>塾技4</td><td>問い線・答え線</td><td>問いと答えを対応させる。</td><td>「何がわかったか」→「どんな岩石でできているか」を対応させる。</td></tr><tr><td>塾技16</td><td>まとめ線</td><td>具体例後の意味づけを読む。</td><td>数字やしくみの説明後にあるまとめを優先する。</td></tr></tbody></table></div>
+  <div class="text-block print-unit"><h3>本文の線引き再現</h3><p><span class="claim">アポロ計画はとんでもない計画でした</span>。一九六一年、ケネディ大統領は「十年以内に人間を月に着陸させ、安全に地球にもどす」と発表しました。しかし、アメリカが人工衛星の打ち上げに成功したのは一九五八年で、<span class="cause">人が乗る宇宙船を飛ばしたのも演説のほんの一か月前</span>でした。月は約三十八万キロも離れており、片道四日間もかかります。</p><p>月へ行くだけではだめで、帰ってこなくてはなりません。月でもう一度ロケットを打ち上げる必要があり、そこに計画の難しさがあります。アメリカは約束通り十年以内にそれをやりとげ、アポロ十一号で人類が初めて月に立ちました。アポロ十三号は酸素タンク爆発というピンチにあいましたが、工夫して地球に帰りました。</p><p>ロケットは、打ち上げ後に使い終わった部分を切り離し、最後は<span class="keyword">着陸船と司令船</span>が残ります。月に着くと二人が着陸船に移り、一人は司令船に残って月のまわりを回ります。<span class="result">司令船を月面に降ろさず、軽い着陸船で降りることで、燃料を少なくできます</span>。持ち帰った岩石により、<span class="claim">月の表面がどんな岩石でできているか</span>が分かりました。</p></div>
+
+<article id="q3-1" class="q-card print-unit">
+  <h3>大問3　問一</h3>
+  <div class="q-meta"><span class="label">問題タイプ：接続語補充</span><span class="accuracy">推定正答率 78%（話題転換と逆接を分けられるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>□A・□Bにあてはまることばとして、最もふさわしいものを次の中から選び、それぞれ記号で答えなさい。ただし、同じ記号は一回しか使えません。<ol class="choice-list"><li>ア　しかし</li><li>イ　なぜなら</li><li>ウ　ところで</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、空欄の前後が「話題転換」か「逆接」かを分けることです。□Aの前では、アポロ計画の難しさを説明していますが、□Aの後は「これまで月面に何人の人間が立ったでしょうか」と人数の話題へ移ります。前の話を受けつつ別話題に移すので、Aは「ところで」です。□Bの前は、アポロ13号が「たいへんなピンチ」となった場面です。□Bの後は「なんとか地球に帰ってきました」と逆方向の結果なので、Bは「しかし」です。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>A＝ウ、B＝ア</strong></p></div>
+  <div class="detail-box"><h4>空欄群の個別解説</h4><table><thead><tr><th>記号</th><th>本文の前後関係</th><th>入る語</th><th>理由</th><th>誤りやすい点</th></tr></thead><tbody><tr><td>A</td><td>計画の説明から、月面に立った人数の問いへ切り替わる。</td><td>ところで</td><td>前の内容と反対ではなく、話題を変えているから。</td><td>「しかし」にすると対立が必要になる。</td></tr><tr><td>B</td><td>爆発事故で全滅しかけたが、工夫して帰還した。</td><td>しかし</td><td>危機から帰還へ、内容が逆向きに転じるから。</td><td>「なぜなら」は理由説明で、ここには合わない。</td></tr></tbody></table></div><div class="detail-box"><h4>答案チェック</h4><ul><li>A・Bを本文中の順番どおりに示している。</li><li>Aは話題転換、Bは逆接になっている。</li><li>同じ記号を二度使っていない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>接続語は意味だけで選ばず、空欄の直前と直後の関係で決める。Aは反対ではなく話題転換、Bは事故から帰還への逆接である。</div>
+  
+</article>
+
+<article id="q3-2" class="q-card print-unit">
+  <h3>大問3　問二</h3>
+  <div class="q-meta"><span class="label">問題タイプ：内容把握・抜き出し</span><span class="accuracy">推定正答率 67%（比喩の意味を広く取り、抜き出し条件を守れるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線①「アポロ計画はとんでもない計画でした」について、次の(1)(2)の問いに答えなさい。<br>(1)「アポロ計画」のどのようなところが「とんでもない」のですか。最もふさわしいものを選び、記号で答えなさい。<ol class="choice-list"><li>ア　十兆円以上のお金がかかり、四十万人以上の人がかかわらないといけないような大規模な計画なのに、失敗する可能性を考えようとしなかったところ。</li><li>イ　人工衛星の打ち上げに成功したのは演説の三年前であるにもかかわらず、宇宙船で月に行くという実現できない計画を立てて、大統領がみんなに発表したところ。</li><li>ウ　成功させる見通しが十分に立っているとはいえない段階で、今までだれもおこなったことのない大変な計画を、短期間で成しとげようとしているところ。</li><li>エ　地球に帰るために月面で地球上と同じようにロケットを打ち上げるというむちゃな計画であるにもかかわらず、アメリカ国民に受け入れられたところ。</li></ol>(2)アポロ計画が実現したことにより、月の表面について何がわかりましたか。本文中から十二字ちょうどでさがし、ぬき出して答えなさい。</div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、比喩と数字を「何の説明か」に戻すことです。本文には「人がのる宇宙船を宇宙にとばしたのは…演説のほんの1か月前」「月は38万km」「小学校に入学できたから、次は大学受験」という説明があります。これは、費用が大きいことだけでなく、当時の技術段階から見て目標が非常に遠かったという意味です。だから(1)はウです。(2)は最後のまとめの「表面がどんな岩石でできているか」を抜きます。十二字ちょうどで、問いの「月の表面について何がわかったか」にそのまま答えています。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>(1) ウ　(2) どんな岩石でできているか</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　十兆円以上のお金がかかり、四十万人以上の人がかかわらないといけないような大規模な計画なのに、失敗する可能性を考えようとしなかったところ。</td><td>「10兆円以上」「40万人以上」という本文の数字を、選択肢では「大規模な計画」とまとめている点は合う。</td><td>【本文にない心情の追加】本文は「大規模」だとは述べるが、「失敗する可能性を考えようとしなかった」とは書かない。対象語は「計画」のままだが、判断を「規模が大きい」→「失敗を考えない」に替えている。<br><strong>【作問者の意図】</strong>本文の「10兆円以上」「40万人以上」を使い、目立つ数字で選ばせながら、結論だけを本文外の「失敗を考えない」にしている。</td><td class="judge">×</td></tr>
+<tr><td>イ　人工衛星の打ち上げに成功したのは演説の三年前であるにもかかわらず、宇宙船で月に行くという実現できない計画を立てて、大統領がみんなに発表したところ。</td><td>「演説の三年前」「人工衛星の打ち上げ」は本文と対応し、当時の技術が未熟だった点は一部合う。</td><td>【結論の言いすぎ】本文は「小学校に入学できたから、次は大学受験」というたとえで困難さを示すが、「実現できない計画」とは断定していない。原因は「技術段階が低い」で合うが、結論を「難しい」→「実現できない」に強めている。<br><strong>【作問者の意図】</strong>本文の「三年前」を残し、決め手となる結論を「困難」から「不可能」に変える言いすぎで迷わせている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>ウ　成功させる見通しが十分に立っているとはいえない段階で、今までだれもおこなったことのない大変な計画を、短期間で成しとげようとしているところ。</td><td>「人がのる宇宙船を宇宙にとばしたのは…ほんの1か月前」「月は38万km」「小学校に入学できたから、次は大学受験」を、選択肢では「見通しが十分に立っているとはいえない段階」「だれもおこなったことのない大変な計画」と言い換えている。<br><strong>【作問者の意図】</strong>本文の数字や比喩をそのまま使わず、「技術段階と目標の差」として抽象化しているため、本文語の丸写しを探すと見落としやすい。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>エ　地球に帰るために月面で地球上と同じようにロケットを打ち上げるというむちゃな計画であるにもかかわらず、アメリカ国民に受け入れられたところ。</td><td>「月でもう一度ロケットの打ち上げ」という本文の課題に触れている点は一部合う。</td><td>【しくみの逆】本文は「司令船は月に降りない」「軽い着陸船」として、地球上と同じような大きな打ち上げを避ける工夫を説明している。選択肢は、避けた方法を実行した計画にしている。<br><strong>【作問者の意図】</strong>本文の「月でもう一度ロケット」を利用し、解決すべき困難と実際のしくみを入れ替えている。</td><td class="judge">×</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>(1)は、規模だけでなく「技術段階と目標の差」を押さえている。</li><li>(2)は十二字ちょうどで抜き出している。</li><li>「月の表面」に対して、岩石の種類に関わる表現を答えている。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「10兆円」「40万人」という目立つ数字だけでアを選ばない。数字は大変さの材料であり、決め手は「当時の段階では見通しが十分でない」ことである。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線①「アポロ計画はとんでもない計画でした」について、(1)の理由として最もふさわしいものを選びなさい。<ol class="choice-list"><li>ア　計画費用が大きく、人手も多かったため、失敗できない国家事業だったところ。</li><li>イ　人が宇宙に出たばかりの段階で、月まで行って帰るという前例のない目標を短期間で実現しようとしたところ。</li><li>ウ　月へ行くロケットを現在の技術でも作れないほど巨大にしようとしたところ。</li><li>エ　月の石を調べるためだけに、人間を月へ送ろうとしたところ。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>イ</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　計画費用が大きく、人手も多かったため、失敗できない国家事業だったところ。</td><td>「10兆円以上」「40万人以上」は合う。</td><td>【結論ずれ】本文の中心は費用や国家事業ではなく、技術段階に対して目標が遠すぎた点。<br><strong>【作問者の意図】</strong>目立つ数字だけを利用して中心を外す。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>イ　人が宇宙に出たばかりの段階で、月まで行って帰るという前例のない目標を短期間で実現しようとしたところ。</td><td>「演説のほんの1か月前」「月は38万km」「10年以内」を、「出たばかり」「前例のない目標」「短期間」と言い換えている。<br><strong>【作問者の意図】</strong>数字を抽象化した正解。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>ウ　月へ行くロケットを現在の技術でも作れないほど巨大にしようとしたところ。</td><td>ロケットが巨大だった点は合う。</td><td>【可能の追加】「現在の技術でも作れない」は本文にない。<br><strong>【作問者の意図】</strong>「巨大」を技術不能に変える。</td><td class="judge">×</td></tr>
+<tr><td>エ　月の石を調べるためだけに、人間を月へ送ろうとしたところ。</td><td>月の岩石が調査対象になる点は合う。</td><td>【目的の限定】本文は「月の石だけ」が目的とは言わない。<br><strong>【作問者の意図】</strong>後半の岩石情報を前半の理由にすり替える。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q3-3" class="q-card print-unit">
+  <h3>大問3　問三</h3>
+  <div class="q-meta"><span class="label">問題タイプ：空欄補充・語句選択</span><span class="accuracy">推定正答率 83%（直後の「むしろ困難」に対応する反対語を選べるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線②にあてはまることばとして、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　真剣</li><li>イ　安心</li><li>ウ　重要</li><li>エ　簡単</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、空欄の直後の対比語を使うことです。本文は「それは、□だからではない。むしろ困難な計画だからだ」という形です。「ではない」と「むしろ」によって、空欄には「困難」と反対向きの語が入ると分かります。選択肢の中で「困難」と最もきれいに対になるのは「簡単」です。「重要」や「真剣」は価値や態度であり、難しさの反対ではありません。したがってエを選びます。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>エ</strong></p></div>
+  <div class="detail-box"><h4>答案チェック</h4><ul><li>「むしろ困難な計画だからだ」と対になる語を選んでいる。</li><li>「重要」「真剣」など、計画の価値を表す語に流れていない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>空欄補充では、本文全体の印象よりも、空欄直後の「むしろ困難」という対応語を最優先する。</div>
+  
+</article>
+
+<article id="q3-4" class="q-card print-unit">
+  <h3>大問3　問四</h3>
+  <div class="q-meta"><span class="label">問題タイプ：内容一致・役割把握</span><span class="accuracy">推定正答率 81%（人数・乗り物・場所をずらさず照合できるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線③「3人の宇宙飛行士」とありますが、三人の役割の説明として、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　月に着くと二人が司令船から着陸船に移って月に降り立ち、一人は司令船に乗ったまま無人探査機を操作する。</li><li>イ　月に着くと一人が司令船から着陸船に移って月に降り立ち、二人は司令船に乗ったまま月の様子を見ている。</li><li>ウ　月に着くと一人が司令船から着陸船に移って月に降り立ち、二人は司令船に乗ったまま地球に帰る準備をする。</li><li>エ　月に着くと二人が司令船から着陸船に移って月に降り立ち、一人は司令船に乗ったまま月のまわりで待っている。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、人数・乗り物・場所を表で整理することです。本文には「3人のうち2人が司令船から着陸船に移ります」とあります。また「3人のうち1人は、月の近くまでいきながら、月に降りることはできません」ともあります。司令船は「月に降りないで月のまわりを回って」いるので、二人が着陸船で月に降り、一人が司令船で月のまわりに残ると分かります。したがってエが正しいです。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>エ</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　月に着くと二人が司令船から着陸船に移って月に降り立ち、一人は司令船に乗ったまま無人探査機を操作する。</td><td>「二人が司令船から着陸船に移ります」は、選択肢の前半と対応する。</td><td>【役割の追加】本文の一人は「司令船に乗ったまま月のまわりを回って」待つが、「無人探査機を操作する」とは書かれていない。主語は一人の宇宙飛行士で合うが、役割を「待つ」→「操作する」に替えている。<br><strong>【作問者の意図】</strong>本文中の「無人探査機」という別語を混ぜ、司令船に残る人の役割を本文外の作業にしている。</td><td class="judge">×</td></tr>
+<tr><td>イ　月に着くと一人が司令船から着陸船に移って月に降り立ち、二人は司令船に乗ったまま月の様子を見ている。</td><td>司令船と着陸船に分かれる点は本文と関係がある。</td><td>【人数のすり替え】本文は「3人のうち2人が司令船から着陸船に移ります」だが、選択肢は「一人」が降りるとしている。結果も「二人が司令船」と逆になっている。<br><strong>【作問者の意図】</strong>「司令船」「着陸船」という本文語を残し、人数だけを「二人」→「一人」に替えている。</td><td class="judge">×</td></tr>
+<tr><td>ウ　月に着くと一人が司令船から着陸船に移って月に降り立ち、二人は司令船に乗ったまま地球に帰る準備をする。</td><td>司令船に残る人がいるという大枠は本文と近い。</td><td>【人数と目的のすり替え】本文は降りるのが「二人」、司令船に残るのが「一人」である。さらに残る人は「月のまわりで待つ」のであって、「地球に帰る準備をする」とは説明されていない。<br><strong>【作問者の意図】</strong>本文後半の「地球へ帰る」という目的語を持ち込み、役割説明の時点をずらしている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>エ　月に着くと二人が司令船から着陸船に移って月に降り立ち、一人は司令船に乗ったまま月のまわりで待っている。</td><td>「3人のうち2人が司令船から着陸船に移ります」「司令船は、月に降りないで月のまわりを回って」を、選択肢では「二人が…月に降り立ち」「一人は…月のまわりで待っている」と整理している。<br><strong>【作問者の意図】</strong>本文の説明を、人数・乗り物・場所に分解して言い換えているため、数字を丁寧に追えば正解になる。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>月に降りる人数は二人である。</li><li>司令船に残る人数は一人である。</li><li>残る場所は地球ではなく、月のまわりである。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>宇宙の知識で考えず、本文の「二人」「一人」「司令船」「着陸船」を一つずつ対応させる。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線③「3人の宇宙飛行士」とありますが、三人の役割の説明として、最もふさわしいものを選びなさい。<ol class="choice-list"><li>ア　二人が着陸船で月に降り、一人が司令船で月のまわりに残る。</li><li>イ　一人が月に降り、二人が司令船で月面を観察する。</li><li>ウ　二人が月に降り、一人が地球から管制する。</li><li>エ　三人全員が着陸船に乗りかえて月に降りる。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　二人が着陸船で月に降り、一人が司令船で月のまわりに残る。</td><td>「二人が…着陸船」「司令船は月に降りない」を整理している。<br><strong>【作問者の意図】</strong>人数と乗り物を正しく対応させる正解。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　一人が月に降り、二人が司令船で月面を観察する。</td><td>司令船に残る人がいる点は近い。</td><td>【人数の逆】本文は降りるのが二人、残るのが一人。<br><strong>【作問者の意図】</strong>人数だけを替える。</td><td class="judge">×</td></tr>
+<tr><td>ウ　二人が月に降り、一人が地球から管制する。</td><td>二人が降りる点は合う。</td><td>【場所のすり替え】一人は地球ではなく司令船にいる。<br><strong>【作問者の意図】</strong>宇宙飛行士と地上管制を混同させる。</td><td class="judge">×</td></tr>
+<tr><td>エ　三人全員が着陸船に乗りかえて月に降りる。</td><td>着陸船が月に降りる点は合う。</td><td>【範囲の広げすぎ】本文は二人だけで、三人全員ではない。<br><strong>【作問者の意図】</strong>「着陸船」を残して人数を広げる。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q3-5" class="q-card print-unit">
+  <h3>大問3　問五</h3>
+  <div class="q-meta"><span class="label">問題タイプ：記述説明</span><span class="accuracy">推定正答率 56%（燃料が少なくてすむ因果を説明できるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線④「着陸船と司令船」とありますが、着陸船と司令船に分けるとどのようなよいところがあるのですか。説明しなさい。</div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、しくみの説明から「よいところ」を因果で取り出すことです。本文には「ロケットが一台しかないと、地球に帰るためのたくさんの燃料を持ったままで、月に着陸し、月から再打ち上げしなくてはなりません」とあります。さらに「司令船は、月に降りないで月のまわりを回っていてもらい」「軽い着陸船で降りる」と説明されています。つまり、地球へ帰るための重い燃料まで月面へ降ろさず、月面からの打ち上げを軽くできるのが利点です。答えは、月から地球へ再びロケットを打ち上げる場合に比べ、少ない燃料で往復できる、という形でまとめます。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>月から地球に向かってもう一度ロケットを打ち上げる場合と比べて、少ない燃料で月と地球を往復できるところ。</strong></p></div>
+  <div class="detail-box"><h4>文末設計</h4><p>「〜ところ。」で終えると、設問の「どのようなよいところ」に自然に対応します。二文に分けるなら、「司令船を月面に降ろさずにすむ。だから、少ない燃料で月と地球を往復できる。」でも成立します。</p></div><div class="detail-box"><h4>採点基準</h4><table><thead><tr><th>要素</th><th>配点目安</th><th>内容</th></tr></thead><tbody><tr><td>比較</td><td>1</td><td>月から地球へもう一度大きなロケットを打ち上げる場合と比べる。</td></tr><tr><td>燃料</td><td>2</td><td>必要な燃料が少なくてすむ。</td></tr><tr><td>往復・帰還</td><td>1</td><td>月と地球を往復、または地球へ帰ることに触れる。</td></tr></tbody></table></div><div class="detail-box"><h4>正解の幅3パターン</h4><ol><li>月面に重い司令船を降ろさずにすむので、少ない燃料で月と地球を往復できるところ。</li><li>月から地球へ帰るための燃料を持ったまま着陸しなくてよいので、燃料を少なくできるところ。</li><li>軽い着陸船だけで月に降りられるため、月面から打ち上げるときに必要な燃料を減らせるところ。</li></ol></div><div class="detail-box"><h4>答案チェック</h4><ul><li>「少ない燃料」を入れている。</li><li>司令船と着陸船を分けるしくみの利点になっている。</li><li>単に「役割分担できる」だけで終わっていない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「二つに分けると便利」だけでは採点できない。なぜ便利かを、燃料・重さ・月からの再打ち上げに結びつけて書く。</div>
+  
+</article>
+
+<article id="q3-6" class="q-card print-unit">
+  <h3>大問3　問六</h3>
+  <div class="q-meta"><span class="label">問題タイプ：正誤判定</span><span class="accuracy">推定正答率 60%（年号・本文にない言いすぎを見抜けるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>次のア〜オについて、本文の内容として、正しいものは○、正しくないものは×と、それぞれ答えなさい。<ol class="choice-list"><li>ア　アポロ計画を発表してから十年後に、人類ははじめて月に降り立った。</li><li>イ　アポロ計画が発表されるより前に、宇宙に有人宇宙船をとばすことはできていた。</li><li>ウ　アポロ13号の事故によって、人が宇宙に行くことへの危険性が問題になった。</li><li>エ　現在の技術では、サターンロケットより大きなロケットはつくれない。</li><li>オ　アポロ計画の以前から、科学者は月にどんな岩石があるか考えていた。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、本文にある数字・時点・結論を一つずつ照合することです。アは1961年発表、1969年着陸なので、「十年後」ではなく「十年以内」です。イは、有人宇宙船を飛ばしたのが演説の一か月前なので正しいです。ウは事故があったことは本文にありますが、それで危険性が問題になったとは書かれていません。エはサターンロケットが巨大だとはありますが、現在の技術で作れないとはありません。オは、アポロ計画前の科学者が月の岩石について考えていたと本文にあるので正しいです。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>ア＝×、イ＝○、ウ＝×、エ＝×、オ＝○</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　アポロ計画を発表してから十年後に、人類ははじめて月に降り立った。</td><td>「10年以内に」「約束通り10年以内」という表現とは一部対応する。</td><td>【時点のずれ】本文は1961年発表、1969年に月着陸なので約八年後であり、「十年後」ではない。条件は「十年以内」→「十年後」に替わっている。<br><strong>【作問者の意図】</strong>本文の「10年以内」という数字を使い、範囲表現をぴったりの時点に変えている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>イ　アポロ計画が発表されるより前に、宇宙に有人宇宙船をとばすことはできていた。</td><td>「人がのる宇宙船を宇宙にとばしたのは、1961年で、ケネディの演説のほんの1か月前」を、選択肢では「発表されるより前に…できていた」と言い換えている。<br><strong>【作問者の意図】</strong>本文の「ほんの1か月前」を時系列として圧縮しているため、「規模が小さい」ことに引っぱられないかを見る。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>ウ　アポロ13号の事故によって、人が宇宙に行くことへの危険性が問題になった。</td><td>「アポロ13号」「酸素のタンクが爆発」という事故の事実は本文と合う。</td><td>【結果の追加】本文は「たいへんなピンチ」「なんとか地球に帰ってきました」と述べるが、「危険性が問題になった」と社会的な問題化までは書かれていない。結果を「帰還」→「危険性が問題化」に替えている。<br><strong>【作問者の意図】</strong>印象的な事故を使い、本文にない一般的な結論を足している。</td><td class="judge">×</td></tr>
+<tr><td>エ　現在の技術では、サターンロケットより大きなロケットはつくれない。</td><td>「サターンロケットは現在のロケットを入れても、もっとも巨大なロケットです」と大きさは本文と合う。</td><td>【可能・不可能のすり替え】本文は「もっとも巨大」と比較しているだけで、「現在の技術では作れない」と能力の限界は述べていない。比較結果を技術限界に変えている。<br><strong>【作問者の意図】</strong>「現在」「巨大」という本文語を利用し、本文の比較を不可能判断へずらしている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>オ　アポロ計画の以前から、科学者は月にどんな岩石があるか考えていた。</td><td>「アポロ計画でわかった一番大きなことは、表面がどんな岩石でできているか」「研究者は…考えていました」を、選択肢では「以前から…考えていた」とまとめている。<br><strong>【作問者の意図】</strong>本文の最後のまとめを時点表現に言い換えているため、前後の流れを読めるかを見ている。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>アは「十年以内」と「十年後」を区別している。</li><li>ウ・エは本文にない結論を×にできている。</li><li>○と×を五つすべて示している。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>本文に似た言葉があるだけで○にしない。「事故があった」から「危険性が問題になった」へ、勝手に一段進めない。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">次のア〜オについて、本文の内容として正しいものは○、正しくないものは×と答えなさい。<ol class="choice-list"><li>ア　ケネディの発表より前に、アメリカは人工衛星の打ち上げには成功していた。</li><li>イ　アポロ13号は事故を起こしたため、乗組員全員が月面に降り立てなかった。</li><li>ウ　科学者はアポロ計画まで、月の岩石について何も考えていなかった。</li><li>エ　サターンロケットは、歴史上とても巨大なロケットである。</li><li>オ　1969年の月面着陸は、計画発表から十年以内に実現した。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア＝○、イ＝×、ウ＝×、エ＝○、オ＝○</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　ケネディの発表より前に、アメリカは人工衛星の打ち上げには成功していた。</td><td>「1958年」「1961年」を時系列で言い換えている。<br><strong>【作問者の意図】</strong>本文の年号を前後関係に直す。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　アポロ13号は事故を起こしたため、乗組員全員が月面に降り立てなかった。</td><td>事故があった点は合う。</td><td>【結果の追加】月面に降り立てなかった理由として本文は書いていない。<br><strong>【作問者の意図】</strong>事故の印象を使い結果を作る。</td><td class="judge">×</td></tr>
+<tr><td>ウ　科学者はアポロ計画まで、月の岩石について何も考えていなかった。</td><td>月の岩石が話題になる点は合う。</td><td>【本文との逆】本文は以前から考えていたと述べる。<br><strong>【作問者の意図】</strong>「わかった」を「考えていなかった」に逆転。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>エ　サターンロケットは、歴史上とても巨大なロケットである。</td><td>「現在のロケットを入れても、もっとも巨大」と合う。<br><strong>【作問者の意図】</strong>本文の比較を過不足なくまとめる。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr class="ok-row"><td>オ　1969年の月面着陸は、計画発表から十年以内に実現した。</td><td>「約束通り10年以内」と合う。<br><strong>【作問者の意図】</strong>「十年後」と混同しないかを見る。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+</section>
+<section id="section-4" class="page-break-before">
+  <h2>大問4　解き方診断</h2>
+  <div class="grid-2">
+    <div class="card print-unit"><h3>文章ジャンル・設問タイプ</h3><p>文章ジャンル：物語文。設問タイプ：抜き出し、心情理由選択、人物の意図選択、様子選択、心情記述、慣用句補充、セリフの意味選択、動作理由選択、心情記述。</p></div>
+    <div class="card print-unit"><h3>文章の主題・流れ</h3><p>友だちができず、自分は「かげがうすい」と思いこんだ「私」が、家族や友人とのやりとりを通して、自分を否定する気持ちから少しずつ離れていく。最後は、ゆうたくんの素直な言葉で自分の思いこみに気づき、友だちになってくれたことにも感謝する。</p></div>
+  </div>
+  <div class="grid-2">
+    <div class="card print-unit"><h3>本文の要約</h3><p>「私」は、学校で言われた言葉が「悪魔の呪文」のように頭から離れず、家で母や姉にも本当の気持ちを言えない。姉は「何かあったら相談して。私は、はるの味方だからね」と無理に聞き出さず支えようとする。新しいクラスで友だちができない「私」は、みんなのグループができていくのを見て、「友だちはきっとできる」と自分に言い聞かせる。真麻ちゃんたちにさそわれたいと思って笑顔を見せた自分を、みじめでなさけないと感じる。公園で玲奈ちゃんに会い、玲奈ちゃんが自分を友だちと認めてくれたことでうれしくなる。さらに、玲奈ちゃんの家族への考え方や、ゆうたくんの「かげは同じ色」という素直な言葉に触れ、自分がいじけていたことに気づく。最後に、ゆうたくんが友だちになってくれたことへ「ありがとう」と感謝する。</p></div>
+    <div class="card print-unit"><h3>本文文字数</h3><p>概算約2,700字。会話と独白が中心の物語文。</p></div>
+  </div>
+  <div class="card print-unit"><h3>この大問で使う線の凡例・線の引き方</h3><table><thead><tr><th>対応する塾技</th><th>線種（日本語）</th><th>役割</th><th>この大問での使い方</th></tr></thead><tbody><tr><td>塾技21</td><td>心情線</td><td>気持ちを表す語を押さえる。</td><td>「みじめ」「なさけない」「うれしい」「ありがとう」に線を引く。</td></tr><tr><td>塾技23</td><td>本心とずれる言動線</td><td>言えない本心を読む。</td><td>「どうもしない」「ないない」と本心のずれを見る。</td></tr><tr><td>塾技24</td><td>変化線・きっかけ線</td><td>心情変化の原因を読む。</td><td>玲奈ちゃんの「友だち」、ゆうたくんの「おんなじ色」を転換点にする。</td></tr><tr><td>塾技1</td><td>キーワード線</td><td>くり返し語を追う。</td><td>「友だち」「かげ」「笑顔」を最後まで追う。</td></tr></tbody></table></div>
+  <div class="text-block print-unit"><h3>本文の線引き再現</h3><p>帰る時間、「私」は真っ先に教室を飛び出します。学校で言われた言葉が<span class="emotion">「悪魔の呪文みたいに頭からはなれない」</span>からです。家で母や姉に心配されても、「どうもしない」「ないない」と本当の気持ちを言えません。姉は<span class="trigger">「何かあったら相談して。私は、はるの味方だからね」</span>と言い、無理に聞き出さず支えようとします。</p><p>新しいクラスで「私」は友だちができず、<span class="emotion">「かげがうすいだけ」</span>と自分に言い聞かせます。昼休み、真麻ちゃんたちが遊ぶ約束をしているのを聞き、「さそわれたい」と思って笑顔を見せますが、<span class="emotion">「さそわれたいっておもって、にこにこした自分がみじめ」</span>と感じます。</p><p>公園で玲奈ちゃんに会った「私」は、玲奈ちゃんが自分を<span class="trigger">「友だち」</span>と言ってくれたことでうれしくなります。玲奈ちゃんは、家のことを「手伝い」ではなく「家族だから」していると話します。その後、「私」が「かげうすいし」と言うと、ゆうたくんは実際の影を見て<span class="trigger">「はるちゃんのかげうすくないよ。ぼくとお姉ちゃんとおんなじ色だよ」</span>と言います。「私」は自分がいじけていたことに気づき、ゆうたくんに友だちになってもらって「ありがとう」と言います。</p></div>
+
+<article id="q4-1" class="q-card print-unit">
+  <h3>大問4　問一</h3>
+  <div class="q-meta"><span class="label">問題タイプ：抜き出し・理由選択</span><span class="accuracy">推定正答率 62%（抜き出し範囲と「怒り」ではなく「なさけなさ」を見抜けるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線①「悪魔の呪文」について、次の(1)(2)の問いに答えなさい。<br>(1)「私」は学校で言われた言葉を「悪魔の呪文」みたいだと思っています。学校で「私」が言われた言葉を本文中から十五字以上二十字以内でさがし、はじめと終わりの五字をぬき出して答えなさい。<br>(2)(1)の言葉を「悪魔の呪文」のようだと感じているのはなぜですか。その理由として、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　家に帰ってきたのに、その言葉が頭からはなれないから。</li><li>イ　その言葉が気になり、なさけない気持ちが消えないから。</li><li>ウ　不安になってくると、その言葉を思い出してしまうから。</li><li>エ　その言葉を言った相手への怒りがおさえられないから。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、抜き出し条件と心情語を分けて処理することです。(1)は、学校で「私」が言われた言葉そのものを探し、はじめと終わりの五字で答えます。ユーザー指定に合わせ、答えは「いてもいな〜でもいい子」です。(2)では、「悪魔の呪文」は相手への怒りではなく、自分をしばって「みじめ」「なさけない」気持ちにしてしまう言葉として働いています。本文後半の「自分がなさけなくなる」ともつながるので、イが最も合います。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>(1) いてもいな〜でもいい子　(2) イ</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　家に帰ってきたのに、その言葉が頭からはなれないから。</td><td>「学校で言われた言葉」「頭からはなれない」は、選択肢の「その言葉が頭からはなれない」と対応する。</td><td>【原因のすり替え】本文で苦しい理由は、言葉が「自分がなさけなくなる」方向に働くこと。選択肢は原因を「家に帰ってきたのに」に替え、場所・時間を理由にしている。<br><strong>【作問者の意図】</strong>本文の「頭からはなれない」を使いながら、決め手の心情語「みじめ」「なさけない」を外している。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>イ　その言葉が気になり、なさけない気持ちが消えないから。</td><td>本文の「みじめ」「なさけなかった」「自分がなさけなくなる」を、選択肢では「なさけない気持ちが消えない」と言い換えている。<br><strong>【作問者の意図】</strong>「悪魔の呪文」を、怖さではなく心をしばり続ける言葉として心情語に圧縮している。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>ウ　不安になってくると、その言葉を思い出してしまうから。</td><td>「友だちはきっとできる」「不安」の流れは本文にある。</td><td>【条件のすり替え】本文では言葉が頭から離れず、ずっと「なさけない」気持ちに結びつく。選択肢は「不安になってくると」という条件をつけ、思い出す場面を限定している。<br><strong>【作問者の意図】</strong>本文中の不安な場面を利用し、問われている「呪文のように感じる理由」から条件つきの記憶へずらしている。</td><td class="judge">×</td></tr>
+<tr><td>エ　その言葉を言った相手への怒りがおさえられないから。</td><td>嫌な言葉を言われた点は本文と関係がある。</td><td>【心情のすり替え】本文の中心は「怒り」ではなく「みじめ」「なさけない」で、自分に向かう苦しさである。対象を「自分」→「言った相手」に替えている。<br><strong>【作問者の意図】</strong>「悪魔」という強い語から怒りを連想させ、本文の心情語を読ませない作りである。</td><td class="judge">×</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>(1)は、はじめ五字と終わり五字の形式で答えている。</li><li>(2)は「怒り」ではなく「なさけない気持ち」を中心にしている。</li><li>「悪魔の呪文」を、心に残って苦しめる言葉として読めている。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「悪魔」という語から怒りを選ばない。本文の中心は、相手への怒りではなく、自分がみじめでなさけなくなる気持ちである。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線①「悪魔の呪文」について、(2)の理由として最もふさわしいものを選びなさい。<ol class="choice-list"><li>ア　その言葉で、自分がみじめでなさけなくなるから。</li><li>イ　その言葉を言った友だちを許せず、ずっと腹が立つから。</li><li>ウ　家族に知られたくない秘密を思い出すから。</li><li>エ　不安な時だけ、その言葉が聞こえるような気がするから。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　その言葉で、自分がみじめでなさけなくなるから。</td><td>「みじめ」「なさけない」を心情としてまとめている。<br><strong>【作問者の意図】</strong>呪文のように心をしばる作用を正しく抽象化。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　その言葉を言った友だちを許せず、ずっと腹が立つから。</td><td>嫌な言葉ではある。</td><td>【心情のすり替え】本文の中心は怒りでなく自己否定。<br><strong>【作問者の意図】</strong>「悪魔」から怒りへ誘導する。</td><td class="judge">×</td></tr>
+<tr><td>ウ　家族に知られたくない秘密を思い出すから。</td><td>家族に言えない場面はある。</td><td>【内容の追加】秘密の内容としては本文にない。<br><strong>【作問者の意図】</strong>家での場面を混ぜる。</td><td class="judge">×</td></tr>
+<tr><td>エ　不安な時だけ、その言葉が聞こえるような気がするから。</td><td>不安は本文にある。</td><td>【条件の限定】「不安な時だけ」ではない。<br><strong>【作問者の意図】</strong>不安の場面に限定してずらす。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q4-2" class="q-card print-unit">
+  <h3>大問4　問二</h3>
+  <div class="q-meta"><span class="label">問題タイプ：人物の意図選択</span><span class="accuracy">推定正答率 64%（姉の言葉を「押しつけ」ではなく支えとして読めるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線②「お姉ちゃんは、私の顔をのぞきこんだ」とありますが、このときお姉ちゃんは「私」にどのようなことを伝えようとしているのですか。最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　かげがうすいことでつらい思いをしているようなので、自分は味方だと伝えて、いっしょにどうすべきか考えたいということ。</li><li>イ　学校で友だちができずに落ちこんでいるようだが、いつでも相談にのるので早く元気になってもらいたいということ。</li><li>ウ　最近はこまったことがあっても相談してくれなくなってさびしいので、家族を信じて心を開いてもらいたいということ。</li><li>エ　今はなんでもいうことを家族に言いたくなさそうだが、一人でかかえきれなくなった時は頼りにしてほしいということ。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、動作の直後のセリフに戻ることです。お姉ちゃんは「何かあったら相談して。私は、はるの味方だからね」と言っています。これは、今すぐ聞き出すのではなく、話したくなったときには頼ってよいという支えです。アは「いっしょに考えたい」まで踏み込みすぎ、イは「早く元気に」、ウは「さびしい」を足しています。本文の控えめな支え方に合うのはエです。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>エ</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　かげがうすいことでつらい思いをしているようなので、自分は味方だと伝えて、いっしょにどうすべきか考えたいということ。</td><td>「私は、はるの味方だからね」は、選択肢の「自分は味方だと伝えて」と対応する。</td><td>【行動の追加】本文は「何かあったら相談して」と言うだけで、「いっしょにどうすべきか考えたい」までは踏み込んでいない。支える姿勢を解決行動に広げている。<br><strong>【作問者の意図】</strong>本文の「味方」を使い、姉らしい親切な行動を足して正解らしく見せている。</td><td class="judge">×</td></tr>
+<tr><td>イ　学校で友だちができずに落ちこんでいるようだが、いつでも相談にのるので早く元気になってもらいたいということ。</td><td>「相談して」は、選択肢の「相談にのる」と近い。</td><td>【目的の追加】本文は、姉が「友だちができずに落ちこんでいる」と把握しているとは書かない。また「早く元気に」が目的とも言っていない。状況と目的を選択肢側で補っている。<br><strong>【作問者の意図】</strong>本文の「相談」を残し、読者が推測しやすい「落ちこみ」「元気」を混ぜている。</td><td class="judge">×</td></tr>
+<tr><td>ウ　最近はこまったことがあっても相談してくれなくなってさびしいので、家族を信じて心を開いてもらいたいということ。</td><td>「相談して」「味方」は、家族に頼る話として一部つながる。</td><td>【主語の感情追加】本文には姉が「さびしい」と感じている描写はない。主語を「私の苦しさ」から「姉のさびしさ」にずらしている。<br><strong>【作問者の意図】</strong>「相談」という本文語を使い、姉側の気持ちを作って誤答にしている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>エ　今はなんでもいうことを家族に言いたくなさそうだが、一人でかかえきれなくなった時は頼りにしてほしいということ。</td><td>「何かあったら相談して。私は、はるの味方だからね」を、選択肢では「一人でかかえきれなくなった時は頼りにしてほしい」と言い換えている。<br><strong>【作問者の意図】</strong>本文の「何かあったら」という控えめな条件を保ちながら、姉の支え方を抽象化している。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>直後の「何かあったら相談して」を根拠にしている。</li><li>「味方だからね」を、支え・頼ってよい相手という意味で読んでいる。</li><li>本文にない「さびしい」「早く元気に」を足していない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>やさしい姉だからといって、すぐ解決したい・一緒に考えたいと広げすぎない。「何かあったら」の控えめな条件を残す。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線②「お姉ちゃんは、私の顔をのぞきこんだ」とありますが、このときお姉ちゃんは「私」にどのようなことを伝えようとしているのですか。<ol class="choice-list"><li>ア　今すぐ理由を話させたいので、強く聞き出そうとしている。</li><li>イ　一人で苦しくなったら、自分を頼ってほしいと伝えている。</li><li>ウ　相談されないことをさびしく思い、家族を信じてほしいと願っている。</li><li>エ　学校での問題をすぐに解決する方法を一緒に考えたい。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>イ</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　今すぐ理由を話させたいので、強く聞き出そうとしている。</td><td>顔をのぞきこむ動作は近い。</td><td>【態度の逆】本文は無理に聞き出さず「何かあったら」。<br><strong>【作問者の意図】</strong>動作だけを強めて読む誤り。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>イ　一人で苦しくなったら、自分を頼ってほしいと伝えている。</td><td>「相談して」「味方」を「頼ってほしい」と言い換える。<br><strong>【作問者の意図】</strong>本文の控えめな支え方を抽象化。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>ウ　相談されないことをさびしく思い、家族を信じてほしいと願っている。</td><td>相談の話は近い。</td><td>【主語の感情追加】姉のさびしさは本文にない。<br><strong>【作問者の意図】</strong>姉側の感情を足す。</td><td class="judge">×</td></tr>
+<tr><td>エ　学校での問題をすぐに解決する方法を一緒に考えたい。</td><td>味方の姿勢は近い。</td><td>【行動の追加】解決方法を考えるとは言わない。<br><strong>【作問者の意図】</strong>親切そうな行動を足す。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q4-3" class="q-card print-unit">
+  <h3>大問4　問三</h3>
+  <div class="q-meta"><span class="label">問題タイプ：心情・様子選択</span><span class="accuracy">推定正答率 58%（場面固定と「嫌われている」まで言いすぎない判断ができるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線③「それでも、友だちはきっとできる、きっと」とありますが、このときの「私」の様子の説明として、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　目だたないために友だちをつくれずにいたけれど、昼休みに遊ぶ約束をしているグループの子たちが近くにいたので、いっしょに遊ぼうとさそってもらい、友だちになれるのではないかと期待している。</li><li>イ　新しいクラスになって一週間もたつと、クラスのグループづくりも落ち着いてきたのに、自分は仲間にさそわれなかったので、みんなが自分と友だちになりたくないのではないかと心配になっている。</li><li>ウ　まだ友だちはできていないが、存在感がないだけできらわれているわけではないから、友だちはできるはずだと自分に言い聞かせることで、友だちができないのではないかという不安を打ち消そうとしている。</li><li>エ　かげがうすいせいで仲間はずれになるのは仕方がないことだとわかっているが、ずっと暗い顔をしているとつらくなってくるので、おばあちゃんの教えを思い出してできるだけ笑顔でいようと思っている。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、線のある瞬間の場面を固定することです。この時点の「私」は、まだ友だちができていません。しかし「かげがうすいだけ」と考え、「それでも、友だちはきっとできる、きっと」と自分に言い聞かせています。つまり、みんなに嫌われていると断定しているのではなく、不安を打ち消そうとしている状態です。後の真麻ちゃんたちの場面やおばあちゃんの笑顔の話へ飛ばず、線③の瞬間に合うウを選びます。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>ウ</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　目だたないために友だちをつくれずにいたけれど、昼休みに遊ぶ約束をしているグループの子たちが近くにいたので、いっしょに遊ぼうとさそってもらい、友だちになれるのではないかと期待している。</td><td>「昼休みに遊ぶ約束をしているグループ」は本文にある。</td><td>【時点のずれ】線③の時点では、まだ「さそってもらう」場面ではなく、「友だちはきっとできる」と自分に言い聞かせている。結果を先取りしている。<br><strong>【作問者の意図】</strong>後の真麻ちゃんたちの場面を使い、線③の直前の心情から目をそらしている。</td><td class="judge">×</td></tr>
+<tr><td>イ　新しいクラスになって一週間もたつと、クラスのグループづくりも落ち着いてきたのに、自分は仲間にさそわれなかったので、みんなが自分と友だちになりたくないのではないかと心配になっている。</td><td>「一週間もたつと、クラスのグループづくりも落ち着いたみたい」は本文と合う。</td><td>【心情の言いすぎ】本文は「かげがうすいだけ」と自分に言い聞かせており、「みんなが友だちになりたくない」とまでは断定していない。不安を「嫌われている」方向へ強めている。<br><strong>【作問者の意図】</strong>本文の不安を利用し、主語を「みんな」にして結論を強くしている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>ウ　まだ友だちはできていないが、存在感がないだけできらわれているわけではないから、友だちはできるはずだと自分に言い聞かせることで、友だちができないのではないかという不安を打ち消そうとしている。</td><td>「かげがうすいだけ」「それでも、友だちはきっとできる、きっと」を、選択肢では「存在感がないだけ」「不安を打ち消そうとしている」と言い換えている。<br><strong>【作問者の意図】</strong>本文の独り言を心情の働きに直した選択肢で、直接同じ語を探すだけでは選びにくくしている。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>エ　かげがうすいせいで仲間はずれになるのは仕方がないことだとわかっているが、ずっと暗い顔をしているとつらくなってくるので、おばあちゃんの教えを思い出してできるだけ笑顔でいようと思っている。</td><td>「かげがうすい」「おばあちゃん」「笑顔」は本文に出てくる。</td><td>【別場面の混入】線③は「友だちはできる」と自分に言い聞かせる場面であり、おばあちゃんの教えを思い出して笑顔でいようとする場面ではない。対象場面をずらしている。<br><strong>【作問者の意図】</strong>印象的な「おばあちゃん」「笑顔」を混ぜ、後の場面の材料で誤答を作っている。</td><td class="judge">×</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>線③の時点を固定している。</li><li>「嫌われている」と言いすぎていない。</li><li>後の昼休みの場面を混ぜていない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>不安な気持ちだけでイを選びたくなるが、イの「みんなが友だちになりたくない」は本文より強い。心情語の強さを確認する。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線③「それでも、友だちはきっとできる、きっと」とありますが、このときの「私」の様子の説明として、最もふさわしいものを選びなさい。<ol class="choice-list"><li>ア　友だちができるはずだと自分に言い聞かせ、不安をおさえている。</li><li>イ　グループの子から声をかけられると期待して笑顔をつくっている。</li><li>ウ　友だちが自分を嫌っていると確信して落ちこんでいる。</li><li>エ　おばあちゃんの言葉を思い出して、暗い顔を直そうとしている。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　友だちができるはずだと自分に言い聞かせ、不安をおさえている。</td><td>「友だちはきっとできる、きっと」を心情に直している。<br><strong>【作問者の意図】</strong>独り言の働きを問う正解。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　グループの子から声をかけられると期待して笑顔をつくっている。</td><td>後の昼休みの話は近い。</td><td>【時点のずれ】線③の時点ではまだ期待して笑顔を見せる場面ではない。<br><strong>【作問者の意図】</strong>後の場面を混ぜる。</td><td class="judge">×</td></tr>
+<tr><td>ウ　友だちが自分を嫌っていると確信して落ちこんでいる。</td><td>不安は本文にある。</td><td>【言いすぎ】嫌われていると確信してはいない。<br><strong>【作問者の意図】</strong>不安を確信に強める。</td><td class="judge">×</td></tr>
+<tr><td>エ　おばあちゃんの言葉を思い出して、暗い顔を直そうとしている。</td><td>おばあちゃんと笑顔は本文にある。</td><td>【別場面の混入】線③の根拠ではない。<br><strong>【作問者の意図】</strong>印象語を混ぜる。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q4-4" class="q-card print-unit">
+  <h3>大問4　問四</h3>
+  <div class="q-meta"><span class="label">問題タイプ：心情記述</span><span class="accuracy">推定正答率 51%（「さそわれなかった」ではなく「さそわれたい自分」を書けるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線④「いまの気持ち」とありますが、どのような気持ちですか。説明しなさい。</div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、心情語の直前直後をそのまま材料にすることです。本文には「さそわれなかったことが、みじめなんじゃなくて、さそわれたいっておもって、にこにこした自分がみじめ」とあります。つまり、友だちに入れてもらえなかった事実だけがつらいのではありません。まだ親しくない真麻ちゃんにさそってほしいと思い、笑顔を見せた自分をなさけなく感じているのです。答えには、友だちができない不安と、さそわれたい自分へのみじめさを入れます。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>友だちができない不安から、それほど親しくない真麻ちゃんにさそわれたくて笑顔を見せたことが、みじめでなさけない気持ち。</strong></p></div>
+  <div class="detail-box"><h4>文末設計</h4><p>「〜気持ち。」で終えると、設問の「どのような気持ち」に合います。二文に分けるなら、「友だちができず不安だった。だから、親しくない真麻ちゃんにさそわれたくて笑顔を見せた自分が、みじめでなさけないと思っている。」でもよいです。</p></div><div class="detail-box"><h4>採点基準</h4><table><thead><tr><th>要素</th><th>配点目安</th><th>内容</th></tr></thead><tbody><tr><td>不安</td><td>1</td><td>友だちができない不安がある。</td></tr><tr><td>行動</td><td>2</td><td>さそわれたくて笑顔を見せた。</td></tr><tr><td>評価</td><td>2</td><td>その自分をみじめ・なさけないと思っている。</td></tr></tbody></table></div><div class="detail-box"><h4>正解の幅3パターン</h4><ol><li>友だちがほしくて、真麻ちゃんにさそわれたくて笑顔を見せた自分が、みじめでなさけない気持ち。</li><li>さそわれなかったことより、さそってほしいと思ってにこにこした自分が情けないという気持ち。</li><li>友だちができない不安から、まだ親しくない相手に気に入られようとした自分をみじめに思う気持ち。</li></ol></div><div class="detail-box"><h4>答案チェック</h4><ul><li>「さそわれなかった」だけで終わっていない。</li><li>「さそわれたいと思って笑顔を見せた自分」を入れている。</li><li>心情語「みじめ」「なさけない」に着地している。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「さそわれなくて悲しい」だけでは半分。本文は「さそわれたいと思ってにこにこした自分」がみじめ、と説明している。</div>
+  
+</article>
+
+<article id="q4-5" class="q-card print-unit">
+  <h3>大問4　問五</h3>
+  <div class="q-meta"><span class="label">問題タイプ：慣用句補充</span><span class="accuracy">推定正答率 76%（慣用句の意味を文脈に戻せるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>（⑤）にあてはまることばとして、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　白い目でみられてる</li><li>イ　目をそらされてる</li><li>ウ　一目おかれてる</li><li>エ　長い目でみられてる</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、慣用句の意味を前後の評価語に戻すことです。空欄の直前には、玲奈ちゃんが「大人っぽい」「落ち着いてる」「堂々としてる」と説明されています。これは悪く見られているのではなく、周りから認められている流れです。「一目おかれる」は、相手の力や存在を認め、敬意をもつという意味なので文脈に合います。ア・イは悪い評価、エは気長に見守る意味でずれます。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>ウ</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　白い目でみられてる</td><td>「目」「見られてる」の形は空欄に入れやすい。</td><td>【文脈との逆】本文は玲奈ちゃんを「大人っぽい」「落ち着いてる」「堂々としてる」とよく評価している。選択肢は悪く見られている意味で、評価の向きが逆である。<br><strong>【作問者の意図】</strong>同じ「目」を使う慣用句を並べ、意味を知らないと文脈の評価を反対に読ませる。</td><td class="judge">×</td></tr>
+<tr><td>イ　目をそらされてる</td><td>クラスで孤立している話と一見つながる。</td><td>【対象のすり替え】ここで説明しているのは「私」ではなく玲奈ちゃんである。玲奈ちゃんは周囲から避けられているのではなく、落ち着いた存在として見られている。<br><strong>【作問者の意図】</strong>「友だちができない」という私の悩みを持ち込み、玲奈ちゃんの評価と混同させている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>ウ　一目おかれてる</td><td>「大人っぽい」「落ち着いてる」「堂々としてる」を、選択肢では「一目おかれてる」と慣用句で言い換えている。<br><strong>【作問者の意図】</strong>本文のよい評価を、敬意をもたれている意味の慣用句に置き換えている。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>エ　長い目でみられてる</td><td>「目」「見られてる」は形として合う。</td><td>【意味の不一致】「長い目で見る」は気長に見守る意味であり、本文の「大人っぽい」「堂々」の評価とは違う。評価を「認められている」→「成長を見守られている」に替えている。<br><strong>【作問者の意図】</strong>同じ「目」の慣用句を使い、語形だけで選ばせようとしている。</td><td class="judge">×</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>空欄直前の「大人っぽい」「落ち着いてる」「堂々としてる」を見ている。</li><li>「目」が入る慣用句を形だけで選んでいない。</li><li>玲奈ちゃんへのよい評価に合う語を選んでいる。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「どこのグループにも入っていない」だけを見て、白い目・目をそらすへ行かない。直前の評価語全体を見る。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">（⑤）にあてはまることばとして、最もふさわしいものを選びなさい。<ol class="choice-list"><li>ア　一目おかれてる</li><li>イ　白い目でみられてる</li><li>ウ　目をそらされてる</li><li>エ　長い目でみられてる</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　一目おかれてる</td><td>「堂々」「大人っぽい」を敬意の慣用句に言い換えている。<br><strong>【作問者の意図】</strong>評価の向きを読む正解。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　白い目でみられてる</td><td>「目」の形は合う。</td><td>【文脈との逆】悪く見られている意味で本文と逆。<br><strong>【作問者の意図】</strong>形だけ似せる。</td><td class="judge">×</td></tr>
+<tr><td>ウ　目をそらされてる</td><td>孤立の話に見える。</td><td>【対象の混同】玲奈ちゃんは避けられていない。<br><strong>【作問者の意図】</strong>私の悩みを混ぜる。</td><td class="judge">×</td></tr>
+<tr><td>エ　長い目でみられてる</td><td>同じ「目」の慣用句。</td><td>【意味違い】気長に見守る意味で文脈に合わない。<br><strong>【作問者の意図】</strong>慣用句の意味を問う。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q4-6" class="q-card print-unit">
+  <h3>大問4　問六</h3>
+  <div class="q-meta"><span class="label">問題タイプ：理由選択</span><span class="accuracy">推定正答率 63%（「友だち」と認められた直接根拠を拾えるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線⑥「うれしい」とありますが、「私」がうれしくなったのはなぜですか。その理由として、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　ずっと話をしてみたいと思っていた、あこがれの玲奈ちゃんに休みの日に学校の外でたまたま会い、話をしながらすごしているうちに、いつのまにか大切な友だちになっていると気づいたから。</li><li>イ　自分とちがって堂々としている玲奈ちゃんと親しくなりたいと思っていても、まともにあいさつをすることすらできなかったのに、玲奈ちゃんのほうから自分を友だちだと認めてくれたから。</li><li>ウ　学校で玲奈ちゃんに声をかけようとしても、気おくれしてうまく話すことができなかったが、玲奈ちゃんが自分の名前を親しげに呼んでくれたので、本当の友だちになれたような気がしたから。</li><li>エ　かげのうすい自分は、クラスの中でも存在感のある玲奈ちゃんと、望んでも仲よくなれないのだとあきらめていたが、玲奈ちゃんが気をつかって友だちという言葉を使ってくれたから。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、「うれしい」の直前のセリフを原因にすることです。「玲奈ちゃんのお友だち？」に対して、玲奈ちゃんは「そうだよ。はるちゃんていうの」と答えています。「私」は、堂々としている玲奈ちゃんに気おくれしていたので、玲奈ちゃんから友だちとして認められたことがうれしいのです。アは関係を広げすぎ、ウは名前を呼ばれたことに原因を替え、エは玲奈ちゃんが気をつかっただけに弱めています。正解はイです。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>イ</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　ずっと話をしてみたいと思っていた、あこがれの玲奈ちゃんに休みの日に学校の外でたまたま会い、話をしながらすごしているうちに、いつのまにか大切な友だちになっていると気づいたから。</td><td>公園で玲奈ちゃんに会い、話す場面は本文と合う。</td><td>【関係の言いすぎ】本文の直接根拠は「玲奈ちゃんのお友だち？」「そうだよ」であり、「あこがれ」「いつのまにか大切な友だち」までは書かれていない。喜びの理由を後づけで広げている。<br><strong>【作問者の意図】</strong>玲奈ちゃんへの気おくれを「あこがれ」に強め、関係性を本文より大きくしている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>イ　自分とちがって堂々としている玲奈ちゃんと親しくなりたいと思っていても、まともにあいさつをすることすらできなかったのに、玲奈ちゃんのほうから自分を友だちだと認めてくれたから。</td><td>「玲奈ちゃんのお友だち？」「私の友だち？」「そうだよ」を、選択肢では「玲奈ちゃんのほうから自分を友だちだと認めてくれた」と言い換えている。<br><strong>【作問者の意図】</strong>セリフのやりとりを心情の理由に直し、「うれしい」の直接原因を抽象化している。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>ウ　学校で玲奈ちゃんに声をかけようとしても、気おくれしてうまく話すことができなかったが、玲奈ちゃんが自分の名前を親しげに呼んでくれたので、本当の友だちになれたような気がしたから。</td><td>玲奈ちゃんに気おくれしていた点、友だちになれたような気持ちは近い。</td><td>【根拠のすり替え】本文の決め手は名前を親しげに呼ばれたことではなく、「お友だち」と認められたことである。原因を「友だちと認める」→「名前を呼ぶ」に替えている。<br><strong>【作問者の意図】</strong>会話らしい自然な行動を足し、実際のセリフの決め手を隠している。</td><td class="judge">×</td></tr>
+<tr><td>エ　かげのうすい自分は、クラスの中でも存在感のある玲奈ちゃんと、望んでも仲よくなれないのだとあきらめていたが、玲奈ちゃんが気をつかって友だちという言葉を使ってくれたから。</td><td>「友だち」という言葉は本文と合う。</td><td>【主語の意図の弱めすぎ】本文では玲奈ちゃんが気をつかって仕方なく言ったとは書かれていない。選択肢は喜びを「本当に認められた」→「気づかい」に弱めている。<br><strong>【作問者の意図】</strong>本文の「友だち」を残し、玲奈ちゃんの気持ちだけを本文外に変えている。</td><td class="judge">×</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>「うれしい」の直前の「友だち」を根拠にしている。</li><li>玲奈ちゃんが気をつかっただけ、とは読んでいない。</li><li>「名前を呼んだ」など本文にない根拠を足していない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「友だち」という同じ語が入るエは迷いやすいが、エは気づかいに弱めすぎている。玲奈の返事は友だちとして認める働き。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線⑥「うれしい」とありますが、「私」がうれしくなったのはなぜですか。<ol class="choice-list"><li>ア　玲奈ちゃんが「友だち」と認めてくれたから。</li><li>イ　玲奈ちゃんが名前を何度も親しげに呼んだから。</li><li>ウ　学校ではなく公園で会えたので、気楽に話せたから。</li><li>エ　玲奈ちゃんが気をつかって友だちと言ってくれたから。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　玲奈ちゃんが「友だち」と認めてくれたから。</td><td>「私の友だち？」「そうだよ」を理由に直している。<br><strong>【作問者の意図】</strong>セリフの意味を抽象化する正解。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　玲奈ちゃんが名前を何度も親しげに呼んだから。</td><td>親しさの方向は近い。</td><td>【根拠の追加】名前を何度も呼ぶとは本文にない。<br><strong>【作問者の意図】</strong>会話らしい材料を足す。</td><td class="judge">×</td></tr>
+<tr><td>ウ　学校ではなく公園で会えたので、気楽に話せたから。</td><td>公園で会う場面は合う。</td><td>【原因すり替え】うれしさの決め手は場所ではなく「友だち」。<br><strong>【作問者の意図】</strong>場面情報を原因にする。</td><td class="judge">×</td></tr>
+<tr><td>エ　玲奈ちゃんが気をつかって友だちと言ってくれたから。</td><td>「友だち」は合う。</td><td>【意図の追加】気をつかっただけとは書かれていない。<br><strong>【作問者の意図】</strong>同じ語で意図を変える。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q4-7" class="q-card print-unit">
+  <h3>大問4　問七</h3>
+  <div class="q-meta"><span class="label">問題タイプ：セリフの意味選択</span><span class="accuracy">推定正答率 66%（「手伝い」ではなく「家族として当然」と読めるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線⑦「手伝ってないよ」とありますが、玲奈ちゃんはどのようなことを伝えようとしているのですか。その説明として、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　家族がおたがいに助け合おうとするのは当たり前であり、自分の家だけが特別ではないということ。</li><li>イ　ご飯をつくって弟の面倒もみていて、買い物以外にも家族の手伝いをしているということ。</li><li>ウ　母親のかわりに自分が家族のためにがんばるのは、大変だがやりがいが感じられるということ。</li><li>エ　家事をいくつも担当していて、家族の一員として自分のやるべきことを行っているということ。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、否定のセリフを次の説明で受けることです。玲奈ちゃんは「お買い物のお手伝いしてるんだね」に対して「手伝ってないよ」と言います。その後に「お母さんいないからね。毎日ご飯つくって弟の面倒もみてる」「家族だからね」と続きます。つまり、玲奈ちゃんにとってそれは特別な手伝いではなく、家族の一員として自分が当然やることなのです。よってエが最も合います。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>エ</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr><td>ア　家族がおたがいに助け合おうとするのは当たり前であり、自分の家だけが特別ではないということ。</td><td>「家族だからね」という本文の言葉に近い。</td><td>【結論の広げすぎ】本文は玲奈ちゃん自身の家での役割を話しているだけで、「自分の家だけが特別ではない」と一般化していない。結論を個人の考えから一般論に広げている。<br><strong>【作問者の意図】</strong>「家族だから」を使い、もっともらしい一般論へ広げている。</td><td class="judge">×</td></tr>
+<tr><td>イ　ご飯をつくって弟の面倒もみていて、買い物以外にも家族の手伝いをしているということ。</td><td>「ご飯つくって弟の面倒もみてる」という事実は本文と合う。</td><td>【本文との逆】本文で玲奈ちゃんは「手伝ってないよ」と言っている。選択肢はそれを「家族の手伝い」と言い換え、玲奈ちゃんの否定と逆になっている。<br><strong>【作問者の意図】</strong>本文の具体的な家事を並べ、設問の「手伝ってないよ」という否定を見落とさせている。</td><td class="judge">×</td></tr>
+<tr><td>ウ　母親のかわりに自分が家族のためにがんばるのは、大変だがやりがいが感じられるということ。</td><td>「お母さんいないからね」は本文と合う。</td><td>【心情の追加】本文は「大変」「やりがい」とは書かず、玲奈ちゃんは淡々と「家族だからね」と言う。気持ちを「当然」から「やりがい」に替えている。<br><strong>【作問者の意図】</strong>家庭の事情から想像しやすい心情を足し、本文にない評価語を混ぜている。</td><td class="judge">×</td></tr>
+<tr class="ok-row"><td>エ　家事をいくつも担当していて、家族の一員として自分のやるべきことを行っているということ。</td><td>「手伝ってないよ。お母さんいないからね。毎日ご飯つくって弟の面倒もみてる」「家族だからね」を、選択肢では「家族の一員として自分のやるべきこと」と言い換えている。<br><strong>【作問者の意図】</strong>具体的な家事を「家族として当然の役割」に抽象化しているため、単なる事実説明ではなく意味を読ませている。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>「手伝ってないよ」という否定を見落としていない。</li><li>「家族だからね」を、家族として当然の役割という意味で読んでいる。</li><li>「大変」「やりがい」など本文にない心情を足していない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「ご飯を作る・弟の面倒を見る」からイに見えるが、玲奈ちゃんはそれを手伝いではないと言っている。否定語を見落とさない。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線⑦「手伝ってないよ」とありますが、玲奈ちゃんはどのようなことを伝えようとしているのですか。<ol class="choice-list"><li>ア　家族の一員として当然のことをしているということ。</li><li>イ　買い物だけでなく多くの手伝いをしているということ。</li><li>ウ　母のかわりをするのはつらいが仕方ないということ。</li><li>エ　自分の家だけ特別ではないと説明しているということ。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　家族の一員として当然のことをしているということ。</td><td>「家族だからね」を「当然のこと」と言い換える。<br><strong>【作問者の意図】</strong>手伝いではない意味を抽象化。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　買い物だけでなく多くの手伝いをしているということ。</td><td>家事の内容は合う。</td><td>【本文との逆】玲奈は「手伝ってないよ」と言う。<br><strong>【作問者の意図】</strong>具体事実で否定を隠す。</td><td class="judge">×</td></tr>
+<tr><td>ウ　母のかわりをするのはつらいが仕方ないということ。</td><td>母がいない点は合う。</td><td>【心情の追加】つらい・仕方ないは本文にない。<br><strong>【作問者の意図】</strong>家庭事情から心情を補わせる。</td><td class="judge">×</td></tr>
+<tr><td>エ　自分の家だけ特別ではないと説明しているということ。</td><td>家族の話ではある。</td><td>【一般化しすぎ】自分の家だけ特別ではないとは言わない。<br><strong>【作問者の意図】</strong>家族論に広げる。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q4-8" class="q-card print-unit">
+  <h3>大問4　問八</h3>
+  <div class="q-meta"><span class="label">問題タイプ：動作理由選択</span><span class="accuracy">推定正答率 72%（比喩を幼い弟が字義通り受け取ったと読めるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線⑧「キョロキョロして」とありますが、ゆうたくんが「キョロキョロ」したのはなぜですか。その理由として、最もふさわしいものを次の中から選び、記号で答えなさい。<ol class="choice-list"><li>ア　「私」の言葉が、実際のことを言っているのだと受け取って、確認しようと思ったから。</li><li>イ　「私」が何を言おうとしているのかわからなくなったので、「私」に質問しようと思ったから。</li><li>ウ　「私」がうそを言っているようなので、言い返す前に自分の目で見てみようと思ったから。</li><li>エ　「私」がいじけた気持ちでいるようなので、何とかして元気づけようと思ったから。</li></ol></div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、比喩をその場の人物がどう受け取ったかを考えることです。「私」は「かげうすいし」と言います。大人なら存在感が薄いという比喩として受け取りますが、ゆうたくんは実際の影のこととして受け取ります。だから横から「キョロキョロして私を見た」のです。続く「はるちゃんのかげうすくないよ。ぼくとお姉ちゃんとおんなじ色だよ」が決め手で、影の色を確認していたと分かります。したがってアが正しいです。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>ア</strong></p></div>
+  <div class="detail-box"><h4>選択肢ごとの照合結果</h4><div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　「私」の言葉が、実際のことを言っているのだと受け取って、確認しようと思ったから。</td><td>「私、かげうすいし」を、ゆうたくんが実際の影のこととして受け取り、「はるちゃんのかげうすくないよ。ぼくとお姉ちゃんとおんなじ色だよ」と確認する流れに合う。<br><strong>【作問者の意図】</strong>比喩表現「かげがうすい」を幼い子が字義通り受け取る、という読み替えを問うている。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　「私」が何を言おうとしているのかわからなくなったので、「私」に質問しようと思ったから。</td><td>ゆうたくんが「どうして？」と反応する点は近い。</td><td>【理由のすり替え】ゆうたくんは分からなくて質問しただけではなく、実際の影を見て「うすくない」と確認している。目的を「確認」→「質問」に替えている。<br><strong>【作問者の意図】</strong>「どうして？」という会話の形を利用し、動作「キョロキョロ」の理由からずらしている。</td><td class="judge">×</td></tr>
+<tr><td>ウ　「私」がうそを言っているようなので、言い返す前に自分の目で見てみようと思ったから。</td><td>自分の目で見る点は、影を確認する動作と一部近い。</td><td>【相手評価の追加】本文に、ゆうたくんが「私」をうそつきだと思った描写はない。対象を「影の確認」から「うそへの反論」に替えている。<br><strong>【作問者の意図】</strong>「自分の目で見る」という近い行動を残し、相手を疑う心情を足している。</td><td class="judge">×</td></tr>
+<tr><td>エ　「私」がいじけた気持ちでいるようなので、何とかして元気づけようと思ったから。</td><td>結果として「私」は元気づけられる方向へ変わる。</td><td>【結果と原因の混同】キョロキョロした時点の理由は、実際の影を確認するためである。選択肢は後の効果である「元気づける」を原因にしている。<br><strong>【作問者の意図】</strong>物語の結末に近い心情変化を使い、その瞬間の動作理由と入れ替えている。</td><td class="judge">×</td></tr>
+</tbody></table></div></div><div class="detail-box"><h4>答案チェック</h4><ul><li>「かげうすい」を、ゆうたくんが実際の影の話として受け取ったと読めている。</li><li>後の「おんなじ色だよ」とつなげている。</li><li>結果として元気づけたことを、動作の原因にしていない。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>結果として「私」は元気づくが、設問は「なぜキョロキョロしたか」。結果ではなく、その瞬間の受け取りを答える。</div>
+  
+<div class="check-card print-unit">
+  <h4>理解確認テスト</h4>
+  <p class="mini-label">問題文</p>
+  <div class="question-copy compact">線⑧「キョロキョロして」とありますが、ゆうたくんが「キョロキョロ」したのはなぜですか。<ol class="choice-list"><li>ア　「かげうすい」を実際の影が薄いという意味だと受け取ったから。</li><li>イ　「私」がうそを言っているか確かめたかったから。</li><li>ウ　「私」を元気づける言葉を探すためだったから。</li><li>エ　「私」が何を言ったかわからず聞き返したかったから。</li></ol></div>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <div class="answer-box small"><h4>解答</h4><p><strong>ア</strong></p></div>
+    <h4>選択肢ごとの照合結果</h4>
+    <div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody>
+<tr class="ok-row"><td>ア　「かげうすい」を実際の影が薄いという意味だと受け取ったから。</td><td>「かげうすいし」→「かげうすくないよ」とつながる。<br><strong>【作問者の意図】</strong>比喩を字義通りに読む幼さを問う正解。</td><td>不一致なし。</td><td class="judge">○</td></tr>
+<tr><td>イ　「私」がうそを言っているか確かめたかったから。</td><td>見る動作は近い。</td><td>【相手評価の追加】うそと思ったとはない。<br><strong>【作問者の意図】</strong>確認を疑いに変える。</td><td class="judge">×</td></tr>
+<tr><td>ウ　「私」を元気づける言葉を探すためだったから。</td><td>結果として元気づく。</td><td>【結果と原因の混同】動作時点では影を確認している。<br><strong>【作問者の意図】</strong>後の結果を原因にする。</td><td class="judge">×</td></tr>
+<tr><td>エ　「私」が何を言ったかわからず聞き返したかったから。</td><td>「どうして？」に近い。</td><td>【目的のずれ】キョロキョロは聞き返しでなく影を見る動作。<br><strong>【作問者の意図】</strong>セリフの質問を動作理由にすり替える。</td><td class="judge">×</td></tr>
+</tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article id="q4-9" class="q-card print-unit">
+  <h3>大問4　問九</h3>
+  <div class="q-meta"><span class="label">問題タイプ：心情記述</span><span class="accuracy">推定正答率 49%（悩み→気づき→感謝の三段階を入れられるか）</span></div>
+  <div class="question-copy"><strong>設問文の再掲</strong><br>線⑨「ありがとう」とありますが、このときの「私」の気持ちを説明しなさい。</div>
+  <h4>思考プロセス＋解説</h4>
+  <div class="process"><p>この問題で中心になる読み方は、最後の一語を「それまでの心情変化」で説明することです。「私」は自分を「かげうすい」と言い、友だちができないことに悩んでいました。ところが、ゆうたくんの「はるちゃんのかげうすくないよ。ぼくとお姉ちゃんとおんなじ色だよ」という言葉で、自分の影が本当に薄いわけではないと気づきます。さらに「友だちになってくれる？」に、ゆうたくんが「なってやってもいいよ」と答えてくれます。だから、いじけていた自分に気づかせてくれたことと、友だちになってくれたことへの感謝をまとめて書きます。</p></div>
+  <div class="answer-box"><h4>解答</h4><p><strong>かげがうすくて友だちができずになやんでいたが、かげの色はみんなと同じだというゆうたくんの言葉で、今までいじけていたことに気がつけた。さらに、友だちになってくれたので感謝する気持ち。</strong></p></div>
+  <div class="detail-box"><h4>文末設計</h4><p>この問題は二文に分けると書きやすいです。一文目で「悩み→気づき」を書き、二文目で「友だちになってくれたことへの感謝」を書くと、要素を落としにくくなります。</p></div><div class="detail-box"><h4>採点基準</h4><table><thead><tr><th>要素</th><th>配点目安</th><th>内容</th></tr></thead><tbody><tr><td>悩み</td><td>1</td><td>かげがうすく、友だちができないと思っていた。</td></tr><tr><td>気づき</td><td>2</td><td>ゆうたくんの言葉で、かげは同じ色だと気づく。</td></tr><tr><td>自己反省</td><td>1</td><td>いじけていた自分に気づく。</td></tr><tr><td>感謝</td><td>1</td><td>友だちになってくれたことに感謝している。</td></tr></tbody></table></div><div class="detail-box"><h4>正解の幅3パターン</h4><ol><li>かげがうすいと思いこみ友だちができず悩んでいたが、ゆうたくんの言葉で自分の思いこみに気づき、友だちにもなってくれて感謝する気持ち。</li><li>自分だけかげがうすいといじけていたが、ゆうたくんに同じ色だと言われて安心し、友だちになってくれたことをありがたく思う気持ち。</li><li>友だちができないことで自分を否定していたが、ゆうたくんの素直な言葉で救われ、友だちになってくれたことに感謝する気持ち。</li></ol></div><div class="detail-box"><h4>答案チェック</h4><ul><li>「友だちになってくれてありがとう」だけで終わっていない。</li><li>ゆうたくんの「かげは同じ色」という言葉を入れている。</li><li>「いじけていた自分に気づく」変化を入れている。</li></ul></div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「友だちになってくれてありがとう」だけでは弱い。ゆうたくんの言葉で、自分の思いこみ・いじけに気づいたことまで入れる。</div>
+  
+</article>
+</section>
+<section id="answers" class="print-unit page-break-before">
+  <h2>最終答案一覧</h2>
+  <div class="table-wrap"><table class="final-table"><thead><tr><th>大問</th><th>問</th><th>最終答案</th></tr></thead><tbody>
+    <tr><td>3</td><td>問一</td><td>A＝ウ、B＝ア</td></tr>
+    <tr><td>3</td><td>問二</td><td>(1) ウ　(2) どんな岩石でできているか</td></tr>
+    <tr><td>3</td><td>問三</td><td>エ</td></tr>
+    <tr><td>3</td><td>問四</td><td>エ</td></tr>
+    <tr><td>3</td><td>問五</td><td>月から地球に向かってもう一度ロケットを打ち上げる場合と比べて、少ない燃料で月と地球を往復できるところ。</td></tr>
+    <tr><td>3</td><td>問六</td><td>ア＝×、イ＝○、ウ＝×、エ＝×、オ＝○</td></tr>
+    <tr><td>4</td><td>問一</td><td>(1) いてもいな〜でもいい子　(2) イ</td></tr>
+    <tr><td>4</td><td>問二</td><td>エ</td></tr>
+    <tr><td>4</td><td>問三</td><td>ウ</td></tr>
+    <tr><td>4</td><td>問四</td><td>友だちができない不安から、それほど親しくない真麻ちゃんにさそわれたくて笑顔を見せたことが、みじめでなさけない気持ち。</td></tr>
+    <tr><td>4</td><td>問五</td><td>ウ</td></tr>
+    <tr><td>4</td><td>問六</td><td>イ</td></tr>
+    <tr><td>4</td><td>問七</td><td>エ</td></tr>
+    <tr><td>4</td><td>問八</td><td>ア</td></tr>
+    <tr><td>4</td><td>問九</td><td>かげがうすくて友だちができずになやんでいたが、かげの色はみんなと同じだというゆうたくんの言葉で、今までいじけていたことに気がつけた。さらに、友だちになってくれたので感謝する気持ち。</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="summary" class="print-unit">
+  <h2>今回の学習まとめ</h2>
+  <div class="grid-2">
+    <div class="card"><h3>再現したい手順</h3><ol><li>説明文は、数字・年号・たとえが何を説明しているかを一文で言い直す。</li><li>物語文は、線のある瞬間の場面を固定してから、直前直後の心情語・セリフを読む。</li><li>選択肢は、本文語があるかだけでなく、主語・条件・時点・結果が同じかを確認する。</li></ol></div>
+    <div class="card"><h3>間違えやすい点</h3><ul><li>「十年以内」と「十年後」のような時点表現を同じにしてしまう。</li><li>「事故があった」から「危険性が問題になった」のように、本文にない結論を足す。</li><li>物語文で、後の場面や一般的な気持ちを、線のある場面に持ち込む。</li></ul></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><h3>次に同タイプで使う塾技</h3><ul><li>説明文：主張線・問い線・答え線を使い、数字の意味をまとめる。</li><li>選択肢：本文引用と選択肢表現を対照し、主語・条件・結果のずれを言語化する。</li><li>物語文：心情線と変化線を使い、気持ちの前後差ときっかけを書く。</li></ul></div>
+    <div class="card"><h3>記述の書き方ミニまとめ</h3><p>記述は一文に詰め込まなくてよい。大問3問五は「しくみ→燃料が少なくすむ」、大問4問九は「悩み→気づき→感謝」のように、要素を二〜三文に分けると、採点要素を落としにくい。</p></div>
+  </div>
+  <h3>問ごとの塾技活用まとめ</h3>
+  <div class="table-wrap"><table><thead><tr><th>設問</th><th>使う読み方</th><th>次に再現するポイント</th></tr></thead><tbody>
+    <tr><td>3-問一</td><td>接続語の前後関係</td><td>話題転換と逆接を分ける。</td></tr>
+    <tr><td>3-問二</td><td>比喩・数字の意味づけ</td><td>「大規模」だけでなく「技術段階と目標の差」を読む。</td></tr>
+    <tr><td>3-問三</td><td>対比語の確認</td><td>「むしろ困難」の反対語を入れる。</td></tr>
+    <tr><td>3-問四</td><td>人数・乗り物・場所の整理</td><td>二人が着陸船、一人が司令船。</td></tr>
+    <tr><td>3-問五</td><td>因果記述</td><td>軽くする→燃料が少なくてすむ、まで書く。</td></tr>
+    <tr><td>3-問六</td><td>正誤判定</td><td>本文にない一般化・言いすぎを×にする。</td></tr>
+    <tr><td>4-問一</td><td>抜き出しと心情語</td><td>怒りではなく「なさけない」を読む。</td></tr>
+    <tr><td>4-問二</td><td>動作＋直後のセリフ</td><td>「何かあったら」の控えめな支えを残す。</td></tr>
+    <tr><td>4-問三</td><td>場面固定</td><td>後の昼休み場面へ飛ばない。</td></tr>
+    <tr><td>4-問四</td><td>心情記述</td><td>さそわれなかったことではなく、さそわれたい自分を書く。</td></tr>
+    <tr><td>4-問五</td><td>慣用句の文脈判断</td><td>よい評価に合う慣用句を選ぶ。</td></tr>
+    <tr><td>4-問六</td><td>直接理由の特定</td><td>「友だち」と認められたことを根拠にする。</td></tr>
+    <tr><td>4-問七</td><td>否定語の確認</td><td>「手伝ってない」を本文どおり受ける。</td></tr>
+    <tr><td>4-問八</td><td>比喩の受け取り</td><td>ゆうたくんは「かげ」を実際の影として受け取る。</td></tr>
+    <tr><td>4-問九</td><td>心情変化の三段階</td><td>悩み→気づき→感謝を順に書く。</td></tr>
+  </tbody></table></div>
+</section>
+</main>
+</body>
+</html>
