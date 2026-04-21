@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3月 復習テスト_国語_2026 HTML解答解説</title>
+<style>
+:root{--bg:#f4f5f7;--paper:#fff;--ink:#1f2937;--sub:#4b5563;--line:#e5e7eb;--accent:#7c3aed;--accent2:#0f766e;--soft:#f8fafc;--warn:#fff7ed;--ok:#ecfdf5;--blue:#eef2ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;line-height:1.9;color:var(--ink);background:radial-gradient(circle at top left,#eef2ff 0,rgba(238,242,255,.65) 18%,transparent 36%),linear-gradient(180deg,#f8fafc 0,#f4f5f7 100%)}
+.top-panel{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 8px 24px rgba(15,23,42,.06);max-height:42vh;overflow-y:auto}
+.nav-inner{max-width:1260px;margin:0 auto;padding:14px 18px}.nav-title{font-weight:900;margin-bottom:8px}.jump-row{display:flex;flex-wrap:wrap;gap:8px}
+.jump-btn,.print-btn{display:inline-flex;align-items:center;text-decoration:none;font-weight:800;padding:8px 11px;border-radius:999px;border:1px solid #c7d2fe;background:#eef2ff;color:#312e81;cursor:pointer;font:inherit;font-size:.92rem}
+.print-btn{background:linear-gradient(135deg,#ede9fe,#ecfeff);border-color:#a5b4fc}
+.app-shell{max-width:1180px;margin:0 auto;padding:22px 18px 88px}section{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:28px;margin:18px 0;box-shadow:0 12px 30px rgba(15,23,42,.05)}.hero{padding:34px 32px;background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(15,118,110,.06)),#fff}.hero h1{margin:0 0 10px;font-size:2rem;line-height:1.3}.hero p{margin:6px 0;color:var(--sub)}.toc{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.toc a{text-decoration:none;color:#312e81;background:#eef2ff;border:1px solid #c7d2fe;padding:8px 12px;border-radius:999px;font-weight:700}
+.badge,.label{display:inline-block;margin:4px 8px 4px 0;padding:4px 10px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:.92rem;font-weight:800}.label{background:#f3f4f6;color:#374151}.accuracy{display:inline-block;margin:4px 8px 4px 0;padding:4px 10px;border-radius:999px;font-size:.9rem;font-weight:900}.accuracy.mid{background:#fef3c7;color:#92400e}
+h2{margin:0 0 14px;font-size:1.55rem;line-height:1.35}h3{margin:0 0 14px;font-size:1.18rem;line-height:1.45}h4{margin:20px 0 8px;font-size:1rem}
+.lead-grid,.diag-grid,.legend-grid,.summary-grid{display:grid;gap:16px}.lead-grid,.diag-grid,.legend-grid{grid-template-columns:1fr 1fr}.summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card,.summary-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}.text-block{border:1px solid var(--line);background:#fcfcfd;border-radius:18px;padding:18px;margin:14px 0}.quote{margin:8px 0;font-size:1.02rem}.note{margin:10px 0 0;padding:10px 12px;background:#faf5ff;border-left:4px solid #a855f7;border-radius:10px;color:#5b21b6}
+.main-claim{text-decoration:underline 3px solid #c0392b;text-decoration-skip-ink:none;font-weight:800}.keyword{text-decoration:underline 2px solid #8e44ad;text-decoration-skip-ink:none}.contrast-a{background:#eef6ff;border-bottom:3px solid #2e86de;padding:0 2px}.contrast-b{background:#fff4e6;border-bottom:3px solid #f39c12;padding:0 2px}.cause{border-bottom:3px solid #27ae60;padding:0 2px}.result{border-bottom:3px solid #16a085;padding:0 2px}.emotion{background:#ffe8ef;padding:0 2px}.trigger{background:#ffe9cc;padding:0 2px}.scene{border-left:6px solid #95a5a6;padding-left:8px;display:inline-block}
+.q-card{border:1px solid var(--line);border-radius:20px;padding:22px;margin:16px 0;background:#fff;break-inside:avoid}.question-box{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:10px 0}.detail-box{background:#fcfcfd;border:1px solid var(--line);border-radius:16px;padding:14px 16px}.answer-box{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:16px;padding:14px 16px;font-weight:900;color:#065f46}.pitfall{margin-top:12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:14px 16px;color:#9a3412}.check-card{border:1px dashed #cbd5e1;border-radius:18px;padding:18px;background:#fff;margin-top:16px;break-inside:avoid}details{margin-top:12px}summary{cursor:pointer;font-weight:900;color:#312e81;background:#eef2ff;border:1px solid #c7d2fe;border-radius:14px;padding:9px 12px;display:inline-block}
+.choice-list{margin:10px 0 0;padding-left:1.2em}.choice-list li{margin:4px 0}.table-wrap{width:100%;overflow-x:auto;margin:12px 0}table{border-collapse:collapse;width:100%;background:#fff}th,td{border:1px solid #e5e7eb;padding:10px 12px;vertical-align:top}th{background:#f1f5f9;text-align:left}.choice-table{min-width:980px;table-layout:fixed}.choice-table td,.choice-table th{font-size:.94rem;line-height:1.7}.judge{text-align:center;font-weight:900;white-space:nowrap}.judge.ok{color:#047857}.judge.ng{color:#b91c1c}.basic-table{min-width:720px}.final-table{min-width:760px}
+@media (max-width:900px){.lead-grid,.diag-grid,.legend-grid,.summary-grid{grid-template-columns:1fr}section{padding:20px}.hero h1{font-size:1.5rem}}
+@media print{@page{size:A4 portrait;margin:12mm}body{background:#fff}.top-panel{display:none}.app-shell{max-width:none;padding:0}section,.q-card,.check-card{box-shadow:none;break-inside:avoid;page-break-inside:avoid}details:not([open])>*:not(summary){display:block!important}details>summary{display:none}.choice-table{min-width:0;font-size:.82rem}}
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<nav class="top-panel"><div class="nav-inner"><div class="nav-title">3月 復習テスト_国語_2026 HTML解答解説</div><div class="jump-row">
+<button class="print-btn" onclick="window.print()">PDF出力</button>
+<a class="jump-btn" href="#read-diagnosis">本文の読み方診断</a><a class="jump-btn" href="#section-3">大問3</a><a class="jump-btn" href="#section-4">大問4</a><a class="jump-btn" href="#answers">最終答案一覧</a><a class="jump-btn" href="#summary">今回の学習まとめ</a>
+<a class="jump-btn" href="#q3-1">大問3-問1</a><a class="jump-btn" href="#q3-2">大問3-問2</a><a class="jump-btn" href="#q3-3">大問3-問3</a><a class="jump-btn" href="#q3-4">大問3-問4</a><a class="jump-btn" href="#q3-5">大問3-問5</a><a class="jump-btn" href="#q3-6">大問3-問6</a><a class="jump-btn" href="#q4-1">大問4-問1</a><a class="jump-btn" href="#q4-2">大問4-問2</a><a class="jump-btn" href="#q4-3">大問4-問3</a><a class="jump-btn" href="#q4-4">大問4-問4</a><a class="jump-btn" href="#q4-5">大問4-問5</a><a class="jump-btn" href="#q4-6">大問4-問6</a><a class="jump-btn" href="#q4-7">大問4-問7</a>
+</div></div></nav>
+<main class="app-shell">
+<section class="hero"><h1>3月 復習テスト_国語_2026 HTML解答解説</h1><p><span class="badge">対象：大問3・大問4</span><span class="badge">v10.7形式で再解析</span><span class="badge">公式解答照合済み</span></p><p>文章ジャンル：説明文／物語文。設問タイプ：空欄補充、語句、選択、抜き出し、記述、内容一致。</p><div class="toc"><a href="#read-diagnosis">本文の読み方診断</a><a href="#section-3">大問3</a><a href="#section-4">大問4</a><a href="#answers">最終答案一覧</a><a href="#summary">今回の学習まとめ</a></div></section>
+<section id="read-diagnosis"><h2>本文の読み方診断</h2><div class="lead-grid"><div class="card"><h3>文章全体の主題・流れ</h3><p>大問3は、イルカの群れについて「身近な例→一般説明→メリット→デメリット→混群→例外」の順で進む説明文です。大問4は、孤独で近寄りがたい夜警員の井上さんが、不思議な女の子とのやりとりを通して心をほぐしていく物語文です。</p></div><div class="card"><h3>読みの勝負所</h3><p>大問3は、メリットとデメリットを混同せず、具体例を直前のまとめに戻すことが勝負です。大問4は、線部の時点を固定し、井上さんの立場と本心のズレ、冷たさと温かさの対比を読むことが勝負です。</p></div></div></section>
+<section id="section-3"><h2>大問3　解き方診断</h2>
+<h3>文章ジャンル・設問タイプ</h3><div class="card">説明文。設問は、接続語の空欄補充、語句の意味、内容選択＋記述、指示語、抜き出し、内容一致で構成されています。</div>
+<h3>文章の主題・流れ</h3><div class="card">イルカが群れをつくる理由を、メリットとデメリットの両面から説明し、同じ種類の群れだけでなく混群やカワイルカの例外へ広げています。</div>
+<h3>本文の要約</h3><div class="card">本文は、船旅やダイビングでイルカの群れを見られる身近な場面から始まり、一般にイルカが集団をつくる理由を説明する。群れのメリットは、敵に早く気づいて逃げやすいこと、全体を大きく見せて脅威を与えること、目が多くなってエサを見つけやすいこと、多くのオスとメスが出会い繁殖の機会が増えることにある。一方で、群れは敵に見つかりやすくなり、エサを分け合うため自分の取り分が減り、メスをめぐる争いも起こる。そこでイルカは、メリットとデメリットを比べながら群れの大きさや構成を変える。また、種類の違うイルカが混群をつくり、エサを共同で追い込んだり分け合ったり、敵から逃げるときに協力したりする例もある。マダライルカとハシナガイルカの混群は、その関係を示す具体例である。最後に、カワイルカは川ではエサの群れが小さいため、大きな群れをつくると食べる分が減り、単独または少数で行動する方が合っていると述べられる。</div>
+<h3>本文文字数</h3><div class="card">概算約2600字。</div>
+<h3>この大問で使う線の凡例・線の引き方</h3><div class="table-wrap"><table class="basic-table"><thead><tr><th>線種（日本語）</th><th>役割</th><th>この大問での使い方</th></tr></thead><tbody><tr><td>キーワード線</td><td>くり返される中心語を追う</td><td>「群れ」「メリット」「デメリット」「混群」「カワイルカ」を囲む。</td></tr><tr><td>問い線・答え線</td><td>問いと理由を対応させる</td><td>「なぜ群れをつくるのか」と、敵・エサ・繁殖の理由を結ぶ。</td></tr><tr><td>対比線</td><td>メリットと反面を分ける</td><td>「その反面」「しかし」以降をデメリットとして押さえる。</td></tr><tr><td>まとめ線</td><td>具体例から説明の目的に戻る</td><td>マダライルカとハシナガイルカの例を「違った種類が群れをつくる理由」に戻す。</td></tr></tbody></table></div>
+<h3>本文の線引き再現</h3><div class="text-block"><p class="quote">船旅やダイビングでは、イルカが群れで泳ぐ姿を見ることがある。<span class="keyword">一般にイルカはたくさんの個体からなる群れをつくります</span>。</p><p class="quote"><span class="main-claim">そもそもなぜ「群れ」をつくるのでしょうか</span>。理由は、<span class="cause">敵から逃げる</span>、<span class="cause">エサを見つけやすい</span>、<span class="cause">繁殖する機会が増える</span>ということにある。</p><p class="quote"><span class="contrast-b">その反面、群れにはデメリットもあります</span>。大勢いると敵から見つかりやすくなり、仲間が多い分だけ<span class="result">自分の食べる分が減って</span>しまう。争いが起きることもある。</p><p class="quote">さらに、違った種類が一緒に群れを作る「混群」もあり、<span class="main-claim">エサを分け合ったり、敵から逃げるときに協力したりする</span>。カワイルカはエサが大きな群れを作らないため、単独または少ない数で行動するほうが都合がよい。</p><p class="note">設問では「メリット」と「デメリット」を分け、混群の具体例は直前のまとめに戻して読む。</p></div>
+
+<article class="q-card" id="q3-1">
+  <h3>大問3-問一</h3>
+  <p><span class="label">問題タイプ</span>空欄補充・接続語</p>
+  <div class="question-box"><strong>設問文：</strong><br>[A]〜[C]にあてはまることばとして、最もふさわしいものを次の中から選び、それぞれ記号で答えなさい。ただし、同じ記号は一回しか使えません。<br><ol class="choice-list"><li>ア つまり</li><li>イ たとえば</li><li>ウ また</li><li>エ ところで</li></ol></div>
+  <p class="accuracy mid">推定正答率 72%（追加・転換・例示の役割を分けられるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">空欄補充では、空欄の直前直後の関係を先に名づけます。Aは、船旅でイルカを見る話に続いて「ダイビングで海にもぐっていると」という別場面を足すので、追加の「また」が合います。Bは「一般にイルカは群れをつくる」説明から、「そもそもなぜ『群れ』をつくるのでしょうか」という問いへ移るので、話題転換の「ところで」です。Cは「バンドウイルカとコビレゴンドウ、カマイルカとミイルカ」など具体例が続くため、「たとえば」が入ります。「つまり」はまとめの語ですが、三つの空欄にはまとめの関係がありません。</div>
+  <h4>解答</h4>
+  <div class="answer-box">A＝ウ、B＝エ、C＝イ</div>
+  
+<h4>空欄群の個別解説</h4>
+<div class="table-wrap"><table class="basic-table"><thead><tr><th>記号</th><th>本文の前後関係</th><th>入る語</th><th>理由</th><th>誤りやすい点</th></tr></thead><tbody><tr><td>A</td><td>船旅でイルカの群れを見る話のあと、ダイビング中に群れに出会う話を加える。</td><td>ウ また</td><td>同じ話題に別の場面を足す追加の接続語。</td><td>「つまり」はまとめなので、ここでは強すぎる。</td></tr><tr><td>B</td><td>群れの規模の説明から、「なぜ群れをつくるのか」という新しい問いに移る。</td><td>エ ところで</td><td>話題を切り替えて、理由説明に入る合図。</td><td>「たとえば」は後ろに具体例を出すときの語。ここは問いに移る。</td></tr><tr><td>C</td><td>混群の組み合わせとして「バンドウイルカとコビレゴンドウ、カマイルカとミイルカ」などが続く。</td><td>イ たとえば</td><td>後ろに具体名が並ぶため、例示の接続語が合う。</td><td>「また」でも文は続くが、例を列挙する合図としては弱い。</td></tr></tbody></table></div>
+
+  <h4>答案チェック</h4>
+  <div class="detail-box">A〜Cを本文の出現順に並べ、同じ記号を二回使っていないか確認します。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「このように」などの近い語に引っ張られてAを「つまり」にしないこと。Aはまとめではなく、例の追加です。</div>
+  
+</article>
+
+<article class="q-card" id="q3-2">
+  <h3>大問3-問二</h3>
+  <p><span class="label">問題タイプ</span>語句の意味・慣用句</p>
+  <div class="question-box"><strong>設問文：</strong><br>線a「一般に」、線b「天秤にかけ」について、本文中の意味として、最もふさわしいものをそれぞれア〜エから選び、記号で答えなさい。<br><ol class="choice-list"><li>a「一般に」：ア 多くの場合　イ 例外なく　ウ すべて同じで　エ 特徴がなく</li><li>b「天秤にかけ」：ア 二つのものをまとめ　イ 二つのものを比べ　ウ 悪いところを見直し　エ 良いところだけを選び</li></ol></div>
+  <p class="accuracy mid">推定正答率 78%（語句を前後文に置き直せるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">語句問題では、言葉だけでなく、直後の説明と例外を見ます。「一般にイルカはたくさんの個体からなる群れをつくります」は、ふつうはそうだという意味です。後で「川で暮らしているカワイルカは群れをつくりません」という例外が出るので、「例外なく」や「すべて同じで」は強すぎます。「天秤にかけ」は、本文の「メリットとデメリット」「どちらが有利かをきめて」という前後から、二つを比べて判断するという意味です。したがってaはア、bはイです。</div>
+  <h4>解答</h4>
+  <div class="answer-box">a＝ア、b＝イ</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>a-ア 多くの場合</td><td>「一般にイルカはたくさんの個体からなる群れをつくります」は、ふつうはそうだという幅を持つ。本文の「カワイルカは群れをつくりません」が例外を示すので、選択肢の「多くの場合」と対応する。<br><strong>【作問者の意図】</strong>本文の「一般に」を、選択肢では「多くの場合」と日常語に言い換えている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>a-イ 例外なく</td><td>「一般に」は多くの場合という意味なので、広い傾向を表す点だけは近い。</td><td>【言いすぎ】本文は「川で暮らしているカワイルカは群れをつくりません」と例外を出している。選択肢の「例外なく」は、例外のある本文を例外なしに変えている。<br><strong>【作問者の意図】</strong>本文の「一般に」を「いつも」と強く読み替えさせる言いすぎ。</td><td class="judge ng">×</td></tr><tr><td>a-ウ すべて同じで</td><td>イルカ全体について述べる文に出る語なので、全体に関係する点だけは近い。</td><td>【範囲の広げすぎ】本文は「種類」「沿岸」「外洋」「季節」などで群れの大きさや構成が変わると説明する。選択肢の「すべて同じ」は、その違いを消している。<br><strong>【作問者の意図】</strong>「一般に」を「全部同じ」と取り違えさせる範囲拡大。</td><td class="judge ng">×</td></tr><tr><td>a-エ 特徴がなく</td><td>「一般に」が説明文の中の語である点だけは本文に近い。</td><td>【意味の取り違え】本文の「一般に」は傾向を表す語であり、「特徴がない」という評価ではない。選択肢は、対象語を「イルカ」から「特徴の有無」にずらしている。<br><strong>【作問者の意図】</strong>抽象語らしい選択肢を置き、語の実際の意味から目をそらしている。</td><td class="judge ng">×</td></tr><tr><td>b-ア 二つのものをまとめ</td><td>「メリット」「デメリット」の二つを扱う点は本文に近い。</td><td>【動作のすり替え】本文は「メリットとデメリットを天秤にかけて、どちらが有利か」と、二つを比べる話。選択肢の「まとめ」は比較判断を消している。<br><strong>【作問者の意図】</strong>本文の二項対立「メリット／デメリット」を使いながら、動作を「比べる」から「まとめる」に替えている。</td><td class="judge ng">×</td></tr><tr><td>b-イ 二つのものを比べ</td><td>本文の「メリットとデメリット」「どちらが有利かをきめて」を、選択肢では「二つのものを比べ」と言い換えている。天秤という比喩の意味にも合う。<br><strong>【作問者の意図】</strong>本文の比喩「天秤にかけ」を、慣用句としての意味「比較する」に直している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>b-ウ 悪いところを見直し</td><td>本文には「デメリット」という悪い面の語がある。</td><td>【片側だけの抽出】本文は「メリットとデメリット」を比べる。選択肢は「悪いところ」だけにし、よい面との比較を落としている。<br><strong>【作問者の意図】</strong>本文の「デメリット」だけを抜き、対になる「メリット」を消している。</td><td class="judge ng">×</td></tr><tr><td>b-エ 良いところだけを選び</td><td>本文には「メリット」という良い面の語がある。</td><td>【片側だけの抽出】本文は良い面と悪い面の両方を見て「どちらが有利か」を決める。選択肢は「良いところだけ」にしている。<br><strong>【作問者の意図】</strong>本文の「メリット」を利用し、比較の相手である「デメリット」を見落とさせる。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">aとbを別々に答えます。bは実際の天秤の話ではなく、慣用句として「比べる」と置き換えます。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「一般に」を「例外なく」と読むと、後半のカワイルカの説明と矛盾します。</div>
+  
+<div class="check-card" id="q3-2-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線a「一般に」、線b「天秤にかけ」について、本文中の意味として最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>a ア たいていの場合</li><li>a イ かならずすべて</li><li>a ウ どの種類も同じで</li><li>a エ 特別な性質がなく</li><li>b ア 二つを一つにまとめる</li><li>b イ 二つをくらべて判断する</li><li>b ウ 悪い面だけを調べる</li><li>b エ よい面だけを集める</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">a＝ア、b＝イ</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>a-ア 多くの場合</td><td>「一般にイルカはたくさんの個体からなる群れをつくります」は、ふつうはそうだという幅を持つ。本文の「カワイルカは群れをつくりません」が例外を示すので、選択肢の「多くの場合」と対応する。<br><strong>【作問者の意図】</strong>本文の「一般に」を、選択肢では「多くの場合」と日常語に言い換えている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>a-イ 例外なく</td><td>「一般に」は多くの場合という意味なので、広い傾向を表す点だけは近い。</td><td>【言いすぎ】本文は「川で暮らしているカワイルカは群れをつくりません」と例外を出している。選択肢の「例外なく」は、例外のある本文を例外なしに変えている。<br><strong>【作問者の意図】</strong>本文の「一般に」を「いつも」と強く読み替えさせる言いすぎ。</td><td class="judge ng">×</td></tr><tr><td>a-ウ すべて同じで</td><td>イルカ全体について述べる文に出る語なので、全体に関係する点だけは近い。</td><td>【範囲の広げすぎ】本文は「種類」「沿岸」「外洋」「季節」などで群れの大きさや構成が変わると説明する。選択肢の「すべて同じ」は、その違いを消している。<br><strong>【作問者の意図】</strong>「一般に」を「全部同じ」と取り違えさせる範囲拡大。</td><td class="judge ng">×</td></tr><tr><td>a-エ 特徴がなく</td><td>「一般に」が説明文の中の語である点だけは本文に近い。</td><td>【意味の取り違え】本文の「一般に」は傾向を表す語であり、「特徴がない」という評価ではない。選択肢は、対象語を「イルカ」から「特徴の有無」にずらしている。<br><strong>【作問者の意図】</strong>抽象語らしい選択肢を置き、語の実際の意味から目をそらしている。</td><td class="judge ng">×</td></tr><tr><td>b-ア 二つのものをまとめ</td><td>「メリット」「デメリット」の二つを扱う点は本文に近い。</td><td>【動作のすり替え】本文は「メリットとデメリットを天秤にかけて、どちらが有利か」と、二つを比べる話。選択肢の「まとめ」は比較判断を消している。<br><strong>【作問者の意図】</strong>本文の二項対立「メリット／デメリット」を使いながら、動作を「比べる」から「まとめる」に替えている。</td><td class="judge ng">×</td></tr><tr><td>b-イ 二つのものを比べ</td><td>本文の「メリットとデメリット」「どちらが有利かをきめて」を、選択肢では「二つのものを比べ」と言い換えている。天秤という比喩の意味にも合う。<br><strong>【作問者の意図】</strong>本文の比喩「天秤にかけ」を、慣用句としての意味「比較する」に直している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>b-ウ 悪いところを見直し</td><td>本文には「デメリット」という悪い面の語がある。</td><td>【片側だけの抽出】本文は「メリットとデメリット」を比べる。選択肢は「悪いところ」だけにし、よい面との比較を落としている。<br><strong>【作問者の意図】</strong>本文の「デメリット」だけを抜き、対になる「メリット」を消している。</td><td class="judge ng">×</td></tr><tr><td>b-エ 良いところだけを選び</td><td>本文には「メリット」という良い面の語がある。</td><td>【片側だけの抽出】本文は良い面と悪い面の両方を見て「どちらが有利か」を決める。選択肢は「良いところだけ」にしている。<br><strong>【作問者の意図】</strong>本文の「メリット」を利用し、比較の相手である「デメリット」を見落とさせる。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q3-3">
+  <h3>大問3-問三</h3>
+  <p><span class="label">問題タイプ</span>内容理解・選択＋記述</p>
+  <div class="question-box"><strong>設問文：</strong><br>線①「群れをつくることには多くのメリットがあります」について、次の問いに答えなさい。<br>(1) イルカが群れをつくるメリットのうちのひとつについて説明したものとして、最もふさわしいものを次の中から選び、記号で答えなさい。<br><ol class="choice-list"><li>ア 多くの個体の中から視力の優れたイルカを見張り役に指名することで、近づかれる前に敵を発見することができる。</li><li>イ 群れ全体を大きな生き物に見せることで、仲間にしたほうがよいと敵に思わせ、襲われないようにすることができる。</li><li>ウ 敵に襲われた時におとりとする個体を用意しておくことで、残りのイルカが団結して反撃することができる。</li><li>エ 敵の接近に気づいて危険をいち早く遠ざけることができ、自分が被害を受ける確率を少しでも下げることができる。</li></ol>(2) (1)で答えたもの以外にどのようなメリットがあるか、説明しなさい。</div>
+  <p class="accuracy mid">推定正答率 60%（メリットを重複なく二つ拾えるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">内容説明では、本文中の列挙をまず分けます。群れのメリットは「敵から逃げる」「エサを見つけやすい」「繁殖する機会も増えます」に整理できます。(1)の選択肢は「敵から逃げる」メリットを問うものです。本文には「誰かが敵に気がつけば早く逃げることができます」「自分が襲われる可能性が低くなる」とあり、これを正しく言い換えたエが合います。(2)では、(1)で使った敵から逃げる話を重ねず、残りの「エサ」と「繁殖」を書きます。</div>
+  <h4>解答</h4>
+  <div class="answer-box">(1) エ<br>(2) 多くの個体がいることでエサを見つけやすくなる。また、多くのオスとメスが集まれば、繁殖をする機会が増え、種として子孫を残すことができる。</div>
+  
+<h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 多くの個体の中から視力の優れたイルカを見張り役に指名することで、近づかれる前に敵を発見することができる。</td><td>本文の「誰かが敵に気がつけば早く逃げることができます」と、敵を発見する点だけは近い。</td><td>【本文にない要素の追加】本文は「誰かが敵に気がつけば」と不特定の個体をいう。選択肢は「視力の優れたイルカ」「見張り役に指名」と役割分担を追加している。<br><strong>【作問者の意図】</strong>本文の「敵に気がつく」を残し、主語を「誰か」から「視力の優れた見張り役」に替えている。</td><td class="judge ng">×</td></tr><tr><td>イ 群れ全体を大きな生き物に見せることで、仲間にしたほうがよいと敵に思わせ、襲われないようにすることができる。</td><td>本文の「全体が何か大きな生き物のように見える」「敵をこわがらせたり脅威をあたえる」は、群れ全体を大きく見せる点に近い。</td><td>【結果のすり替え】本文は敵を「こわがらせたり脅威をあたえる」。選択肢は「仲間にしたほうがよいと敵に思わせる」と、敵の反応を好意的なものに変えている。<br><strong>【作問者の意図】</strong>本文の「大きな生き物に見える」を使いながら、結果を「こわがる」から「仲間にしたい」にすり替えている。</td><td class="judge ng">×</td></tr><tr><td>ウ 敵に襲われた時におとりとする個体を用意しておくことで、残りのイルカが団結して反撃することができる。</td><td>本文には「多少は犠牲になるイルカもいるでしょう」という語があり、犠牲の話に近く見える。</td><td>【本文にない行動の追加】本文は犠牲が出る可能性を述べるだけ。選択肢の「おとりを用意」「団結して反撃」は本文にない。<br><strong>【作問者の意図】</strong>本文の「犠牲」を利用して、準備された「おとり」や「反撃」という別の行動を混ぜている。</td><td class="judge ng">×</td></tr><tr><td>エ 敵の接近に気づいて危険をいち早く遠ざけることができ、自分が被害を受ける確率を少しでも下げることができる。</td><td>本文の「誰かが敵に気がつけば早く逃げることができます」「自分が襲われる可能性が低くなる」を、選択肢では「敵の接近に気づく」「被害を受ける確率を下げる」と言い換えている。<br><strong>【作問者の意図】</strong>本文の二つの表現を一つの因果に圧縮しているため、語は違うが内容は合う。</td><td>不一致なし。</td><td class="judge ok">○</td></tr></tbody></table></div>
+<h4>文末設計</h4><div class="detail-box">(2)は、(1)で使った「敵から逃げる」以外のメリットを書く問題です。「エサを見つけやすい」「繁殖の機会が増える」を、二文に分けてもよいので、どちらも落とさずに書きます。</div>
+<h4>採点基準</h4><div class="table-wrap"><table class="basic-table"><thead><tr><th>観点</th><th>内容</th></tr></thead><tbody><tr><td>エサ</td><td>多くの個体がいるため目が多くなり、エサを見つけやすいこと。</td></tr><tr><td>繁殖</td><td>多くのオスとメスが集まることで繁殖の機会が増え、子孫を残しやすいこと。</td></tr><tr><td>重複回避</td><td>(1)で答えた敵から逃げるメリットをもう一度書かないこと。</td></tr></tbody></table></div>
+<h4>正解の幅3パターン</h4><div class="table-wrap"><table class="basic-table"><thead><tr><th>型</th><th>答案例</th></tr></thead><tbody><tr><td>標準</td><td>多くの個体がいることでエサを見つけやすくなる。また、多くのオスとメスが集まれば繁殖の機会が増え、種として子孫を残すことができる。</td></tr><tr><td>二文型</td><td>仲間が多いので、エサを見つけやすくなる。さらに、オスとメスが多く集まることで、繁殖する機会も増える。</td></tr><tr><td>短め</td><td>エサを見つけやすくなり、繁殖の機会も増えて子孫を残しやすくなる。</td></tr></tbody></table></div>
+
+  <h4>答案チェック</h4>
+  <div class="detail-box">(1)で使った「敵から逃げる」を(2)にもう一度書かないようにします。記述は二文に分けてもかまいません。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「群れを大きく見せる」も本文にはありますが、選択肢イは敵に「仲間にしたほうがよい」と思わせるので本文とずれます。</div>
+  
+<div class="check-card" id="q3-3-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線①「群れをつくることには多くのメリットがあります」について、イルカが群れをつくるメリットとして最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>ア 視力のよいイルカを前に出して、敵を攻撃させることができる。</li><li>イ 群れの中でメスをめぐる争いを減らし、仲間同士の関係をよくできる。</li><li>ウ だれかが敵に気づけば、早く逃げられ、自分が襲われる可能性を低くできる。</li><li>エ いつも同じメンバーでいるため、群れの役割を変えずにすむ。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">ウ</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 視力のよいイルカを前に出して、敵を攻撃させることができる。</td><td>本文の「敵に気がつけば」に近い。</td><td>【本文にない行動の追加】本文は逃げる話で、攻撃させるとは書いていない。<br><strong>【作問者の意図】</strong>「敵」という語を残し、行動を「逃げる」から「攻撃」に替えている。</td><td class="judge ng">×</td></tr><tr><td>イ 群れの中でメスをめぐる争いを減らし、仲間同士の関係をよくできる。</td><td>本文には「争い」の話がある。</td><td>【反対内容の混入】本文の争いはデメリットであり、メリットではない。選択肢は「争いを減らす」と反対にしている。<br><strong>【作問者の意図】</strong>本文の「争い」を使い、メリットの欄にデメリットの話を混ぜている。</td><td class="judge ng">×</td></tr><tr><td>ウ だれかが敵に気づけば、早く逃げられ、自分が襲われる可能性を低くできる。</td><td>本文の「誰かが敵に気がつけば早く逃げる」「襲われる可能性が低くなる」を、選択肢では「早く逃げられ」「可能性を低くできる」と言い換えている。<br><strong>【作問者の意図】</strong>本文の因果をそのまま短く圧縮している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>エ いつも同じメンバーでいるため、群れの役割を変えずにすむ。</td><td>本文には群れの構成の話がある。</td><td>【本文との逆】本文は「群れの構成が変わってしまうことがあります」。選択肢は「いつも同じメンバー」「役割を変えず」と反対にしている。<br><strong>【作問者の意図】</strong>「構成」という近い話題を使い、結論を変化ありから変化なしに反転している。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q3-4">
+  <h3>大問3-問四</h3>
+  <p><span class="label">問題タイプ</span>指示語・内容理解</p>
+  <div class="question-box"><strong>設問文：</strong><br>線②「そういった例の1つ」とありますが、この例はどのようなことを説明するためのものですか。最もふさわしいものを次の中から選び、記号で答えなさい。<br><ol class="choice-list"><li>ア 種類が異なる生き物どうしでも、おたがいに生き残りやすくするため、集団で暮らすことがあるということ。</li><li>イ 種類が異なる生き物どうしでも、共通の敵と戦うため、グループをつくることがあるということ。</li><li>ウ 名前の違う生き物どうしでも、早く簡単にエサを手に入れるため、ともに生活することがあるということ。</li><li>エ 名前の違う生き物どうしでも、協力して見張りをするため、一時的に群れになることがあるということ。</li></ol></div>
+  <p class="accuracy mid">推定正答率 66%（「そういった」の受け先を直前全体に戻せるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">指示語は、直前の一語だけでなく、直前の説明全体に戻します。「そういった例」は、「違った種類が群れをつくる理由として、エサを共同で追い込むためや、エサをうまく分けあったりするため」「敵から逃げるときにも協力し合う」を受けています。マダライルカとハシナガイルカの例は、エサを奪い合わず、敵が来たときに一緒に逃げることで、互いに生き残りやすくなる説明です。エサだけに限定するウ、戦うにするイ、見張りにするエは本文とずれます。</div>
+  <h4>解答</h4>
+  <div class="answer-box">ア</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 種類が異なる生き物どうしでも、おたがいに生き残りやすくするため、集団で暮らすことがあるということ。</td><td>本文の「違った種類が群れをつくる理由」「エサをうまく分けあったり」「敵から逃げるときにも協力し合う」を、選択肢では「おたがいに生き残りやすくするため」と広くまとめている。<br><strong>【作問者の意図】</strong>具体的な「エサ」「敵から逃げる」を、上位語の「生き残りやすくする」に抽象化している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ 種類が異なる生き物どうしでも、共通の敵と戦うため、グループをつくることがあるということ。</td><td>本文の「敵から逃げるときにも協力し合う」は、敵に関わる点で近い。</td><td>【行動のすり替え】本文は「敵から逃げる」とある。選択肢は「共通の敵と戦う」と、行動を逃げるから戦うに替えている。<br><strong>【作問者の意図】</strong>本文の「敵」を残し、動作だけを「逃げる」から「戦う」に替えている。</td><td class="judge ng">×</td></tr><tr><td>ウ 名前の違う生き物どうしでも、早く簡単にエサを手に入れるため、ともに生活することがあるということ。</td><td>本文の「エサを共同で追い込むため」や「エサをうまく分けあったり」は、エサの話として近い。</td><td>【範囲の狭めすぎ】本文はエサだけでなく「敵から逃げるときにも協力し合う」を含む。選択肢は「エサを手に入れるため」に限定している。<br><strong>【作問者の意図】</strong>直前の「エサ」を利用し、もう一つの根拠「敵から逃げる」を落としている。</td><td class="judge ng">×</td></tr><tr><td>エ 名前の違う生き物どうしでも、協力して見張りをするため、一時的に群れになることがあるということ。</td><td>本文の「ともに敵から身を守ります」は、協力して安全を守る点で近い。</td><td>【本文にない役割の追加】本文には「見張りをする」とはない。選択肢は「協力」を残し、協力の内容を見張りに替えている。<br><strong>【作問者の意図】</strong>本文の「敵から身を守る」を使いながら、方法を「見張り」に作り替えている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">「そういった」の受け先は、直前の「エサ」の一文だけではなく、敵から逃げる協力まで含む説明全体です。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>マダライルカとハシナガイルカの具体例に目を奪われ、理由を「エサだけ」と狭くしないこと。</div>
+  
+<div class="check-card" id="q3-4-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線②「そういった例の1つ」とありますが、この例はどのようなことを説明するためのものですか。最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>ア 異なる種類が、エサの分け方や敵からの逃げ方で協力し、互いに生き残りやすくなること。</li><li>イ 異なる種類が、相手を自分たちの群れに取りこむために行動すること。</li><li>ウ 名前の違うイルカが、敵を共同で攻撃するために集まること。</li><li>エ エサを早く見つけるためだけに、同じ種類のイルカが一時的に集まること。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">ア</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 異なる種類が、エサの分け方や敵からの逃げ方で協力し、互いに生き残りやすくなること。</td><td>本文の「エサをうまく分けあったり」「敵から逃げるときにも協力し合う」を、選択肢では「互いに生き残りやすくなる」とまとめている。<br><strong>【作問者の意図】</strong>二つの具体を一つの目的語に抽象化している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ 異なる種類が、相手を自分たちの群れに取りこむために行動すること。</td><td>本文には異なる種類が同じ群れをつくる話がある。</td><td>【目的の追加】本文は「取りこむ」ためではなく、エサや防衛のため。選択肢は目的を「相手を取りこむ」に替えている。<br><strong>【作問者の意図】</strong>「異なる種類が群れをつくる」を使い、目的だけを本文にないものにしている。</td><td class="judge ng">×</td></tr><tr><td>ウ 名前の違うイルカが、敵を共同で攻撃するために集まること。</td><td>本文の「敵」に関わる点は近い。</td><td>【行動のすり替え】本文は「敵から逃げる」。選択肢は「敵を共同で攻撃する」に替えている。<br><strong>【作問者の意図】</strong>敵という対象語を残して、動作を逆方向にしている。</td><td class="judge ng">×</td></tr><tr><td>エ エサを早く見つけるためだけに、同じ種類のイルカが一時的に集まること。</td><td>本文にはエサの話と群れの話がある。</td><td>【対象と範囲のずれ】本文は「違った種類」が協力する例。選択肢は「同じ種類」にし、さらに理由を「エサだけ」に狭めている。<br><strong>【作問者の意図】</strong>本文の「エサ」を使いながら、対象語「違った種類」を「同じ種類」に替えている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q3-5">
+  <h3>大問3-問五</h3>
+  <p><span class="label">問題タイプ</span>抜き出し</p>
+  <div class="question-box"><strong>設問文：</strong><br>線③「川で暮らしているカワイルカは群れをつくりません」とありますが、なぜですか。その理由を次のように説明したとき、□にあてはまることばを本文中から十一字ちょうどでぬき出して答えなさい。<br>カワイルカが一度に得られるエサの数には限りがあるので、群れをつくると□しまうから。</div>
+  <p class="accuracy mid">推定正答率 58%（理由文に差し込める十一字を探せるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">抜き出しでは、設問文の□にそのまま入れて自然に読める表現を探します。カワイルカの段落では、川では小魚やエビなどが海の魚のような大きな群れをつくらないため、単独または少ない数で行動したほうが都合がよいと説明されます。この理由を設問文に入れるには、前のデメリット説明にある「自分の食べる分が減ってしまいます」が対応します。「群れをつくると自分の食べる分が減ってしまうから」と読めるので、十一字の「自分の食べる分が減って」を抜き出します。</div>
+  <h4>解答</h4>
+  <div class="answer-box">自分の食べる分が減って</div>
+  
+  <h4>答案チェック</h4>
+  <div class="detail-box">「自分／の／食べる／分／が／減っ／て」で十一字です。□のあとに「しまうから」が続くので、抜き出しは「減って」で止めます。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>最後のカワイルカの段落だけを探して「小魚やエビ」などを抜くと、設問文に差し込んだときに文がつながりません。</div>
+  
+</article>
+
+<article class="q-card" id="q3-6">
+  <h3>大問3-問六</h3>
+  <p><span class="label">問題タイプ</span>内容一致・○×判定</p>
+  <div class="question-box"><strong>設問文：</strong><br>次のア〜オについて、本文の内容として、あてはまるものは○、あてはまらないものは×と、それぞれ答えなさい。ただし、ア〜オのすべてを○、または、×と答えてはいけません。<br><ol class="choice-list"><li>ア イルカが集団でいるときの争いは、理想の相手を選ぼうとして、オスをめぐるメスどうしで起こることが多い。</li><li>イ 群れをつくる生き物たちは、役割をしっかりと分けるために、生活のしかたの異なる生き物だけを相手に選ぶ。</li><li>ウ イルカの集団の大きさはさまざまで、岸に近いところで暮らす種類はあまり大きな群れをつくらない傾向がある。</li><li>エ おたがいに協力するため仲間意識が強いイルカたちは、一度つくった群れの構成を変えることは絶対にない。</li><li>オ たくさんのイルカが一つの場所に集まることは、敵から見つかりやすくなるという危険な側面を持っている。</li></ol></div>
+  <p class="accuracy mid">推定正答率 69%（本文語を使った一語違いを見抜けるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">○×問題は、本文に似た語があるかではなく、主語・理由・強さを照合します。アは本文に「メスをめぐる争い」とあるのに、選択肢は「メスどうし」にしているので×です。イは異なる種類の混群はありますが、理由を「役割分担」「異なる生き物だけ」にしているので×です。ウは「沿岸近くで暮らす種類はさほど大きな群れをつくらない傾向」と一致するので○です。エは「群れの構成が変わってしまう」と本文にあるため×です。オは「敵からも見つかりやすくなります」と合うので○です。</div>
+  <h4>解答</h4>
+  <div class="answer-box">ア＝×、イ＝×、ウ＝○、エ＝×、オ＝○</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア イルカが集団でいるときの争いは、理想の相手を選ぼうとして、オスをめぐるメスどうしで起こることが多い。</td><td>本文の「争い」「メスをめぐって」は、争いの話として近い。</td><td>【主語のすり替え】本文は「メスをめぐる争い」と、メスをめぐって争う側を述べる。選択肢は「メスどうしで起こる」と、争う主語をメスに替えている。<br><strong>【作問者の意図】</strong>本文の「メス」を残し、「メスをめぐる」から「メスどうし」に変えている。</td><td class="judge ng">×</td></tr><tr><td>イ 群れをつくる生き物たちは、役割をしっかりと分けるために、生活のしかたの異なる生き物だけを相手に選ぶ。</td><td>本文には「違った種類が群れをつくる理由」という説明がある。</td><td>【条件のすり替え】本文の理由は「エサを共同で追い込む」「エサを分けあう」「敵から逃げるときにも協力」。選択肢は「役割をしっかりと分けるため」「異なる生き物だけ」と条件を変えている。<br><strong>【作問者の意図】</strong>本文の「違った種類」を使いながら、理由を「生き残りやすさ」から「役割分担」に替えている。</td><td class="judge ng">×</td></tr><tr><td>ウ イルカの集団の大きさはさまざまで、岸に近いところで暮らす種類はあまり大きな群れをつくらない傾向がある。</td><td>本文の「沿岸近くで暮らす種類はさほど大きな群れをつくらない傾向」を、選択肢では「岸に近いところで暮らす種類はあまり大きな群れをつくらない」と言い換えている。<br><strong>【作問者の意図】</strong>本文の「沿岸近く」を「岸に近いところ」と平易に言い換えている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>エ おたがいに協力するため仲間意識が強いイルカたちは、一度つくった群れの構成を変えることは絶対にない。</td><td>本文には群れの構成の話が出る。</td><td>【本文との逆】本文は「昼と夜のうちでも群れの構成が変わってしまうことがあります」。選択肢は「絶対にない」と反対にしている。<br><strong>【作問者の意図】</strong>「群れの構成」という本文語を残し、結論を「変わる」から「変わらない」に反転させている。</td><td class="judge ng">×</td></tr><tr><td>オ たくさんのイルカが一つの場所に集まることは、敵から見つかりやすくなるという危険な側面を持っている。</td><td>本文の「敵からも見つかりやすくなります」を、選択肢では「危険な側面を持っている」とデメリット化している。<br><strong>【作問者の意図】</strong>本文のデメリットを抽象語「危険な側面」に言い換えている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">○はウ・オの二つです。「だけ」「絶対に」「どうし」など、条件を変える語に印をつけて確認します。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>本文に「メス」「違った種類」「構成」という同じ語があるだけで○にしないこと。語の関係まで比べます。</div>
+  
+<div class="check-card" id="q3-6-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>次のア〜エについて、本文の内容として、あてはまるものは○、あてはまらないものは×と答えなさい。</div>
+  <ol class="choice-list"><li>ア 群れの構成は季節や昼夜で変わることがある。</li><li>イ 外洋で暮らすイルカは、必ず三百頭をこえる群れをつくる。</li><li>ウ 違った種類のイルカの混群には、エサや敵への対応で利益がある。</li><li>エ カワイルカは、海の魚のように大群れになるエサを追うため大きな群れをつくる。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">ア＝○、イ＝×、ウ＝○、エ＝×</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 群れの構成は季節や昼夜で変わることがある。</td><td>本文の「昼と夜のうちでも群れの構成が変わってしまうことがあります」と一致する。<br><strong>【作問者の意図】</strong>本文の「昼と夜」を「昼夜」と圧縮している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ 外洋で暮らすイルカは、必ず三百頭をこえる群れをつくる。</td><td>本文には「外洋性のイルカには…大きな群れになることもある」とある。</td><td>【言いすぎ】本文は「こともある」で、選択肢は「必ず」にしている。<br><strong>【作問者の意図】</strong>本文の大群の例を使い、可能性を断定に変えている。</td><td class="judge ng">×</td></tr><tr><td>ウ 違った種類のイルカの混群には、エサや敵への対応で利益がある。</td><td>本文の「エサを共同で追い込む」「敵から逃げるときにも協力」と合う。<br><strong>【作問者の意図】</strong>本文の具体を「利益」と抽象化している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>エ カワイルカは、海の魚のように大群れになるエサを追うため大きな群れをつくる。</td><td>本文にはカワイルカとエサの話がある。</td><td>【本文との逆】本文は「川で暮らしているカワイルカは群れをつくりません」「海の魚のように大きな群れをつくることがない」。選択肢は大群をつくると反対にしている。<br><strong>【作問者の意図】</strong>「カワイルカ」「海の魚」という語を使いながら、結論を反対にしている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+</section>
+<section id="section-4"><h2>大問4　解き方診断</h2>
+<h3>文章ジャンル・設問タイプ</h3><div class="card">物語文。設問は、人物像、場面把握、動作からの心情、対比表現、理由選択、心情記述、複数選択で構成されています。</div>
+<h3>文章の主題・流れ</h3><div class="card">人と交流しない井上さんが、女の子のなぞかけとキャラメル・スミレ・春の出来事を通して、孤独から温かな交流へ変化していく流れです。</div>
+<h3>本文の要約</h3><div class="card">井上さんは学校の夜警員で、いつも一人でうつむきがちに歩き、人と話したり笑い合ったりしないため、子どもにも近寄りにくい印象を与えている。ある日、一年生くらいの女の子が突然「手の中のもの、なあんだ？」と声をかけ、井上さんが「何にも入ってない」と答えると悲しそうに去る。次の日、井上さんは外すつもりで「キャラメル」と答えるが本当に当たり、女の子から受け取ったキャラメルの甘さに、冷たい弁当とは違う心の温もりを感じる。さらにスミレも当たったため、井上さんは女の子を喜ばせようと絶対に当たらない答えを考える。女の子が現れずあきらめかけた時、夜警員室にいるのを見つけ、本来なら注意すべきなのに親しげに声をかける。最後に「春」と答えると中庭に菜の花が満開で、今まで気になっていた女の子のにおいの正体も菜の花だとわかる。孤独だった井上さんは、女の子との不思議で温かな交流を通して心がほどけ、にっこり笑う。</div>
+<h3>本文文字数</h3><div class="card">概算約4400字。</div>
+<h3>この大問で使う線の凡例・線の引き方</h3><div class="table-wrap"><table class="basic-table"><thead><tr><th>線種（日本語）</th><th>役割</th><th>この大問での使い方</th></tr></thead><tbody><tr><td>人物像線</td><td>出発点の人物像を押さえる</td><td>「むっつりそう」「話したり、笑い合ったりしない」を人物像として読む。</td></tr><tr><td>心情線</td><td>気持ちを表す語を拾う</td><td>「悲しそう」「うきうき」「にっこり」を心の動きとしてつなぐ。</td></tr><tr><td>本心とずれる言動線</td><td>立場と言動のズレを読む</td><td>「本当なら注意すべき」なのに「やあ」と言う場面を押さえる。</td></tr><tr><td>変化線</td><td>きっかけから心情変化を追う</td><td>キャラメル、スミレ、春を、井上さんの心がほぐれるきっかけとして追う。</td></tr></tbody></table></div>
+<h3>本文の線引き再現</h3><div class="text-block"><p class="quote"><span class="scene">出発点</span> 井上さんは、<span class="keyword">むっつりそうな顔</span>で、人と<span class="keyword">話したり、笑い合ったりすることがありませんでした</span>。</p><p class="quote">女の子に「手の中のもの、なあんだ？」と聞かれ、最初は「何にも入ってないんだろ」と答える。女の子が<span class="emotion">悲しそうな顔</span>をしたため、井上さんは次から当たらない答えを言おうと考える。</p><p class="quote"><span class="contrast-a">冷たいおべん当</span>のあとで食べたキャラメルは、<span class="emotion">口の中であまくとける</span>味がした。ここから、孤独な食事と人との温もりが対比される。</p><p class="quote">井上さんは、女の子をよろこばせる答えを考え、スミレの次には「春」と答える。夜警員室に女の子がいたとき、本当なら注意すべきなのに、<span class="trigger">「やあ。」と言ってしまいました</span>。</p><p class="quote">最後に中庭の菜の花が満開になり、<span class="main-claim">菜の花畑のにおいだった</span>と気づいて、<span class="emotion">にっこり笑いました</span>。</p><p class="note">動作や物の温度は、井上さんの心情の変化として読む。とくに「本当なら注意すべき」場面で「やあ」と言うズレが記述の中心。</p></div>
+
+<article class="q-card" id="q4-1">
+  <h3>大問4-問一</h3>
+  <p><span class="label">問題タイプ</span>人物像</p>
+  <div class="question-box"><strong>設問文：</strong><br>線①「いつもひとりでうつむきかげんに歩く井上さん」とありますが、井上さんはどのような人でしたか。最もふさわしいものを次の中から選び、記号で答えなさい。<br><ol class="choice-list"><li>ア つねに下を見ながら歩き、自分の進んでいく道に危険がないかどうかを確かめるような、慎重な人。</li><li>イ 他人と交流することがあまりなく、顔つきからも気むずかしく、話しかけづらい印象を与える人。</li><li>ウ 積極的にあいさつをせず、学校の子どもたちに対しても冷たい態度をとるような、近よりがたい人。</li><li>エ 周りの人が自分に話しかけることはないだろうとあきらめているような、後ろ向きな考えをする人。</li></ol></div>
+  <p class="accuracy mid">推定正答率 76%（外見描写を人物像に言い換えられるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">人物像は、線部だけでなく、直後の説明と合わせて読みます。本文には「むっつりそうな顔が、人にとっつきにくい感じをあたえる」「話したり、笑い合ったりすることがありませんでした」とあります。これは、他人との交流が少なく、話しかけづらい印象を与える人ということです。アは「道に危険がないか確かめる」という目的を勝手に足しています。ウの「冷たい態度」やエの「あきらめ」は、本文の外見・行動から強く言いすぎています。</div>
+  <h4>解答</h4>
+  <div class="answer-box">イ</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア つねに下を見ながら歩き、自分の進んでいく道に危険がないかどうかを確かめるような、慎重な人。</td><td>本文の「うつむきかげんに歩く」と、下を見て歩く様子は近い。</td><td>【目的の追加】本文は「うつむきかげん」を人と交流しない印象と結びつける。選択肢は「危険がないかどうかを確かめる」と目的を追加している。<br><strong>【作問者の意図】</strong>本文の「うつむき」を使い、理由を「人との距離」から「道の安全確認」に替えている。</td><td class="judge ng">×</td></tr><tr><td>イ 他人と交流することがあまりなく、顔つきからも気むずかしく、話しかけづらい印象を与える人。</td><td>本文の「話をしたり、笑い合ったりすることがありませんでした」「むっつりそうな顔」「とっつきにくい感じ」を、選択肢では「交流することがあまりなく」「話しかけづらい印象」と言い換えている。<br><strong>【作問者の意図】</strong>本文の具体描写を人物像にまとめている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>ウ 積極的にあいさつをせず、学校の子どもたちに対しても冷たい態度をとるような、近よりがたい人。</td><td>本文の「話をしたり、笑い合ったりすることがありませんでした」は、交流が少ない点で近い。</td><td>【言いすぎ】本文は話さない・笑わないという様子であり、「冷たい態度」とまでは書いていない。選択肢は印象を性格の冷たさに強めている。<br><strong>【作問者の意図】</strong>本文の「とっつきにくい」を使い、「冷たい態度」に言いすぎている。</td><td class="judge ng">×</td></tr><tr><td>エ 周りの人が自分に話しかけることはないだろうとあきらめているような、後ろ向きな考えをする人。</td><td>本文の「ひとり」「話をしたり、笑い合ったりすることがありませんでした」は、孤独な様子に近い。</td><td>【内面の追加】本文は表情や交流の少なさを述べるが、「あきらめている」「後ろ向きな考え」は書かれていない。<br><strong>【作問者の意図】</strong>孤独な外見描写から、本文にない内面判断へ飛ばせている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">線部の後にある「とっつきにくい」「話したり笑い合ったりしない」を根拠にして、人物像へ言い換えます。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「うつむき」を字面だけで読み、慎重な人と決めつけないこと。</div>
+  
+<div class="check-card" id="q4-1-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線①「いつもひとりでうつむきかげんに歩く井上さん」とありますが、井上さんはどのような人でしたか。最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>ア 足元を確かめながら慎重に歩く、安全確認を欠かさない人。</li><li>イ 人とあまり関わらず、表情からも近づきにくく見える人。</li><li>ウ 子どもを嫌っていて、わざと冷たく接する人。</li><li>エ だれにも話しかけられないと決めつけ、希望を失っている人。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">イ</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア つねに下を見ながら歩き、自分の進んでいく道に危険がないかどうかを確かめるような、慎重な人。</td><td>本文の「うつむきかげんに歩く」と、下を見て歩く様子は近い。</td><td>【目的の追加】本文は「うつむきかげん」を人と交流しない印象と結びつける。選択肢は「危険がないかどうかを確かめる」と目的を追加している。<br><strong>【作問者の意図】</strong>本文の「うつむき」を使い、理由を「人との距離」から「道の安全確認」に替えている。</td><td class="judge ng">×</td></tr><tr><td>イ 他人と交流することがあまりなく、顔つきからも気むずかしく、話しかけづらい印象を与える人。</td><td>本文の「話をしたり、笑い合ったりすることがありませんでした」「むっつりそうな顔」「とっつきにくい感じ」を、選択肢では「交流することがあまりなく」「話しかけづらい印象」と言い換えている。<br><strong>【作問者の意図】</strong>本文の具体描写を人物像にまとめている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>ウ 積極的にあいさつをせず、学校の子どもたちに対しても冷たい態度をとるような、近よりがたい人。</td><td>本文の「話をしたり、笑い合ったりすることがありませんでした」は、交流が少ない点で近い。</td><td>【言いすぎ】本文は話さない・笑わないという様子であり、「冷たい態度」とまでは書いていない。選択肢は印象を性格の冷たさに強めている。<br><strong>【作問者の意図】</strong>本文の「とっつきにくい」を使い、「冷たい態度」に言いすぎている。</td><td class="judge ng">×</td></tr><tr><td>エ 周りの人が自分に話しかけることはないだろうとあきらめているような、後ろ向きな考えをする人。</td><td>本文の「ひとり」「話をしたり、笑い合ったりすることがありませんでした」は、孤独な様子に近い。</td><td>【内面の追加】本文は表情や交流の少なさを述べるが、「あきらめている」「後ろ向きな考え」は書かれていない。<br><strong>【作問者の意図】</strong>孤独な外見描写から、本文にない内面判断へ飛ばせている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q4-2">
+  <h3>大問4-問二</h3>
+  <p><span class="label">問題タイプ</span>行動・場面把握</p>
+  <div class="question-box"><strong>設問文：</strong><br>線②「変わった子だな」とありますが、井上さんは女の子のどのようなところを見て、そのように思ったのですか。最もふさわしいものを次の中から選び、記号で答えなさい。<br><ol class="choice-list"><li>ア 親しみにくい井上さんにとつぜん話しかけてきた上、問いかけの答えを当てられると、すぐに去っていったところ。</li><li>イ 急にやってきて、わけもわかっていない状態の井上さんに相手にしてもらったのに、お礼も言わずに去ってしまったところ。</li><li>ウ 初対面のはずなのに、女の子は以前から井上さんを知っているかのようにふるまい、親しげに話しかけてきたところ。</li><li>エ 子どもがいるはずのない夜おそくにやってきて、むずかしい謎をいくつも出して井上さんをこまらせてきたところ。</li></ol></div>
+  <p class="accuracy mid">推定正答率 68%（線部直前の場面に固定できるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">場面問題では、線部の時点を固定します。線②の直前では、女の子が突然「手の中のもの、なあんだ？」と話しかけ、井上さんが答えると、女の子は悲しそうな顔をして手を見せ、横をかけぬけていきます。井上さんは、それまで子どもから声をかけられたことがありませんでした。だから、親しみにくい自分に突然話しかけ、答えが当たるとすぐ去ったところを「変わった」と感じたのです。夜の場面を持ち込むエは時点がずれます。</div>
+  <h4>解答</h4>
+  <div class="answer-box">ア</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 親しみにくい井上さんにとつぜん話しかけてきた上、問いかけの答えを当てられると、すぐに去っていったところ。</td><td>本文の「今まで子どもから声をかけられたことなんてなかった」「横をかけぬけていきました」を、選択肢では「親しみにくい井上さんにとつぜん話しかけ」「すぐに去った」とまとめている。<br><strong>【作問者の意図】</strong>線部直前の出来事を場面順に圧縮している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ 急にやってきて、わけもわかっていない状態の井上さんに相手にしてもらったのに、お礼も言わずに去ってしまったところ。</td><td>本文では女の子が急に声をかけ、去っていく。</td><td>【評価の追加】本文に「お礼も言わず」が問題になったとはない。井上さんが「変わった」と感じたのは、親しみにくい自分に話しかけ、答えのあと去ったこと。<br><strong>【作問者の意図】</strong>「去った」という本文事実に「お礼を言わない」という別の評価を混ぜている。</td><td class="judge ng">×</td></tr><tr><td>ウ 初対面のはずなのに、女の子は以前から井上さんを知っているかのようにふるまい、親しげに話しかけてきたところ。</td><td>本文の女の子は親しげに話しかけているように見える。</td><td>【本文にない関係の追加】本文には「以前から知っているかのように」は書かれていない。選択肢は親しさを過剰に解釈している。<br><strong>【作問者の意図】</strong>突然話しかける様子を、知り合いのようなふるまいに言い換えすぎている。</td><td class="judge ng">×</td></tr><tr><td>エ 子どもがいるはずのない夜おそくにやってきて、むずかしい謎をいくつも出して井上さんをこまらせてきたところ。</td><td>後半には夜警員室で女の子と会う場面がある。</td><td>【時点のずれ】線②の「変わった子だな」は最初の校門での出来事の後。選択肢は後の夜の場面を持ち込んでいる。<br><strong>【作問者の意図】</strong>後半の印象的な夜の場面を混ぜ、線部の時点から目をそらしている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">「変わった子だな」と思った時点は、最初に女の子が去った直後です。後半の夜の場面を先取りしません。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>不思議な物語なので、後の出来事を理由にしたくなりますが、線部問題はまず直前直後で場面を固定します。</div>
+  
+<div class="check-card" id="q4-2-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線②「変わった子だな」とありますが、井上さんは女の子のどのようなところを見て、そのように思ったのですか。最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>ア 近寄りがたい井上さんに急に話しかけ、答えを聞くとすぐ走り去ったところ。</li><li>イ 夜中に校内へ入り、いくつもの難しいなぞを出してきたところ。</li><li>ウ 初めから井上さんをよく知っている友だちのようにふるまったところ。</li><li>エ 答えを当ててもらったのに感謝せず帰ったところ。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">ア</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 親しみにくい井上さんにとつぜん話しかけてきた上、問いかけの答えを当てられると、すぐに去っていったところ。</td><td>本文の「今まで子どもから声をかけられたことなんてなかった」「横をかけぬけていきました」を、選択肢では「親しみにくい井上さんにとつぜん話しかけ」「すぐに去った」とまとめている。<br><strong>【作問者の意図】</strong>線部直前の出来事を場面順に圧縮している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ 急にやってきて、わけもわかっていない状態の井上さんに相手にしてもらったのに、お礼も言わずに去ってしまったところ。</td><td>本文では女の子が急に声をかけ、去っていく。</td><td>【評価の追加】本文に「お礼も言わず」が問題になったとはない。井上さんが「変わった」と感じたのは、親しみにくい自分に話しかけ、答えのあと去ったこと。<br><strong>【作問者の意図】</strong>「去った」という本文事実に「お礼を言わない」という別の評価を混ぜている。</td><td class="judge ng">×</td></tr><tr><td>ウ 初対面のはずなのに、女の子は以前から井上さんを知っているかのようにふるまい、親しげに話しかけてきたところ。</td><td>本文の女の子は親しげに話しかけているように見える。</td><td>【本文にない関係の追加】本文には「以前から知っているかのように」は書かれていない。選択肢は親しさを過剰に解釈している。<br><strong>【作問者の意図】</strong>突然話しかける様子を、知り合いのようなふるまいに言い換えすぎている。</td><td class="judge ng">×</td></tr><tr><td>エ 子どもがいるはずのない夜おそくにやってきて、むずかしい謎をいくつも出して井上さんをこまらせてきたところ。</td><td>後半には夜警員室で女の子と会う場面がある。</td><td>【時点のずれ】線②の「変わった子だな」は最初の校門での出来事の後。選択肢は後の夜の場面を持ち込んでいる。<br><strong>【作問者の意図】</strong>後半の印象的な夜の場面を混ぜ、線部の時点から目をそらしている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q4-3">
+  <h3>大問4-問三</h3>
+  <p><span class="label">問題タイプ</span>様子・心情</p>
+  <div class="question-box"><strong>設問文：</strong><br>線③「首をひねりました」とありますが、これは井上さんのどのような様子をあらわしていますか。最もふさわしいものを次の中から選び、記号で答えなさい。<br><ol class="choice-list"><li>ア 女の子が一方的にキャラメルをわたして走り去ったことにおどろき、また、女の子から自分が昔かいだことのある菜の花畑のにおいがすることに疑問を持っている様子。</li><li>イ 女の子がどのようにしてキャラメルを用意したのかということや、女の子が放つどこかなつかしいにおいの正体が何であるかということを考えている様子。</li><li>ウ 女の子をよろこばせたいと思ってはりきっていたが、思うように事が進まなかったことにさみしさを感じ、どこかで安心するにおいの中で心を落ち着かせようとしている様子。</li><li>エ 当たらないだろうと思って答えたものが、女の子の手の中に入っていたことを不思議に思うとともに、どこかでかいだことのある女の子のにおいが気になっている様子。</li></ol></div>
+  <p class="accuracy mid">推定正答率 63%（不思議さとにおいへの疑問を同時に拾えるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">動作表現は、何に対する心の動きかを直前直後から読みます。線③の前後で井上さんは、「わざと当たらないように、キャラメルなんて言ったのに」と考えています。つまり、外したつもりの答えが本当に入っていたことを不思議に思っています。さらに「どこかでかいだことがある」「なつかしいにおい」と、女の子のにおいも気にしています。菜の花だと分かるのは最後なので、アは時点の先取りです。</div>
+  <h4>解答</h4>
+  <div class="answer-box">エ</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 女の子が一方的にキャラメルをわたして走り去ったことにおどろき、また、女の子から自分が昔かいだことのある菜の花畑のにおいがすることに疑問を持っている様子。</td><td>本文の「どこかでかいだことがある」には合う。</td><td>【時点の先取り】線③の時点では「菜の花畑のにおい」とは分かっていない。選択肢は最後で判明する「菜の花」を先に入れている。<br><strong>【作問者の意図】</strong>本文末の「菜の花畑」を使い、線③の時点にない知識を混ぜている。</td><td class="judge ng">×</td></tr><tr><td>イ 女の子がどのようにしてキャラメルを用意したのかということや、女の子が放つどこかなつかしいにおいの正体が何であるかということを考えている様子。</td><td>本文の「どうして当たったんだろう」「どこかでかいだことがある」は、疑問を持つ点で近い。</td><td>【焦点のずれ】本文の中心は「当たらないと思った答えが実際に入っていた」不思議さ。選択肢は「用意のしかた」に寄せている。<br><strong>【作問者の意図】</strong>本文の「どうして当たった」を、物の準備方法の疑問に作り替えている。</td><td class="judge ng">×</td></tr><tr><td>ウ 女の子をよろこばせたいと思ってはりきっていたが、思うように事が進まなかったことにさみしさを感じ、どこかで安心するにおいの中で心を落ち着かせようとしている様子。</td><td>「女の子をよろこばせたい」は後の井上さんの気持ちに近い。</td><td>【時点のずれ】線③の時点は、キャラメルが本当に入っていた直後。女の子を喜ばせようと本格的に考えるのは後である。<br><strong>【作問者の意図】</strong>後半の気持ち「よろこばせたい」を先取りしている。</td><td class="judge ng">×</td></tr><tr><td>エ 当たらないだろうと思って答えたものが、女の子の手の中に入っていたことを不思議に思うとともに、どこかでかいだことのある女の子のにおいが気になっている様子。</td><td>本文の「わざと当たらないように、キャラメルなんて言ったのに」「どこかでかいだことがある」を、選択肢では「当たらないだろうと思って答えたものが入っていた」「においが気になっている」と言い換えている。<br><strong>【作問者の意図】</strong>動作「首をひねる」を、二つの疑問に分解して人物の心情に直している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">「首をひねる」は、疑問・不思議・考え込む動作です。線③の時点で分かっていることだけを使います。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>最後で判明する「菜の花」を、線③の時点に持ち込まないこと。</div>
+  
+<div class="check-card" id="q4-3-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線③「首をひねりました」とありますが、これは井上さんのどのような様子をあらわしていますか。最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>ア 外したつもりの答えが本当に手の中にあり、さらに女の子のなつかしいにおいも気にしている様子。</li><li>イ 女の子がどこでキャラメルを買ったのかだけを知りたがっている様子。</li><li>ウ 菜の花畑のにおいだとはっきり分かり、安心している様子。</li><li>エ 女の子を喜ばせる計画が失敗したので、がっかりしている様子。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">ア</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 外したつもりの答えが本当に手の中にあり、さらに女の子のなつかしいにおいも気にしている様子。</td><td>本文の「わざと当たらないように」「それが入っていた」「なつかしいにおい」を、選択肢では二つの疑問として整理している。<br><strong>【作問者の意図】</strong>線部周辺の二つの不思議さを圧縮している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ 女の子がどこでキャラメルを買ったのかだけを知りたがっている様子。</td><td>キャラメルに関する疑問は本文に近い。</td><td>【焦点の狭めすぎ】本文は「当たったこと」と「におい」の両方。選択肢は買った場所だけにしている。<br><strong>【作問者の意図】</strong>キャラメルという本文語を使い、疑問の対象を狭くしている。</td><td class="judge ng">×</td></tr><tr><td>ウ 菜の花畑のにおいだとはっきり分かり、安心している様子。</td><td>においの話は本文にある。</td><td>【時点の先取り】菜の花だと分かるのは最後。線③ではまだ分からない。<br><strong>【作問者の意図】</strong>結末の情報を線③の時点に持ち込ませる。</td><td class="judge ng">×</td></tr><tr><td>エ 女の子を喜ばせる計画が失敗したので、がっかりしている様子。</td><td>女の子を喜ばせたい気持ちは後に出る。</td><td>【時点のずれ】線③は計画前で、まだ「失敗」ではない。<br><strong>【作問者の意図】</strong>後の計画を先取りして混ぜている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q4-4">
+  <h3>大問4-問四</h3>
+  <p><span class="label">問題タイプ</span>対比表現・心情</p>
+  <div class="question-box"><strong>設問文：</strong><br>線④「冷たいおべん当」、線⑤「口の中であまくとけるキャラメル」とありますが、これらの表現から井上さんについて読みとれることとして、最もふさわしいものを次の中から選び、記号で答えなさい。<br><ol class="choice-list"><li>ア おべん当が冷たくなってしまうほどにきびしい寒さの中、女の子にもらったキャラメルを食べることで夜の見回りもがんばろうと前向きになっているということ。</li><li>イ 今までは人と話す機会も少なく、ひとりさびしく過ごしていた井上さんだが、女の子とのやりとりを通し、人と触れ合う温もりを感じているということ。</li><li>ウ 寒いなか一人で夜警にあたり、さびしさを感じていた井上さんが、自分のためにキャラメルを用意してくれた女の子のやさしさに感動しているということ。</li><li>エ 大人になった今は一人で食事をする日々が続いているが、久しぶりにキャラメルを口にしたことで、子どもの頃を思い出しなつかしさを感じているということ。</li></ol></div>
+  <p class="accuracy mid">推定正答率 55%（物の温度を心情の対比にできるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">対比表現は、物そのものではなく人物の心情を読む手がかりです。「冷たいおべん当」は、夜ひとりで食べる井上さんの孤独さを表します。一方、キャラメルは女の子とのやりとりで受け取ったもので、「口の中であまくとける」温かい味として描かれます。ここでは単に甘いものを食べたのではなく、人との関わりで心が温まることが中心です。エの「なつかしさ」は一部に近いですが、線④と⑤の対比全体を説明するのはイです。</div>
+  <h4>解答</h4>
+  <div class="answer-box">イ</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア おべん当が冷たくなってしまうほどにきびしい寒さの中、女の子にもらったキャラメルを食べることで夜の見回りもがんばろうと前向きになっているということ。</td><td>本文の「冷たいおべん当」「キャラメル」は語として近い。</td><td>【目的の追加】本文の中心は見回りをがんばることではなく、孤独な食事と女の子との交流の温かさの対比。選択肢は結果を「前向きに見回り」に替えている。<br><strong>【作問者の意図】</strong>「寒さ」「夜警」を使い、心の温もりを仕事への意欲にずらしている。</td><td class="judge ng">×</td></tr><tr><td>イ 今までは人と話す機会も少なく、ひとりさびしく過ごしていた井上さんだが、女の子とのやりとりを通し、人と触れ合う温もりを感じているということ。</td><td>本文の「話をしたり、笑い合ったりすることがありませんでした」「冷たいおべん当」「口の中であまくとけるキャラメル」「むねの中まで、ほっこり」を、選択肢では「ひとりさびしく」「人と触れ合う温もり」と言い換えている。<br><strong>【作問者の意図】</strong>物の温度を心情の温度に抽象化している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>ウ 寒いなか一人で夜警にあたり、さびしさを感じていた井上さんが、自分のためにキャラメルを用意してくれた女の子のやさしさに感動しているということ。</td><td>寒さ、一人、キャラメルという要素は本文にある。</td><td>【意図の追加】本文は女の子が「井上さんのために」キャラメルを用意したとは書いていない。選択肢は女の子の意図を足している。<br><strong>【作問者の意図】</strong>「女の子にもらったキャラメル」を使い、用意した目的を本文にない「井上さんのため」にしている。</td><td class="judge ng">×</td></tr><tr><td>エ 大人になった今は一人で食事をする日々が続いているが、久しぶりにキャラメルを口にしたことで、子どもの頃を思い出しなつかしさを感じているということ。</td><td>本文の「キャラメルなんてひさしぶり」「なつかしいにおい」は近い。</td><td>【一部だけの抽出】本文では「冷たいおべん当」と「あまくとけるキャラメル」の対比が重要。選択肢は「なつかしさ」だけに寄せ、人との交流の温もりを落としている。<br><strong>【作問者の意図】</strong>本文の「ひさしぶり」「なつかしい」を使い、対比の中心を懐旧だけに狭めている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">冷たい＝孤独、甘く温まる＝交流の温もり、という対比を読みます。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>キャラメル単体の「ひさしぶり」「なつかしい」だけを見るとエに流れます。二つの線をセットで読みます。</div>
+  
+<div class="check-card" id="q4-4-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線④「冷たいおべん当」、線⑤「口の中であまくとけるキャラメル」から読みとれることとして、最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>ア 寒い夜の仕事を続けるため、甘い物で元気を出しているということ。</li><li>イ ひとりで過ごす寂しさが、女の子とのやりとりによって温かくやわらいでいるということ。</li><li>ウ 女の子が井上さんのために特別にキャラメルを買ったことに感動しているということ。</li><li>エ 久しぶりのキャラメルで、昔の楽しい食事だけを思い出しているということ。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">イ</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア おべん当が冷たくなってしまうほどにきびしい寒さの中、女の子にもらったキャラメルを食べることで夜の見回りもがんばろうと前向きになっているということ。</td><td>本文の「冷たいおべん当」「キャラメル」は語として近い。</td><td>【目的の追加】本文の中心は見回りをがんばることではなく、孤独な食事と女の子との交流の温かさの対比。選択肢は結果を「前向きに見回り」に替えている。<br><strong>【作問者の意図】</strong>「寒さ」「夜警」を使い、心の温もりを仕事への意欲にずらしている。</td><td class="judge ng">×</td></tr><tr><td>イ 今までは人と話す機会も少なく、ひとりさびしく過ごしていた井上さんだが、女の子とのやりとりを通し、人と触れ合う温もりを感じているということ。</td><td>本文の「話をしたり、笑い合ったりすることがありませんでした」「冷たいおべん当」「口の中であまくとけるキャラメル」「むねの中まで、ほっこり」を、選択肢では「ひとりさびしく」「人と触れ合う温もり」と言い換えている。<br><strong>【作問者の意図】</strong>物の温度を心情の温度に抽象化している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>ウ 寒いなか一人で夜警にあたり、さびしさを感じていた井上さんが、自分のためにキャラメルを用意してくれた女の子のやさしさに感動しているということ。</td><td>寒さ、一人、キャラメルという要素は本文にある。</td><td>【意図の追加】本文は女の子が「井上さんのために」キャラメルを用意したとは書いていない。選択肢は女の子の意図を足している。<br><strong>【作問者の意図】</strong>「女の子にもらったキャラメル」を使い、用意した目的を本文にない「井上さんのため」にしている。</td><td class="judge ng">×</td></tr><tr><td>エ 大人になった今は一人で食事をする日々が続いているが、久しぶりにキャラメルを口にしたことで、子どもの頃を思い出しなつかしさを感じているということ。</td><td>本文の「キャラメルなんてひさしぶり」「なつかしいにおい」は近い。</td><td>【一部だけの抽出】本文では「冷たいおべん当」と「あまくとけるキャラメル」の対比が重要。選択肢は「なつかしさ」だけに寄せ、人との交流の温もりを落としている。<br><strong>【作問者の意図】</strong>本文の「ひさしぶり」「なつかしい」を使い、対比の中心を懐旧だけに狭めている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q4-5">
+  <h3>大問4-問五</h3>
+  <p><span class="label">問題タイプ</span>理由選択</p>
+  <div class="question-box"><strong>設問文：</strong><br>線⑥「なかなかねむれませんでした」とありますが、それはなぜですか。最もふさわしいものを次の中から選び、記号で答えなさい。<br><ol class="choice-list"><li>ア 当たらない答えを言ってほしいという女の子の期待にこたえられなかったので、申し訳ない気持ちでいっぱいだったから。</li><li>イ 女の子を満足させることのできる答えをやっと思いついたので、女の子に会うことが待ちきれなくなっていたから。</li><li>ウ 次こそは女の子に残念な顔をさせなくてすむように、とっておきの答えを用意しようと考えをめぐらせていたから。</li><li>エ 女の子がスミレを持っていたことや、女の子がどうしてスミレのにおいがするのかが気になって仕方がなかったから。</li></ol></div>
+  <p class="accuracy mid">推定正答率 70%（直前の行動計画を理由にできるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">理由問題は、線部の直前にある行動計画を探します。井上さんは「よし、あしたは、ぜったいに当たらない答えを言ってやろう」と考えています。答えが当たると女の子が残念そうな顔をするので、次は残念にさせない答えを用意したいのです。そのため「なかなかねむれませんでした」の直接の理由は、とっておきの当たらない答えを考え続けていたからです。翌日の「うきうき」はありますが、線⑥の夜の直接理由ではありません。</div>
+  <h4>解答</h4>
+  <div class="answer-box">ウ</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 当たらない答えを言ってほしいという女の子の期待にこたえられなかったので、申し訳ない気持ちでいっぱいだったから。</td><td>本文の「悪いことしたな」「悲しそうな顔」は、申し訳なさに近い。</td><td>【原因のずれ】眠れない直接の原因は「ぜったいに当たらない答えを言ってやろう」「いろいろ考えて」いること。選択肢は申し訳なさだけを原因にしている。<br><strong>【作問者の意図】</strong>本文の「悪いことしたな」を使い、直後の「答えを考える」を落としている。</td><td class="judge ng">×</td></tr><tr><td>イ 女の子を満足させることのできる答えをやっと思いついたので、女の子に会うことが待ちきれなくなっていたから。</td><td>本文には翌日「うきうきして」学校へ入る場面がある。</td><td>【時点のずれ】「うきうき」は翌日の朝の気持ち。線⑥の夜は、答えを「いろいろ考えて」眠れない場面で、まだ「やっと思いついた」とは言えない。<br><strong>【作問者の意図】</strong>翌日の期待を、前夜に眠れない直接理由へ移している。</td><td class="judge ng">×</td></tr><tr><td>ウ 次こそは女の子に残念な顔をさせなくてすむように、とっておきの答えを用意しようと考えをめぐらせていたから。</td><td>本文の「よし、あしたは、ぜったいに当たらない答えを言ってやろう」「いろいろ考えて」を、選択肢では「残念な顔をさせなくてすむように」「答えを用意」と言い換えている。<br><strong>【作問者の意図】</strong>本文の行動計画を、目的まで補って理由文にしている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>エ 女の子がスミレを持っていたことや、女の子がどうしてスミレのにおいがするのかが気になって仕方がなかったから。</td><td>本文には「スミレ」やにおいの不思議が出る。</td><td>【原因のすり替え】本文で眠れない理由として続くのは「当たらない答え」を考えること。選択肢は気になる対象を「スミレ」「におい」に替えている。<br><strong>【作問者の意図】</strong>直前に印象的な「スミレ」を使い、問われている理由から外している。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">線⑥の前にある「ぜったいに当たらない答え」を必ず根拠にします。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「悪いことしたな」や「スミレのにおい」も本文にありますが、眠れない直接の理由は答えを考えたことです。</div>
+  
+<div class="check-card" id="q4-5-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線⑥「なかなかねむれませんでした」とありますが、それはなぜですか。最もふさわしいものを選びなさい。</div>
+  <ol class="choice-list"><li>ア 女の子をがっかりさせないよう、今度こそ外れる答えを考え続けていたから。</li><li>イ スミレのにおいの正体をどうしても知りたくなったから。</li><li>ウ 女の子に会う約束をしていたので、楽しみすぎて眠れなかったから。</li><li>エ 女の子に悪いことをしたと思い、謝る言葉だけを考えていたから。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">ア</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア 女の子をがっかりさせないよう、今度こそ外れる答えを考え続けていたから。</td><td>本文の「ぜったいに当たらない答え」「いろいろ考えて」を、選択肢では「外れる答えを考え続ける」と言い換えている。<br><strong>【作問者の意図】</strong>本文の理由を短く因果化している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ スミレのにおいの正体をどうしても知りたくなったから。</td><td>本文に「スミレ」とにおいは出る。</td><td>【原因のすり替え】眠れない理由は答えを考えたこと。選択肢はにおいを原因にしている。<br><strong>【作問者の意図】</strong>印象的な「スミレ」を混ぜ、直接理由からそらす。</td><td class="judge ng">×</td></tr><tr><td>ウ 女の子に会う約束をしていたので、楽しみすぎて眠れなかったから。</td><td>翌日の期待の気持ちは本文にある。</td><td>【本文にない条件の追加】約束はしていない。線⑥の夜は答えを考えている。<br><strong>【作問者の意図】</strong>期待を「約束」に強めている。</td><td class="judge ng">×</td></tr><tr><td>エ 女の子に悪いことをしたと思い、謝る言葉だけを考えていたから。</td><td>「悪いことしたな」は本文にある。</td><td>【目的のずれ】考えているのは謝罪ではなく「当たらない答え」。<br><strong>【作問者の意図】</strong>申し訳なさを使い、次の行動計画を消している。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+<article class="q-card" id="q4-6">
+  <h3>大問4-問六</h3>
+  <p><span class="label">問題タイプ</span>記述・心情説明</p>
+  <div class="question-box"><strong>設問文：</strong><br>線⑦「『やあ。』と言ってしまいました」とありますが、このときの井上さんの気持ちを説明しなさい。</div>
+  <p class="accuracy mid">推定正答率 48%（夜警員としての立場と本心のズレを書けるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">記述では、線部の言動と、その言動に反する立場を両方拾います。線⑦の直前には「本当なら、『今ごろ、こんなところで、何してるんだ、早く帰りなさい』と言わなければならないところです」とあります。つまり、夜警員としては女の子を注意すべき場面です。しかし井上さんは、それまで「ぜったいに当たらない答え」を考え、女の子を喜ばせるのを楽しみにしていました。女の子がなかなか現れず、あきらめかけたところで会えたため、注意よりもうれしさが先に出て「やあ」と言ってしまったのです。</div>
+  <h4>解答</h4>
+  <div class="answer-box">女の子の質問に、ぜったいに当たらない答えを返してよろこばせるのを楽しみにしていた。ところが、なかなか女の子があらわれずあきらめかけていたので、女の子と会えたことをうれしく思った。そのため、本来は注意する立場でありながらも、つい親しげに「やあ」と言ってしまった気持ち。</div>
+  <h4>文末設計</h4><div class="detail-box">「楽しみにしていた」「会えてうれしかった」「注意すべき立場なのに親しげに声をかけた」の三つに分けると、長い答案でも読みやすくなります。</div><h4>採点基準</h4><div class="table-wrap"><table class="basic-table"><thead><tr><th>観点</th><th>内容</th></tr></thead><tbody><tr><td>期待</td><td>絶対に当たらない答えで女の子を喜ばせたいと思っていた。</td></tr><tr><td>落胆から喜び</td><td>女の子が現れず、あきらめかけたところで会えた。</td></tr><tr><td>立場とのズレ</td><td>本来は注意すべき夜警員なのに、うれしさから親しげに言った。</td></tr></tbody></table></div><h4>正解の幅3パターン</h4><div class="table-wrap"><table class="basic-table"><thead><tr><th>型</th><th>答案例</th></tr></thead><tbody><tr><td>標準</td><td>女の子を喜ばせる答えを用意して待っていたのに、なかなか会えずあきらめかけていたため、会えたことがうれしく、注意する立場を忘れて親しげに声をかけた気持ち。</td></tr><tr><td>複数文</td><td>井上さんは、女の子に当たらない答えを言って喜ばせたいと思っていた。女の子が現れず残念に思っていたところで会えたので、夜警員として注意しなければならないのに、うれしくて「やあ」と言ってしまった。</td></tr><tr><td>短め</td><td>女の子に会えてうれしく、用意した答えを言うのを楽しみにするあまり、注意すべき立場を忘れて親しげに声をかけた気持ち。</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">「会えたうれしさ」だけで終わらず、「本来なら注意すべき」という対比を入れると答案の中心がそろいます。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>「夜に子どもがいて驚いた」だけでは不足です。楽しみ・あきらめかけ・会えたうれしさ・立場のズレを入れます。</div>
+  
+</article>
+
+<article class="q-card" id="q4-7">
+  <h3>大問4-問七</h3>
+  <p><span class="label">問題タイプ</span>複数選択・心情</p>
+  <div class="question-box"><strong>設問文：</strong><br>線⑧「にっこり笑いました」とありますが、このときの井上さんはどのような気持ちでいると考えられますか。あてはまるものを次の中からすべて選び、記号で答えなさい。<br><ol class="choice-list"><li>ア すぐに去っていった女の子の様子から、自分の答えに満足して帰ったのだと思い、夜警員として安心している。</li><li>イ ずっと気になっていた女の子のにおいの正体が菜の花であることを思い出せて、すっきりとした気分になっている。</li><li>ウ 話すのが苦手な自分が女の子と仲よくなれたので、今後はほかの子どもたちとうまく交流できるだろうと期待している。</li><li>エ 女の子が実際に春を感じさせるものを見せてくれたので、答えを当てられてうれしいよりむしろ恥ずかしいと思っている。</li><li>オ 女の子との心温まる交流を通して、ひとりで過ごしてきた井上さんの孤独がいやされ、なごやかな気持ちになっている。</li></ol></div>
+  <p class="accuracy mid">推定正答率 57%（においの解決と心の温まりを両方選べるか）</p>
+  <h4>思考プロセス＋解説</h4>
+  <div class="detail-box">複数選択では、根拠の種類を分けて考えます。最後の場面で、井上さんは中庭の菜の花を見て「菜の花畑のにおいだったんだ」と気づきます。これまで気になっていた女の子のにおいの正体が分かったので、イが合います。また、物語の初めの井上さんは人と話さず一人で過ごす人でしたが、女の子とのキャラメル、スミレ、春のやりとりを通して心が温まっています。最後の「にっこり」は怖さや恥ずかしさではなく、孤独がいやされるなごやかな笑いなので、オも合います。</div>
+  <h4>解答</h4>
+  <div class="answer-box">イ・オ</div>
+  <h4>選択肢ごとの照合結果</h4>
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア すぐに去っていった女の子の様子から、自分の答えに満足して帰ったのだと思い、夜警員として安心している。</td><td>女の子が去る場面は本文にある。</td><td>【心情のすり替え】線⑧の直前は「菜の花畑のにおいだったんだ」と気づく場面。選択肢は夜警員としての安心にしている。<br><strong>【作問者の意図】</strong>「女の子が去る」という事実を使い、笑いの理由を職務上の安心にずらしている。</td><td class="judge ng">×</td></tr><tr><td>イ ずっと気になっていた女の子のにおいの正体が菜の花であることを思い出せて、すっきりとした気分になっている。</td><td>本文の「菜の花畑のにおいだったんだ」を、選択肢では「においの正体が菜の花であることを思い出せて」と言い換えている。<br><strong>【作問者の意図】</strong>線③から続いたにおいの謎を、結末の気づきとしてまとめている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>ウ 話すのが苦手な自分が女の子と仲よくなれたので、今後はほかの子どもたちとうまく交流できるだろうと期待している。</td><td>本文ではほかの子どもが「さようなら」と声をかける場面があり、人との関わりは少し広がる。</td><td>【未来の追加】本文は今後ほかの子どもとうまく交流できる期待までは書いていない。線⑧の笑いは、菜の花の気づきと女の子との交流に向いている。<br><strong>【作問者の意図】</strong>人との関わりの変化を使い、本文にない将来予想を足している。</td><td class="judge ng">×</td></tr><tr><td>エ 女の子が実際に春を感じさせるものを見せてくれたので、答えを当てられてうれしいよりむしろ恥ずかしいと思っている。</td><td>「春」という答えと「菜の花」の場面は本文にある。</td><td>【心情のすり替え】本文は「にっこり笑いました」で、恥ずかしさはない。選択肢は「春」を使いながら、笑いの感情を恥ずかしさに変えている。<br><strong>【作問者の意図】</strong>「春」を当てた場面を使い、気持ちを本文にない「恥ずかしい」に替えている。</td><td class="judge ng">×</td></tr><tr><td>オ 女の子との心温まる交流を通して、ひとりで過ごしてきた井上さんの孤独がいやされ、なごやかな気持ちになっている。</td><td>本文の「冷たいおべん当」から「ほっこり温まる味」、最後の「にっこり笑いました」への流れを、選択肢では「孤独がいやされ、なごやかな気持ち」と言い換えている。<br><strong>【作問者の意図】</strong>物語全体の心情変化を抽象語でまとめている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr></tbody></table></div>
+  <h4>答案チェック</h4>
+  <div class="detail-box">「すべて選び」なので一つで止めません。においの謎の解決＝イ、心の温まり＝オを両方選びます。</div>
+  <div class="pitfall"><strong>間違えやすい点：</strong>不思議な結末を「こわい」「恥ずかしい」と読まず、井上さんの笑いの質を本文全体の変化から判断します。</div>
+  
+<div class="check-card" id="q4-7-test">
+  <h4>理解確認テスト</h4>
+  <div class="question-box"><strong>設問文：</strong><br>線⑧「にっこり笑いました」とありますが、このときの井上さんはどのような気持ちでいると考えられますか。あてはまるものをすべて選びなさい。</div>
+  <ol class="choice-list"><li>ア ずっと気になっていたにおいが菜の花だと分かり、胸のつかえが取れた気持ち。</li><li>イ 女の子を校内から帰らせることができ、夜警員として仕事を終えた安心感。</li><li>ウ 女の子とのやさしいやりとりで、ひとりきりだった心がやわらいだ気持ち。</li><li>エ 答えがまた当たってしまったので、女の子にからかわれたと思う気持ち。</li></ol>
+  <details>
+    <summary>解答・解説を表示</summary>
+    <h4>解答</h4>
+    <div class="answer-box">ア・ウ</div>
+    <h4>選択肢ごとの照合結果</h4>
+    
+<div class="table-wrap"><table class="choice-table">
+<colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+<thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+<tbody><tr><td>ア ずっと気になっていたにおいが菜の花だと分かり、胸のつかえが取れた気持ち。</td><td>本文の「菜の花畑のにおいだったんだ」を、選択肢では「においが菜の花だと分かる」と言い換えている。<br><strong>【作問者の意図】</strong>結末の謎解きを心情語にしている。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>イ 女の子を校内から帰らせることができ、夜警員として仕事を終えた安心感。</td><td>女の子が帰る場面はある。</td><td>【心情のすり替え】笑いは職務の安心ではなく、においの気づきと交流の温かさから来る。<br><strong>【作問者の意図】</strong>夜警員という立場を使い、心情を職務面へずらしている。</td><td class="judge ng">×</td></tr><tr><td>ウ 女の子とのやさしいやりとりで、ひとりきりだった心がやわらいだ気持ち。</td><td>本文の孤独な出発点と「ほっこり」「にっこり」を、選択肢では「心がやわらいだ」とまとめている。<br><strong>【作問者の意図】</strong>物語全体の変化を抽象化している。</td><td>不一致なし。</td><td class="judge ok">○</td></tr><tr><td>エ 答えがまた当たってしまったので、女の子にからかわれたと思う気持ち。</td><td>答えが当たる不思議さは本文にある。</td><td>【感情のすり替え】本文に「からかわれた」という不快感はない。最後はなごやかな笑いである。<br><strong>【作問者の意図】</strong>不思議な出来事を利用し、温かな交流を疑いに変えている。</td><td class="judge ng">×</td></tr></tbody></table></div>
+  </details>
+</div>
+
+</article>
+
+</section>
+<section id="answers"><h2>最終答案一覧</h2>
+<div class="table-wrap"><table class="final-table"><thead><tr><th>大問</th><th>問</th><th>最終答案</th></tr></thead><tbody><tr><td>3</td><td>問一</td><td>A＝ウ、B＝エ、C＝イ</td></tr><tr><td>3</td><td>問二</td><td>a＝ア、b＝イ</td></tr><tr><td>3</td><td>問三</td><td>(1) エ　(2) 多くの個体がいることでエサを見つけやすくなる。また、多くのオスとメスが集まれば、繁殖をする機会が増え、種として子孫を残すことができる。</td></tr><tr><td>3</td><td>問四</td><td>ア</td></tr><tr><td>3</td><td>問五</td><td>自分の食べる分が減って</td></tr><tr><td>3</td><td>問六</td><td>ア＝×、イ＝×、ウ＝○、エ＝×、オ＝○</td></tr><tr><td>4</td><td>問一</td><td>イ</td></tr><tr><td>4</td><td>問二</td><td>ア</td></tr><tr><td>4</td><td>問三</td><td>エ</td></tr><tr><td>4</td><td>問四</td><td>イ</td></tr><tr><td>4</td><td>問五</td><td>ウ</td></tr><tr><td>4</td><td>問六</td><td>女の子の質問に、ぜったいに当たらない答えを返してよろこばせるのを楽しみにしていた。ところが、なかなか女の子があらわれずあきらめかけていたので、女の子と会えたことをうれしく思った。そのため、本来は注意する立場でありながらも、つい親しげに「やあ」と言ってしまった気持ち。</td></tr><tr><td>4</td><td>問七</td><td>イ・オ</td></tr></tbody></table></div>
+</section>
+<section id="summary"><h2>今回の学習まとめ</h2><h3>再現したい手順</h3><div class="summary-grid"><div class="summary-card">説明文は、問い・答え・反面・具体例を分ける。</div><div class="summary-card">物語文は、線部の時点を固定し、前後の動作を心情に変換する。</div><div class="summary-card">選択肢は、本文語があるかではなく、主語・原因・時点・結論が同じかを見る。</div></div><h3>間違えやすい点</h3><div class="card">大問3では、本文に出た語を使った誤答に注意します。「メスをめぐる」を「メスどうし」、「逃げる」を「戦う」に変えた選択肢が典型です。大問4では、後の場面や結末で分かったことを、線部時点に持ち込まないことが重要です。</div><h3>次に同タイプで使う塾技</h3><div class="card">説明文では「問い→答え」「メリット→デメリット」「具体例→まとめ」を線で分ける。物語文では「人物像の出発点」「気持ちの変化」「本心とずれる言動」を押さえる。</div><h3>問ごとの塾技活用まとめ</h3>
+<div class="table-wrap"><table class="basic-table"><thead><tr><th>大問・問</th><th>使った読み方</th><th>次回の再現ポイント</th></tr></thead><tbody><tr><td>3-問一</td><td>接続語の前後関係</td><td>追加・転換・例示を空欄ごとに名づける。</td></tr><tr><td>3-問二</td><td>語句の置換</td><td>前後文に入れて自然な意味を選ぶ。</td></tr><tr><td>3-問三</td><td>列挙整理</td><td>メリットを重複なく分ける。</td></tr><tr><td>3-問四</td><td>指示語の受け先</td><td>直前の説明全体に戻す。</td></tr><tr><td>3-問五</td><td>抜き出し差し込み</td><td>□に入れて文が自然か確認する。</td></tr><tr><td>3-問六</td><td>内容一致</td><td>主語・条件・強さの違いを見る。</td></tr><tr><td>4-問一</td><td>人物像の言い換え</td><td>外見＋交流の少なさを人物像にする。</td></tr><tr><td>4-問二</td><td>場面固定</td><td>線部直前の出来事だけで判断する。</td></tr><tr><td>4-問三</td><td>動作→心情</td><td>首をひねる理由を二つ拾う。</td></tr><tr><td>4-問四</td><td>対比表現</td><td>物の温度を心の温度に読む。</td></tr><tr><td>4-問五</td><td>理由の直前確認</td><td>眠れない直前の計画を根拠にする。</td></tr><tr><td>4-問六</td><td>本心と立場のズレ</td><td>注意すべき立場と会えてうれしい本心を両方書く。</td></tr><tr><td>4-問七</td><td>複数根拠</td><td>においの解決と心の温まりを両方選ぶ。</td></tr></tbody></table></div>
+<h3>記述の書き方ミニまとめ</h3><div class="card">記述は一文に詰め込まなくてよいです。大問3問三(2)は「エサ」と「繁殖」を二文でつなぎ、大問4問六は「楽しみにしていた」「会えてうれしい」「注意すべきなのに親しげに言った」の三段に分けると、採点要素が落ちにくくなります。</div></section>
+</main></body></html>
