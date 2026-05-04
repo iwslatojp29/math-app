@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>42A-10_国語A_コトノハ「こいのぼりを見上げて」HTML解答解説</title>
+<style>
+:root {
+  --ink:#20242a;
+  --muted:#657080;
+  --paper:#ffffff;
+  --bg:#f5f7fb;
+  --line:#d9e1ee;
+  --blue:#e8f1ff;
+  --blue2:#3666d6;
+  --green:#e9f7ee;
+  --green2:#2d8f57;
+  --yellow:#fff7d9;
+  --yellow2:#c48a00;
+  --pink:#fff0f4;
+  --pink2:#c43c69;
+  --violet:#f2eeff;
+  --violet2:#7554d6;
+  --red:#fff1ee;
+  --red2:#cf4b37;
+  --shadow:0 16px 40px rgba(22,34,51,.10);
+  --radius:18px;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.75;
+  color:var(--ink);
+  background:linear-gradient(180deg,#eef3fb 0,#f7f8fb 280px,#f7f8fb 100%);
+}
+a { color:var(--blue2); text-decoration:none; }
+.top-panel {
+  position:sticky;
+  top:0;
+  z-index:10;
+  max-height:40vh;
+  overflow-y:auto;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(10px);
+  box-shadow:0 8px 24px rgba(23,35,52,.08);
+}
+.nav-wrap {
+  max-width:1180px;
+  margin:0 auto;
+  padding:10px 18px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.nav-title { font-weight:800; margin-right:4px; white-space:nowrap; }
+.btn, .nav-link {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:#263241;
+  font-weight:700;
+  font-size:13px;
+  box-shadow:0 2px 8px rgba(26,38,55,.04);
+}
+.btn { cursor:pointer; background:#263241; color:white; border-color:#263241; }
+main { max-width:1180px; margin:28px auto 64px; padding:0 18px; }
+.hero {
+  background:linear-gradient(135deg,#ffffff 0,#f3f7ff 100%);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:26px;
+  box-shadow:var(--shadow);
+}
+h1 { margin:0 0 12px; font-size:clamp(24px,3vw,38px); line-height:1.25; letter-spacing:.01em; }
+.badges, .pills { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 0; }
+.badge, .pill {
+  display:inline-flex;
+  padding:5px 10px;
+  border-radius:999px;
+  background:var(--blue);
+  color:#1f4fae;
+  font-size:13px;
+  font-weight:800;
+}
+.pill { background:#fff; border:1px solid var(--line); color:#2f3a4b; }
+.section { margin-top:28px; }
+.card, .diagnosis-card, .q-card, .summary-card {
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.card + .card, .diagnosis-card + .diagnosis-card { margin-top:16px; }
+h2 { margin:0 0 18px; font-size:26px; border-left:8px solid var(--blue2); padding-left:12px; }
+h3 { margin:20px 0 10px; font-size:20px; }
+h4 { margin:18px 0 8px; font-size:17px; }
+.small { color:var(--muted); font-size:13px; }
+.lead { font-size:17px; }
+.grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.info-list { margin:0; padding-left:1.2em; }
+.info-list li { margin:4px 0; }
+.legend { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.legend span { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:#fff; border:1px solid var(--line); font-size:13px; font-weight:700; }
+.swatch { width:16px; height:8px; border-radius:8px; display:inline-block; }
+.swatch.emotion { background:var(--pink2); }
+.swatch.trigger { background:var(--yellow2); }
+.swatch.scene { background:var(--blue2); }
+.swatch.result { background:var(--green2); }
+.swatch.keyword { background:var(--violet2); }
+.text-block {
+  background:#fbfcff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px 18px;
+}
+.quote { margin:10px 0; padding:10px 12px; background:#fff; border-left:5px solid var(--line); border-radius:10px; }
+.note { margin:10px 0 0; padding:10px 12px; background:var(--yellow); border:1px solid #f2df9b; border-radius:12px; color:#5e4700; }
+.ln { display:inline-block; min-width:42px; color:#7b8797; font-weight:800; }
+.emotion { background:linear-gradient(transparent 58%, rgba(196,60,105,.28) 0); }
+.trigger { background:linear-gradient(transparent 58%, rgba(196,138,0,.30) 0); }
+.scene { background:linear-gradient(transparent 58%, rgba(54,102,214,.22) 0); }
+.result { background:linear-gradient(transparent 58%, rgba(45,143,87,.24) 0); }
+.keyword { background:linear-gradient(transparent 58%, rgba(117,84,214,.22) 0); }
+.q-card { margin-top:22px; }
+.q-head { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:14px; }
+.q-title { font-size:23px; font-weight:900; }
+.type { display:inline-flex; padding:6px 10px; border-radius:999px; background:var(--violet); color:#563bbb; font-weight:900; font-size:13px; }
+.rate { display:inline-block; margin:10px 0; padding:8px 12px; border-radius:12px; background:var(--green); color:#1d6f43; font-weight:900; }
+.question-box { background:#f8fbff; border:1px solid var(--line); border-radius:14px; padding:14px; margin:10px 0; }
+.options { margin:8px 0 0; padding-left:0; list-style:none; display:grid; gap:6px; }
+.options li { padding:8px 10px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+.answer-box { margin:12px 0; padding:14px 16px; border-radius:14px; background:var(--green); border:1px solid #bfe7cd; font-weight:900; color:#185b36; }
+.process { background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; }
+.table-wrap { overflow-x:auto; margin:12px 0 4px; }
+table { border-collapse:collapse; width:100%; min-width:900px; background:#fff; }
+th,td { border:1px solid var(--line); padding:10px 11px; vertical-align:top; }
+th { background:#f0f4fb; text-align:left; font-size:13px; }
+.choice-table col.choice { width:22%; }
+.choice-table col.match { width:34%; }
+.choice-table col.mismatch { width:34%; }
+.choice-table col.judge { width:10%; }
+.judge-ok { color:#167246; font-weight:900; }
+.judge-ng { color:#b13b2d; font-weight:900; }
+.mini-label { display:inline-block; padding:2px 7px; border-radius:999px; background:#eef3fb; color:#37465a; font-size:12px; font-weight:900; }
+.pitfall { margin-top:14px; padding:13px 15px; background:var(--red); border:1px solid #efc1b9; border-radius:14px; color:#743126; }
+.test { margin-top:16px; border:1px dashed #b7c3d6; border-radius:16px; padding:14px; background:#fcfdff; }
+details { margin-top:12px; }
+summary { cursor:pointer; font-weight:900; color:#1f4fae; padding:8px 0; }
+.final-table { min-width:620px; }
+.footer-note { margin-top:24px; color:var(--muted); font-size:12px; }
+@media (max-width:760px) {
+  .grid-2 { grid-template-columns:1fr; }
+  .nav-wrap { align-items:flex-start; }
+  main { margin-top:18px; }
+  .hero { padding:20px; }
+}
+@page { size:A4 portrait; margin:14mm; }
+@media print {
+  body { background:#fff; color:#111; font-size:11.5pt; }
+  .top-panel { display:none; }
+  main { max-width:none; margin:0; padding:0; }
+  .hero, .card, .diagnosis-card, .q-card, .summary-card { box-shadow:none; border-color:#ccd3dd; break-inside:avoid; page-break-inside:avoid; }
+  .section { break-inside:auto; }
+  .q-card, .summary-card, .test { break-inside:avoid; page-break-inside:avoid; }
+  a { color:#111; }
+  details { display:block; }
+  details[open] { display:block; }
+  summary { color:#111; }
+}
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<header class="top-panel">
+  <nav class="nav-wrap" aria-label="ページ内ナビゲーション">
+    <span class="nav-title">42A-10 問三・問四</span>
+    <button class="btn" onclick="window.print()">PDF出力</button>
+    <a class="nav-link" href="#diagnosis">本文の読み方診断</a>
+    <a class="nav-link" href="#daimon1">読解演習へ</a>
+    <a class="nav-link" href="#q3">問三へ</a>
+    <a class="nav-link" href="#q4">問四へ</a>
+    <a class="nav-link" href="#final">最終答案一覧</a>
+    <a class="nav-link" href="#summary">今回の学習まとめ</a>
+  </nav>
+</header>
+<main>
+  <section class="hero" id="top">
+    <h1>42A-10_国語A_コトノハ「こいのぼりを見上げて」HTML解答解説</h1>
+    <p class="lead">対象：PDF内の読解演習 問三・問四。本文と設問を照合し、添付の解答・解説で最終確認しています。</p>
+    <div class="badges">
+      <span class="badge">文章ジャンル：物語文</span>
+      <span class="badge">対象設問：問三・問四</span>
+      <span class="badge">設問タイプ：選択肢照合</span>
+      <span class="badge">A4縦PDF出力対応</span>
+    </div>
+    <div class="pills">
+      <a class="pill" href="#diagnosis">本文の読み方診断</a>
+      <a class="pill" href="#q3">問三</a>
+      <a class="pill" href="#q4">問四</a>
+      <a class="pill" href="#final">最終答案一覧</a>
+      <a class="pill" href="#summary">今回の学習まとめ</a>
+    </div>
+  </section>
+
+  <section class="section" id="diagnosis">
+    <h2>本文の読み方診断</h2>
+    <div class="grid-2">
+      <div class="diagnosis-card">
+        <h3>文章全体の主題・流れ</h3>
+        <p>一平は、母ちゃんの行動を「はずかしい」と見ているところから始まります。しかし、和枝ちゃんのママが倒れそうになった場面で、母ちゃんは迷わず助けに入り、親が子どものために自分を忘れる気持ちを語ります。ここで一平の見方は、はずかしさから、母ちゃんの愛情と頼もしさを受け止める方向へ変わります。</p>
+      </div>
+      <div class="diagnosis-card">
+        <h3>読みの勝負所</h3>
+        <p>問三は、線②の一般論を和枝ちゃんのママの具体的行動へ戻す問題です。問四は、線③の「いいかえすのをやめた」を、単なるあきらめではなく、直前の「しんけんな顔」と「いのちをなげだしてもおしくない」という言葉から読む問題です。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="daimon1">
+    <h2>読解演習</h2>
+    <div class="card">
+      <h3>文章ジャンル・設問タイプ</h3>
+      <ul class="info-list">
+        <li>文章ジャンル：物語文。人物の行動から心情変化を読む文章。</li>
+        <li>問三：選択肢問題。線②の一般論を、和枝ちゃんのママの具体的行動にあてはめる。</li>
+        <li>問四：選択肢問題。線③の行動理由を、直前の母ちゃんの言葉と一平の心情変化から判断する。</li>
+      </ul>
+      <h3>文章の主題・流れ</h3>
+      <p>「はずかしい母ちゃん」から「頼もしく、愛情深い母ちゃん」へ、一平の見方が変わる流れを追います。問三・問四では、事件そのものよりも、母ちゃんの言葉を一平がどう受け止めたかが中心です。</p>
+      <h3>本文の要約</h3>
+      <p>一平は、タクシー運転手の母ちゃんを、女らしくなく、すぐ人に文句を言い、他人のことにも夢中になる人として恥ずかしく思っている。そのため授業参観の知らせも隠したいが、見つかってしまい、母ちゃんは仕事の途中で制服のまま教室に来る。授業中、和枝ちゃんの母が心臓の具合を悪くして倒れそうになり、母ちゃんは周囲があわてる中ですばやく抱きかかえ、自分のタクシーで病院へ運ぶ。和枝ちゃんの母が病院から無理をして参観に来たことを聞き、母ちゃんは「親は子どものためには自分のことを忘れる」と語る。さらに一平のためなら命も惜しくないと真剣に言うので、一平は言い返せず、母ちゃんの本当の愛情を受け取り、たまらなく好きだと感じる。病院のあとで母ちゃんに甘えようとする一平は、以前とは違って母ちゃんを受け入れ始めている。最後に先生や友人も母ちゃんの明るさと頼もしさを認め、一平の恥ずかしさは、母ちゃんを誇らしく思う気持ちへ近づいていく。</p>
+      <h3>本文文字数</h3>
+      <p>本文再現範囲：約1,600字。問三・問四の根拠に関係する前後場面を中心に再現しています。</p>
+      <h3>この大問で使う線の凡例・線の引き方</h3>
+      <div class="legend">
+        <span><i class="swatch scene"></i>場面線：だれが、どこで、何をしているか</span>
+        <span><i class="swatch trigger"></i>変化のきっかけ線：心情が変わる直前の言葉・出来事</span>
+        <span><i class="swatch emotion"></i>心情線：人物の気持ちを直接示す語</span>
+        <span><i class="swatch result"></i>結果線：出来事の結果・評価</span>
+        <span><i class="swatch keyword"></i>キーワード線：設問の中心語</span>
+      </div>
+      <h3>本文の線引き再現</h3>
+      <div class="text-block">
+        <p class="quote"><span class="ln">6頁</span>「授業がはじまっても母ちゃんのすがたが見えないので安心していたら、いきなり教室のまえのドアがあいて母ちゃんがとびこんできた。」<span class="emotion">ぼくはおもわずうつむいてしまった。</span></p>
+        <p class="quote"><span class="ln">15行目前後</span><span class="scene">教室のうしろがきゅうにざわめいた。</span>みどり先生が教壇からかけおりてきた。立ちあがってふりむいたら、だれかの母ちゃんが青い顔で、いまにもたおれそうにゆれている。</p>
+        <p class="quote"><span class="ln">17-23行目</span>和枝ちゃんが「ママ……」と声をあげる。ぼくの母ちゃんは走ってきて、和枝ちゃんのママをだきかえ、「わたしの車で病院にはこびます」と言う。和枝ちゃんは「<span class="keyword">ママ、病院からきたの。きょうは気分がいいからって</span>」と言う。</p>
+        <p class="quote"><span class="ln">7頁</span>母ちゃんは仕事中に学校へ来ており、和枝ちゃんのママをタクシーへ乗せる。「<span class="scene">だいじょうぶ、わたしたちにまかせてください</span>」と言って、和枝ちゃんをママの横に、ぼくを運転席の横に座らせる。</p>
+        <p class="quote"><span class="ln">10-20行目</span>和枝ちゃんのママは「<span class="keyword">わたし心ぞうのぐあいがわるくて……</span>」と言う。母ちゃんは「<span class="trigger">一平、だれの母ちゃんだって子どものためには、じぶんのことをわすれてしまうんだよ。それが親というもんだ</span>」と言う。さらに「<span class="trigger">一平のためなら、いのちをなげだしてもおしくない</span>」と言う。</p>
+        <p class="quote"><span class="ln">20行目</span><span class="emotion">母ちゃんのしんけんな顔を見て、ぼくはいいかえすのをやめた。なんだか、母ちゃんが、たまらなく好きになってくる。</span></p>
+        <p class="note">問三は「病院からきたの」と「心ぞうのぐあいがわるくて」を結びます。問四は「しんけんな顔」「いのちをなげだしてもおしくない」「たまらなく好き」を一続きで読みます。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="q-card" id="q3">
+    <div class="q-head">
+      <div class="q-title">問三</div>
+      <span class="type">選択肢問題：線②の具体化</span>
+    </div>
+    <div class="question-box">
+      <strong>設問文の再掲</strong>
+      <p>線②「だれの母ちゃんだって子どものためには、じぶんのことをわすれてしまうんだよ」とありますが、和枝ちゃんのママの場合、どのような行動を指していると考えられますか。最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+      <ul class="options">
+        <li>ア　たとえ周囲にめいわくをかけても、むすめのために病院からぬけだそうとする行動。</li>
+        <li>イ　心ぞうのぐあいが悪化するとわかっていながらも、むすめのためにかけつけようとする行動。</li>
+        <li>ウ　じぶんの病気が重くても、大切なむすめの授業参観日にはなんとか出席しようとする行動。</li>
+        <li>エ　いのちの危険をおかしてまで、かわいいむすめのために、学校行事に参加しようとする行動。</li>
+      </ul>
+    </div>
+    <div class="rate">推定正答率 73%（「病院からきた」と「子どものため」を結べるか）</div>
+    <h3>思考プロセス＋解説</h3>
+    <div class="process">
+      <p>この問題は、線②の一般的な言葉を、直前の和枝ちゃんのママの行動に戻して読む問題です。まず和枝ちゃんの「ママ、病院からきたの。きょうは気分がいいからって」に線を引きます。次に、和枝ちゃんのママ本人の「心ぞうのぐあいがわるくて……」を合わせると、ふだん病院にいるほど体が悪いのに、子どもの授業参観を見に来たことがわかります。したがって「子どものために、じぶんのことをわすれる」とは、病気の自分の負担より、むすめの授業参観を優先して来た行動です。よって答えはウです。</p>
+    </div>
+    <h3>解答</h3>
+    <div class="answer-box">ウ</div>
+    <h3>選択肢ごとの照合結果</h3>
+    <div class="table-wrap">
+      <table class="choice-table">
+        <colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup>
+        <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>ア　たとえ周囲にめいわくをかけても、むすめのために病院からぬけだそうとする行動。</td>
+            <td>「ママ、病院からきたの」と「子どものためには」を、選択肢では「むすめのために病院から」として使っている。</td>
+            <td>【行動のすり替え】本文は「病院からきたの」と、学校に来た事実を示す。選択肢は「病院からぬけだそうとする」と、来た後の事実を抜け出す行動に替えている。さらに「周囲にめいわくをかけても」は本文にない。<br><strong>【作問者の意図】</strong>本文の「病院からきたの」を使いながら、「きた」→「ぬけだそう」に方向を替えて正解らしく見せている。</td>
+            <td class="judge-ng">×</td>
+          </tr>
+          <tr>
+            <td>イ　心ぞうのぐあいが悪化するとわかっていながらも、むすめのためにかけつけようとする行動。</td>
+            <td>「わたし心ぞうのぐあいがわるくて」と「ママ、病院からきたの」は、選択肢の「心ぞうのぐあい」「むすめのためにかけつける」と近い。</td>
+            <td>【条件の言いすぎ】本文は「きょうは気分がいいからって」であり、「悪化するとわかっていながら」とは書かれていない。条件は「気分がいい」→「悪化するとわかっている」に強められている。<br><strong>【作問者の意図】</strong>本文の「心ぞうのぐあいがわるくて」を残し、「きょうは気分がいい」→「悪化するとわかって」に変えている。</td>
+            <td class="judge-ng">×</td>
+          </tr>
+          <tr>
+            <td>ウ　じぶんの病気が重くても、大切なむすめの授業参観日にはなんとか出席しようとする行動。</td>
+            <td>「ママ、病院からきたの。きょうは気分がいいからって」と「心ぞうのぐあいがわるくて」を、選択肢では「じぶんの病気が重くても」とまとめている。授業参観の場面に来たことを「むすめの授業参観日にはなんとか出席」と言い換えている。<br><strong>【作問者の意図】</strong>本文の「病院からきた」「心ぞうのぐあい」を直接の語のままではなく、「病気が重くても」「出席しようとする」に圧縮している。</td>
+            <td>不一致なし。</td>
+            <td class="judge-ok">○</td>
+          </tr>
+          <tr>
+            <td>エ　いのちの危険をおかしてまで、かわいいむすめのために、学校行事に参加しようとする行動。</td>
+            <td>「一平のためなら、いのちをなげだしてもおしくない」と「子どものためには」は、選択肢の「いのちの危険」「むすめのため」と語が近い。</td>
+            <td>【発話主のすり替え・言いすぎ】本文の「いのちをなげだしても」は一平の母ちゃんが自分の気持ちを語った言葉で、和枝ちゃんのママの行動説明ではない。選択肢は主語を「母ちゃん」→「和枝ちゃんのママ」に替え、「命の危険」と言い切っている。<br><strong>【作問者の意図】</strong>線②の直後にある印象的な「いのちをなげだしても」を使い、問われている和枝ちゃんのママの行動に移している。</td>
+            <td class="judge-ng">×</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pitfall"><strong>pitfall：</strong>「いのちをなげだしても」は一平の母ちゃんの言葉です。和枝ちゃんのママの行動を問われているので、主語を入れ替えないことが大切です。</div>
+    <div class="test">
+      <h3>理解確認テスト</h3>
+      <p><strong>設問文</strong>：線②「だれの母ちゃんだって子どものためには、じぶんのことをわすれてしまうんだよ」とありますが、和枝ちゃんのママの場合、どのような行動を指していると考えられますか。最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+      <ul class="options">
+        <li>ア　和枝ちゃんのママが、授業参観を知らせるために病院から学校へ電話しようとした行動。</li>
+        <li>イ　具合が悪いのに、むすめの授業参観を見たいと思って病院から学校へ来た行動。</li>
+        <li>ウ　和枝ちゃんを病院へ連れていくために、母ちゃんのタクシーに乗りこんだ行動。</li>
+        <li>エ　一平のためなら命もおしくないと、母ちゃんが真剣に言った行動。</li>
+      </ul>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <h3>解答</h3>
+        <div class="answer-box">イ</div>
+        <h3>選択肢ごとの照合結果</h3>
+        <div class="table-wrap">
+          <table class="choice-table">
+            <colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup>
+            <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+            <tbody>
+              <tr><td>ア　和枝ちゃんのママが、授業参観を知らせるために病院から学校へ電話しようとした行動。</td><td>「病院からきたの」と「授業参観」の語は近い。</td><td>【本文にない行動の追加】本文は病院から学校へ「来た」のであり、「電話しようとした」とは書かれていない。<br><strong>【作問者の意図】</strong>本文の「授業参観」と「病院」を残し、行動を「来た」→「電話」に替えている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>イ　具合が悪いのに、むすめの授業参観を見たいと思って病院から学校へ来た行動。</td><td>「ママ、病院からきたの。きょうは気分がいいからって」「心ぞうのぐあいがわるくて」を、「具合が悪いのに病院から学校へ来た」と言い換えている。<br><strong>【作問者の意図】</strong>本文の具体語を「具合が悪い」「授業参観を見たい」と整理し、線②の「子どものため」と対応させている。</td><td>不一致なし。</td><td class="judge-ok">○</td></tr>
+              <tr><td>ウ　和枝ちゃんを病院へ連れていくために、母ちゃんのタクシーに乗りこんだ行動。</td><td>「母ちゃんのタクシー」「病院へはこびます」は本文にある。</td><td>【主語のすり替え】問われているのは和枝ちゃんのママの「子どものため」の行動。選択肢は母ちゃんが病院へ運ぶ場面に移っている。<br><strong>【作問者の意図】</strong>本文の印象的な「タクシー」「病院」を使い、和枝ちゃんのママの行動から母ちゃんの救助行動へずらしている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>エ　一平のためなら命もおしくないと、母ちゃんが真剣に言った行動。</td><td>「一平のためなら、いのちをなげだしてもおしくない」とほぼ同じ表現が本文にある。</td><td>【対象のすり替え】その言葉は一平の母ちゃんの発言で、和枝ちゃんのママの場合を答える内容ではない。<br><strong>【作問者の意図】</strong>線②の近くにある強い言葉をそのまま使い、問われた対象を「和枝ちゃんのママ」から「母ちゃん」に替えている。</td><td class="judge-ng">×</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="q-card" id="q4">
+    <div class="q-head">
+      <div class="q-title">問四</div>
+      <span class="type">選択肢問題：心情変化の理由</span>
+    </div>
+    <div class="question-box">
+      <strong>設問文の再掲</strong>
+      <p>線③「ぼくはいいかえすのをやめた」とありますが、なぜですか。その理由の説明として、最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+      <ul class="options">
+        <li>ア　母ちゃんの言葉で、病気である和枝ちゃんのママが授業参観にきた理由がわかったから。</li>
+        <li>イ　じぶんの考えを曲げない気の強い母ちゃんに、なにをいってもむだだとあきらめたから。</li>
+        <li>ウ　和枝ちゃんのママを病院までつれていこうと必死になる母ちゃんに、気をつかったから。</li>
+        <li>エ　一平のことを大切に思ってくれる、母ちゃんの気持ちはほんものであると理解したから。</li>
+      </ul>
+    </div>
+    <div class="rate">推定正答率 68%（「言い返すのをやめた」を、あきらめではなく愛情の受け止めとして読めるか）</div>
+    <h3>思考プロセス＋解説</h3>
+    <div class="process">
+      <p>この問題は、線③の動作を、直前の言葉と直後の心情に結びつけて読む問題です。直前で母ちゃんは「一平のためなら、いのちをなげだしてもおしくない」と言い、そのとき「母ちゃんのしんけんな顔」を一平が見ています。直後には「母ちゃんが、たまらなく好きになってくる」とあり、一平が反発をやめて母ちゃんの愛情を受け止めたことがわかります。つまり「いいかえすのをやめた」は、母ちゃんに負けた、気をつかった、ではなく、母ちゃんの気持ちが本物だと感じたためです。よって答えはエです。</p>
+    </div>
+    <h3>解答</h3>
+    <div class="answer-box">エ</div>
+    <h3>選択肢ごとの照合結果</h3>
+    <div class="table-wrap">
+      <table class="choice-table">
+        <colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup>
+        <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>ア　母ちゃんの言葉で、病気である和枝ちゃんのママが授業参観にきた理由がわかったから。</td>
+            <td>「だれの母ちゃんだって子どものためには」と「ママ、病院からきたの」は、選択肢の「授業参観にきた理由」と関係する。</td>
+            <td>【中心理由のすり替え】線③の直前は「一平のためなら、いのちをなげだしてもおしくない」と「母ちゃんのしんけんな顔」。理由は一平自身への愛情を感じたこと。選択肢は対象を「一平」→「和枝ちゃんのママ」に替えている。<br><strong>【作問者の意図】</strong>問三の根拠「病院からきたの」を持ち込み、線③の心情変化から目をそらしている。</td>
+            <td class="judge-ng">×</td>
+          </tr>
+          <tr>
+            <td>イ　じぶんの考えを曲げない気の強い母ちゃんに、なにをいってもむだだとあきらめたから。</td>
+            <td>「ぼくはいいかえすのをやめた」という動作だけを見ると、選択肢の「あきらめた」に近く見える。</td>
+            <td>【心情の反転】本文は「母ちゃんのしんけんな顔」「たまらなく好きになってくる」と好意に変わっている。選択肢は「気の強い母ちゃん」「むだだとあきらめた」と反発・あきらめにしている。<br><strong>【作問者の意図】</strong>本文の「いいかえすのをやめた」を使い、理由を「愛情を受け止めた」→「あきらめた」に反対にしている。</td>
+            <td class="judge-ng">×</td>
+          </tr>
+          <tr>
+            <td>ウ　和枝ちゃんのママを病院までつれていこうと必死になる母ちゃんに、気をつかったから。</td>
+            <td>「わたしの車で病院にはこびます」「病院へはこびこんだおかげで」は、選択肢の「病院までつれていこう」と近い。</td>
+            <td>【時点と対象のずれ】線③の場面では、タクシーの中で母ちゃんが一平に「いのちをなげだしても」と語っている。選択肢は救助中の母ちゃんへの気づかいにずれている。<br><strong>【作問者の意図】</strong>本文の「病院へはこびます」を使い、問われた一平への愛情の受け止めを、救助行動への配慮に替えている。</td>
+            <td class="judge-ng">×</td>
+          </tr>
+          <tr>
+            <td>エ　一平のことを大切に思ってくれる、母ちゃんの気持ちはほんものであると理解したから。</td>
+            <td>「一平のためなら、いのちをなげだしてもおしくない」を、選択肢では「一平のことを大切に思ってくれる」と言い換えている。「母ちゃんのしんけんな顔」を「気持ちはほんものである」と抽象化している。直後の「たまらなく好きになってくる」も、受け止めた結果に合う。<br><strong>【作問者の意図】</strong>本文の強い表現をそのまま写さず、「大切に思ってくれる」「ほんもの」と心情語に変換している。</td>
+            <td>不一致なし。</td>
+            <td class="judge-ok">○</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pitfall"><strong>pitfall：</strong>「言い返すのをやめた」だけを見ると、母ちゃんに押し切られたように読めます。直後の「たまらなく好きになってくる」まで読むと、あきらめではなく愛情の受け止めだとわかります。</div>
+    <div class="test">
+      <h3>理解確認テスト</h3>
+      <p><strong>設問文</strong>：線③「ぼくはいいかえすのをやめた」とありますが、なぜですか。その理由の説明として、最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+      <ul class="options">
+        <li>ア　母ちゃんが一平を心から大事に思っていることを、真剣な顔と言葉から感じたから。</li>
+        <li>イ　和枝ちゃんのママが助かったので、もう言い争う必要がないと判断したから。</li>
+        <li>ウ　母ちゃんが仕事中に来ていたことを知って、これ以上文句を言うと怒られると思ったから。</li>
+        <li>エ　母ちゃんが和枝ちゃんのママの事情を説明して、一平の疑問が消えたから。</li>
+      </ul>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <h3>解答</h3>
+        <div class="answer-box">ア</div>
+        <h3>選択肢ごとの照合結果</h3>
+        <div class="table-wrap">
+          <table class="choice-table">
+            <colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup>
+            <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+            <tbody>
+              <tr><td>ア　母ちゃんが一平を心から大事に思っていることを、真剣な顔と言葉から感じたから。</td><td>「一平のためなら、いのちをなげだしてもおしくない」「母ちゃんのしんけんな顔」を、「心から大事に思っている」「真剣な顔と言葉」と言い換えている。<br><strong>【作問者の意図】</strong>本文の発言と表情をまとめ、理由を一平への愛情にしぼっている。</td><td>不一致なし。</td><td class="judge-ok">○</td></tr>
+              <tr><td>イ　和枝ちゃんのママが助かったので、もう言い争う必要がないと判断したから。</td><td>「病院へはこびこんだおかげで」「それ以上ぐあいがわるくならない」は、助かったことに関係する。</td><td>【時点のずれ】線③は病院に着く前のタクシー内の場面。選択肢は病院後の結果を理由にしている。<br><strong>【作問者の意図】</strong>本文後半の「すみそうだ」を使い、線③の直前の根拠から時間をずらしている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>ウ　母ちゃんが仕事中に来ていたことを知って、これ以上文句を言うと怒られると思ったから。</td><td>「母ちゃんはしごとちゅうに学校へかけつけてきた」は本文にある。</td><td>【理由の作り込み】仕事中に来たことはあるが、「怒られると思った」とは書かれていない。直後は「たまらなく好き」で、恐れではない。<br><strong>【作問者の意図】</strong>本文の「しごとちゅう」を使い、心情を「好き」→「怒られる心配」に替えている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>エ　母ちゃんが和枝ちゃんのママの事情を説明して、一平の疑問が消えたから。</td><td>「だれの母ちゃんだって子どものためには」という説明は、和枝ちゃんのママの行動にも関係する。</td><td>【対象のすり替え】線③で一平が受け止めたのは、自分のためなら命も惜しくないという母ちゃんの愛情。選択肢は和枝ちゃんのママの事情理解にずれている。<br><strong>【作問者の意図】</strong>線②の一般論を使い、線③の中心である「一平への愛情」から外している。</td><td class="judge-ng">×</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="section" id="final">
+    <h2>最終答案一覧</h2>
+    <div class="summary-card">
+      <div class="table-wrap">
+        <table class="final-table">
+          <thead><tr><th>設問</th><th>問題タイプ</th><th>最終答案</th><th>決め手</th></tr></thead>
+          <tbody>
+            <tr><td>問三</td><td>線②の具体化</td><td><strong>ウ</strong></td><td>「病院からきた」「心ぞうのぐあいがわるくて」から、病気でもむすめの授業参観に来た行動と読む。</td></tr>
+            <tr><td>問四</td><td>線③の理由</td><td><strong>エ</strong></td><td>「一平のためなら、いのちをなげだしてもおしくない」「しんけんな顔」から、母ちゃんの本当の愛情を受け止めたと読む。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="summary">
+    <h2>今回の学習まとめ</h2>
+    <div class="summary-card">
+      <h3>再現したい手順</h3>
+      <ol>
+        <li>線の直前・直後を読み、主語と場面を固定する。</li>
+        <li>動作だけで判断せず、直後の心情語までつなげる。</li>
+        <li>選択肢の強すぎる表現、主語のすり替え、時点のずれを一つずつ消す。</li>
+      </ol>
+      <h3>間違えやすい点</h3>
+      <p>「いのちをなげだしても」のような印象的な言葉は、設問の対象と一致するかを確認します。問三では和枝ちゃんのママ、問四では一平の母ちゃんと一平の関係が中心です。</p>
+      <h3>次に同タイプで使う塾技</h3>
+      <p>人物の気持ちは、発言・表情・直後の心情語をセットで読む。とくに「いいかえすのをやめた」のような動作は、動作の説明だけでなく、どんな感情の表れかまで読む。</p>
+      <h3>問ごとの塾技活用まとめ</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>設問</th><th>中心になる読み方</th><th>本文で見た語句</th><th>次に使う見分け方</th></tr></thead>
+          <tbody>
+            <tr><td>問三</td><td>一般論を具体場面へ戻す</td><td>「病院からきたの」「心ぞうのぐあいがわるくて」</td><td>強すぎる「悪化するとわかって」「命の危険」を消す。</td></tr>
+            <tr><td>問四</td><td>動作の理由を直前・直後から読む</td><td>「いのちをなげだしてもおしくない」「しんけんな顔」「たまらなく好き」</td><td>「あきらめ」「気づかい」ではなく、心情変化の方向を確認する。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>記述の書き方ミニまとめ</h3>
+      <p>今回の対象は選択肢問題ですが、記述にするなら「だれが」「何を見聞きして」「どう感じたから」の三点で組み立てます。問四なら「一平は、母ちゃんが自分を心から大切に思っていると感じたから。」のように、心情の理由まで書きます。</p>
+    </div>
+  </section>
+  <p class="footer-note">作成日：2026-05-04。HTML単体で閲覧・印刷できます。</p>
+</main>
+</body>
+</html>
