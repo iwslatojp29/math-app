@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>42A-08_国語A_コトノハ HTML解答解説</title>
+  <style>
+    :root {
+      --ink:#18222c;
+      --muted:#657487;
+      --paper:#fbfcff;
+      --card:#ffffff;
+      --line:#dce5f2;
+      --blue:#e8f2ff;
+      --blue2:#cfe5ff;
+      --green:#e9f9ef;
+      --green2:#bfe9cd;
+      --yellow:#fff6d7;
+      --yellow2:#f2d675;
+      --pink:#ffecef;
+      --pink2:#ffbdca;
+      --purple:#f2edff;
+      --purple2:#d7c8ff;
+      --orange:#fff0df;
+      --orange2:#ffc98a;
+      --shadow:0 14px 34px rgba(29,45,68,.10);
+      --radius:20px;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      color:var(--ink);
+      background:linear-gradient(180deg,#f5f8ff 0%,#fbfcff 220px,#f7f9fc 100%);
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic","YuGothic","Noto Sans JP",Meiryo,sans-serif;
+      line-height:1.75;
+      letter-spacing:.01em;
+    }
+    a { color:#195aa6; text-decoration:none; }
+    .top-panel {
+      position:sticky;
+      top:0;
+      z-index:20;
+      max-height:34vh;
+      overflow-y:auto;
+      padding:12px 18px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.94);
+      backdrop-filter: blur(10px);
+      box-shadow:0 8px 22px rgba(21,40,70,.07);
+    }
+    .top-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .brand { font-weight:800; color:#173b67; margin-right:8px; white-space:nowrap; }
+    .nav-btn, .print-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:34px;
+      border-radius:999px;
+      padding:6px 12px;
+      border:1px solid #cdddf2;
+      background:#fff;
+      color:#1d4775;
+      font-weight:700;
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .print-btn { background:#173b67; color:#fff; border-color:#173b67; cursor:pointer; }
+    main { max-width:1180px; margin:28px auto 80px; padding:0 18px; }
+    .hero {
+      background:linear-gradient(135deg,#173b67,#2b6bb0 58%,#6aa2d8);
+      color:#fff;
+      border-radius:28px;
+      padding:28px 30px;
+      box-shadow:var(--shadow);
+    }
+    h1 { margin:0 0 8px; font-size:clamp(24px,3vw,36px); line-height:1.2; }
+    .subtitle { opacity:.95; margin:6px 0 16px; }
+    .badges, .pill-row { display:flex; flex-wrap:wrap; gap:8px; }
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      padding:5px 10px;
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.24);
+      font-weight:700;
+      font-size:13px;
+    }
+    .toc-pill {
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      padding:6px 12px;
+      background:#fff;
+      color:#17416f;
+      font-weight:800;
+      box-shadow:0 6px 14px rgba(20,50,90,.14);
+      font-size:13px;
+    }
+    section { margin-top:26px; }
+    .section-title {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin:0 0 14px;
+      font-size:24px;
+      line-height:1.25;
+      color:#173b67;
+    }
+    .section-title::before {
+      content:"";
+      display:inline-block;
+      width:10px;
+      height:30px;
+      border-radius:999px;
+      background:#2b6bb0;
+    }
+    .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .card, .diagnosis-card, .q-card, .summary-card {
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+    .diagnosis-card h3, .card h3, .q-card h3 { margin:0 0 10px; color:#1d4775; }
+    .mini-label {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:3px 9px;
+      border-radius:999px;
+      background:#eef5ff;
+      color:#17416f;
+      font-weight:800;
+      font-size:12px;
+      margin-bottom:8px;
+    }
+    .diag-list { margin:0; padding-left:1.2em; }
+    .note {
+      border-left:5px solid #2b6bb0;
+      background:#f3f8ff;
+      border-radius:14px;
+      padding:12px 14px;
+      color:#1d4775;
+      margin:12px 0;
+    }
+    .text-block {
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      line-height:2.05;
+    }
+    .quote { margin:10px 0; padding:13px 15px; border-radius:14px; background:#fbfcff; border:1px dashed #cdddf2; }
+    .main-claim { background:linear-gradient(transparent 58%, var(--yellow2) 58%); font-weight:700; }
+    .keyword { background:linear-gradient(transparent 58%, var(--blue2) 58%); font-weight:700; }
+    .emotion { background:linear-gradient(transparent 58%, var(--pink2) 58%); font-weight:700; }
+    .trigger { background:linear-gradient(transparent 58%, var(--orange2) 58%); font-weight:700; }
+    .scene { background:linear-gradient(transparent 58%, var(--green2) 58%); font-weight:700; }
+    .mask { background:linear-gradient(transparent 58%, var(--purple2) 58%); font-weight:700; }
+    .line-no {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:28px;
+      height:28px;
+      border-radius:50%;
+      background:#173b67;
+      color:#fff;
+      font-weight:800;
+      margin-right:4px;
+    }
+    .legend { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 0; }
+    .legend span { border-radius:999px; padding:5px 10px; font-weight:800; font-size:13px; border:1px solid var(--line); }
+    .legend .l-scene { background:var(--green); }
+    .legend .l-emotion { background:var(--pink); }
+    .legend .l-trigger { background:var(--orange); }
+    .legend .l-mask { background:var(--purple); }
+    .legend .l-keyword { background:var(--blue); }
+    .q-card { margin-top:22px; }
+    .q-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:14px; }
+    .q-title { margin:0; font-size:23px; color:#173b67; }
+    .rate {
+      border-radius:14px;
+      background:#f7fbff;
+      border:1px solid #cdddf2;
+      padding:8px 12px;
+      color:#17416f;
+      font-weight:800;
+      max-width:430px;
+    }
+    .problem-box { background:#fffdf6; border:1px solid #f2d675; border-radius:16px; padding:14px 16px; margin:12px 0; }
+    .choice-list { margin:8px 0 0; padding-left:0; list-style:none; }
+    .choice-list li { margin:4px 0; }
+    .answer-box {
+      border-radius:18px;
+      border:2px solid #2b6bb0;
+      background:#f4f9ff;
+      padding:14px 16px;
+      margin:12px 0;
+      font-size:18px;
+      font-weight:800;
+      color:#173b67;
+    }
+    .detail-box { background:#fbfcff; border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin:12px 0; }
+    .answer-check { background:#f7fbff; border:1px solid #cdddf2; border-radius:16px; padding:12px 14px; margin:12px 0; }
+    .pitfall { background:#fff2f2; border:1px solid #f4b4b4; border-radius:16px; padding:12px 14px; margin:12px 0; }
+    .table-wrap { overflow-x:auto; margin:12px 0 18px; }
+    table { border-collapse:separate; border-spacing:0; width:100%; }
+    th, td { border:1px solid var(--line); padding:11px 12px; vertical-align:top; background:#fff; }
+    th { background:#eef5ff; color:#173b67; font-weight:800; text-align:left; }
+    tr:first-child th:first-child { border-top-left-radius:14px; }
+    tr:first-child th:last-child { border-top-right-radius:14px; }
+    tr:last-child td:first-child { border-bottom-left-radius:14px; }
+    tr:last-child td:last-child { border-bottom-right-radius:14px; }
+    .choice-table { min-width:980px; }
+    .choice-table col.c1 { width:22%; }
+    .choice-table col.c2 { width:34%; }
+    .choice-table col.c3 { width:34%; }
+    .choice-table col.c4 { width:10%; }
+    .judge-ok { color:#0c7a3b; font-weight:900; }
+    .judge-ng { color:#b02222; font-weight:900; }
+    details.confirm {
+      border:1px solid #d7c8ff;
+      background:#fbf9ff;
+      border-radius:18px;
+      padding:14px 16px;
+      margin:16px 0;
+    }
+    details.confirm summary { cursor:pointer; font-weight:900; color:#4a3292; font-size:18px; }
+    .mini-test-visible { background:#fff; border:1px solid #e2d9ff; border-radius:14px; padding:12px 14px; margin-top:10px; }
+    .final-table { max-width:760px; }
+    .learning-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .small { font-size:13px; color:var(--muted); }
+    @media (max-width:800px) {
+      .grid-2, .learning-grid { grid-template-columns:1fr; }
+      main { padding:0 12px; }
+      .hero { padding:22px 20px; }
+      .top-panel { max-height:42vh; }
+    }
+    @page { size:A4 portrait; margin:14mm; }
+    @media print {
+      body { background:#fff; color:#111; }
+      .top-panel, .print-hide { display:none !important; }
+      main { max-width:none; margin:0; padding:0; }
+      .hero { background:#fff; color:#111; border:1px solid #aaa; box-shadow:none; }
+      .badge { color:#111; border-color:#aaa; background:#fff; }
+      .toc-pill { display:none; }
+      .card, .diagnosis-card, .q-card, .summary-card, details.confirm, .text-block { box-shadow:none; break-inside:avoid; page-break-inside:avoid; }
+      .q-card, .diagnosis-card, .summary-card { page-break-inside:avoid; break-inside:avoid; }
+      .choice-table { min-width:0; font-size:10.5px; }
+      th, td { padding:6px 7px; }
+      details.confirm { break-inside:avoid; }
+      details.confirm[open] { display:block; }
+    }
+  </style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+  <nav class="top-panel print-hide" aria-label="上部ナビゲーション">
+    <div class="top-row">
+      <span class="brand">42A-08 コトノハ 解答ナビ</span>
+      <button class="print-btn" onclick="window.print()">PDF出力</button>
+      <a class="nav-btn" href="#diagnosis">本文の読み方診断</a>
+      <a class="nav-btn" href="#daimon">大問へ</a>
+      <a class="nav-btn" href="#q3">問三へ</a>
+      <a class="nav-btn" href="#q4">問四へ</a>
+      <a class="nav-btn" href="#answers">最終答案一覧</a>
+      <a class="nav-btn" href="#learning">今回の学習まとめ</a>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <h1>42A-08_国語A_コトノハ HTML解答解説</h1>
+      <p class="subtitle">対象：読解演習「まる月の木」 問三・問四。添付の問題PDFと解答・解説PDFを照合して作成。</p>
+      <div class="badges">
+        <span class="badge">文章ジャンル：物語文</span>
+        <span class="badge">設問タイプ：心情選択・様子選択</span>
+        <span class="badge">今回の勝負所：本心とずれる言動</span>
+      </div>
+      <div class="pill-row" style="margin-top:16px;">
+        <a class="toc-pill" href="#diagnosis">本文の読み方診断</a>
+        <a class="toc-pill" href="#daimon">大問診断</a>
+        <a class="toc-pill" href="#q3">問三</a>
+        <a class="toc-pill" href="#q4">問四</a>
+        <a class="toc-pill" href="#answers">最終答案一覧</a>
+        <a class="toc-pill" href="#learning">今回の学習まとめ</a>
+      </div>
+    </header>
+
+    <section id="diagnosis">
+      <h2 class="section-title">本文の読み方診断</h2>
+      <div class="grid-2">
+        <div class="diagnosis-card">
+          <h3>文章全体の主題・流れ</h3>
+          <p>「母がいない」という共通点をきっかけに、「ぼく」の進への見方が、反発から同情・親しみへ変わっていく物語です。進の母がいない理由は、最初は「家出かもしれない」と思われますが、後半で「手術」とわかります。この理由の変化が、問三・問四の心情判断の中心になります。</p>
+        </div>
+        <div class="diagnosis-card">
+          <h3>読みの勝負所</h3>
+          <ul class="diag-list">
+            <li>問三は、線③の直後にある「進がないているような気がした」「むねが、きゅん」を読む。</li>
+            <li>問四は、進の「さらり」とした言い方と「テレビの俳優のように、カッコつけた」を合わせて読む。</li>
+            <li>選択肢は、本文にある語を使っていても、時点・理由・目的をずらしているものを消す。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="daimon">
+      <h2 class="section-title">大問：読解演習「まる月の木」</h2>
+      <div class="diagnosis-card">
+        <h3>文章ジャンル・設問タイプ</h3>
+        <p>物語文。問三は「ぼく」の気持ちを選ぶ心情選択、問四は進の様子を選ぶ行動・心情選択です。どちらも、場面の直後だけでなく、前後の動作・会話・心情語をつないで判断します。</p>
+
+        <h3>文章の主題・流れ</h3>
+        <p>「ぼく」は、進のいやみな態度に反発しています。しかし、進の家にも母がいないと知り、さらに進が一人で広い家にいる様子を思い浮かべることで、進への見方が変わります。後半では、進の母が家出ではなく手術中だとわかり、進の強がった言動の裏にある不安やさびしさが見えてきます。</p>
+
+        <h3>本文の要約</h3>
+        <p>「ぼく」と道夫は、母が家出して不在の生活に慣れ、帰り道で進にも母がいないらしいと知る。初めは、進の家も家出だと同じ仲間のように感じ、道夫はふざけて歌うが、「ぼく」は進が一人で広い家にいる姿を思いうかべ、胸がつまる。自分の狭い部屋で弟とこたつにもぐると、進には兄弟もなく、広い家でぽつんとしているだろうという想像が強まる。夜、三人は三角公園で雪だるまを作る。道夫は母をまねた雪だるまを作り、母が帰る日を喜ぶが、進の母は家出ではなく手術中だとわかる。進は不安やさびしさを「さらり」と言い、テレビの俳優のように「リンチだぞ」とカッコつけてふざける。「ぼく」は、進も母を思いながら強がっていることに気づき、雪だるまを心配して声をかけ、「また、あそぼうな」と手をふる。進をたたきのめしたいと思っていた気持ちは、相手の事情を想像し、言葉と行動のずれを読むことで、少し親しみと心配へ変わっていく。</p>
+
+        <h3>本文文字数</h3>
+        <p>本文全体：約1,500字程度。下の「本文の線引き再現」では、問三・問四の判断に必要な前後場面を中心に再掲しています。</p>
+
+        <h3>この大問で使う線の凡例・線の引き方</h3>
+        <div class="legend">
+          <span class="l-scene">場面線：だれが・どこで・何をしているか</span>
+          <span class="l-emotion">心情線：胸・涙・さびしさなどの感情</span>
+          <span class="l-trigger">きっかけ線：事実が変わる一言</span>
+          <span class="l-mask">本心とずれる言動線：強がり・カッコつけ</span>
+          <span class="l-keyword">キーワード線：家出・手術・ひとり</span>
+        </div>
+
+        <h3>本文の線引き再現</h3>
+        <div class="text-block">
+          <p class="quote">八百富のおばちゃんは進を見て「あんたたち、母ちゃん、たいへんだねえ。」と言う。進は「フン」と鼻をならし、ひとりで帰って行く。おばちゃんは「みんな、母ちゃんいなくても、ちゃんとやってんだからえらいよ。」と言う。</p>
+          <p class="quote"><span class="keyword">「進くんちも、お母さん、いないのかなあ。」</span>「みたいだね。」「家出……かな。」道夫がぼくの顔を見て、にやっとした。</p>
+          <p class="quote">「進くんち、はじめてなのかなあ。ぼくら、なれていてよかったね。家出って、うちだけじゃなかったね。」道夫は歌いだす。ぼくは、昇降口で進が「ばんめしをどうする」と聞いたこと、パソコンをやろうと言ったこと、ばんめしをいっしょに食べようとさそったことを思い出す。</p>
+          <p class="quote">三角公園で、右に行くとぼくらのアパート、左のほうに進の家がある。道夫にせかされ、ぼくはアパートの部屋へ入る。<span class="scene"><span class="line-no">②</span>お母ちゃんのいない部屋はくらくて、ほらあなにはいっていくようだった。</span>ぼくらは電気ごたつにもぐりこむ。</p>
+          <p class="quote"><span class="emotion"><span class="line-no">③</span>あいつの家は、ひろいんだよなあ。</span>部屋のまんなかに、ぽつんといる進が目にうかぶ。「兄弟もいないし、ひとりかあ……」進がないているような気がし、むねが、きゅんとつまってくる。</p>
+          <p class="quote">夜、三人は三角公園で雪だるまを作る。道夫は雪だるまの胸をふくらませ、「お母ちゃんの雪だるまに見える？」と笑う。道夫は母が帰る日を喜ぶが、進は長ぐつで雪をけり、「きょう、おれんちの母さん、手術するんだ。」と言う。</p>
+          <p class="quote"><span class="trigger">進は「きょうの二時、頭の骨を切るんだってさ。」と話す。</span>「すぐになおるんだよね。」という問いに、「そんなこと、おれにゃわかるかよ。じゃ、バーイ。」と返す。</p>
+          <p class="quote"><span class="mask"><span class="line-no">④</span>「おい、きょう、あそばねえとリンチだぞ。」テレビの俳優のように、カッコつけた。</span>ぼくが「わかったよ。やくそくするぜ。」と調子を合わせると、進は肩をゆすって歩いていく。「こけなきゃいいな、雪だるまふたつ。」とぼくが声をかけ、進はにっこり笑う。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="q3" class="q-card">
+      <div class="q-head">
+        <div>
+          <h2 class="q-title">問三</h2>
+          <div class="mini-label">問題タイプ：心情選択</div>
+        </div>
+        <div class="rate">推定正答率 78%（「ひろい」を羨望ではなく孤独の場面として読めるか）</div>
+      </div>
+      <div class="problem-box">
+        <strong>設問文の再掲</strong><br>
+        線③「あいつの家は、ひろいんだよなあ」とありますが、このときの「ぼく」の気持ちとして、最もふさわしいものを次の中から選び、記号で答えましょう。
+        <ul class="choice-list">
+          <li>ア　ひとりぼっちでひろい家にいる進のことをかわいそうに思う気持ち。</li>
+          <li>イ　進の家にくらべ、自分の家がせまいことをはずかしく思う気持ち。</li>
+          <li>ウ　進の家が自分の家よりもひろいことをうらやましく思う気持ち。</li>
+          <li>エ　ひろい家の中で母の病気を心配している進をあわれに思う気持ち。</li>
+        </ul>
+      </div>
+      <h3>思考プロセス＋解説</h3>
+      <div class="detail-box">
+        <p>この問題は、心情語を直接探すだけでなく、場面を映像化してから気持ちを決める読み方を使います。線③の直前には「ぼくらは、電気ごたつにもぐりこんだ」「こたつのなかは、からだでいっぱいになった」とあり、「ぼく」と道夫は狭いけれど二人でいる場面です。そこから「部屋のまんなかに、ぽつんといる進」「兄弟もいないし、ひとりかあ……」と、進が広い家で一人でいる姿を想像します。決め手は「進がないているような気がした。むねが、きゅんとつまってきた」です。「ひろい」はうらやましさではなく、一人でいるさびしさを強める語として働いています。したがって、「ひとりぼっちでひろい家にいる進のことをかわいそうに思う」アが答えです。</p>
+      </div>
+      <h3>解答</h3>
+      <div class="answer-box">ア</div>
+
+      <h3>選択肢ごとの照合結果</h3>
+      <div class="table-wrap">
+        <table class="choice-table">
+          <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
+          <thead>
+            <tr>
+              <th>選択肢（全文）</th>
+              <th>合致するところ（本文引用＋選択肢表現の対応）</th>
+              <th>合致しないところ</th>
+              <th>判定</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ア　ひとりぼっちでひろい家にいる進のことをかわいそうに思う気持ち。</td>
+              <td>「部屋のまんなかに、ぽつんといる進」「兄弟もいないし、ひとりかあ」「進がないているような気がした。むねが、きゅんとつまってきた」。本文の「ぽつん」「ひとりかあ」を選択肢では「ひとりぼっちでひろい家にいる進」とまとめ、「むねが、きゅん」を「かわいそうに思う気持ち」と言い換えている。<br><strong>【作問者の意図】</strong> 本文の動作・映像をそのまま使わず、場面描写から心情語へ変換できるかを見ている。</td>
+              <td>不一致なし。</td>
+              <td class="judge-ok">○</td>
+            </tr>
+            <tr>
+              <td>イ　進の家にくらべ、自分の家がせまいことをはずかしく思う気持ち。</td>
+              <td>「せまいなあ。もっとそっちへいってよ」「あいつの家は、ひろいんだよなあ」という対比はある。本文の「せまい」「ひろい」を、選択肢では「進の家にくらべ、自分の家がせまい」と使っている。</td>
+              <td>【心情のすり替え】本文は「ぽつんといる進」「進がないているような気がした」と、進の孤独を想像している。選択肢は「自分の家がせまいことをはずかしく」と、対象を進から自分の家へ替え、心情も同情から恥ずかしさへ替えている。<br><strong>【作問者の意図】</strong> 本文の「せまいなあ」と「ひろいんだよなあ」を使い、対象語を「進」から「自分の家」にずらしている。</td>
+              <td class="judge-ng">×</td>
+            </tr>
+            <tr>
+              <td>ウ　進の家が自分の家よりもひろいことをうらやましく思う気持ち。</td>
+              <td>「あいつの家は、ひろいんだよなあ」とあるので、「進の家が自分の家よりもひろい」という部分だけは本文と近い。</td>
+              <td>【感情の反転】本文は「進がないているような気がした。むねが、きゅん」と、進を心配して胸が痛くなる方向である。選択肢は「うらやましく」と、進の孤独を見落として、自分が得たいものとして見ている。<br><strong>【作問者の意図】</strong> 本文の「ひろい」を残し、心情を「かわいそう」から「うらやましい」に替えた心情反転。</td>
+              <td class="judge-ng">×</td>
+            </tr>
+            <tr>
+              <td>エ　ひろい家の中で母の病気を心配している進をあわれに思う気持ち。</td>
+              <td>「ひろい家」「進をあわれに思う」は、線③後の「ぽつん」「むねが、きゅん」と近い。</td>
+              <td>【時点のずれ】線③の時点で「ぼく」は、進の母が「病気」や「手術」だとはまだ知らない。本文でわかっているのは「母ちゃんいなくても」と「家出……かな」までであり、選択肢の「母の病気を心配している」は後の情報を先に入れている。<br><strong>【作問者の意図】</strong> 後半の「手術するんだ」という本文語を先取りして混ぜ、線③の時点で読める気持ちから目をそらしている。</td>
+              <td class="judge-ng">×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>答案チェック</h3>
+      <div class="answer-check">線③だけで止めず、直後の「ぽつん」「ひとりかあ」「ないているような気がした」「むねが、きゅん」まで読めていれば、アに絞れます。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「ひろい」という語だけを見るとウを選びたくなりますが、この場面の「ひろい」は快適さではなく、ひとりでいる孤独を強める語です。</div>
+
+      <details class="confirm">
+        <summary>理解確認テスト</summary>
+        <div class="mini-test-visible">
+          <p><strong>設問文</strong><br>線③「あいつの家は、ひろいんだよなあ」とありますが、このときの「ぼく」の気持ちとして、最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+          <ul class="choice-list">
+            <li>ア　進の家が広いので、自分もそこで遊べるかもしれないと期待している気持ち。</li>
+            <li>イ　進が母の手術のことを知って泣いているだろうと決めつけ、同情している気持ち。</li>
+            <li>ウ　広い家に兄弟もおらず一人でいる進を思いうかべ、胸がつまるように感じている気持ち。</li>
+            <li>エ　自分の家の狭さを道夫にからかわれ、進の家をうらやましく思う気持ち。</li>
+          </ul>
+        </div>
+        <h3>解答</h3>
+        <div class="answer-box">ウ</div>
+        <h3>選択肢ごとの照合結果</h3>
+        <div class="table-wrap">
+          <table class="choice-table">
+            <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
+            <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+            <tbody>
+              <tr><td>ア　進の家が広いので、自分もそこで遊べるかもしれないと期待している気持ち。</td><td>「あいつの家は、ひろいんだよなあ」と「広い」は一致する。</td><td>【目的の作り込み】本文は「ぽつんといる進」を想像しており、「遊べるかもしれない」という期待はない。<br><strong>【作問者の意図】</strong> 本文の「ひろい」を残し、結果を「孤独への同情」から「遊びへの期待」に替えている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>イ　進が母の手術のことを知って泣いているだろうと決めつけ、同情している気持ち。</td><td>「進がないているような気がした」と「泣いているだろう」は近い。</td><td>【時点のずれ】線③ではまだ「手術」は知られていない。本文は「家出……かな」と考えている段階である。<br><strong>【作問者の意図】</strong> 後の「手術するんだ」を先に入れ、時点をずらしている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>ウ　広い家に兄弟もおらず一人でいる進を思いうかべ、胸がつまるように感じている気持ち。</td><td>「部屋のまんなかに、ぽつんといる進」「兄弟もいないし、ひとりかあ」「むねが、きゅん」。本文の「ぽつん」「ひとりかあ」を「一人でいる進」、「きゅん」を「胸がつまる」と言い換えている。<br><strong>【作問者の意図】</strong> 本文の心情語を少し抽象化し、場面と心情を両方照合させている。</td><td>不一致なし。</td><td class="judge-ok">○</td></tr>
+              <tr><td>エ　自分の家の狭さを道夫にからかわれ、進の家をうらやましく思う気持ち。</td><td>「せまいなあ」「ひろいんだよなあ」は本文にある。</td><td>【原因・心情のすり替え】本文で道夫は「もっとそっちへいってよ」と言うだけで、からかってはいない。心情も「うらやましい」ではなく「むねが、きゅん」である。<br><strong>【作問者の意図】</strong> 「せまい」と「ひろい」の対比を使い、原因を「道夫にからかわれた」に作り替えている。</td><td class="judge-ng">×</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section id="q4" class="q-card">
+      <div class="q-head">
+        <div>
+          <h2 class="q-title">問四</h2>
+          <div class="mini-label">問題タイプ：様子・心情選択</div>
+        </div>
+        <div class="rate">推定正答率 72%（「カッコつけ」を本心を隠す動作として読めるか）</div>
+      </div>
+      <div class="problem-box">
+        <strong>設問文の再掲</strong><br>
+        線④「おい、きょう、あそばねえとリンチだぞ。」テレビのはいゆうのように、カッコつけた」とありますが、このときの進の様子として、最もふさわしいものを次の中から選び、記号で答えましょう。
+        <ul class="choice-list">
+          <li>ア　母が家にいないさびしさと母が手術することへの不安を感じながらも、それを素直に表に出したくないと思い、わざとふざけている。</li>
+          <li>イ　自分の中にある悲しさや不安を「ぼく」たちに見せると、心配をかけるのではないかと気をつかい、無理して明るくふるまっている。</li>
+          <li>ウ　母が手術すると知られ、同情からあそんでもらうのは自尊心がゆるさないので、少しおどしつけて自分の言うことを聞かせようとしている。</li>
+          <li>エ　母が手術を受けるため、自分ひとりで家にいるという、だれが見ても気の毒な状況のいまなら、だれもがゆるしてくれるのではないかと思い、カッコつけている。</li>
+        </ul>
+      </div>
+      <h3>思考プロセス＋解説</h3>
+      <div class="detail-box">
+        <p>この問題は、人物の言葉をそのまま受け取らず、本心とずれる言動を読む問題です。進は「きょう、おれんちの母さん、手術するんだ」「頭の骨を切るんだってさ」と重大なことを話します。しかし、その後の線④では「リンチだぞ」と乱暴に言い、「テレビの俳優のように、カッコつけた」とあります。ここでの「カッコつけ」は、本当に相手をおどすことではなく、さびしさや不安をそのまま出さないための芝居のようなふるまいです。直後にも「じゃあな、アバヨ」と肩をゆすって歩き、わざと軽い調子を作っています。したがって、母がいないさびしさと手術への不安を抱えながら、素直に表に出したくないと読めるアが答えです。</p>
+      </div>
+      <h3>解答</h3>
+      <div class="answer-box">ア</div>
+
+      <h3>選択肢ごとの照合結果</h3>
+      <div class="table-wrap">
+        <table class="choice-table">
+          <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
+          <thead>
+            <tr>
+              <th>選択肢（全文）</th>
+              <th>合致するところ（本文引用＋選択肢表現の対応）</th>
+              <th>合致しないところ</th>
+              <th>判定</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ア　母が家にいないさびしさと母が手術することへの不安を感じながらも、それを素直に表に出したくないと思い、わざとふざけている。</td>
+              <td>「きょう、おれんちの母さん、手術するんだ」「そんなこと、おれにゃわかるかよ」と、進には母の手術への不安がある。「おい、きょう、あそばねえとリンチだぞ」「テレビの俳優のように、カッコつけた」を、選択肢では「素直に表に出したくない」「わざとふざけている」と言い換えている。<br><strong>【作問者の意図】</strong> 「リンチだぞ」という強い言葉を本気の脅しではなく、感情を隠す芝居として読ませている。</td>
+              <td>不一致なし。</td>
+              <td class="judge-ok">○</td>
+            </tr>
+            <tr>
+              <td>イ　自分の中にある悲しさや不安を「ぼく」たちに見せると、心配をかけるのではないかと気をつかい、無理して明るくふるまっている。</td>
+              <td>「手術するんだ」「カッコつけた」から、悲しさや不安をそのまま見せていない点は近い。</td>
+              <td>【理由の追加】本文には「ぼくたちに心配をかけるのではないか」と気づかう説明はない。本文の中心は、進が自分の弱さを「素直に表に出したくない」ことであり、相手への配慮ではない。<br><strong>【作問者の意図】</strong> 本文の「不安を見せない」を使いながら、理由を「相手を気づかう」へ作り替えている。</td>
+              <td class="judge-ng">×</td>
+            </tr>
+            <tr>
+              <td>ウ　母が手術すると知られ、同情からあそんでもらうのは自尊心がゆるさないので、少しおどしつけて自分の言うことを聞かせようとしている。</td>
+              <td>「母さん、手術するんだ」「リンチだぞ」から、「手術」と「おどしつけるような言い方」は本文に近い。</td>
+              <td>【目的のすり替え】本文は「テレビの俳優のように、カッコつけた」と、感情を隠す芝居を示す。選択肢は「同情からあそんでもらうのは自尊心がゆるさない」「言うことを聞かせよう」と、目的を支配・自尊心に替えている。<br><strong>【作問者の意図】</strong> 本文の「リンチだぞ」という強い語を利用し、芝居の強がりを本気の命令に見せかけている。</td>
+              <td class="judge-ng">×</td>
+            </tr>
+            <tr>
+              <td>エ　母が手術を受けるため、自分ひとりで家にいるという、だれが見ても気の毒な状況のいまなら、だれもがゆるしてくれるのではないかと思い、カッコつけている。</td>
+              <td>「母さん、手術するんだ」「カッコつけた」は本文にある。進が母の不在を抱えている点も近い。</td>
+              <td>【本文にない考えの追加】本文に「だれもがゆるしてくれる」と進が考えた根拠はない。線④の「カッコつけた」は、自分の弱さを隠すふるまいであって、許されると思っている計算ではない。<br><strong>【作問者の意図】</strong> 本文の「母の手術」と「カッコつけ」を残し、結論を「感情を隠す」から「許される計算」に替えている。</td>
+              <td class="judge-ng">×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>答案チェック</h3>
+      <div class="answer-check">「リンチだぞ」は本気の脅しではありません。「テレビの俳優のように、カッコつけた」が、わざと演じていることを示す決め手です。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>ウは「リンチだぞ」を本気の命令として読ませるひっかけです。本文では「カッコつけた」とあるので、目的は相手を支配することではなく、弱さを見せないことです。</div>
+
+      <details class="confirm">
+        <summary>理解確認テスト</summary>
+        <div class="mini-test-visible">
+          <p><strong>設問文</strong><br>線④「おい、きょう、あそばねえとリンチだぞ。」テレビのはいゆうのように、カッコつけた」とありますが、このときの進の様子として、最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+          <ul class="choice-list">
+            <li>ア　母の手術がこわいので、本当は遊びたくないのに、「ぼく」たちを追い払おうとしている様子。</li>
+            <li>イ　母のことを話して動揺しているが、弱さを見せまいとして、芝居のように乱暴な言い方でふざけている様子。</li>
+            <li>ウ　手術のことを話せば同情してもらえると思い、わざと気の毒な自分を演じている様子。</li>
+            <li>エ　「ぼく」たちに命令できる立場だと本気で思い、リンチすると脅して遊びを強制している様子。</li>
+          </ul>
+        </div>
+        <h3>解答</h3>
+        <div class="answer-box">イ</div>
+        <h3>選択肢ごとの照合結果</h3>
+        <div class="table-wrap">
+          <table class="choice-table">
+            <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
+            <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+            <tbody>
+              <tr><td>ア　母の手術がこわいので、本当は遊びたくないのに、「ぼく」たちを追い払おうとしている様子。</td><td>「母さん、手術するんだ」は本文にある。</td><td>【行動の逆】本文では「あそばねえとリンチだぞ」と遊ぶ約束を求めている。選択肢の「遊びたくない」「追い払おう」は本文の行動と逆である。<br><strong>【作問者の意図】</strong> 「手術がこわい」を使い、結果を「遊びたい」から「追い払う」に反対にしている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>イ　母のことを話して動揺しているが、弱さを見せまいとして、芝居のように乱暴な言い方でふざけている様子。</td><td>「おれんちの母さん、手術するんだ」「おれにゃわかるかよ」「テレビの俳優のように、カッコつけた」。本文の「俳優」「カッコつけ」を「芝居のように」、「リンチだぞ」を「乱暴な言い方でふざけている」と言い換えている。<br><strong>【作問者の意図】</strong> 強い言葉の表面ではなく、演じている様子を根拠にさせる。</td><td>不一致なし。</td><td class="judge-ok">○</td></tr>
+              <tr><td>ウ　手術のことを話せば同情してもらえると思い、わざと気の毒な自分を演じている様子。</td><td>「手術するんだ」と「カッコつけた」は本文にある。</td><td>【主語のねらいのすり替え】本文は進が弱さを見せないようにしている場面であり、「同情してもらえると思い」は書かれていない。<br><strong>【作問者の意図】</strong> 「手術」「演じる」を残し、演じる目的を「同情をもらう」に替えている。</td><td class="judge-ng">×</td></tr>
+              <tr><td>エ　「ぼく」たちに命令できる立場だと本気で思い、リンチすると脅して遊びを強制している様子。</td><td>「リンチだぞ」は選択肢の「脅して」と語が近い。</td><td>【本気化の誤り】本文は「テレビの俳優のように、カッコつけた」と、芝居のような言い方だと示している。選択肢は「本気で思い」「強制」と、ふざけた強がりを本気の支配に替えている。<br><strong>【作問者の意図】</strong> 乱暴な語だけを読ませ、直後の「俳優」「カッコつけ」を見落とさせる。</td><td class="judge-ng">×</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section id="answers" class="summary-card">
+      <h2 class="section-title">最終答案一覧</h2>
+      <div class="table-wrap final-table">
+        <table>
+          <thead><tr><th>設問</th><th>最終答案</th><th>根拠の一言</th></tr></thead>
+          <tbody>
+            <tr><td>問三</td><td><strong>ア</strong></td><td>「ぽつん」「ひとりかあ」「むねが、きゅん」から、広い家で一人の進をかわいそうに思う。</td></tr>
+            <tr><td>問四</td><td><strong>ア</strong></td><td>「手術するんだ」の不安を、「リンチだぞ」「カッコつけた」で素直に出さずに隠している。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="learning" class="summary-card">
+      <h2 class="section-title">今回の学習まとめ</h2>
+      <div class="learning-grid">
+        <div class="card">
+          <h3>再現したい手順</h3>
+          <ol>
+            <li>線の前後で、だれがどこにいて何をしているかを固定する。</li>
+            <li>動作・表情・言い方を拾い、その動作がどんな気持ちの表れかに変換する。</li>
+            <li>選択肢は、本文の語があるかではなく、対象・時点・理由・結論が一致するかで判定する。</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>間違えやすい点</h3>
+          <p>「ひろい」「リンチだぞ」のような目立つ語だけで選ぶと誤答になります。「ひろい」は孤独を強める語、「リンチだぞ」は本気の脅しではなくカッコつけた芝居です。</p>
+        </div>
+        <div class="card">
+          <h3>次に同タイプで使う塾技</h3>
+          <p>物語文では、人物の本心は直接書かれないことがあります。気持ちを表す言葉、直後の動作、わざとらしい言い方をつなぎ、「表の言動」と「本心」のずれを読むことが大切です。</p>
+        </div>
+        <div class="card">
+          <h3>記述の書き方ミニまとめ</h3>
+          <p>選択肢問題を記述に直すなら、「だれが」「何をきっかけに」「どんな気持ちになったか」の順で書きます。例：進が広い家で一人でいることを想像し、かわいそうに思った。</p>
+        </div>
+      </div>
+
+      <h3>問ごとの塾技活用まとめ</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>設問</th><th>使った読み方</th><th>決め手の本文語</th><th>誤答を消すポイント</th></tr></thead>
+          <tbody>
+            <tr><td>問三</td><td>場面固定＋心情線</td><td>「ぽつん」「ひとりかあ」「むねが、きゅん」</td><td>「ひろい」をうらやましさにせず、孤独の場面として読む。</td></tr>
+            <tr><td>問四</td><td>本心とずれる言動線</td><td>「手術するんだ」「リンチだぞ」「カッコつけた」</td><td>乱暴な言葉を本気の脅しではなく、強がり・芝居として読む。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
