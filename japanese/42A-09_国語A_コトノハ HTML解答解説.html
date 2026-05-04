@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>42A-09_国語A_コトノハ HTML解答解説</title>
+<style>
+:root{
+  --ink:#223047;
+  --muted:#667085;
+  --paper:#fffdf8;
+  --line:#d9e2ec;
+  --accent:#2f6f73;
+  --accent2:#b7791f;
+  --soft:#eef7f6;
+  --soft2:#fff4df;
+  --danger:#9b2c2c;
+  --ok:#276749;
+  --card:#ffffff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  color:var(--ink);
+  background:linear-gradient(180deg,#f7fafc 0%,#fffdf8 32%,#f7fafc 100%);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,sans-serif;
+  line-height:1.78;
+}
+.top-panel{
+  position:sticky;
+  top:0;
+  z-index:20;
+  max-height:30vh;
+  overflow-y:auto;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(8px);
+  padding:10px 18px;
+  box-shadow:0 8px 24px rgba(34,48,71,.08);
+}
+.nav-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.nav-row strong{margin-right:8px;}
+.nav-row a,.nav-row button{
+  border:1px solid #c7d7df;
+  background:#fff;
+  color:#1d4f55;
+  border-radius:999px;
+  padding:7px 12px;
+  text-decoration:none;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+}
+.nav-row button{background:#1d4f55;color:#fff;border-color:#1d4f55;}
+.nav-row a:hover,.nav-row button:hover{filter:brightness(.96);}
+.wrapper{width:min(1180px,94vw);margin:26px auto 72px;}
+.hero{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 18px 50px rgba(34,48,71,.08);
+}
+h1{font-size:clamp(26px,4vw,42px);line-height:1.25;margin:0 0 10px;}
+.subtitle{color:var(--muted);font-weight:700;margin:0 0 16px;}
+.badges,.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.badge,.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:13px;
+  font-weight:700;
+}
+.badge{background:var(--soft);color:#1d4f55;border:1px solid #cbe8e6;}
+.pill{background:#f8fafc;border:1px solid var(--line);color:#344054;text-decoration:none;}
+.section{margin-top:26px;}
+.section>h2{
+  font-size:25px;
+  margin:0 0 14px;
+  padding-left:14px;
+  border-left:7px solid var(--accent);
+}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+.card,.diagnostic-card,.q-card,.summary-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 12px 32px rgba(34,48,71,.06);
+}
+.diagnostic-card h3,.q-card h3,.summary-card h3{margin-top:0;}
+.kv{display:grid;grid-template-columns:180px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px;margin-top:12px;}
+.kv div:nth-child(odd){font-weight:800;color:#38576a;}
+.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0;}
+.legend-item{border:1px dashed #cbd5e1;border-radius:14px;padding:10px;background:#fbfdff;}
+.text-block{
+  background:#fffaf0;
+  border:1px solid #f1d8a8;
+  border-radius:18px;
+  padding:18px 20px;
+  font-size:16px;
+}
+.text-block p{margin:0 0 13px;}
+.quote{
+  display:inline;
+  padding:1px 3px;
+  border-radius:5px;
+}
+.keyword{background:#e6fffa;border-bottom:3px solid #38b2ac;}
+.main-claim{background:#fef3c7;border-bottom:3px solid #d69e2e;}
+.question-line{background:#edf2ff;border-bottom:3px solid #667eea;}
+.answer-line{background:#e9f7ef;border-bottom:3px solid #38a169;}
+.contrast-a{background:#e6fffa;border-bottom:3px solid #2c7a7b;}
+.contrast-b{background:#fff1f2;border-bottom:3px solid #e53e3e;}
+.cause{background:#eef2ff;border-bottom:3px solid #5a67d8;}
+.result{background:#f0fff4;border-bottom:3px solid #48bb78;}
+.note{display:block;color:#667085;font-size:13px;margin-top:6px;}
+.q-card{margin-top:18px;}
+.q-head{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+.q-num{font-size:22px;font-weight:900;color:#1d4f55;}
+.q-type{font-weight:800;background:var(--soft);color:#1d4f55;border-radius:999px;padding:5px 10px;}
+.rate{background:#fff4df;border:1px solid #f6d08f;border-radius:14px;padding:10px 12px;font-weight:800;margin:12px 0;}
+.problem-box,.answer-box,.detail-box,.pitfall{
+  border-radius:16px;
+  padding:14px 16px;
+  margin:12px 0;
+}
+.problem-box{background:#f8fafc;border:1px solid #d0d7de;}
+.answer-box{background:#ecfdf3;border:1px solid #a6d8b3;color:#14532d;font-weight:900;}
+.detail-box{background:#f8fbff;border:1px solid #c9d8ea;}
+.pitfall{background:#fff5f5;border:1px solid #f1b5b5;color:#7b1e1e;}
+.choice-list{margin:8px 0 0 0;padding-left:0;list-style:none;}
+.choice-list li{padding:4px 0;}
+.table-wrap{overflow-x:auto;margin:12px 0;}
+table{border-collapse:collapse;width:100%;background:#fff;}
+th,td{border:1px solid #d0d7de;padding:10px;vertical-align:top;}
+th{background:#eef7f6;color:#1d4f55;text-align:left;}
+.choice-table{min-width:980px;}
+.choice-table .judge-ok{font-weight:900;color:var(--ok);}
+.choice-table .judge-ng{font-weight:900;color:var(--danger);}
+.check-test{
+  border:1px solid #d8e6e4;
+  border-radius:18px;
+  background:#fbfffe;
+  margin-top:14px;
+  padding:14px 16px;
+}
+details.check-answer summary{
+  cursor:pointer;
+  font-weight:900;
+  color:#1d4f55;
+  list-style:none;
+}
+details.check-answer summary::-webkit-details-marker{display:none;}
+.mini-title{font-weight:900;color:#1d4f55;margin:14px 0 6px;}
+.check-visible{border-top:1px dashed #cbd5e1;margin-top:10px;padding-top:10px;}
+.final-table{min-width:720px;}
+.small{font-size:13px;color:var(--muted);}
+hr.soft{border:0;border-top:1px solid var(--line);margin:18px 0;}
+@media (max-width:760px){
+  .grid,.legend{grid-template-columns:1fr;}
+  .kv{grid-template-columns:1fr;}
+  .wrapper{width:94vw;}
+  .hero,.card,.diagnostic-card,.q-card,.summary-card{padding:16px;}
+}
+@media print{
+  @page{size:A4 portrait;margin:13mm;}
+  body{background:#fff;color:#111;}
+  .top-panel{display:none;}
+  .wrapper{width:100%;margin:0;}
+  .hero,.card,.diagnostic-card,.q-card,.summary-card,.check-test{box-shadow:none;break-inside:avoid;page-break-inside:avoid;}
+  .section{break-inside:auto;page-break-inside:auto;}
+  a{color:#111;text-decoration:none;}
+  .check-test{break-inside:avoid;}
+  details.check-answer:not([open]) summary::after{content:"（印刷時はブラウザで開いてから印刷すると解説も出ます）";font-weight:400;color:#555;margin-left:8px;}
+}
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<nav class="top-panel" aria-label="ページ内ナビゲーション">
+  <div class="nav-row">
+    <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true); window.print()">PDF出力</button>
+    <strong>ジャンプ：</strong>
+    <a href="#diagnosis">本文の読み方診断</a>
+    <a href="#daimon">大問</a>
+    <a href="#q3-1">問三(1)へ</a>
+    <a href="#q3-2">問三(2)へ</a>
+    <a href="#q4">問四へ</a>
+    <a href="#answers">最終答案一覧</a>
+    <a href="#summary">今回の学習まとめ</a>
+  </div>
+</nav>
+<main class="wrapper">
+  <header class="hero">
+    <h1>42A-09_国語A_コトノハ HTML解答解説</h1>
+    <p class="subtitle">対象：読解演習「ヤマネのくらし」 問三・問四 ／ 解答・解説PDF照合済み</p>
+    <div class="badges">
+      <span class="badge">文章ジャンル：説明文</span>
+      <span class="badge">設問タイプ：抜き出し・理由選択・語句意味選択</span>
+      <span class="badge">PDF出力対応：A4縦</span>
+    </div>
+    <div class="pills">
+      <a class="pill" href="#diagnosis">本文の読み方診断</a>
+      <a class="pill" href="#daimon">本文の線引き再現</a>
+      <a class="pill" href="#answers">最終答案一覧</a>
+      <a class="pill" href="#summary">今回の学習まとめ</a>
+    </div>
+    <p class="small">注：縦書きPDFの本文・設問を、学習しやすいよう横書きに再構成しています。問三・問四に必要な本文根拠を中心に掲載しています。</p>
+  </header>
+
+  <section id="diagnosis" class="section">
+    <h2>本文の読み方診断</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>文章全体の主題・流れ</h3>
+        <p>この文章は、ヤマネを中心にして、森の生き物どうしのつりあいと、人間の開発がそのつりあいをこわす危険を説明しています。前半は「食べる・食べられる」「食べ物の分け合い」、後半は「開発・観光・植林による変化」、最後は「人間も自然の一員」という主張へ進みます。</p>
+      </article>
+      <article class="card">
+        <h3>読みの勝負所</h3>
+        <p>問三は、本文中の「広葉樹」と「針葉樹の植林地」の対比を見抜くことが勝負です。問四は、「心ない人」という言葉を辞書的な意味だけでなく、直後の「ごみをすてたり、植物をとったり」という行動に戻して読むことが勝負です。</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="daimon" class="section">
+    <h2>大問：読解演習「ヤマネのくらし」</h2>
+    <article class="diagnostic-card">
+      <h3>文章ジャンル・設問タイプ</h3>
+      <p>説明文。問三は「本文中の語句を形に合わせて抜き出す問題」と「理由選択問題」、問四は「文脈中の語句の意味を選ぶ問題」です。</p>
+
+      <h3>文章の主題・流れ</h3>
+      <p>森には多くの生き物がいて、食べたり食べられたりする関係でつりあっています。ヤマネも昆虫を食べ、天敵に食べられることで数が調整され、ほかのげっ歯類とは活動場所や食べ物を分け合っています。後半では、観光・別荘地・植林によってヤマネのすむ森がこわされ、最後に人間が自然を一方的に変えてはいけないという主張が示されます。</p>
+
+      <h3>本文の要約</h3>
+      <p>本文は、ヤマネのすむ森を例に、森の自然が多くの生き物の食べる・食べられる関係でつりあっていることを説明する。ヤマネはガなどの昆虫を食べるため、草木を食べる幼虫がふえすぎるのを防ぐ一方、ヤマネ自身も天敵によって数がふえすぎない。さらに、リスやネズミなど同じげっ歯類の仲間とも、体の大きさ、活動する場所や時間、食べる木の実の種類を変えることで食べ物を分け合っている。後半では、八ヶ岳中信高原国定公園の観光道路・観光施設・別荘地の開発が、ヤマネやほかの生き物に悪い影響を与えていることが示される。ごみ、植物採取、交通事故、毒薬やわな、雑木を切って針葉樹を植えることによって、豊かな広葉樹の森が失われる。ヤマネにとってよいのは、木の実をつける広葉樹があり、たくさんの生き物が関わり合う森である。最後に筆者は、人間も自然の一員であり、人間だけが一方的に自然を変えてよいはずはないと主張する。</p>
+
+      <h3>本文文字数</h3>
+      <p>約1,230字（本文を横書きに再構成して概算）。</p>
+
+      <h3>この大問で使う線の凡例・線の引き方</h3>
+      <div class="legend">
+        <div class="legend-item"><strong>キーワード線</strong><br>ヤマネ、森の自然、つりあい、広葉樹、針葉樹など、くり返し出る中心語に引く。</div>
+        <div class="legend-item"><strong>問い線・答え線</strong><br>「あらそうことはないのでしょうか」のような問いと、その後の答えに引く。</div>
+        <div class="legend-item"><strong>対比線</strong><br>ヤマネによい広葉樹の森と、生き物が少ない針葉樹の植林地を分けて引く。</div>
+        <div class="legend-item"><strong>主張線</strong><br>最後の「人間だけが一方的に自然を変えてしまっていいはずはありません」に引く。</div>
+      </div>
+
+      <h3>本文の線引き再現</h3>
+      <div class="text-block">
+        <p><span class="quote keyword">ヤマネのすむ森</span>は、木や草などの植物が豊かに生えているだけでなく、昆虫や鳥、けものなど、数多くの生き物もくらしています。これらの生き物が、<span class="quote keyword">食べたり食べられたり</span>しながら、<span class="quote main-claim">森の自然はつりあっている</span>のです。</p>
+        <p>例えば、ヤマネは、夏には昆虫をたくさん食べます。ガの幼虫は、森の草木の葉を食べますから、ガを食べるヤマネのような動物がいないと、やがて、幼虫がふえて森の緑はなくなってしまいます。これでは、ヤマネもくらしていくことができません。</p>
+        <p>ヤマネが多すぎるとどうでしょう。森の昆虫や木の実がなくなり、やっぱりヤマネはすみづらくなるでしょう。でも、ヤマネには、テンやイタチ、フクロウ、ヘビのような天敵がいて、ヤマネがふえすぎることはありません。</p>
+        <p>ところで、<span class="quote keyword">①ヤマネのすむ森</span>には、リスやネズミ、ときにはムササビやモモンガなどの、同じげっ歯類のなかまがすんでいることがあります。<span class="quote question-line">木の実などの食べ物をめぐって、あらそうことはないのでしょうか</span>。これらのなかまは、からだの大きさがちがえば、活動するはんいや空間もちがいます。また、活動の時間帯がちがうものもいます。それに、ヤマネの歯はあまり鋭くないので、比較的やわらかい種類の木の実を食べます。そのことによって、<span class="quote answer-line">食べ物をうまくわけあっている</span>のです。</p>
+        <p>ヤマネのすむ八ヶ岳中信高原国定公園は高原や森、渓谷などの美しい風景にめぐまれた土地です。そのため、近年、観光道路や観光施設がたくさんつくられ、別荘地も開発されてきました。多くの人が美しい自然と接することができるようになったのはいいことですが、いっぽうでは<span class="quote result">開発によってこわされてしまった森</span>もあります。</p>
+        <p>観光地では、<span class="quote cause">ごみをすてたり、植物をとったりする②心ない人</span>もいます。そして、観光客のこした食べ物をたよりにするようになった動物もいれば、観光道路で交通事故にあう動物もでてきました。別荘地では、毒薬をまいたり、わなをしかける人がいます。それによって命をおとすヤマネもいます。</p>
+        <p><span class="quote contrast-a">ヤマネのすむ森は、木の実をつけるさまざまな広葉樹が生えています</span>が、このような木は雑木といって、林業にはあまりむいていません。そこで雑木をきりはらって、カラマツやスギなどが、どんどん植林されてきました。<span class="quote contrast-b">このような針葉樹の植林地には生き物がすくなく</span>、ヤマネのような動物には、かならずしもよい場所ではありません。</p>
+        <p><span class="quote main-claim">さまざまな生き物が複雑にかかわりあって、はじめてつりあいのとれた豊かな自然です</span>。人間ももともと自然の一員です。<span class="quote main-claim">人間だけが一方的に自然を変えてしまっていいはずはありません</span>。</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="section" aria-label="設問別解答解説">
+    <h2>設問別解答解説</h2>
+
+    <article id="q3-1" class="q-card">
+      <div class="q-head"><span class="q-num">問三（1）</span><span class="q-type">抜き出し・空欄補充</span></div>
+      <div class="problem-box">
+        <strong>設問文の再掲</strong><br>
+        線①「ヤマネのすむ森」について。ヤマネのすむ森はどのような種類の木が生えているのかを説明するとき、次のア・イにあてはまる言葉を本文中から探して、指定された字数でぬき出しましょう。<br>
+        <span class="small">ア（三字）がなる　イ（二字）樹。</span>
+      </div>
+      <div class="rate">推定正答率 86%（「木の実をつける」を「木の実がなる」に言い換えられるか）</div>
+      <h3>思考プロセス＋解説</h3>
+      <div class="detail-box">
+        この問題は、設問の形「アがなるイ樹」を本文に入れ戻して探す抜き出しです。本文には「<strong>ヤマネのすむ森は、木の実をつけるさまざまな広葉樹が生えています</strong>」とあります。「木の実をつける」は、設問の「木の実がなる」と同じ意味です。また、「広葉樹」は「イ樹」の形にそのまま合うので、「樹」は解答に入れず、その前の二字「広葉」を抜きます。したがって、アは三字で「木の実」、イは二字で「広葉」です。「雑木」は本文に近い語ですが、「雑木樹」とは言えないので入りません。
+      </div>
+      <h3>解答</h3>
+      <div class="answer-box">ア＝木の実、イ＝広葉</div>
+
+      <h3>空欄群の個別解説</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>記号</th><th>本文の前後関係</th><th>入る語</th><th>理由</th><th>誤りやすい点</th></tr></thead>
+          <tbody>
+            <tr><td>ア</td><td>「木の実をつけるさまざまな広葉樹」</td><td>木の実</td><td>「つける」は「実がなる」と同じ内容。三字条件にも合う。</td><td>「木の実を」と助詞まで入れると字数が合わない。</td></tr>
+            <tr><td>イ</td><td>「広葉樹が生えています」</td><td>広葉</td><td>設問には最後の「樹」が印字されているため、抜き出すのは前の二字だけ。</td><td>「針葉」は後に出るが、ヤマネによい場所ではない植林地の説明。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>答案チェック</h3>
+      <div class="detail-box">「木・の・実」で三字、「広・葉」で二字です。解答欄に「樹」を重ねて書かないことを確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「雑木」は目立つ語ですが、設問の形は「□□樹」です。「雑木」は種類の説明ではあっても「雑木樹」にはならないので、字数と文型で消します。</div>
+    </article>
+
+    <article id="q3-2" class="q-card">
+      <div class="q-head"><span class="q-num">問三（2）</span><span class="q-type">理由選択</span></div>
+      <div class="problem-box">
+        <strong>設問文の再掲</strong><br>
+        ヤマネが、（1）の木が生える森でくらすのはなぜだと考えられますか。その理由として、最もふさわしいものを次の中から選び、記号で答えましょう。
+        <ul class="choice-list">
+          <li>ア　いろいろな生き物が数多くいるので、エサが手に入りやすいから。</li>
+          <li>イ　光が多くさしこむ明るい森なので、天敵におそわれにくいから。</li>
+          <li>ウ　林業に使えない木が多いので、人間があまり入ってこないから。</li>
+          <li>エ　天敵におそわれないように自分を守ってくれる動物がいるから。</li>
+        </ul>
+      </div>
+      <div class="rate">推定正答率 74%（「広葉樹」と「針葉樹の植林地」の対比から理由を組み立てられるか）</div>
+      <h3>思考プロセス＋解説</h3>
+      <div class="detail-box">
+        この問題は、（1）で見つけた「木の実をつける広葉樹」が、ヤマネにとってなぜよいのかを本文全体から考える理由選択です。本文は「<strong>ヤマネのすむ森は、木の実をつけるさまざまな広葉樹が生えています</strong>」と言ったあと、「<strong>針葉樹の植林地には生き物がすくなく</strong>」と対比しています。つまり、広葉樹の森は木の実や生き物が多く、ヤマネのえさが得られやすい森だと読めます。前半にも、ヤマネが「昆虫をたくさん食べます」とあり、木の実も食べ物として出ています。したがって、理由は「エサが手に入りやすいから」で、アを選びます。
+      </div>
+      <h3>解答</h3>
+      <div class="answer-box">ア</div>
+
+      <h3>選択肢ごとの照合結果</h3>
+      <div class="table-wrap">
+        <table class="choice-table">
+          <colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+          <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>ア　いろいろな生き物が数多くいるので、エサが手に入りやすいから。</td>
+              <td>「木の実をつけるさまざまな広葉樹」と「針葉樹の植林地には生き物がすくなく」を合わせると、広葉樹の森には生き物や木の実が多いと分かる。本文の「木の実」「昆虫をたくさん食べます」を、選択肢では「エサ」とまとめている。</td>
+              <td>不一致なし。<br><strong>【作問者の意図】</strong>本文の「木の実」「広葉樹」「生き物」を、選択肢では「エサが手に入りやすい」と一段まとめている。本文語の丸写しではないので、広葉樹とえさの関係を自分でつなぐ必要がある。</td>
+              <td class="judge-ok">正解</td>
+            </tr>
+            <tr>
+              <td>イ　光が多くさしこむ明るい森なので、天敵におそわれにくいから。</td>
+              <td>本文には「テンやイタチ、フクロウ、ヘビのような天敵がいて」とあり、天敵という語は本文に出てくる。</td>
+              <td>【原因すり替え】本文の理由は「木の実をつける広葉樹」や「生き物」の多さによるえさの得やすさ。選択肢は原因を「光が多くさしこむ明るい森」、結果を「天敵におそわれにくい」に替えている。<br><strong>【作問者の意図】</strong>本文の「天敵」を使いながら、天敵が「ヤマネがふえすぎることはありません」という数の調整役である点を、「おそわれにくい」という安全の話にすり替えている。</td>
+              <td class="judge-ng">不正解</td>
+            </tr>
+            <tr>
+              <td>ウ　林業に使えない木が多いので、人間があまり入ってこないから。</td>
+              <td>「このような木は雑木といって、林業にはあまりむいていません」は、選択肢の「林業に使えない木が多い」に近い。</td>
+              <td>【結果のすり替え】本文は「林業にはあまりむいていません」だから「雑木をきりはらって、カラマツやスギなどが、どんどん植林されてきました」と述べる。選択肢は結果を「人間があまり入ってこない」に替えている。<br><strong>【作問者の意図】</strong>本文の「林業にはあまりむいていません」を残し、本文の結果「切りはらって植林」ではなく「人間が入ってこない」に変えている。</td>
+              <td class="judge-ng">不正解</td>
+            </tr>
+            <tr>
+              <td>エ　天敵におそわれないように自分を守ってくれる動物がいるから。</td>
+              <td>本文には「テンやイタチ、フクロウ、ヘビのような天敵がいて」とあり、ヤマネ以外の動物がいることは書かれている。</td>
+              <td>【役割の反転】本文の天敵はヤマネを守る動物ではなく、ヤマネがふえすぎるのを防ぐ存在。選択肢は「天敵」や「動物」を残しながら、役割を「おそう」から「守る」に反対にしている。<br><strong>【作問者の意図】</strong>本文の「天敵」「動物」という近い語を使って、天敵の働きを逆向きにしている。</td>
+              <td class="judge-ng">不正解</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「林業にはあまりむいていません」は本文にあるのでウに飛びつきやすいですが、本文はその後に「切りはらって植林」と続きます。理由は「人間が入らない」ではありません。</div>
+
+      <h3>理解確認テスト</h3>
+      <div class="check-test">
+        <div class="check-visible">
+          <p><strong>設問文</strong>：ヤマネが、（1）の木が生える森でくらすのはなぜだと考えられますか。その理由として、最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+          <ul class="choice-list">
+            <li>ア　林業に向かない木があるので、人間が森をそのまま残してくれるから。</li>
+            <li>イ　広葉樹の森には木の実や昆虫など、ヤマネのえさにつながるものが多いから。</li>
+            <li>ウ　針葉樹が多く植えられていて、天敵から見つかりにくいから。</li>
+            <li>エ　観光客が残した食べ物を食べることができるから。</li>
+          </ul>
+          <details class="check-answer">
+            <summary>解答・解説を表示</summary>
+            <h3>解答</h3>
+            <div class="answer-box">イ</div>
+            <h3>選択肢ごとの照合結果</h3>
+            <div class="table-wrap">
+              <table class="choice-table">
+                <colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+                <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+                <tbody>
+                  <tr><td>ア　林業に向かない木があるので、人間が森をそのまま残してくれるから。</td><td>「林業にはあまりむいていません」は本文にある。</td><td>【結果のすり替え】本文はその後「雑木をきりはらって、カラマツやスギなどが、どんどん植林」と続く。選択肢は「切りはらう」→「そのまま残してくれる」に変えている。<br><strong>【作問者の意図】</strong>本文の「林業にはあまりむいていません」を使いながら、結果だけを反対にしている。</td><td class="judge-ng">不正解</td></tr>
+                  <tr><td>イ　広葉樹の森には木の実や昆虫など、ヤマネのえさにつながるものが多いから。</td><td>「木の実をつけるさまざまな広葉樹」と「昆虫をたくさん食べます」が対応する。本文の「木の実」「昆虫」を、選択肢では「ヤマネのえさにつながるもの」とまとめている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文語を「えさにつながるもの」と言い換え、広葉樹とヤマネのくらしの関係をまとめて問うている。</td><td class="judge-ok">正解</td></tr>
+                  <tr><td>ウ　針葉樹が多く植えられていて、天敵から見つかりにくいから。</td><td>「カラマツやスギなどが、どんどん植林」は本文にある。</td><td>【本文との逆】本文は「針葉樹の植林地には生き物がすくなく、ヤマネのような動物には、かならずしもよい場所ではありません」と言う。選択肢は針葉樹の植林地をヤマネによい場所にしている。<br><strong>【作問者の意図】</strong>本文の「針葉樹」「植林」を残し、評価を「よい場所ではない」→「見つかりにくいからよい」に反転している。</td><td class="judge-ng">不正解</td></tr>
+                  <tr><td>エ　観光客が残した食べ物を食べることができるから。</td><td>「観光客のこした食べ物をたよりにするようになった動物」は本文にある。</td><td>【対象のすり替え】本文ではそれは観光地の問題として出てくる「動物」で、ヤマネが広葉樹の森でくらす理由ではない。<br><strong>【作問者の意図】</strong>本文の「観光客のこした食べ物」を使い、問われている「広葉樹の森」から目をそらしている。</td><td class="judge-ng">不正解</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article id="q4" class="q-card">
+      <div class="q-head"><span class="q-num">問四</span><span class="q-type">語句意味選択</span></div>
+      <div class="problem-box">
+        <strong>設問文の再掲</strong><br>
+        線②「心ない人」の本文中での意味として、最もふさわしいものを次の中から選び、記号で答えましょう。
+        <ul class="choice-list">
+          <li>ア　決められたことを守らない人</li>
+          <li>イ　落ちついて行動できない人</li>
+          <li>ウ　自分のことしか考えない人</li>
+          <li>エ　こだわりが強くがんこな人</li>
+        </ul>
+      </div>
+      <div class="rate">推定正答率 82%（語句の意味を直後の行動に戻して考えられるか）</div>
+      <h3>思考プロセス＋解説</h3>
+      <div class="detail-box">
+        この問題は、線の語句だけでなく、直後の具体的な行動に戻って意味を決める問題です。本文では「<strong>ごみをすてたり、植物をとったりする心ない人</strong>」と書かれています。つまり「心ない人」は、観光地で自然や生き物への影響を考えず、自分の都合で行動する人を指しています。最後の主張にも「<strong>人間だけが一方的に自然を変えてしまっていいはずはありません</strong>」とあるため、単なるルール違反や落ち着きのなさではなく、自然への思いやりのなさが中心です。したがって、本文中での意味は「自分のことしか考えない人」となり、ウを選びます。
+      </div>
+      <h3>解答</h3>
+      <div class="answer-box">ウ</div>
+
+      <h3>選択肢ごとの照合結果</h3>
+      <div class="table-wrap">
+        <table class="choice-table">
+          <colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+          <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>ア　決められたことを守らない人</td>
+              <td>「ごみをすてたり、植物をとったり」は、きまりを守らない行動としても読めるので、一部は近い。</td>
+              <td>【意味のせばめすぎ】本文は「ごみをすてたり、植物をとったりする心ない人」を、自然や生き物への配慮を欠く人として出している。選択肢は「決められたこと」という規則違反に意味をせばめている。<br><strong>【作問者の意図】</strong>本文の「ごみ」「植物をとったり」を使い、ルール違反だけの話に見せている。</td>
+              <td class="judge-ng">不正解</td>
+            </tr>
+            <tr>
+              <td>イ　落ちついて行動できない人</td>
+              <td>本文の「ごみをすてたり、植物をとったり」は人の行動なので、「行動」という語だけは近い。</td>
+              <td>【性質のすり替え】本文の問題は、あわてていることではなく、自然への思いやりを欠いていること。選択肢は「心ない」を「落ちつきがない」という別の性質に替えている。<br><strong>【作問者の意図】</strong>本文の「人の行動」に合わせつつ、中心の意味を「思いやりがない」から「落ちつきがない」にずらしている。</td>
+              <td class="judge-ng">不正解</td>
+            </tr>
+            <tr>
+              <td>ウ　自分のことしか考えない人</td>
+              <td>「ごみをすてたり、植物をとったりする心ない人」は、自然や生き物のことを考えず自分の都合を優先する人を表す。本文の「人間だけが一方的に自然を変えてしまっていいはずはありません」とも対応する。</td>
+              <td>不一致なし。<br><strong>【作問者の意図】</strong>本文の「ごみをすてたり、植物をとったりする」を、選択肢では「自分のことしか考えない」と心のあり方に言い換えている。</td>
+              <td class="judge-ok">正解</td>
+            </tr>
+            <tr>
+              <td>エ　こだわりが強くがんこな人</td>
+              <td>「自分の考えを通す人」という印象は、表面的には「自分勝手」と少し近く見える。</td>
+              <td>【別語混入】本文には「こだわりが強い」「がんこ」という、意見を変えない性格は書かれていない。問題は自然への配慮不足であり、性格の頑固さではない。<br><strong>【作問者の意図】</strong>選択肢の「こだわり」「がんこ」で強い性格を想像させるが、本文の「ごみ」「植物をとる」という行動とずれている。</td>
+              <td class="judge-ng">不正解</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>アの「決められたことを守らない」は近く見えますが、本文では「きまり」よりも「自然への配慮がない」ことが中心です。語句の意味は、線の直後の具体例で決めます。</div>
+
+      <h3>理解確認テスト</h3>
+      <div class="check-test">
+        <div class="check-visible">
+          <p><strong>設問文</strong>：線②「心ない人」の本文中での意味として、最もふさわしいものを次の中から選び、記号で答えましょう。</p>
+          <ul class="choice-list">
+            <li>ア　自然やほかの生き物への影響を考えず、自分本位に行動する人</li>
+            <li>イ　観光地のきまりを知らず、うっかり失敗してしまう人</li>
+            <li>ウ　自分の考えを曲げず、人の意見を聞かない人</li>
+            <li>エ　危険をこわがって落ち着きを失っている人</li>
+          </ul>
+          <details class="check-answer">
+            <summary>解答・解説を表示</summary>
+            <h3>解答</h3>
+            <div class="answer-box">ア</div>
+            <h3>選択肢ごとの照合結果</h3>
+            <div class="table-wrap">
+              <table class="choice-table">
+                <colgroup><col style="width:22%"><col style="width:34%"><col style="width:34%"><col style="width:10%"></colgroup>
+                <thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead>
+                <tbody>
+                  <tr><td>ア　自然やほかの生き物への影響を考えず、自分本位に行動する人</td><td>「ごみをすてたり、植物をとったりする心ない人」と、「人間だけが一方的に自然を変えてしまっていいはずはありません」が対応する。本文の具体行動を、選択肢では「自分本位に行動」とまとめている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文の「ごみ」「植物をとったり」を、自然への配慮不足という抽象表現に言い換えている。</td><td class="judge-ok">正解</td></tr>
+                  <tr><td>イ　観光地のきまりを知らず、うっかり失敗してしまう人</td><td>「観光地では」という場所は本文に合う。</td><td>【原因の追加】本文は「知らず」「うっかり」とは書いていない。選択肢は、配慮のなさを「知識不足の失敗」に弱めている。<br><strong>【作問者の意図】</strong>本文の「観光地」を残して、原因を「自分本位」から「知らなかった」に替えている。</td><td class="judge-ng">不正解</td></tr>
+                  <tr><td>ウ　自分の考えを曲げず、人の意見を聞かない人</td><td>「自分」という語は、正解の「自分本位」と近く見える。</td><td>【別語混入】本文に「考えを曲げない」「人の意見を聞かない」はない。線②は、自然への影響を考えない行動の意味。<br><strong>【作問者の意図】</strong>「自分」という語だけを近づけ、意味を「自分勝手」から「がんこ」にずらしている。</td><td class="judge-ng">不正解</td></tr>
+                  <tr><td>エ　危険をこわがって落ち着きを失っている人</td><td>人の様子を表す選択肢である点だけは共通する。</td><td>【性質のすり替え】本文は「こわがる」「落ち着きを失う」とは書いていない。問題はごみ捨てや植物採取による自然への配慮不足。<br><strong>【作問者の意図】</strong>「心ない」を心の状態と誤読させ、文脈の具体行動から離れさせている。</td><td class="judge-ng">不正解</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="answers" class="section">
+    <h2>最終答案一覧</h2>
+    <div class="summary-card table-wrap">
+      <table class="final-table">
+        <thead><tr><th>設問</th><th>最終答案</th><th>根拠の一言</th></tr></thead>
+        <tbody>
+          <tr><td>問三（1）</td><td>ア＝木の実、イ＝広葉</td><td>「木の実をつけるさまざまな広葉樹」</td></tr>
+          <tr><td>問三（2）</td><td>ア</td><td>広葉樹の森は木の実や生き物が多く、えさが得られやすい。</td></tr>
+          <tr><td>問四</td><td>ウ</td><td>「ごみをすてたり、植物をとったりする」＝自分本位で自然への配慮がない。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="summary" class="section">
+    <h2>今回の学習まとめ</h2>
+    <article class="summary-card">
+      <h3>再現したい手順</h3>
+      <ol>
+        <li>設問の形を先に見る。抜き出しなら、印字済みの語を重ねない。</li>
+        <li>理由選択では、直前だけでなく、後ろの対比文まで読む。</li>
+        <li>語句意味では、線の直後の具体例に戻して意味を決める。</li>
+        <li>最後に、正解肢が本文のどの語をどう言い換えているかを確認する。</li>
+      </ol>
+
+      <h3>間違えやすい点</h3>
+      <p>本文にある語が入った選択肢でも、理由や結果が変えられていることがあります。問三（2）のウは「林業にはあまりむいていません」が本文にありますが、本文の続きは「切りはらって植林」であり、「人間があまり入ってこない」ではありません。</p>
+
+      <h3>次に同タイプで使う塾技</h3>
+      <p>抜き出しは「文型合わせ」、理由選択は「対比の後半まで確認」、語句意味は「具体例への差し戻し」を使います。特に説明文では、最後の主張線に戻ると、語句の方向性を外しにくくなります。</p>
+
+      <h3>問ごとの塾技活用まとめ</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>問</th><th>使う読み方</th><th>本文の決め手</th><th>次回の注意</th></tr></thead>
+          <tbody>
+            <tr><td>問三（1）</td><td>文型合わせ・字数確認</td><td>「木の実をつけるさまざまな広葉樹」</td><td>印字済みの「樹」を解答に入れない。</td></tr>
+            <tr><td>問三（2）</td><td>対比から理由を読む</td><td>広葉樹の森と針葉樹の植林地の対比</td><td>本文語があるだけの選択肢に飛びつかない。</td></tr>
+            <tr><td>問四</td><td>語句を具体例へ差し戻す</td><td>「ごみをすてたり、植物をとったりする」</td><td>辞書的意味だけでなく本文中の意味を選ぶ。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>記述の書き方ミニまとめ</h3>
+      <p>今回は記号・抜き出し中心ですが、記述にするなら「広葉樹の森には木の実や昆虫などのえさが多いから」「自然や生き物への影響を考えず自分本位に行動する人」のように、本文語を短く入れてから理由・意味をまとめます。</p>
+    </article>
+  </section>
+</main>
+</body>
+</html>
