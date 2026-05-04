@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>42A-07_国語A_コトノハ HTML解答解説</title>
+<style>
+:root{
+  --bg:#f7f4ee; --paper:#fffdf8; --ink:#27231f; --muted:#6f6558; --line:#e1d5c6;
+  --accent:#8b3d2f; --accent2:#2f5f73; --soft:#f4e6d8; --soft2:#e7f0f3; --ok:#1d6b45; --ng:#9b2d2d;
+  --yellow:#fff3bf; --green:#dff3e5; --blue:#dfeff8; --pink:#f7e0e7;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;line-height:1.75}
+a{color:inherit;text-decoration:none}
+.top-panel{position:sticky;top:0;z-index:20;background:rgba(255,253,248,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 3px 18px rgba(40,30,20,.08);max-height:34vh;overflow-y:auto;padding:10px 18px}
+.nav-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.nav-row strong{margin-right:6px;color:var(--accent)}
+button.print-btn,.nav-pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-weight:700;font-size:13px;white-space:nowrap;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+button.print-btn{background:var(--accent);color:#fff;border-color:var(--accent);cursor:pointer}
+.nav-pill:hover{background:var(--soft)}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 70px}
+.hero{background:linear-gradient(135deg,#fffdf8,#f8eadc);border:1px solid var(--line);border-radius:24px;padding:24px 28px;margin-bottom:22px;box-shadow:0 10px 30px rgba(44,29,15,.08)}
+h1{font-size:clamp(26px,3vw,40px);margin:.1em 0 .2em;line-height:1.25}
+.subtitle{color:var(--muted);font-weight:700}
+.badges,.toc-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.badge,.toc-pills a{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:6px 10px;background:#fff;border:1px solid var(--line);font-size:13px;font-weight:700;color:#5c4b3e}
+.section{margin:30px 0}
+.section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:25px}
+.section-title::before{content:"";width:10px;height:30px;border-radius:10px;background:var(--accent)}
+.card,.diag-card,.q-card,.summary-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:20px 22px;margin:16px 0;box-shadow:0 6px 18px rgba(44,29,15,.06)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.top-panel{max-height:45vh}}
+h2,h3,h4{line-height:1.4} h3{font-size:21px;margin:0 0 10px} h4{margin:14px 0 8px;color:var(--accent)}
+.note{border-left:5px solid var(--accent2);background:var(--soft2);padding:12px 14px;border-radius:12px;margin:12px 0;color:#263f49}
+.answer-box{background:#fff8df;border:2px solid #e2b94d;border-radius:16px;padding:12px 16px;margin:12px 0;font-weight:800}
+.pitfall{background:#fff1f1;border:1px solid #e5b5b5;border-left:6px solid var(--ng);border-radius:14px;padding:12px 14px;margin:12px 0}
+.check{background:#eef8ef;border:1px solid #b9d9bd;border-left:6px solid var(--ok);border-radius:14px;padding:12px 14px;margin:12px 0}
+.q-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.q-title{font-size:22px;font-weight:900;color:var(--accent)}
+.q-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta{background:var(--soft);border-radius:999px;padding:5px 10px;font-size:13px;font-weight:700;color:#6b3b2d}
+.statement{background:#fff;border:1px dashed #d7c6b7;border-radius:14px;padding:12px 14px;margin:10px 0}
+.choices{margin:8px 0 8px 1em;padding-left:1em}.choices li{margin:.2em 0}
+.table-wrap{overflow-x:auto;margin:12px 0;border-radius:14px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;background:#fff}
+th,td{border:1px solid var(--line);vertical-align:top;padding:10px 12px;font-size:14px}th{background:#f4eadf;color:#4d3b2e;text-align:left}.choice-table{min-width:920px}.choice-table col.choice{width:22%}.choice-table col.match{width:34%}.choice-table col.mismatch{width:34%}.choice-table col.judge{width:10%}.judge-ok{color:var(--ok);font-weight:900}.judge-ng{color:var(--ng);font-weight:900}.mark{font-weight:900;color:var(--accent)}
+.text-block{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-top:12px}.quote{border-left:4px solid var(--accent);padding-left:12px;margin:12px 0}.scene{background:var(--blue);border-bottom:2px solid #82b1c9}.emotion{background:var(--pink);border-bottom:2px solid #cc7b9b}.trigger{background:var(--yellow);border-bottom:2px solid #dab33d}.result{background:var(--green);border-bottom:2px solid #75b987}.keyword{font-weight:900;color:var(--accent2)}.main-claim{font-weight:900;border-bottom:3px double var(--accent)}
+details.test{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:14px}details.test>summary{cursor:pointer;font-weight:900;color:var(--accent)}.mini{font-size:13px;color:var(--muted)}
+.final-table th{background:#eadfd2}.step-list li{margin:.3em 0}.footer-note{font-size:12px;color:var(--muted);margin-top:30px}
+@media print{
+  @page{size:A4 portrait;margin:12mm}
+  body{background:#fff;font-size:11pt}.top-panel{display:none}main{max-width:none;padding:0}.hero,.card,.diag-card,.q-card,.summary-card,details.test{box-shadow:none;break-inside:avoid;page-break-inside:avoid}.section{break-inside:auto}.q-card{margin-top:10mm}.choice-table{min-width:0}th,td{font-size:9pt;padding:5px}.toc-pills{display:none}button{display:none}.answer-box,.pitfall,.check{break-inside:avoid}.text-block{font-size:10pt}
+}
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<nav class="top-panel">
+  <div class="nav-row"><button class="print-btn" onclick="window.print()">PDF出力</button><strong>ジャンプ</strong>
+    <a class="nav-pill" href="#diagnosis">本文の読み方診断</a><a class="nav-pill" href="#dai1">大問1</a>
+    <a class="nav-pill" href="#final">最終答案一覧</a><a class="nav-pill" href="#summary">今回の学習まとめ</a>
+  </div>
+  <div class="nav-row" style="margin-top:8px"><strong>設問</strong>
+    <a class="nav-pill" href="#q1">問1へ</a><a class="nav-pill" href="#q2">問2へ</a><a class="nav-pill" href="#q3">問3へ</a><a class="nav-pill" href="#q4">問4へ</a><a class="nav-pill" href="#q5">問5へ</a><a class="nav-pill" href="#q6">問6へ</a><a class="nav-pill" href="#q7">問7へ</a><a class="nav-pill" href="#q8">問8へ</a><a class="nav-pill" href="#q9">問9へ</a><a class="nav-pill" href="#q10">正しく読めたかな？</a>
+  </div>
+</nav>
+<main>
+  <header class="hero">
+    <div class="subtitle">Daily Sapix 小学4年 国語 42A-07 コトノハ「入学式」読解演習</div>
+    <h1>42A-07_国語A_コトノハ HTML解答解説</h1>
+    <div class="badges"><span class="badge">文章ジャンル：物語文</span><span class="badge">中心人物：わたる</span><span class="badge">設問タイプ：理由選択・心情選択・記述・内容正誤</span><span class="badge">解答解説PDF照合済み</span></div>
+    <div class="toc-pills"><a href="#diagnosis">本文の読み方診断</a><a href="#dai1">本文の線引き再現</a><a href="#final">最終答案一覧</a><a href="#summary">今回の学習まとめ</a></div>
+    <p class="mini">判読困難箇所は、設問処理に影響する範囲ではありません。本文再現は、問題PDFのスキャン画像をもとに、解法に必要な場面・線番号を中心に整えています。</p>
+  </header>
+
+  <section id="diagnosis" class="section">
+    <h2 class="section-title">本文の読み方診断</h2>
+    <div class="grid">
+      <div class="diag-card"><h3>文章全体の主題・流れ</h3><p>テストで失敗したわたるが、結果を気にして落ち込み、合格した友だちの淳に会うのを避ける。そこへ、家族の好物による励ましと、淳のさりげない友情が入り、わたるの気持ちが少しずつ軽くなる物語である。</p></div>
+      <div class="diag-card"><h3>読みの勝負所</h3><p>この文章は「落ち込む」→「平気なふり」→「気づかわれてつらい」→「好物で回復」→「友だちの思いやりに気づく」という心情変化を追う。行動だけでなく、なぜその行動をしたのかを直前直後の描写から読むことが大事である。</p></div>
+    </div>
+  </section>
+
+  <section id="dai1" class="section">
+    <h2 class="section-title">大問1</h2>
+    <div class="card">
+      <h3>文章ジャンル・設問タイプ</h3>
+      <p>物語文。線部理由選択、心情選択、会話の省略補充、理由記述、内容正誤が中心。人物の行動を「表向きの言葉」と「本心」に分けて読む問題構成である。</p>
+      <h3>文章の主題・流れ</h3>
+      <p>わたるはサッカーの特別チームのテストで失敗し、不合格になる。自分だけ落ちたことと、淳に気づかわれることがつらい。しかし母のピロシキで気持ちを立て直し、公園で淳とサッカーをする中で、淳のさりげない励ましに気づいて感謝する。</p>
+      <h3>本文の要約</h3>
+      <p>わたるは、特別チームに入るためのサッカーテストで緊張し、力を出し切れないまま雨の中を帰宅する。風呂でも夕食でも涙や不安が消えず、滝川コーチから不合格を知らされる前から落ち込み、電話を待つ間もテレビに集中できない。結果を聞くと部屋で泣き、翌日、合格した淳に会うのを避ける。淳は自分が誘ったことを謝るが、わたるは平気なふりをし、秋のテストに向けて頑張ると言う。しかし淳に気づかわれることで、かえってみじめさが強まり、誘いも断る。帰宅後、おかあさんが好物のピロシキで元気づけてくれたことで、おなかも心も満たされ、くよくよしていた自分をばからしく思い、サッカーがしたくなる。公園で淳に会ったわたるは最初は気まずく隠れようとするが、淳が余計なことを聞かず一緒にボールを蹴り、さりげなく励ましてくれたことに気づく。失敗のつらさを抱えたままでも、わたるは友だちと家族の優しさを受け止め、素直に感謝を伝える。</p>
+      <h3>本文文字数</h3><p>約1,600字。会話が多く、心情語よりも動作・反応から気持ちを読むタイプの物語文である。</p>
+      <h3>この大問で使う線の凡例・線の引き方</h3>
+      <div class="table-wrap"><table><tr><th>線</th><th>引く場所</th><th>この文章での例</th></tr><tr><td>場面線</td><td>いつ・どこで・だれといるかが変わるところ</td><td>家で電話を待つ場面、学校帰りに淳と会う場面、公園でサッカーをする場面</td></tr><tr><td>心情線</td><td>泣く、肩を落とす、ため息など、感情が出た動作</td><td>「おいおいと泣いた」「がくんと肩を落とし」</td></tr><tr><td>本心とずれる言動線</td><td>平気なふり、強がり、うそ</td><td>「何でもないふうをよそおった」「用事があるから」</td></tr><tr><td>転換線</td><td>気持ちが変わるきっかけ</td><td>「ピロシキ」「なんとなく、わたるがくるような気がしてさ」</td></tr></table></div>
+      <h3>本文の線引き再現</h3>
+      <div class="text-block">
+        <p class="note">線番号①〜⑨の前後を中心に、本文を読解用に再現している。青は場面、桃は心情、黄はきっかけ、緑は結果・変化。</p>
+        <p class="quote"><span class="scene">わたるは、サッカーが上手な子だけを集めた特別チームに入るためのテストを、友だちの淳やカッチンと受けたが、緊張のあまり思うようなプレーができなかった。</span></p>
+        <p>わたるはどしゃぶりの雨の中を泥だらけになって帰ってきた。熱いお湯の中に体をひたすと、<span class="emotion">じわっと涙がでてきた</span>。夕食は好物のハンバーグなのに、おかわりする気になれない。電話が鳴るたびにどきりとし、滝川コーチからの電話を待っていた。<span class="mark">①</span><span class="emotion">いつも夢中で見るテレビなのにちっともおもしろくない。</span></p>
+        <p>ようやく八時半に電話がかかり、わたるは「はい……、はい……わかりました」と受話器をおいた。「だめだった……。疲れたからもう寝る」。布団にもぐりこむと、かけ布団で顔をかくして<span class="mark">②</span><span class="emotion">おいおいと泣いた。</span></p>
+        <p>翌日、学校の帰りに淳につかまる。「今日一日、学校でおれのことさけてなかった？」と聞かれ、わたるは<span class="mark">③</span><span class="emotion">何でもないふうをよそおった。</span> 淳は「おれがむりやり誘って受けさせて、悪いことしたな」と謝る。わたるは「かえって落ちて、よけい練習やる気になったんだから」と強がる。</p>
+        <p>淳は<span class="mark">④</span><span class="main-claim">「わたるはすごいよ」</span>と言い、自分なら落ち込んでだれにも会いたくない、学校も休むかもしれない、と話す。そして<span class="mark">⑤</span>「あっ、だから……。ごめん、おれなんにも気がつかなくて……」と気づく。わたるは<span class="mark">⑥</span><span class="emotion">「悪いけど、用事があるから……」</span>とサッカーの誘いを断るが、淳に気づかわれたことがかえってつらく、再び落ち込む。</p>
+        <p>帰宅すると、おかあさんが<span class="mark">⑦</span><span class="trigger">「ピロシキ作っておいたわよ」</span>と言う。おかあさんは、わたるに悲しいことやうれしいことがあった時、いつもタイミングよく好物を作ってくれる。ピロシキを食べると、<span class="result">くよくよしていたのがばからしく思え、サッカーボールを蹴りたくなる。</span></p>
+        <p>宝野公園のグラウンドへ行くと淳がいた。<span class="mark">⑧</span><span class="emotion">わたるはあわててかくれようとした</span>が、淳は笑顔で手を振る。二人は暗くなるまでボールを蹴りあい、心は軽やかになる。芝生の上で空をながめながら、わたるは<span class="mark">⑨</span><span class="main-claim">「淳、サンキュー」</span>と言う。淳は「友達だろ」と答える。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="q1" class="q-card">
+    <div class="q-head"><div class="q-title">問一</div><div class="q-meta"><span class="meta">問題タイプ：理由選択</span><span class="meta">推定正答率 78%（結果待ちの不安と落ち込みを両方拾えるか）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線①「いつも夢中で見るテレビなのにちっともおもしろくない」とありますが、それはなぜですか。その理由として、最もふさわしいものを次の中から選び、記号で答えましょう。
+      <ol class="choices"><li>ア 落ち込んでいる自分の気も知らず、ハンバーグでお祝いをしようとするおかあさんに腹が立っていたから。</li><li>イ テストのことを考えるとテレビに集中できず、電話の音や弟の笑い声が気になってしかたがなかったから。</li><li>ウ 今回のテストではうまくいかなかったので、次回はどうすれば合格できるかということを考えていたから。</li><li>エ テストで失敗してしまい、落ち込んでいたうえに、結果がどうだったかがとても気になっていたから。</li></ol>
+    </div>
+    <h3>思考プロセス＋解説</h3><p>線①の前後では、わたるは「好物のハンバーグなのに、おかわりする気になれなかった」うえに、「電話が鳴るたびに、どきり」としている。つまり、テレビそのものがつまらなくなったのではなく、テストの失敗感と滝川コーチからの結果への不安で気持ちがいっぱいになっている。弟の笑い声は場面描写として出るが、決め手は「滝川コーチからの電話を待っていた」ことである。したがって、落ち込みと結果待ちの不安を両方含むエを選ぶ。</p>
+    <div class="answer-box">解答：エ</div>
+    <h3>選択肢ごとの照合結果</h3>
+    <div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr>
+      <tr><td>ア 落ち込んでいる自分の気も知らず、ハンバーグでお祝いをしようとするおかあさんに腹が立っていたから。</td><td>「好物のハンバーグなのに、おかわりする気になれなかった」とあり、選択肢の「落ち込んでいる」「ハンバーグ」は本文語を使っている。</td><td>【原因すり替え】本文は「滝川コーチからの電話を待っていた」ため結果が気になる。選択肢は原因を「おかあさんに腹が立っていた」に替えている。本文に「お祝い」も「腹が立つ」もない。<br><strong>【作問者の意図】</strong>本文の「ハンバーグ」を使いながら、原因を「結果待ちの不安」から「母への怒り」にすり替えている。</td><td class="judge-ng">×</td></tr>
+      <tr><td>イ テストのことを考えるとテレビに集中できず、電話の音や弟の笑い声が気になってしかたがなかったから。</td><td>「電話が鳴るたびに、わたるはどきりとした」「となりでは弟のいさむが大声で笑っている」とあり、選択肢の「電話の音」「弟の笑い声」は本文にある。</td><td>【焦点のずれ】本文で気にしているのは「滝川コーチからの電話」、つまり結果の連絡である。選択肢は「弟の笑い声」まで同じ重さで「気になってしかたがなかった」としており、中心がずれる。<br><strong>【作問者の意図】</strong>本文の「弟のいさむが大声で笑っている」を混ぜ、決め手の「滝川コーチからの電話」から目をそらしている。</td><td class="judge-ng">×</td></tr>
+      <tr><td>ウ 今回のテストではうまくいかなかったので、次回はどうすれば合格できるかということを考えていたから。</td><td>「思うようなプレーができませんでした」とあり、選択肢の「うまくいかなかった」は本文と合う。</td><td>【時点のずれ】線①の時点では「電話を待っていた」ので、結果が出る前である。選択肢の「次回はどうすれば合格できるか」は、後の「秋の選抜テストには、がんばる」方向の話で、ここではない。<br><strong>【作問者の意図】</strong>後半の「秋の選抜テスト」を先取りして、線①の「結果待ち」の場面に混ぜている。</td><td class="judge-ng">×</td></tr>
+      <tr><td>エ テストで失敗してしまい、落ち込んでいたうえに、結果がどうだったかがとても気になっていたから。</td><td>「思うようなプレーができませんでした」→「テストで失敗」、また「滝川コーチからの電話を待っていた」→「結果がどうだったかが気になっていた」と言い換えている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文の「思うようなプレーができない」「電話を待つ」を、選択肢では「失敗」「結果が気になる」とまとめているため、本文語の丸写しではなくても正解になる。</td><td class="judge-ok">○</td></tr>
+    </table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>弟の笑い声やハンバーグに反応しすぎると、中心の「結果待ち」を見落とす。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>線①と同じ理由として最もふさわしいものを選びましょう。</p><ol class="choices"><li>ア 結果の連絡が気になり、失敗したかもしれない不安と落ち込みでテレビに集中できなかった。</li><li>イ 弟が大声で笑うので、家族が自分のつらさを分かっていないと腹を立てていた。</li><li>ウ ハンバーグを食べたくなかったので、夕食のことばかり考えていた。</li><li>エ 次のテストに受かる作戦を考えるのに夢中になっていた。</li></ol><div class="answer-box">解答：ア</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 結果の連絡が気になり、失敗したかもしれない不安と落ち込みでテレビに集中できなかった。</td><td>「電話を待っていた」→「結果の連絡」、「思うようなプレーができない」→「失敗したかもしれない不安」と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文の「電話」「プレーができない」を抽象化している。</td><td class="judge-ok">○</td></tr><tr><td>イ 弟が大声で笑うので、家族が自分のつらさを分かっていないと腹を立てていた。</td><td>「弟のいさむが大声で笑っている」は本文にある。</td><td>【原因すり替え】本文は「電話を待つ不安」。選択肢は「弟への怒り」。<br><strong>【作問者の意図】</strong>場面語「弟」を使った別原因混入。</td><td class="judge-ng">×</td></tr><tr><td>ウ ハンバーグを食べたくなかったので、夕食のことばかり考えていた。</td><td>「おかわりする気になれなかった」は近い。</td><td>【結果と原因の混同】食べられないのは落ち込みの結果で、テレビがつまらない原因ではない。<br><strong>【作問者の意図】</strong>食事描写を中心に見せる。</td><td class="judge-ng">×</td></tr><tr><td>エ 次のテストに受かる作戦を考えるのに夢中になっていた。</td><td>後で「秋の選抜テストには、がんばる」と言う。</td><td>【時点のずれ】線①ではまだ結果待ちで、次回作戦ではない。<br><strong>【作問者の意図】</strong>後の前向き発言を先に持ち込む。</td><td class="judge-ng">×</td></tr></table></div></details>
+  </section>
+
+  <section id="q2" class="q-card">
+    <div class="q-head"><div class="q-title">問二</div><div class="q-meta"><span class="meta">問題タイプ：理由選択</span><span class="meta">推定正答率 74%（泣いた理由を「不合格＋力を出せなかった悔しさ」で読む）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線②「おいおいと泣いた」とありますが、なぜですか。その理由として最もふさわしいものを次の中から選び、記号で答えましょう。
+      <ol class="choices"><li>ア 特別チームのテストに落ちてしまってつらい思いをしているのに、平気で質問をしてくるおかあさんに腹が立ったから。</li><li>イ 淳やカッチンは特別チームのテストに受かっているのに、自分だけが落ちてしまったので、とても情けなかったから。</li><li>ウ 特別チームのテストに落ちてしまった自分のことを気づかってくれている弟やおかあさんの思いやりが、しみじみしたから。</li><li>エ 自分でも納得のいかないプレーをしてしまい、特別チームのテストに落ちてしまったので、とてもつらかったから。</li></ol>
+    </div>
+    <h3>思考プロセス＋解説</h3><p>線②の直前で、滝川コーチから電話があり、わたるは「だめだった……」と不合格を知っている。さらに冒頭のあらすじに「緊張のあまり、思うようなプレーができませんでした」とあるので、ただ落ちたのではなく、実力を出し切れなかったこともつらい。全力を出して落ちたなら受け止めやすいが、今回は「納得のいかないプレー」が残っている。したがって、不合格と悔しさを両方含むエが正解。</p><div class="answer-box">解答：エ</div>
+    <h3>選択肢ごとの照合結果</h3><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr>
+      <tr><td>ア 特別チームのテストに落ちてしまってつらい思いをしているのに、平気で質問をしてくるおかあさんに腹が立ったから。</td><td>「だめだった」とあり、「テストに落ちてしまってつらい」は合う。</td><td>【感情のすり替え】本文は「おいおいと泣いた」で、悲しさ・悔しさが中心。選択肢は「おかあさんに腹が立った」と怒りに替えている。<br><strong>【作問者の意図】</strong>おかあさんの「どうだった？」を使い、泣く原因を母への怒りに見せている。</td><td class="judge-ng">×</td></tr>
+      <tr><td>イ 淳やカッチンは特別チームのテストに受かっているのに、自分だけが落ちてしまったので、とても情けなかったから。</td><td>後に「カッチンも受かったみたいだよ」と分かり、「自分だけ落ちた」という要素は後半で出る。</td><td>【時点のずれ】線②の時点では、淳やカッチンが受かったことをまだ知らない。本文の直接原因は「だめだった」と知らされたことと、力を出せなかった悔しさである。<br><strong>【作問者の意図】</strong>後の「淳・カッチンも受かった」を線②の場面に前倒ししている。</td><td class="judge-ng">×</td></tr>
+      <tr><td>ウ 特別チームのテストに落ちてしまった自分のことを気づかってくれている弟やおかあさんの思いやりが、しみじみしたから。</td><td>おかあさんは風呂や食事を用意しており、家族の存在は本文にある。</td><td>【本文にない理由の追加】線②の直前に弟の思いやりは書かれない。おかあさんの思いやりで心が動くのは後のピロシキの場面で、線②では不合格のつらさが中心。<br><strong>【作問者の意図】</strong>後半の「好物で元気づける」場面を、泣く理由に混ぜている。</td><td class="judge-ng">×</td></tr>
+      <tr><td>エ 自分でも納得のいかないプレーをしてしまい、特別チームのテストに落ちてしまったので、とてもつらかったから。</td><td>「緊張のあまり、思うようなプレーができませんでした」→「納得のいかないプレー」、「だめだった」→「テストに落ちた」と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文のあらすじと線②直前の「だめだった」を合わせて読む必要があり、直前だけでは見えにくい正解になっている。</td><td class="judge-ok">○</td></tr>
+    </table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>「自分だけ落ちた」は後で分かること。線②ではまだその比較はできない。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>線②の理由として最もふさわしいものを選びましょう。</p><ol class="choices"><li>ア 不合格を知らされ、しかも思うようなプレーができなかった悔しさがこみあげたから。</li><li>イ おかあさんが結果を聞いてきたので、責められているように感じたから。</li><li>ウ 淳とカッチンだけが受かったと電話で聞き、ひどく腹が立ったから。</li><li>エ 弟が笑っている声を聞き、自分をばかにされたと思ったから。</li></ol><div class="answer-box">解答：ア</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 不合格を知らされ、しかも思うようなプレーができなかった悔しさがこみあげたから。</td><td>「だめだった」と「思うようなプレーができませんでした」を合わせている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>直前とあらすじを合成する正解。</td><td class="judge-ok">○</td></tr><tr><td>イ おかあさんが結果を聞いてきたので、責められているように感じたから。</td><td>おかあさんが「どうだった？」と聞く。</td><td>【感情の追加】本文に「責められている」はない。<br><strong>【作問者の意図】</strong>会話を利用した被害感の追加。</td><td class="judge-ng">×</td></tr><tr><td>ウ 淳とカッチンだけが受かったと電話で聞き、ひどく腹が立ったから。</td><td>後に二人が受かったことは出る。</td><td>【時点のずれ】線②の電話で聞いたのは自分の結果で、二人の合格ではない。<br><strong>【作問者の意図】</strong>後情報の前倒し。</td><td class="judge-ng">×</td></tr><tr><td>エ 弟が笑っている声を聞き、自分をばかにされたと思ったから。</td><td>「弟のいさむが大声で笑っている」は本文にある。</td><td>【本文にない解釈】ばかにされたとは書かれていない。<br><strong>【作問者の意図】</strong>場面描写を原因化している。</td><td class="judge-ng">×</td></tr></table></div></details>
+  </section>
+
+  <section id="q3" class="q-card">
+    <div class="q-head"><div class="q-title">問三</div><div class="q-meta"><span class="meta">問題タイプ：理由選択</span><span class="meta">推定正答率 71%（平気なふりの裏にある「かわいそうと思われたくない」を読む）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線③「わたるはっとめて何でもないふうをよそおった」とありますが、それはなぜですか。その理由として、最もふさわしいものを次の中から選び、記号で答えましょう。
+      <ol class="choices"><li>ア 淳はテストに合格してうれしそうにしているので、自分の結果を教えてがっかりさせたくなかったから。</li><li>イ 自分はテストに落ちたので、受かった淳のことがうらやましく、じまん話を聞くのがつらかったから。</li><li>ウ テストに落ちてがっかりしていると知られて、合格した淳にかわいそうだと思われたくなかったから。</li><li>エ テストに受かってはしゃいでいる淳のすがたを見てうらやましく思っていることを、かくしたかったから。</li></ol>
+    </div>
+    <h3>思考プロセス＋解説</h3><p>わたるは「できれば今日一日だけは、淳とは顔をあわせたくなかった」とあり、淳に自分の落ち込みを見られたくない。淳から「受かったけど」と言われた後に、わたるは「だめだったよ」と言いながら、何でもないふうをよそおう。ここで隠したいのは、淳への怒りやうらやましさだけでなく、落ち込んでいる自分を「かわいそう」と見られることへのみじめさである。よってウ。</p><div class="answer-box">解答：ウ</div>
+    <h3>選択肢ごとの照合結果</h3><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr>
+      <tr><td>ア 淳はテストに合格してうれしそうにしているので、自分の結果を教えてがっかりさせたくなかったから。</td><td>淳は「おれは受かったけど」と言うので、「淳が合格」は本文にある。</td><td>【主語のすり替え】本文で守りたいのは淳の気持ちではなく、自分の落ち込みを見られたくないわたるの気持ち。選択肢は「淳をがっかりさせたくない」にしている。<br><strong>【作問者の意図】</strong>淳の合格を利用し、気づかう主語を「わたる自身」から「淳」へ替えている。</td><td class="judge-ng">×</td></tr>
+      <tr><td>イ 自分はテストに落ちたので、受かった淳のことがうらやましく、じまん話を聞くのがつらかったから。</td><td>「自分は落ちた」「淳は受かった」は本文と合う。</td><td>【本文にない要素の追加】淳は「じまん話」をしていない。「カッチンも受かったみたいだよ」は情報であり、わたるが隠したのは落ち込みである。<br><strong>【作問者の意図】</strong>受かった友人という設定から「うらやましい」「じまん」を作り足している。</td><td class="judge-ng">×</td></tr>
+      <tr><td>ウ テストに落ちてがっかりしていると知られて、合格した淳にかわいそうだと思われたくなかったから。</td><td>「何でもないふうをよそおった」は「がっかりしていると知られたくない」、「淳はわたるを気づかってくれた」につながるので「かわいそうだと思われたくない」と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文の「よそおった」を、表向きの態度ではなく本心の「みじめさを見せたくない」へ言い換えている。</td><td class="judge-ok">○</td></tr>
+      <tr><td>エ テストに受かってはしゃいでいる淳のすがたを見てうらやましく思っていることを、かくしたかったから。</td><td>淳の合格は本文にある。</td><td>【人物描写の追加】本文の淳は「すまなそうな顔」をしており、「はしゃいでいる」姿はない。わたるが隠す中心も「うらやましさ」ではなく「落ち込み」である。<br><strong>【作問者の意図】</strong>合格＝はしゃぐ、と読者が想像しやすい要素を加えている。</td><td class="judge-ng">×</td></tr>
+    </table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>「合格した淳がうらやましい」だけで読むと、後の「淳に気づかわれてつらい」につながらない。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>線③の理由として最もふさわしいものを選びましょう。</p><ol class="choices"><li>ア 淳の合格を聞いて、自分も合格したように見せたかったから。</li><li>イ 落ち込んでいる自分を淳に気づかれ、同情されるのがいやだったから。</li><li>ウ 淳が自慢していると思い、その話を早く終わらせたかったから。</li><li>エ 次のテストへのやる気が本当に出たので、悲しくなくなったから。</li></ol><div class="answer-box">解答：イ</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 淳の合格を聞いて、自分も合格したように見せたかったから。</td><td>淳の合格は本文にある。</td><td>【事実との逆】わたるは「だめだったよ」と不合格は伝えている。<br><strong>【作問者の意図】</strong>「よそおう」を合格のふりと誤読させる。</td><td class="judge-ng">×</td></tr><tr><td>イ 落ち込んでいる自分を淳に気づかれ、同情されるのがいやだったから。</td><td>「何でもないふう」→落ち込みを隠す、「淳はわたるを気づかってくれた」→同情がつらい、と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>表情描写を心情語へ言い換えている。</td><td class="judge-ok">○</td></tr><tr><td>ウ 淳が自慢していると思い、その話を早く終わらせたかったから。</td><td>淳は合格を伝える。</td><td>【本文にない態度】淳は自慢ではなく心配している。<br><strong>【作問者の意図】</strong>合格報告を自慢話に変えている。</td><td class="judge-ng">×</td></tr><tr><td>エ 次のテストへのやる気が本当に出たので、悲しくなくなったから。</td><td>わたるは「秋の選抜テストには、がんばる」と言う。</td><td>【本心と表向きの混同】その発言は強がりで、後に「がくんと肩を落とし」とある。<br><strong>【作問者の意図】</strong>わたるの表向きの言葉を本心にしている。</td><td class="judge-ng">×</td></tr></table></div></details>
+  </section>
+
+  <section id="q4" class="q-card">
+    <div class="q-head"><div class="q-title">問四</div><div class="q-meta"><span class="meta">問題タイプ：人物評価選択</span><span class="meta">推定正答率 77%（淳が見ている「表向きのわたる」を読む）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線④「わたるはすごいよ」と淳は言っていますが、淳は、わたるのどのようなところを「すごい」と感じているのですか。最もふさわしいものを次の中から選び、記号で答えましょう。
+      <ol class="choices"><li>ア テストに落ちたことを気にせず、話しかけても気づかないくらい、次のテストのことを考えているところ。</li><li>イ むりやりテストに誘ったことを責めるどころか、淳の合格を心から喜んでくれているところ。</li><li>ウ テストに合格できなかったのに、落ち込むだけにげたりせず、次のテストに向かってがんばろうとしているところ。</li><li>エ 今までよりもサッカーの練習に対してやる気になれたので、テストに落ちてよかったと喜んでいるところ。</li></ol>
+    </div><h3>思考プロセス＋解説</h3><p>淳は「おれだったらきっと、今頃落ち込んでるぜ」「だれにも会いたくないな」と、自分なら逃げると比べている。その直前に、わたるは「かえって落ちて、よけい練習やる気になった」「秋の選抜テストには、がんばる」と言っている。つまり淳は、わたるの本心ではなく、わたるが見せている前向きな姿を「すごい」と感じている。したがってウ。</p><div class="answer-box">解答：ウ</div>
+    <h3>選択肢ごとの照合結果</h3><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア テストに落ちたことを気にせず、話しかけても気づかないくらい、次のテストのことを考えているところ。</td><td>「秋の選抜テストには、がんばる」は「次のテスト」を考えているように見える。</td><td>【言いすぎ】本文では落ちたことを気にしていないのではなく、後に「がくんと肩を落とし」とある。また「話しかけても気づかない」は、淳に声をかけられたことを避けていた場面の誤読。<br><strong>【作問者の意図】</strong>「気づかなかったよ」というとぼけを、本当に気づかなかったことに変えている。</td><td class="judge-ng">×</td></tr><tr><td>イ むりやりテストに誘ったことを責めるどころか、淳の合格を心から喜んでくれているところ。</td><td>「よかったな、淳」は淳の合格を喜ぶ言葉に見える。</td><td>【中心のずれ】淳が「すごい」と言った直後の説明は「おれだったら落ち込んでる」であり、比較しているのは喜びではなく、落ちても前を向く態度。<br><strong>【作問者の意図】</strong>「よかったな」を使い、評価の対象を「次へ向かう態度」から「淳を喜ぶ優しさ」に替えている。</td><td class="judge-ng">×</td></tr><tr><td>ウ テストに合格できなかったのに、落ち込むだけにげたりせず、次のテストに向かってがんばろうとしているところ。</td><td>「秋の選抜テストには、がんばる」→「次のテストに向かってがんばろう」、「おれだったら落ち込んでる」→「落ち込むだけにげたりせず」と対応する。</td><td>不一致なし。ただし読者は、わたるの本心ではなく、淳から見えた姿を答える点に注意。<br><strong>【作問者の意図】</strong>本文の会話を、淳の評価としてまとめ直している。</td><td class="judge-ok">○</td></tr><tr><td>エ 今までよりもサッカーの練習に対してやる気になれたので、テストに落ちてよかったと喜んでいるところ。</td><td>「よけい練習やる気になった」は本文にある。</td><td>【結論の反転】わたるは落ちてよかったと本気で喜んでいない。後で「ショックだった」「再び落ち込んでしまった」とある。<br><strong>【作問者の意図】</strong>強がりの「かえって落ちて」を本心の喜びにしている。</td><td class="judge-ng">×</td></tr></table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>問われているのは「淳がどう見たか」。読者が後で知るわたるの本心と混同しない。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>線④で淳が「すごい」と感じた点として最もふさわしいものを選びましょう。</p><ol class="choices"><li>ア 不合格でも、落ち込んで人を避けるのではなく、次に向かうように見えたところ。</li><li>イ 自分を誘った淳を責めず、心から感謝していたところ。</li><li>ウ 本当にもう悲しくなくなり、落ちたことを喜んでいるところ。</li><li>エ 淳の話しかけに気づかないほど練習計画に集中していたところ。</li></ol><div class="answer-box">解答：ア</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 不合格でも、落ち込んで人を避けるのではなく、次に向かうように見えたところ。</td><td>「秋の選抜テストには、がんばる」と「おれだったら落ち込んでる」を合わせている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>淳の比較発言をまとめている。</td><td class="judge-ok">○</td></tr><tr><td>イ 自分を誘った淳を責めず、心から感謝していたところ。</td><td>わたるは淳を直接責めない。</td><td>【時点のずれ】感謝の「サンキュー」は後半。ここではまだ感謝ではない。<br><strong>【作問者の意図】</strong>結末の心情を前倒しする。</td><td class="judge-ng">×</td></tr><tr><td>ウ 本当にもう悲しくなくなり、落ちたことを喜んでいるところ。</td><td>「かえって落ちて」は近い表現。</td><td>【本心との逆】後に落ち込むので、本当に喜んだわけではない。<br><strong>【作問者の意図】</strong>強がりを本心にしている。</td><td class="judge-ng">×</td></tr><tr><td>エ 淳の話しかけに気づかないほど練習計画に集中していたところ。</td><td>「気づかなかったよ」は本文にある。</td><td>【発言の誤読】これはとぼけであり、集中ではない。<br><strong>【作問者の意図】</strong>セリフだけを字面で拾わせる。</td><td class="judge-ng">×</td></tr></table></div></details>
+  </section>
+
+  <section id="q5" class="q-card">
+    <div class="q-head"><div class="q-title">問五</div><div class="q-meta"><span class="meta">問題タイプ：会話補充</span><span class="meta">推定正答率 63%（「だから」の前後をつないで淳の気づきを補う）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線⑤「あっ、だから……」の「……」の部分に続く淳の言葉を考えて答えましょう。</div>
+    <h3>思考プロセス＋解説</h3><p>「だから」は、直前の内容を理由にして何かに気づいたときの接続語である。直前で淳は「おれだったらきっと、今頃落ち込んでる」「だれにも会いたくないな。学校も休んじゃったりしてね」と言っている。これにより、淳は「今日一日、学校でおれのことをさけていた」わたるの行動の理由に気づいた。したがって、「わたるは今日、自分に会いたくなかったのか」という内容を補えばよい。</p>
+    <div class="answer-box">解答：わたるは、きょう一日、学校でおれのことをさけていたのか</div>
+    <div class="check"><h3>答案チェック</h3><p>「だから」の後には、淳が気づいた内容を書く。主語は淳ではなく「わたるは」。内容は「学校でおれのことをさけていたのか」。</p></div>
+    <h3>文末設計</h3><p>会話の続きなので、「〜なのか」「〜だったのか」の形にすると自然である。本文の「ごめん、おれなんにも気がつかなくて……」につながるように、気づきの文で終える。</p>
+    <h3>採点基準</h3><div class="table-wrap"><table><tr><th>要素</th><th>内容</th></tr><tr><td>だれが</td><td>わたるが</td></tr><tr><td>何をしていたか</td><td>学校で淳をさけていた</td></tr><tr><td>気づきの形</td><td>「〜だったのか」と淳の理解として書く</td></tr></table></div>
+    <h3>正解の幅3パターン</h3><div class="table-wrap"><table><tr><th>型</th><th>答案例</th></tr><tr><td>標準</td><td>わたるは、きょう一日、学校でおれのことをさけていたのか</td></tr><tr><td>少し短い</td><td>わたるは今日、おれに会いたくなくてさけていたのか</td></tr><tr><td>言い換え</td><td>わたるが今日ぼくをさけていたのは、落ち込んで会いたくなかったからなのか</td></tr></table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>「淳が謝った理由」だけを書くとずれる。ここは「淳が何に気づいたか」を答える。</div>
+  </section>
+
+  <section id="q6" class="q-card">
+    <div class="q-head"><div class="q-title">問六</div><div class="q-meta"><span class="meta">問題タイプ：心情選択</span><span class="meta">推定正答率 70%（断るセリフの裏にあるみじめさを読む）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線⑥「悪いけど、用事があるから……」とありますが、このときのわたるの気持ちとして、最もふさわしいものを次の中から選び、記号で答えましょう。
+      <ol class="choices"><li>ア 自分だけ特別チームのテストに落ちてしまったうえに、そのことを淳に気をつかわれてしまい、みじめな気持ちになっている。</li><li>イ せっかく淳が同情してサッカーに誘ってくれているのに、強がって断ってしまっていることを申しわけなく思っている。</li><li>ウ 予想していたとはいえ、自分だけ特別チームのテストに落ちていたことを知り、何も考えられなくなるほど、ぼうぜんとしている。</li><li>エ 特別チームのテストに落ちてしまったことにショックを受けているが、水曜日からは気持ちを切りかえてがんばろうと思っている。</li></ol>
+    </div><h3>思考プロセス＋解説</h3><p>線⑥の後で、わたるは「がくんと肩を落とし、大きなため息」をつく。さらに「やっぱり自分だけ落ちてしまった」「淳はわたるを気づかってくれたのだろうが、かえってそれがつらかった」と説明される。つまり、断った理由は淳に申し訳ないからではなく、合格した淳に気をつかわれることがみじめでつらいからである。したがってアを選ぶ。</p><div class="answer-box">解答：ア</div>
+    <h3>選択肢ごとの照合結果</h3><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 自分だけ特別チームのテストに落ちてしまったうえに、そのことを淳に気をつかわれてしまい、みじめな気持ちになっている。</td><td>「やっぱり自分だけ落ちてしまった」→「自分だけ落ちた」、「淳はわたるを気づかってくれた」「かえってそれがつらかった」→「気をつかわれ、みじめ」と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文の「かえってそれがつらかった」を、心情語「みじめ」に言い換えている。</td><td class="judge-ok">○</td></tr><tr><td>イ せっかく淳が同情してサッカーに誘ってくれているのに、強がって断ってしまっていることを申しわけなく思っている。</td><td>「サッカーやろうぜ」と誘われ、「悪いけど」と断っている点は合う。</td><td>【感情のすり替え】本文の決め手は「かえってそれがつらかった」であり、申し訳なさではない。選択肢は「申しわけなく思っている」と気持ちを替えている。<br><strong>【作問者の意図】</strong>「悪いけど」という表現を使い、礼儀上の言葉を本心に見せている。</td><td class="judge-ng">×</td></tr><tr><td>ウ 予想していたとはいえ、自分だけ特別チームのテストに落ちていたことを知り、何も考えられなくなるほど、ぼうぜんとしている。</td><td>「思っていたとおりの結果だった」「ショックだった」は本文にある。</td><td>【言いすぎ】本文では「大きなため息」「再び落ち込んだ」であり、「何も考えられないほど、ぼうぜん」とは書かれない。線⑥の中心は淳に気づかわれるつらさ。<br><strong>【作問者の意図】</strong>「ショックだった」を強めすぎ、淳との関係を抜いている。</td><td class="judge-ng">×</td></tr><tr><td>エ 特別チームのテストに落ちてしまったことにショックを受けているが、水曜日からは気持ちを切りかえてがんばろうと思っている。</td><td>「ショックだった」「水曜日サッカーの練習」は本文にある。</td><td>【結論のすり替え】線⑥の直後は「再び落ち込んでしまった」で、気持ちを切りかえてはいない。水曜日の約束は淳の言葉である。<br><strong>【作問者の意図】</strong>「水曜日」を使い、先の予定を前向きな心情に変えている。</td><td class="judge-ng">×</td></tr></table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>「悪いけど」を本気の謝罪と読みすぎない。直後の地の文が本心を説明している。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>線⑥のときのわたるの気持ちとして最もふさわしいものを選びましょう。</p><ol class="choices"><li>ア 淳に気をつかわれることで、自分だけ落ちたことがいっそうつらく感じられている。</li><li>イ 淳の誘いを断るのが楽しく、用事があるとうそをついてからかっている。</li><li>ウ もう気持ちは完全に切りかわり、水曜日の練習を楽しみにしている。</li><li>エ 淳が自慢してきたので、怒ってサッカーをしたくないと思っている。</li></ol><div class="answer-box">解答：ア</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 淳に気をつかわれることで、自分だけ落ちたことがいっそうつらく感じられている。</td><td>「自分だけ落ちた」「気づかってくれた」「かえってそれがつらかった」をまとめている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文の三つの根拠を短く圧縮している。</td><td class="judge-ok">○</td></tr><tr><td>イ 淳の誘いを断るのが楽しく、用事があるとうそをついてからかっている。</td><td>「用事があるから」と断る。</td><td>【心情の反転】直後は「がくんと肩を落とし」で楽しくない。<br><strong>【作問者の意図】</strong>うそを軽い冗談に変えている。</td><td class="judge-ng">×</td></tr><tr><td>ウ もう気持ちは完全に切りかわり、水曜日の練習を楽しみにしている。</td><td>「水曜日サッカーの練習」は出る。</td><td>【結論の逆】本文は「再び落ち込んでしまった」。<br><strong>【作問者の意図】</strong>予定語を心情にすり替えている。</td><td class="judge-ng">×</td></tr><tr><td>エ 淳が自慢してきたので、怒ってサッカーをしたくないと思っている。</td><td>淳が合格を伝える。</td><td>【本文にない態度】淳は自慢していない。怒りよりつらさが中心。<br><strong>【作問者の意図】</strong>合格者への嫉妬に見せる。</td><td class="judge-ng">×</td></tr></table></div></details>
+  </section>
+
+  <section id="q7" class="q-card">
+    <div class="q-head"><div class="q-title">問七</div><div class="q-meta"><span class="meta">問題タイプ：理由記述</span><span class="meta">推定正答率 68%（好物を作る母の意図を直後の説明から取る）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線⑦「ピロシキ作っておいたわよ」とありますが、なぜおかあさんは、ピロシキを作っておいてくれたのですか。その理由を説明しましょう。</div>
+    <h3>思考プロセス＋解説</h3><p>線⑦の直後に「わたるのすきな」とあり、ピロシキはわたるの好物である。さらに「おかあさんは、わたるに悲しいことがあった時やうれしいことがあった時には、いつもタイミングよく好物を作ってくれた」と説明される。今回は「特別チームのテストに落ちて」「再び落ち込んでしまった」場面なので、母は好物によってわたるを元気づけようとしている。したがって、落ち込む理由と母の目的を一文にまとめる。</p>
+    <div class="answer-box">解答：特別チームのテストに落ちてがっかりしているわたるを、好物で元気づけたかったから。</div>
+    <div class="check"><h3>答案チェック</h3><p>「ピロシキが好きだから」だけでは不足。なぜ今作ったのかまで入れるため、「テストに落ちてがっかり」「好物で元気づける」を入れる。</p></div>
+    <h3>文末設計</h3><p>理由説明なので、文末は「〜から。」で終える。主語は「おかあさん」、目的語は「わたるを」、方法は「好物で」と整理すると書きやすい。</p>
+    <h3>採点基準</h3><div class="table-wrap"><table><tr><th>要素</th><th>入れる内容</th></tr><tr><td>状況</td><td>特別チームのテストに落ちた</td></tr><tr><td>わたるの気持ち</td><td>がっかりしている・落ち込んでいる</td></tr><tr><td>母の方法</td><td>わたるの好物であるピロシキを作る</td></tr><tr><td>母の目的</td><td>元気づける</td></tr></table></div>
+    <h3>正解の幅3パターン</h3><div class="table-wrap"><table><tr><th>型</th><th>答案例</th></tr><tr><td>標準</td><td>特別チームのテストに落ちてがっかりしているわたるを、好物で元気づけたかったから。</td></tr><tr><td>短め</td><td>テストに落ちて落ち込むわたるを、好きなピロシキで元気にしたかったから。</td></tr><tr><td>説明多め</td><td>わたるがテストに落ちて悲しんでいると分かり、好物のピロシキを作って励まそうと思ったから。</td></tr></table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>「おかあさんも食べたかったから」など自分の理由にしない。本文は「わたるに悲しいことがあった時」と説明している。</div>
+  </section>
+
+  <section id="q8" class="q-card">
+    <div class="q-head"><div class="q-title">問八</div><div class="q-meta"><span class="meta">問題タイプ：理由選択</span><span class="meta">推定正答率 75%（直前のうそと公園での再会をつなぐ）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線⑧「わたるはあわててかくれようとした」とありますが、なぜですか。その理由の説明として、最もふさわしいものを次の中から選び、記号で答えましょう。
+      <ol class="choices"><li>ア せっかく元気を取りもどしたのに、淳と会ったらまた昨日のことを思い出して落ち込みそうだったから。</li><li>イ 今日は一人でサッカーボールを蹴りながら、これからどうするかをゆっくりと考えたかったから。</li><li>ウ みんなにかくれて一人でサッカーの練習をしようと考えていたことを、淳に知られるのがてれくさいから。</li><li>エ サッカーに誘われたのに、うそをついて断っていたので、淳と顔をあわせるのが気まずかったから。</li></ol>
+    </div><h3>思考プロセス＋解説</h3><p>わたるは前の場面で、淳にサッカーへ誘われたのに「用事があるから」と断っている。しかしその後、ピロシキを食べて元気になり、サッカーボールを蹴りたくなって公園へ行った。そこに淳がいたため、わたるは自分の「用事がある」という断りがうそだったことを見られる形になる。だから、淳と顔を合わせるのが気まずく、かくれようとした。正解はエ。</p><div class="answer-box">解答：エ</div>
+    <h3>選択肢ごとの照合結果</h3><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア せっかく元気を取りもどしたのに、淳と会ったらまた昨日のことを思い出して落ち込みそうだったから。</td><td>ピロシキ後に「ばからしく思えた」「サッカーボールが蹴りたかった」と元気を取りもどしている点は合う。</td><td>【原因すり替え】かくれた直接理由は、淳にうそをついて断った直後に公園で会った気まずさ。選択肢は「また落ち込みそう」に替えている。<br><strong>【作問者の意図】</strong>前半の落ち込みを引きずらせ、直前の「用事があるから」を見落とさせている。</td><td class="judge-ng">×</td></tr><tr><td>イ 今日は一人でサッカーボールを蹴りながら、これからどうするかをゆっくりと考えたかったから。</td><td>「サッカーボールが蹴りたかった」は本文にある。</td><td>【目的の追加】本文では「これからどうするかをゆっくり考える」とは書かれていない。むしろ淳と会った後は一緒にボールを蹴る。<br><strong>【作問者の意図】</strong>一人で公園へ行った状況から、本文にない目的を作っている。</td><td class="judge-ng">×</td></tr><tr><td>ウ みんなにかくれて一人でサッカーの練習をしようと考えていたことを、淳に知られるのがてれくさいから。</td><td>一人で公園に来た点は本文にある。</td><td>【感情のすり替え】本文の「かくれよう」は、照れではなく、断った相手に会う気まずさ。選択肢は「てれくさい」に変えている。<br><strong>【作問者の意図】</strong>「かくれる」を照れに見せるが、直前のうそを消している。</td><td class="judge-ng">×</td></tr><tr><td>エ サッカーに誘われたのに、うそをついて断っていたので、淳と顔をあわせるのが気まずかったから。</td><td>「サッカーやろうぜ」→誘い、「悪いけど、用事があるから」→断り、公園でボールを蹴ろうとしたことから「うそ」と分かり、「かくれよう」→「気まずい」と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文には「うそ」と直接書かないが、行動の前後関係から推理する正解になっている。</td><td class="judge-ok">○</td></tr></table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>「あわててかくれる」だけを見ると照れに見えるが、前場面の「用事があるから」を戻して考える。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>線⑧の理由として最もふさわしいものを選びましょう。</p><ol class="choices"><li>ア 用事があると言って誘いを断ったのに、自分もサッカーをしに来たので、淳に会うのが気まずかった。</li><li>イ 淳と会うとまた不合格の話をされると思い、泣きそうになった。</li><li>ウ 一人で秘密の特訓をする予定だったので、練習方法を知られたくなかった。</li><li>エ 母にピロシキを食べすぎたことを注意されると思った。</li></ol><div class="answer-box">解答：ア</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 用事があると言って誘いを断ったのに、自分もサッカーをしに来たので、淳に会うのが気まずかった。</td><td>「用事があるから」と「サッカーボールを乗せてでかけた」をつなげている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文の前後関係から「うそ」を補う。</td><td class="judge-ok">○</td></tr><tr><td>イ 淳と会うとまた不合格の話をされると思い、泣きそうになった。</td><td>不合格の話は前にある。</td><td>【本文にない予想】公園で淳は不合格を聞かない。<br><strong>【作問者の意図】</strong>前半のつらさを再利用する。</td><td class="judge-ng">×</td></tr><tr><td>ウ 一人で秘密の特訓をする予定だったので、練習方法を知られたくなかった。</td><td>一人でボールを蹴りに来た点は近い。</td><td>【目的の追加】秘密の特訓は本文にない。<br><strong>【作問者の意図】</strong>一人で来たことを秘密に変える。</td><td class="judge-ng">×</td></tr><tr><td>エ 母にピロシキを食べすぎたことを注意されると思った。</td><td>ピロシキを三つ食べた。</td><td>【人物違い】目の前にいるのは淳であり、母ではない。<br><strong>【作問者の意図】</strong>印象的な食事場面を混ぜる。</td><td class="judge-ng">×</td></tr></table></div></details>
+  </section>
+
+  <section id="q9" class="q-card">
+    <div class="q-head"><div class="q-title">問九</div><div class="q-meta"><span class="meta">問題タイプ：感謝の対象選択</span><span class="meta">推定正答率 72%（淳のさりげない励ましを読み取る）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>線⑨「淳、サンキュー」とありますが、どのようなことについて「サンキュー」と言っているのですか。最もふさわしいものを次の中から選び、記号で答えましょう。
+      <ol class="choices"><li>ア 自分が勝手に腹を立てて、ずっと淳のことをさけていたのに、淳は何も言わずに許してくれ、いっしょにサッカーをしてくれたこと。</li><li>イ 淳がよけいなことは聞かずにわたるのことを思いやり、いっしょにサッカーをすることで、さりげなくはげまそうとしてくれたこと。</li><li>ウ 淳がテストに落ちたわたるを元気づけるために、春の大会に出ることをすすめ、新しい目標に向かってがんばらせようとしてくれたこと。</li><li>エ わたるは用事があるとうそをついたのに、淳はそのことを気にせず、日が暮れるまでずっといっしょにサッカーをしてくれたこと。</li></ol>
+    </div><h3>思考プロセス＋解説</h3><p>淳は公園で「なんとなく、わたるがくるような気がしてさ」と言い、わたるの気持ちを予想して待っていたように描かれる。しかし、テストのことや断ったうそのことを責めず、「サッカーでも一緒にやっか」と自然に誘う。二人でボールを蹴るうちに、わたるの心は「軽やか」になる。わたるの「サンキュー」は、淳が余計なことを聞かず、サッカーを通して励ましてくれたことへの感謝である。よってイ。</p><div class="answer-box">解答：イ</div>
+    <h3>選択肢ごとの照合結果</h3><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 自分が勝手に腹を立てて、ずっと淳のことをさけていたのに、淳は何も言わずに許してくれ、いっしょにサッカーをしてくれたこと。</td><td>「今日一日、学校でおれのことさけてなかった？」とあり、わたるが避けていたことは合う。淳は公園で責めずにサッカーをする。</td><td>【感情の追加】本文に「勝手に腹を立てて」はない。淳が「許してくれた」とも明示されない。中心は許しではなく、さりげない励まし。<br><strong>【作問者の意図】</strong>「さけていた」を使い、感謝の理由を謝罪・許しの関係にずらしている。</td><td class="judge-ng">×</td></tr><tr><td>イ 淳がよけいなことは聞かずにわたるのことを思いやり、いっしょにサッカーをすることで、さりげなくはげまそうとしてくれたこと。</td><td>「なんとなく、わたるがくるような気がしてさ」→思いやり、「サッカーでも一緒にやっか」→サッカーで励ます、「心は軽やかだった」→励ましの効果、と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>本文に「はげます」と直接書かず、淳の行動から目的を推理させる正解。</td><td class="judge-ok">○</td></tr><tr><td>ウ 淳がテストに落ちたわたるを元気づけるために、春の大会に出ることをすすめ、新しい目標に向かってがんばらせようとしてくれたこと。</td><td>「もうすぐ多摩市の春の大会もあるしね」は本文にある。</td><td>【別語混入】本文では春の大会をすすめたのではなく、サッカーをする自然なきっかけとして言っている。中心は大会ではなく「一緒にボールを蹴る」こと。<br><strong>【作問者の意図】</strong>印象的な「春の大会」を使い、励ましの方法を別の目標設定に替えている。</td><td class="judge-ng">×</td></tr><tr><td>エ わたるは用事があるとうそをついたのに、淳はそのことを気にせず、日が暮れるまでずっといっしょにサッカーをしてくれたこと。</td><td>「用事があるから」と断った後、公園で「暗くなるまで」一緒にサッカーをした点は合う。</td><td>【焦点の不足】「うそを気にしない」だけでは、わたるの心が軽くなった理由を説明しきれない。本文の「なんとなく、わたるがくるような気がしてさ」という思いやりが抜ける。<br><strong>【作問者の意図】</strong>出来事を正しく並べながら、感謝の本質である「さりげない励まし」を落としている。</td><td class="judge-ng">×</td></tr></table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>エは出来事として近いが、「サンキュー」の対象は、単に長く遊んだことではなく、淳の思いやりである。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>線⑨でわたるが感謝していることとして最もふさわしいものを選びましょう。</p><ol class="choices"><li>ア 淳が合格を自慢せず、わたるの気持ちを思って自然にサッカーで励ましてくれたこと。</li><li>イ 淳が春の大会に出るよう強くすすめ、新しい目標を決めてくれたこと。</li><li>ウ 淳がわたるのうそを見抜いて、きびしく注意してくれたこと。</li><li>エ 淳がピロシキを食べたことをほめ、おかあさんにお礼を言ってくれたこと。</li></ol><div class="answer-box">解答：ア</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 淳が合格を自慢せず、わたるの気持ちを思って自然にサッカーで励ましてくれたこと。</td><td>「なんとなく、わたるがくるような気がしてさ」「サッカーでも一緒にやっか」と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>淳の行動を「自然な励まし」と抽象化している。</td><td class="judge-ok">○</td></tr><tr><td>イ 淳が春の大会に出るよう強くすすめ、新しい目標を決めてくれたこと。</td><td>「春の大会」は本文にある。</td><td>【言いすぎ】強くすすめても、目標を決めてもいない。<br><strong>【作問者の意図】</strong>大会の語を中心化する。</td><td class="judge-ng">×</td></tr><tr><td>ウ 淳がわたるのうそを見抜いて、きびしく注意してくれたこと。</td><td>用事のうそは読者には分かる。</td><td>【本文との逆】淳は注意せず、自然にサッカーをする。<br><strong>【作問者の意図】</strong>気まずさを説教場面に変える。</td><td class="judge-ng">×</td></tr><tr><td>エ 淳がピロシキを食べたことをほめ、おかあさんにお礼を言ってくれたこと。</td><td>ピロシキ場面は本文にある。</td><td>【人物・場面違い】ピロシキの場面に淳はいない。<br><strong>【作問者の意図】</strong>母の励ましと淳の励ましを混同させる。</td><td class="judge-ng">×</td></tr></table></div></details>
+  </section>
+
+  <section id="q10" class="q-card">
+    <div class="q-head"><div class="q-title">正しく読めたかな？</div><div class="q-meta"><span class="meta">問題タイプ：内容正誤</span><span class="meta">推定正答率 76%（場面・人物・好物を取り違えない）</span></div></div>
+    <div class="statement"><strong>設問文の再掲：</strong>次のア〜オについて、本文の内容にあてはまるものには○、あてはまらないものには×と答えましょう。
+      <ol class="choices"><li>ア 特別チームのテストに落ちたわたるの気持ちも考えずにサッカーの練習に誘ってしまったことを、淳は申しわけなく思った。</li><li>イ 受かる見込みのない特別チームのテストにむりやり誘ってきた淳へのいかりから、わたるは学校で淳をさけていた。</li><li>ウ 滝川コーチからの電話がかかってくる前から、わたるは自分が特別チームのテストに落ちているだろうと予想していた。</li><li>エ 特別チームのテストに落ちたわたるをはげますために、おかあさんはわたるの好物のハンバーグを作って待っていてくれた。</li><li>オ おかあさんも淳も、特別チームのテストに落ちてがっかりしているわたるの気持ちを思いやる、心の優しい人たちである。</li></ol>
+    </div><h3>思考プロセス＋解説</h3><p>正誤問題は、一つずつ本文の人物・時点・対象語を照合する。淳が謝ったのは、わたるをテストに誘ったことについてであり、練習に誘ったことではない。わたるが淳をさけたのは怒りではなく、落ち込んだ自分を知られたくなかったからである。一方で、電話前からわたるは「やっぱり、おれってすごくへたなんだろうな」と落ちる予想をしている。母が後で作った好物はハンバーグではなくピロシキ。最後のオは、母と淳の思いやりをまとめているので合う。</p><div class="answer-box">解答：ア＝×、イ＝×、ウ＝○、エ＝×、オ＝○</div>
+    <h3>選択肢ごとの照合結果</h3><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 特別チームのテストに落ちたわたるの気持ちも考えずにサッカーの練習に誘ってしまったことを、淳は申しわけなく思った。</td><td>淳は「ごめん」「なんにも気がつかなくて」と謝る。</td><td>【対象のすり替え】本文で淳が申しわけなく思うのは「おれがむりやり誘って受けさせて、悪いことしたな」、つまりテストに誘ったこと。選択肢は「サッカーの練習に誘ったこと」に替えている。<br><strong>【作問者の意図】</strong>本文にある「サッカーやろうぜ」を使い、謝る対象を変更している。</td><td class="judge-ng">×</td></tr><tr><td>イ 受かる見込みのない特別チームのテストにむりやり誘ってきた淳へのいかりから、わたるは学校で淳をさけていた。</td><td>「学校でおれのことさけてなかった？」とあり、わたるが淳をさけていた点は合う。</td><td>【原因すり替え】本文の理由は「落ち込んでいる自分を見られたくない」こと。選択肢は「淳へのいかり」に替え、「受かる見込みのない」「むりやり」も本文にない。<br><strong>【作問者の意図】</strong>テストに誘った淳という設定から怒りを作り足している。</td><td class="judge-ng">×</td></tr><tr><td>ウ 滝川コーチからの電話がかかってくる前から、わたるは自分が特別チームのテストに落ちているだろうと予想していた。</td><td>電話前に「やっぱり、おれってすごくへたなんだろうな」「電話を待っていた」とあり、結果が悪いと予想している。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>「だめだった」と結果が出る前の心情を問うので、電話前の描写を戻って読む必要がある。</td><td class="judge-ok">○</td></tr><tr><td>エ 特別チームのテストに落ちたわたるをはげますために、おかあさんはわたるの好物のハンバーグを作って待っていてくれた。</td><td>ハンバーグもピロシキも好物であり、母が食事を用意する場面は本文にある。</td><td>【対象語の混同】テスト後すぐの夕食はハンバーグだが、励ますために作った好物は線⑦の「ピロシキ」。選択肢は「ピロシキ」→「ハンバーグ」に替えている。<br><strong>【作問者の意図】</strong>本文前半の「ハンバーグ」を後半の励まし場面に混ぜている。</td><td class="judge-ng">×</td></tr><tr><td>オ おかあさんも淳も、特別チームのテストに落ちてがっかりしているわたるの気持ちを思いやる、心の優しい人たちである。</td><td>母は「好物を作ってくれた」、淳は「なんとなく、わたるがくるような気がしてさ」「友達だろ」とあり、二人ともわたるを思いやっている。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>二つの別場面をまとめて、人物の共通点を抽象化している。</td><td class="judge-ok">○</td></tr></table></div>
+    <div class="pitfall"><strong>間違えやすい点：</strong>エは「好物」という共通語で迷わせる。ハンバーグは夕食、ピロシキは母の励まし。</div>
+    <details class="test"><summary>理解確認テスト</summary><p><strong>設問：</strong>次の文が本文に合うかを判断しましょう。</p><ol class="choices"><li>ア 淳は、わたるが公園に来そうだと感じ、余計なことを聞かずに一緒にサッカーをした。</li><li>イ わたるは、淳が合格を自慢したので、怒って練習を断った。</li><li>ウ おかあさんは、悲しいことがあったわたるを元気づけるために、好きな食べ物を作ることがあった。</li></ol><div class="answer-box">解答：ア＝○、イ＝×、ウ＝○</div><div class="table-wrap"><table class="choice-table"><colgroup><col class="choice"><col class="match"><col class="mismatch"><col class="judge"></colgroup><tr><th>選択肢（全文）</th><th>合致するところ</th><th>合致しないところ</th><th>判定</th></tr><tr><td>ア 淳は、わたるが公園に来そうだと感じ、余計なことを聞かずに一緒にサッカーをした。</td><td>「わたるがくるような気がしてさ」「サッカーでも一緒にやっか」と対応する。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>淳の思いやりを圧縮している。</td><td class="judge-ok">○</td></tr><tr><td>イ わたるは、淳が合格を自慢したので、怒って練習を断った。</td><td>淳が合格を伝え、練習を誘う場面はある。</td><td>【本文にない態度】自慢ではなく心配。わたるは怒りではなく、気づかわれてつらい。<br><strong>【作問者の意図】</strong>合格者への怒りに見せる。</td><td class="judge-ng">×</td></tr><tr><td>ウ おかあさんは、悲しいことがあったわたるを元気づけるために、好きな食べ物を作ることがあった。</td><td>「悲しいことがあった時」「好物を作ってくれた」と合う。</td><td>不一致なし。<br><strong>【作問者の意図】</strong>ピロシキを一般化している。</td><td class="judge-ok">○</td></tr></table></div></details>
+  </section>
+
+  <section id="final" class="section">
+    <h2 class="section-title">最終答案一覧</h2>
+    <div class="summary-card"><div class="table-wrap"><table class="final-table"><tr><th>設問</th><th>最終答案</th></tr><tr><td>問一</td><td>エ</td></tr><tr><td>問二</td><td>エ</td></tr><tr><td>問三</td><td>ウ</td></tr><tr><td>問四</td><td>ウ</td></tr><tr><td>問五</td><td>わたるは、きょう一日、学校でおれのことをさけていたのか</td></tr><tr><td>問六</td><td>ア</td></tr><tr><td>問七</td><td>特別チームのテストに落ちてがっかりしているわたるを、好物で元気づけたかったから。</td></tr><tr><td>問八</td><td>エ</td></tr><tr><td>問九</td><td>イ</td></tr><tr><td>正しく読めたかな？</td><td>ア＝×、イ＝×、ウ＝○、エ＝×、オ＝○</td></tr></table></div></div>
+  </section>
+
+  <section id="summary" class="section">
+    <h2 class="section-title">今回の学習まとめ</h2>
+    <div class="summary-card"><h3>再現したい手順</h3><ol class="step-list"><li>線部の直前直後だけでなく、その場面の前提を戻って読む。</li><li>物語文では、動作を感情に変換する。「泣く」「肩を落とす」「かくれる」は心情のサイン。</li><li>強がり・うそ・平気なふりは、本心とずれる言動として処理する。</li><li>選択肢は、本文語が入っていても、原因・時点・主語が違えば消す。</li></ol>
+      <h3>間違えやすい点</h3><p>この文章では「ハンバーグ」と「ピロシキ」、「テストに誘ったこと」と「サッカーに誘ったこと」、「結果を知る前」と「結果を知った後」の混同が多い。本文語が同じでも、場面が違うと不正解になる。</p>
+      <h3>次に同タイプで使う塾技</h3><p>心情問題では、気持ちを表す言葉だけでなく、行動・会話・直後の地の文をセットで読む。理由選択では、選択肢の「原因」「時点」「主語」を本文と一つずつ照合する。</p>
+      <h3>問ごとの塾技活用まとめ</h3><div class="table-wrap"><table><tr><th>問</th><th>使う読み方</th><th>決め手</th></tr><tr><td>問一</td><td>原因照合</td><td>電話を待つ不安と失敗の落ち込み</td></tr><tr><td>問二</td><td>直前＋あらすじ照合</td><td>不合格と力を出せなかった悔しさ</td></tr><tr><td>問三</td><td>本心と表向きの言動</td><td>落ち込みを同情されたくない</td></tr><tr><td>問四</td><td>人物評価</td><td>淳から見た前向きなわたる</td></tr><tr><td>問五</td><td>接続語「だから」</td><td>淳がわたるの避けた理由に気づく</td></tr><tr><td>問六</td><td>直後の地の文</td><td>気づかわれてつらい、みじめ</td></tr><tr><td>問七</td><td>理由記述</td><td>母が好物で元気づける</td></tr><tr><td>問八</td><td>前場面との照合</td><td>用事があるとうそをついた気まずさ</td></tr><tr><td>問九</td><td>感謝の対象</td><td>余計なことを聞かない淳の励まし</td></tr><tr><td>正しく読めたかな？</td><td>正誤照合</td><td>対象語・時点・人物を取り違えない</td></tr></table></div>
+      <h3>記述の書き方ミニまとめ</h3><p>問五は「気づいた内容」を会話として書く。問七は「状況＋気持ち＋方法＋目的」を一文にまとめる。理由記述の文末は「〜から。」、会話補充は「〜なのか。」のように、設問の場面に合う文末にする。</p>
+    </div>
+  </section>
+  <p class="footer-note">作成対象：42A-07_国語A_コトノハ.pdf／42A-07_国語A_解答・解説.pdf。HTML単体で閲覧・印刷できるよう、外部CSS・外部JSには依存していません。</p>
+</main>
+</body>
+</html>
