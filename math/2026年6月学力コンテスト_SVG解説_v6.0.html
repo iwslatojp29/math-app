@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>2026年6月 学力コンテスト SVG図解 解答解説 改訂2</title>
+<style>
+:root {
+  --bg:#f5f7fb; --card:#ffffff; --ink:#20222a; --muted:#5e6472; --line:#dfe3ee;
+  --accent:#247c83; --accent2:#c46a2b; --soft:#eaf7f7; --soft2:#fff2e4; --red:#a34848; --blue:#4367a8;
+  --shadow:0 12px 30px rgba(21,35,52,.10);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:linear-gradient(180deg,#f4f7fb 0%,#eef4f6 100%); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; line-height:1.82; }
+a { color:inherit; }
+.layout { display:block; min-height:100vh; }
+nav { position:sticky; top:0; height:100vh; overflow:auto; padding:18px 12px; background:#102e36; color:#fff; }
+nav .brand { font-weight:900; font-size:16px; line-height:1.35; margin:4px 8px 16px; }
+nav a { display:block; text-decoration:none; padding:9px 10px; margin:6px 0; border-radius:12px; background:rgba(255,255,255,.08); font-size:14px; }
+nav a:hover { background:rgba(255,255,255,.18); }
+main { max-width:1160px; width:100%; margin:0 auto; padding:28px 28px 70px; }
+.hero,.card { background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:22px; }
+.hero { padding:28px; background:radial-gradient(circle at 92% 12%,#dff4f3 0,#fff 34%,#fff 100%); }
+h1 { font-size:31px; line-height:1.35; margin:0 0 10px; }
+h2 { font-size:25px; line-height:1.35; margin:0 0 12px; padding-top:3px; }
+h3 { font-size:19px; margin:24px 0 10px; color:#244f57; }
+h4 { font-size:16px; margin:20px 0 8px; color:#244f57; }
+p { margin:8px 0; }
+.lead { color:var(--muted); margin:0; }
+.card { padding:24px; margin:24px 0; }
+.answers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:18px; }
+.answer { border:1px solid var(--line); border-radius:16px; padding:14px; background:#fff; }
+.answer b { color:var(--accent); font-size:20px; }
+.tags { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 14px; }
+.tag { font-size:13px; border:1px solid #c5d8da; background:var(--soft); color:#1b5960; padding:5px 10px; border-radius:999px; }
+.problem { background:#fbfcff; border:1px dashed #b8c3d5; border-radius:16px; padding:14px 16px; color:#353947; }
+.note,.orange,.warn { border-radius:14px; padding:12px 14px; margin:14px 0; }
+.note { background:var(--soft); border-left:5px solid var(--accent); }
+.orange { background:var(--soft2); border-left:5px solid var(--accent2); }
+.warn { background:#fff7f7; border-left:5px solid var(--red); }
+.svg-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; align-items:start; margin:16px 0; }
+.svg-card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:12px; box-shadow:0 4px 16px rgba(20,30,50,.05); }
+.svg-card.wide { grid-column:1/-1; }
+.fig-title { margin:0 0 8px; font-weight:900; color:#244f57; }
+svg { display:block; width:100%; height:auto; }
+.flowbox { margin:12px 0 18px; }
+table { width:100%; border-collapse:collapse; margin:12px 0; background:#fff; }
+th,td { border:1px solid var(--line); padding:9px 10px; vertical-align:top; }
+th { background:#f1f7f7; color:#244f57; }
+.num { text-align:right; white-space:nowrap; }
+.ans { font-size:18px; font-weight:900; color:#164f55; background:#ecf8f7; border:1px solid #c7e6e4; border-radius:16px; padding:13px 15px; margin-top:16px; }
+.mini { color:var(--muted); font-size:14px; }
+.math { font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; font-weight:800; }
+.summary-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.summary-grid div { background:#fbfcff; border:1px solid var(--line); border-radius:16px; padding:13px; }
+.summary-grid b { color:var(--accent); }
+.jump-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin:18px 0 6px; }
+.jump-btn { display:block; text-decoration:none; text-align:center; padding:12px 10px; border-radius:14px; border:1px solid #c8d8e0; background:#fbfcff; font-weight:800; }
+.jump-btn small { display:block; margin-top:3px; color:var(--muted); font-weight:600; }
+.section-jumps { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 16px; }
+.section-jumps a { text-decoration:none; padding:8px 12px; border-radius:999px; border:1px solid #c8d8e0; background:#fbfcff; font-size:13px; font-weight:700; }
+.insight-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+.insight { background:#fbfcff; border:1px solid var(--line); border-radius:18px; padding:14px 15px; }
+.insight h4 { margin:0 0 8px; }
+.insight ul { margin:8px 0 0 18px; padding:0; }
+.hyp-table td,.hyp-table th { font-size:14px; }
+.case-card { background:#fbfcff; border:1px solid var(--line); border-radius:18px; padding:16px; margin:14px 0; }
+.case-card h4 { margin-top:0; }
+.mind { background:#f7fbfb; border:1px dashed #b9d4d7; border-radius:14px; padding:10px 12px; margin-top:10px; }
+@media (max-width:900px) {
+  .layout { display:block; } nav { position:relative; height:auto; display:flex; flex-wrap:wrap; gap:6px; } nav .brand { width:100%; } nav a { margin:0; }
+  main { padding:18px 14px 50px; } .answers,.svg-grid,.summary-grid,.jump-grid,.insight-grid { grid-template-columns:1fr; }
+}
+@media print { nav { display:none; } .layout { display:block; } main { max-width:none; padding:0; } .card,.hero { box-shadow:none; break-inside:avoid; } }
+
+.page-top-jump {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(245,247,251,.98);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 4px 18px rgba(20,30,50,.06);
+}
+.page-top-jump .top-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 12px 28px;
+}
+.top-title {
+  font-weight: 900;
+  color: #102e36;
+  margin-bottom: 8px;
+  letter-spacing: .02em;
+}
+.top-buttons {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0,1fr));
+  gap: 8px;
+}
+.top-buttons a {
+  display: block;
+  text-decoration: none;
+  border: 1px solid #c8d8e0;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 8px;
+  text-align: center;
+  font-weight: 900;
+  line-height: 1.25;
+  color: #12343b;
+}
+.top-buttons a span {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 650;
+}
+.top-buttons a:hover { background: var(--soft); border-color: #78b1b4; }
+.transfer-map { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:14px 0 18px; }
+.transfer-map div { border:1px solid var(--line); border-radius:16px; background:#fbfcff; padding:13px; }
+.transfer-map b { color:var(--accent); }
+.compare-badge { display:inline-block; padding:4px 9px; border-radius:999px; background:#ecf8f7; border:1px solid #c7e6e4; color:#164f55; font-size:12px; font-weight:800; margin:2px 4px 2px 0; }
+.related-card { border:1px solid var(--line); border-radius:20px; background:#fff; padding:18px; margin:18px 0; box-shadow:0 4px 16px rgba(20,30,50,.05); }
+.related-card h3 { margin-top:0; }
+.step-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
+.step-grid div { background:#fbfcff; border:1px solid var(--line); border-radius:14px; padding:11px; }
+.step-grid b { color:var(--accent2); }
+@media (max-width:900px) {
+  .page-top-jump { position: relative; }
+  .page-top-jump .top-inner { padding: 10px 14px; }
+  .top-buttons { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .transfer-map, .step-grid { grid-template-columns: 1fr; }
+}
+@media print { .page-top-jump { display:none; } }
+
+
+.related-wrap { margin-top:26px; border-top:2px dashed #d7e3ea; padding-top:18px; }
+.related-card { background:#fbfcff; border:1px solid var(--line); border-radius:20px; padding:18px; margin:16px 0; }
+.related-card h4 { margin:0 0 8px; color:#184d74; }
+.related-card .head { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.related-card .head span { display:inline-block; padding:5px 10px; border-radius:999px; background:#eef7fb; border:1px solid #cddfea; font-size:12px; font-weight:800; }
+.mini-svg { margin:10px 0 12px; background:#fff; border:1px solid #dfe6f0; border-radius:16px; padding:8px; }
+.detail-steps { margin:10px 0 0 18px; }
+.detail-steps li { margin:6px 0; }
+.compare-note { background:#fff7e9; border:1px solid #e7c691; border-radius:14px; padding:10px 12px; margin:10px 0; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:900px){ .two-col{ grid-template-columns:1fr; } }
+
+
+.calc-box { background:#fff; border:1px solid #dfe6f0; border-radius:16px; padding:12px 14px; margin:12px 0; }
+.calc-line { padding:5px 0; border-bottom:1px dashed #e5edf3; font-weight:700; }
+.calc-line:last-child { border-bottom:none; }
+.calc-line b { color:#c46a2b; }
+.answer-step { background:#f7fbfb; border-left:5px solid #247c83; border-radius:12px; padding:10px 12px; margin:10px 0; }
+.answer-step .label { font-weight:900; color:#247c83; }
+.related-card svg text { font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; }
+
+.solution { margin:14px 0 0; border:1px solid #cfdfea; border-radius:16px; background:#fff; overflow:hidden; }
+.solution summary { cursor:pointer; padding:12px 14px; font-weight:900; color:#164f55; background:#eef8f8; list-style:none; }
+.solution summary::-webkit-details-marker { display:none; }
+.solution summary::before { content:"＋"; display:inline-block; width:1.7em; height:1.7em; line-height:1.7em; text-align:center; margin-right:8px; border-radius:999px; background:#247c83; color:#fff; font-weight:900; }
+.solution[open] summary::before { content:"−"; background:#c46a2b; }
+.solution-body { padding:14px 16px 18px; }
+.formula-box { background:#fbfcff; border:1px solid #dfe6f0; border-radius:14px; padding:10px 12px; margin:10px 0; font-weight:800; }
+.expansion { background:#fffaf2; border-left:5px solid #e0b179; border-radius:12px; padding:10px 12px; margin:10px 0; }
+.related-card .problem-mini { background:#f8fbff; border:1px dashed #b9c8d8; border-radius:14px; padding:12px 14px; margin:10px 0; }
+.related-card .ans-mini { background:#ecf8f7; border:1px solid #c7e6e4; color:#164f55; border-radius:14px; padding:10px 12px; font-weight:900; margin-top:10px; }
+.svg-caption { font-size:13px; color:#5e6472; margin-top:4px; }
+
+
+/* related exercises: keep hints hidden until details are opened */
+.related-wrap > .mini { display:none; }
+.related-card .head span:not(:first-child) { display:none; }
+.hidden-after-open { margin-top:0; }
+.solution-body .mini-svg { margin:12px 0 16px; }
+.related-card svg text { paint-order: stroke; stroke:#fff; stroke-width:2px; stroke-linejoin:round; }
+.related-card svg text[fill="#fff"], .related-card svg text[fill="white"] { stroke:none; }
+.solution summary { user-select:none; }
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<section class="page-top-jump" id="top">
+<div class="top-inner">
+<div class="top-title">問題番号へすぐ飛ぶ</div>
+<div class="top-buttons">
+<a href="#answers">答え一覧<span>全体確認</span></a>
+<a href="#q1">問1 数表<span>差に置き換える</span></a>
+<a href="#q2">問2 図形<span>通過範囲・切断</span></a>
+<a href="#q3">問3 場合の数<span>点数変化に変換</span></a>
+<a href="#q4">問4 移動<span>矢印和に変換</span></a>
+<a href="#summary">まとめ<span>構造の共通点</span></a>
+</div>
+</div>
+</section>
+<div class="layout">
+<main>
+<section class="hero" id="answers">
+<h1>2026年6月 学力コンテスト<br/>SVG図解つき 解答解説</h1>
+<p class="lead">図を「条件確認」「方針」「決め手」に分け、すべてインラインSVGで描いた解説です。印刷しても図が荒れにくく、スマートフォンでも読みやすい構成にしています。</p>
+<div class="answers">
+<div class="answer"><b>1</b>　(1) 5段：25, 28, 28, 24, 15 ／ 6段：41, 45, 46, 43, 35, 21<br/>(2) n＝9　(3) n＝12, 36</div>
+<div class="answer"><b>2</b>　(1) 63/2 cm<sup>2</sup>　(2) 9 cm<sup>3</sup>　(3) 99/2 cm<sup>3</sup></div>
+<div class="answer"><b>3</b>　(1) A＝4, B＝6　(2) 112通り</div>
+<div class="answer"><b>4</b>　(1) 20度　(2) 120度</div>
+</div>
+</section>
+<section class="card" id="q1">
+<h2>1. 三角形状の数表A・B</h2>
+<div class="tags"><span class="tag">規則性</span><span class="tag">数表</span><span class="tag">差の変化</span><span class="tag">右上＋同じ位置</span></div>
+<div class="problem">
+    数表Aは、上から下へ、同じ段では左から右へ、1以上の整数を小さい順に書く。数表Bは、段の一番右のマスには数表Aの同じ位置の数を書く。それ以外のマスXには、数表BでXのすぐ右上の数と、数表AでXと同じ位置の数の和を書く。
+  </div>
+<div class="note"><b>この問題の核：</b>Bの値は、横に作るより「同じ左から何番目か」を固定して下へ追うと見やすい。差を聞かれたら、値そのものではなく差の変化だけを見る。</div>
+<div class="svg-grid">
+<div class="svg-card wide"><p class="fig-title">SVG図1：5段目・6段目を作る矢印</p><svg aria-label="数表Bの5段目・6段目を作るSVG図" role="img" viewBox="0 0 560 430">
+<title>数表Bの5段目・6段目を作るSVG図</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="390" rx="18" stroke="#cfd8e8" stroke-width="1" width="520" x="20" y="20"></rect>
+<text class="" fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="280" y="42">数表B：右上のBに、同じ位置のAを足す</text>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="start" x="48" y="80">1段</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="235.0" y="54"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="261.0" y="79">1</text>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="start" x="48" y="128">2段</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="206.0" y="102"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="232.0" y="127">3</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="264.0" y="102"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="290.0" y="127">3</text>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="start" x="48" y="176">3段</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="177.0" y="150"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="203.0" y="175">7</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="235.0" y="150"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="261.0" y="175">8</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="293.0" y="150"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="319.0" y="175">6</text>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="start" x="48" y="224">4段</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="148.0" y="198"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="174.0" y="223">14</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="206.0" y="198"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="232.0" y="223">16</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="264.0" y="198"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="290.0" y="223">15</text>
+<rect fill="#fff" height="40" rx="7" stroke="#9aa6b8" stroke-width="1.4" width="52" x="322.0" y="198"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="348.0" y="223">10</text>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="start" x="48" y="272">5段</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="119.0" y="246"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="145.0" y="271">25</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="145.0" y="284">+A=11</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="177.0" y="246"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="203.0" y="271">28</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="203.0" y="284">+A=12</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="235.0" y="246"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="261.0" y="271">28</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="261.0" y="284">+A=13</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="293.0" y="246"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="319.0" y="271">24</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="319.0" y="284">+A=14</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="351.0" y="246"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="377.0" y="271">15</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="377.0" y="284">+A=15</text>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="start" x="48" y="320">6段</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="90.0" y="294"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="116.0" y="319">41</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="116.0" y="332">+A=16</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="148.0" y="294"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="174.0" y="319">45</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="174.0" y="332">+A=17</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="206.0" y="294"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="232.0" y="319">46</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="232.0" y="332">+A=18</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="264.0" y="294"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="290.0" y="319">43</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="290.0" y="332">+A=19</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="322.0" y="294"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="348.0" y="319">35</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="348.0" y="332">+A=20</text>
+<rect fill="#eaf7f7" height="40" rx="7" stroke="#68a9ad" stroke-width="1.4" width="52" x="380.0" y="294"></rect>
+<text class="" fill="#20222a" font-size="16" font-weight="700" text-anchor="middle" x="406.0" y="319">21</text>
+<text class="" fill="#c46a2b" font-size="9" font-weight="700" text-anchor="middle" x="406.0" y="332">+A=21</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="174.0" x2="145.0" y1="233.0" y2="246.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="232.0" x2="203.0" y1="233.0" y2="246.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="290.0" x2="261.0" y1="233.0" y2="246.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="348.0" x2="319.0" y1="233.0" y2="246.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="145.0" x2="116.0" y1="281.0" y2="294.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="203.0" x2="174.0" y1="281.0" y2="294.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="261.0" x2="232.0" y1="281.0" y2="294.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="319.0" x2="290.0" y1="281.0" y2="294.0"></line>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="1.4" x1="377.0" x2="348.0" y1="281.0" y2="294.0"></line>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="1.7" x1="402.0" x2="445.0" y1="258.0" y2="250.0"></line>
+<text class="" fill="#c46a2b" font-size="13" font-weight="700" text-anchor="middle" x="505.0" y="254.0">右端はAそのまま</text>
+<rect fill="#fff2e4" height="42" rx="12" stroke="#e0b179" stroke-width="1" width="210" x="175" y="350"></rect>
+<text class="" fill="#c46a2b" font-size="14" font-weight="700" text-anchor="middle" x="280" y="376">例：25 = 14 + 11</text>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図2：差の変化だけを追う</p><svg aria-label="数表Bの差を追うSVG図" role="img" viewBox="0 0 720 380">
+<title>数表Bの差を追うSVG図</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="345" rx="18" stroke="#cfd8e8" stroke-width="1" width="680" x="18" y="18"></rect>
+<text class="" fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="350" y="43">差だけを追うと、大きな表を作らなくてよい</text>
+<text class="" fill="#247c83" font-size="15" font-weight="700" text-anchor="middle" x="58" y="110">(2)</text>
+<line stroke="#b7c1d2" stroke-linecap="round" stroke-width="3" x1="85" x2="495" y1="105" y2="105"></line>
+<circle cx="85" cy="105" fill="#eaf7f7" r="10" stroke="#68a9ad" stroke-width="2"></circle>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="middle" x="85" y="81">n=4</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="85" y="140">差 5</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.8" x1="98" x2="154" y1="105" y2="105"></line>
+<text class="" fill="#247c83" font-size="12" font-weight="700" text-anchor="middle" x="126.0" y="95">−1</text>
+<circle cx="167" cy="105" fill="#eaf7f7" r="10" stroke="#68a9ad" stroke-width="2"></circle>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="middle" x="167" y="81">n=5</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="167" y="140">差 4</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.8" x1="180" x2="236" y1="105" y2="105"></line>
+<text class="" fill="#247c83" font-size="12" font-weight="700" text-anchor="middle" x="208.0" y="95">−1</text>
+<circle cx="249" cy="105" fill="#eaf7f7" r="10" stroke="#68a9ad" stroke-width="2"></circle>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="middle" x="249" y="81">n=6</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="249" y="140">差 3</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.8" x1="262" x2="318" y1="105" y2="105"></line>
+<text class="" fill="#247c83" font-size="12" font-weight="700" text-anchor="middle" x="290.0" y="95">−1</text>
+<circle cx="331" cy="105" fill="#eaf7f7" r="10" stroke="#68a9ad" stroke-width="2"></circle>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="middle" x="331" y="81">n=7</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="331" y="140">差 2</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.8" x1="344" x2="400" y1="105" y2="105"></line>
+<text class="" fill="#247c83" font-size="12" font-weight="700" text-anchor="middle" x="372.0" y="95">−1</text>
+<circle cx="413" cy="105" fill="#eaf7f7" r="10" stroke="#68a9ad" stroke-width="2"></circle>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="middle" x="413" y="81">n=8</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="413" y="140">差 1</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.8" x1="426" x2="482" y1="105" y2="105"></line>
+<text class="" fill="#247c83" font-size="12" font-weight="700" text-anchor="middle" x="454.0" y="95">−1</text>
+<circle cx="495" cy="105" fill="#eaf7f7" r="10" stroke="#68a9ad" stroke-width="2"></circle>
+<text class="" fill="#5e6472" font-size="12" font-weight="700" text-anchor="middle" x="495" y="81">n=9</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="495" y="140">差 0</text>
+<rect fill="#eaf7f7" height="54" rx="12" stroke="#68a9ad" stroke-width="1" width="145" x="505" y="77"></rect>
+<text class="" fill="#247c83" font-size="15" font-weight="700" text-anchor="middle" x="577" y="101">差5 → 0</text>
+<text class="" fill="#5e6472" font-size="13" font-weight="700" text-anchor="middle" x="577" y="121">5段下がる</text>
+<text class="" fill="#c46a2b" font-size="15" font-weight="700" text-anchor="middle" x="58" y="220">(3)</text>
+<line stroke="#b7c1d2" stroke-linecap="round" stroke-width="3" x1="85" x2="600" y1="215" y2="215"></line>
+<circle cx="85" cy="215" fill="#fff" r="11" stroke="#247c83" stroke-width="2.2"></circle>
+<text class="" fill="#5e6472" font-size="13" font-weight="700" text-anchor="middle" x="85" y="189">n=8</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="85" y="253">差 64</text>
+<circle cx="235" cy="215" fill="#fff" r="11" stroke="#c46a2b" stroke-width="2.2"></circle>
+<text class="" fill="#5e6472" font-size="13" font-weight="700" text-anchor="middle" x="235" y="189">n=12</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="235" y="253">差 48</text>
+<circle cx="515" cy="215" fill="#fff" r="11" stroke="#c46a2b" stroke-width="2.2"></circle>
+<text class="" fill="#5e6472" font-size="13" font-weight="700" text-anchor="middle" x="515" y="189">n=36</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="515" y="253">差 -48</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="2" x1="100" x2="220" y1="215" y2="215"></line>
+<text class="" fill="#c46a2b" font-size="12" font-weight="700" text-anchor="middle" x="160" y="203">4段 × −4</text>
+<line marker-end="url(#arrR)" stroke="#a34848" stroke-dasharray="5 4" stroke-linecap="round" stroke-width="2" x1="251" x2="499" y1="215" y2="215"></line>
+<text class="" fill="#a34848" font-size="12" font-weight="700" text-anchor="middle" x="375" y="203">さらに24段 × −4</text>
+<rect fill="#fff2e4" height="46" rx="12" stroke="#e0b179" stroke-width="1" width="300" x="76" y="298"></rect>
+<text class="" fill="#c46a2b" font-size="15" font-weight="700" text-anchor="middle" x="226" y="326">D(n)=64−4(n−8)</text>
+<rect fill="#fff7f7" height="46" rx="12" stroke="#e0a1a1" stroke-width="1" width="155" x="492" y="298"></rect>
+<text class="" fill="#a34848" font-size="13" font-weight="700" text-anchor="middle" x="569" y="326">|差|=48 だから2通り</text>
+</svg></div>
+</div>
+<div class="flowbox"><svg aria-label="問1の流れ" role="img" viewBox="0 0 760 118">
+<title>問1の流れ</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="82" rx="18" stroke="#cfd8e8" stroke-width="1" width="724" x="18" y="18"></rect>
+<rect fill="#eaf7f7" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="50.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="126.5" y="66">右端はAそのまま</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="206.0" x2="214.0" y1="60" y2="60"></line>
+<rect fill="#fff2e4" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="219.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="295.5" y="66">右上BにAを足す</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="375.0" x2="383.0" y1="60" y2="60"></line>
+<rect fill="#eaf7f7" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="388.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="464.5" y="66">比べる列だけ見る</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="544.0" x2="552.0" y1="60" y2="60"></line>
+<rect fill="#fff2e4" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="557.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="633.5" y="66">差の変化で段を求める</text>
+</svg></div>
+<h3>本解</h3>
+<h4>(1) 5段目・6段目</h4>
+<p>数表Aの5段目は <span class="math">11, 12, 13, 14, 15</span> です。右端はAそのままなので15。ほかは「右上のB＋同じ位置のA」で、5段目は <span class="math">25, 28, 28, 24, 15</span>。</p>
+<p>数表Aの6段目は <span class="math">16, 17, 18, 19, 20, 21</span> なので、6段目は <span class="math">41, 45, 46, 43, 35, 21</span>。</p>
+<h4>(2) 左から3番目と4番目が等しくなる段</h4>
+<p>4段目では、3番目が15、4番目が10なので差は5。次の段へ進むたび、Aの4番目はAの3番目より1大きいため、差は1ずつ小さくなる。</p>
+<p>差5が0になるには5段下がればよいので、<span class="math">4＋5＝9</span>。</p>
+<h4>(3) 左から4番目と8番目の差が48になる段</h4>
+<p>8段目で、4番目は100、8番目は36。差は64。次の段へ進むたび、Aの4番目と8番目の差は4なので、Bの差は毎段4ずつ小さくなる。</p>
+<p><span class="math">64→48</span> は16小さくなるので4段下、<span class="math">n＝12</span>。また差の絶対値が48なら、<span class="math">64→−48</span> も考える。112小さくなるので28段下、<span class="math">n＝36</span>。</p>
+<div class="warn"><b>注意：</b>「差が48」は、4番目が大きい場合だけでなく、8番目が大きい場合も含めて考える。</div>
+<div class="ans">答え： (1) 5段目 25, 28, 28, 24, 15 ／ 6段目 41, 45, 46, 43, 35, 21　(2) 9　(3) 12, 36</div>
+<div class="related-wrap" id="q1-related">
+<h3>問1の類題（2題）</h3>
+
+<div class="related-card">
+<div class="head"><span>類題1-A</span></div>
+<h4>商店街の2枚のスタンプカード</h4>
+<div class="problem-mini">
+<p>AカードとBカードがあります。1日目のスタンプ数は Aが10個、Bが60個です。</p>
+<p>2日目以降、Aカードには 8個, 10個, 12個, 14個, … と毎日2個ずつ多く押されます。Bカードには 15個, 16個, 17個, 18個, … と毎日1個ずつ多く押されます。</p>
+<p>AとBのスタンプ数が初めて同じになるのは何日目ですか。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>大きな表を全部作らず、差や増え方の差に置き換える練習です。元の数表とは見た目を変えていますが、「比べたい2つを直接追う」構造が似ています。</p><p><b>開いてから確認する見方：</b>見た目：スタンプカード ／ 構造：差の増減を追う</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="スタンプカードの差を追う図" role="img" viewBox="0 0 820 250">
+<defs><marker id="q1a_arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker></defs>
+<rect fill="#fbfcff" height="218" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="42">個数そのものではなく、差 D＝B−A を追う</text>
+<rect fill="#fff" height="66" rx="14" stroke="#dfe3ee" width="210" x="54" y="72"></rect>
+<text fill="#20222a" font-size="15" font-weight="800" text-anchor="middle" x="159" y="100">1日目</text>
+<text fill="#c46a2b" font-size="16" font-weight="900" text-anchor="middle" x="159" y="126">D = 60−10 = 50</text>
+<line marker-end="url(#q1a_arr)" stroke="#247c83" stroke-width="2.6" x1="282" x2="374" y1="105" y2="105"></line>
+<rect fill="#fff" height="66" rx="14" stroke="#dfe3ee" width="286" x="390" y="72"></rect>
+<text fill="#20222a" font-size="15" font-weight="800" text-anchor="middle" x="533" y="100">1回ごとの差の変化</text>
+<text fill="#247c83" font-size="16" font-weight="900" text-anchor="middle" x="533" y="126">+7, +6, +5, …, 0, −1, −2, …</text>
+<rect fill="#fff2e4" height="42" rx="14" stroke="#e0b179" width="652" x="74" y="168"></rect>
+<text fill="#c46a2b" font-size="16" font-weight="900" text-anchor="middle" x="400" y="187.0"><tspan dy="0" x="400">50 + {7+6+5+…+(−12)}</tspan><tspan dy="19" x="400">= 0 になる日を探す</tspan></text>
+</svg><div class="svg-caption">差を見ると、AとBを毎日両方計算する必要がなくなります。</div></div>
+<p><b>1. まず問題文を解く表現に置き換える。</b> AとBの数を両方追うと数が大きくなります。聞かれているのは「同じになる日」なので、差 <span class="math">D＝B−A</span> だけを追います。</p>
+<div class="formula-box">1日目：D＝60−10＝50</div>
+<p><b>2. 1日進むと差がどう変わるかを見る。</b></p>
+<table><tr><th>押される日</th><th>Aに増える数</th><th>Bに増える数</th><th>D＝B−A の変化</th></tr><tr><td>2日目</td><td>8</td><td>15</td><td>+7</td></tr><tr><td>3日目</td><td>10</td><td>16</td><td>+6</td></tr><tr><td>4日目</td><td>12</td><td>17</td><td>+5</td></tr><tr><td>…</td><td>…</td><td>…</td><td>1ずつ小さくなる</td></tr></table>
+<p>ここで大切なのは、Bの方が最初はさらに離れていくことです。<span class="math">+7,+6,+5,…</span> の後、やがて <span class="math">0,−1,−2,…</span> となり、Aが追いつき始めます。</p>
+<div class="expansion"><b>3. 20回進んだところまで展開して確かめる。</b><br/>
+          差の変化は、2日目から21日目までの20回で<br/>
+<span class="math">7 + 6 + 5 + 4 + 3 + 2 + 1 + 0 − 1 − 2 − 3 − 4 − 5 − 6 − 7 − 8 − 9 − 10 − 11 − 12</span><br/>
+          です。正の部分と負の部分を分けると、<br/>
+<span class="math">(7+6+5+4+3+2+1) − (1+2+3+4+5+6+7+8+9+10+11+12)</span><br/>
+<span class="math">= 28 − 78 = −50</span>
+</div>
+<p>1日目の差が50で、20回分の変化が−50なので、</p>
+<div class="formula-box">D＝50＋(−50)＝0</div>
+<p>20回進んだ日は、<span class="math">1＋20＝21</span> 日目です。</p>
+<div class="ans-mini">答え：21日目</div>
+<p><b>構造の類似性：</b>元の問1と同じく、数そのものではなく差を追います。ただし、こちらは三角形の数表ではなく、2つの増え方の差が1ずつ変わる問題です。</p>
+</div></details>
+</div>
+<div class="related-card">
+<div class="head"><span>類題1-B</span></div>
+<h4>2つの積み木タワー</h4>
+<div class="problem-mini">
+<p>4段目の時点で、タワーBはタワーAより10個高い。</p>
+<p>5段目から先、Aには「その段の番号」と同じ数だけ積み木を足し、Bには毎段5個ずつ足します。つまり5段目ではAに5個、Bに5個、6段目ではAに6個、Bに5個を足します。</p>
+<p>(1) AとBが同じ高さになるのは何段目ですか。<br/>(2) Aの方が5個高くなるのは何段目ですか。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>大きな表を全部作らず、差や増え方の差に置き換える練習です。元の数表とは見た目を変えていますが、「比べたい2つを直接追う」構造が似ています。</p><p><b>開いてから確認する見方：</b>見た目：積み木 ／ 構造：差が三角数で変わる</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="積み木タワーの差の変化" role="img" viewBox="0 0 820 250">
+<rect fill="#fbfcff" height="218" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="42">D＝B−A として、差がどれだけ減るかを見る</text>
+<g transform="translate(80,78)">
+<rect fill="#eaf7f7" height="46" rx="12" stroke="#68a9ad" width="100" x="0" y="0"></rect><text font-size="15" font-weight="800" text-anchor="middle" x="50" y="29">5段目</text>
+<rect fill="#fff" height="46" rx="12" stroke="#dfe3ee" width="100" x="125" y="0"></rect><text font-size="15" font-weight="800" text-anchor="middle" x="175" y="29">6段目</text>
+<rect fill="#fff" height="46" rx="12" stroke="#dfe3ee" width="100" x="250" y="0"></rect><text font-size="15" font-weight="800" text-anchor="middle" x="300" y="29">7段目</text>
+<rect fill="#fff" height="46" rx="12" stroke="#dfe3ee" width="100" x="375" y="0"></rect><text font-size="15" font-weight="800" text-anchor="middle" x="425" y="29">8段目</text>
+<rect fill="#fff" height="46" rx="12" stroke="#dfe3ee" width="100" x="500" y="0"></rect><text font-size="15" font-weight="800" text-anchor="middle" x="550" y="29">9段目</text>
+<text fill="#c46a2b" font-size="14" font-weight="900" text-anchor="middle" x="50" y="82">−0</text>
+<text fill="#c46a2b" font-size="14" font-weight="900" text-anchor="middle" x="175" y="82">−1</text>
+<text fill="#c46a2b" font-size="14" font-weight="900" text-anchor="middle" x="300" y="82">−2</text>
+<text fill="#c46a2b" font-size="14" font-weight="900" text-anchor="middle" x="425" y="82">−3</text>
+<text fill="#c46a2b" font-size="14" font-weight="900" text-anchor="middle" x="550" y="82">−4</text>
+</g>
+<rect fill="#fff2e4" height="32" rx="12" stroke="#e0b179" width="500" x="160" y="190"></rect><text fill="#c46a2b" font-size="15" font-weight="900" text-anchor="middle" x="410" y="211">10 − (0+1+2+3+4) = 0</text>
+</svg></div>
+<p><b>1. 差を置く。</b> BがAより高い量を <span class="math">D＝B−A</span> とします。4段目では <span class="math">D＝10</span> です。</p>
+<p><b>2. 各段で差がどう変わるか。</b> 5段目ではAもBも5個足すので差は変わりません。6段目ではAが6個、Bが5個なので、B−Aは1小さくなります。</p>
+<table><tr><th>段</th><th>Aに足す</th><th>Bに足す</th><th>D＝B−A の変化</th></tr><tr><td>5段目</td><td>5</td><td>5</td><td>0</td></tr><tr><td>6段目</td><td>6</td><td>5</td><td>−1</td></tr><tr><td>7段目</td><td>7</td><td>5</td><td>−2</td></tr><tr><td>8段目</td><td>8</td><td>5</td><td>−3</td></tr><tr><td>9段目</td><td>9</td><td>5</td><td>−4</td></tr></table>
+<div class="expansion"><b>(1) 同じ高さになる段</b><br/>
+          4段目の差は10。5〜9段目で差が減る量は<br/>
+<span class="math">0 + 1 + 2 + 3 + 4 = 10</span><br/>
+          したがって、<span class="math">D＝10−10＝0</span>。同じ高さになるのは9段目です。
+        </div>
+<div class="expansion"><b>(2) Aが5個高くなる段</b><br/>
+          Aが5個高いとは、<span class="math">D＝B−A＝−5</span> ということです。<br/>
+          差10から−5になるには、合計で15小さくなればよい。<br/>
+<span class="math">0 + 1 + 2 + 3 + 4 + 5 = 15</span><br/>
+          これは10段目まで進んだときです。
+        </div>
+<div class="ans-mini">答え：(1) 9段目　(2) 10段目</div>
+<p><b>構造の類似性：</b>数表ではありませんが、「値を全部作らず、差がどれだけ変わったかを見る」点が問1と同じです。</p>
+</div></details>
+</div>
+</div>
+</section>
+
+<section class="card" id="q2">
+<h2>2. 図形の通過範囲・切断</h2>
+<div class="tags"><span class="tag">掃過範囲</span><span class="tag">立体切断</span><span class="tag">断面</span><span class="tag">体積</span></div>
+<div class="problem">
+    (1) AB＝AC＝3cmの直角二等辺三角形が、向きを変えず、頂点Aが1辺3cmの正方形Xの周上を1周する。通過面積を求める。<br/>
+    (2) 1辺3cmの立方体を平面PUVと平面PVWで切断し、頂点Rを含む立体の体積を求める。<br/>
+    (3) AB＝AC＝AD＝3cmで3本が互いに直角の三角すいが、(1)と同じように動く。通過体積を求める。
+  </div>
+<div class="note"><b>この問題の核：</b>動く図形を追うのではなく、Aの通る道を固定する。(3)は高さごとの断面に分けて、(1)の平面問題に戻す。</div>
+<div class="svg-grid">
+<div class="svg-card wide"><p class="fig-title">SVG図3：(1) 通過範囲は「外側−通らない三角形」</p><svg aria-label="問2(1)通過面積のSVG図" role="img" viewBox="0 0 740 465">
+<title>問2(1)通過面積のSVG図</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="430" rx="18" stroke="#cfd8e8" stroke-width="1" width="700" x="18" y="18"></rect>
+<text class="" fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="360" y="43">頂点Aの道を固定して、通過範囲を一気に見る</text>
+<rect fill="#dff4f3" height="300" opacity="0.95" rx="0" stroke="#68a9ad" stroke-width="2" width="300" x="70" y="95"></rect>
+<polygon fill="#fff" opacity="1" points="370,245 370,395 220,395" stroke="#d17a39" stroke-linejoin="round" stroke-width="2.4"></polygon>
+<text class="" fill="#c46a2b" font-size="13" font-weight="700" text-anchor="middle" x="327.5" y="347.5">通らない</text>
+<rect fill="none" height="150" rx="0" stroke="#334" stroke-dasharray="8 5" stroke-width="2" width="150" x="70" y="245"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="145.0" y="412.5">Aの道：正方形Xの周</text>
+<polygon fill="rgba(36,124,131,.16)" points="70,245 220,245 70,95" stroke="#247c83" stroke-linejoin="round" stroke-width="1.5"></polygon>
+<circle cx="70" cy="245" fill="#247c83" r="4" stroke="#247c83" stroke-width="1"></circle>
+<polygon fill="rgba(36,124,131,.16)" points="220,245 370,245 220,95" stroke="#247c83" stroke-linejoin="round" stroke-width="1.5"></polygon>
+<circle cx="220" cy="245" fill="#247c83" r="4" stroke="#247c83" stroke-width="1"></circle>
+<polygon fill="rgba(36,124,131,.16)" points="70,395 220,395 70,245" stroke="#247c83" stroke-linejoin="round" stroke-width="1.5"></polygon>
+<circle cx="70" cy="395" fill="#247c83" r="4" stroke="#247c83" stroke-width="1"></circle>
+<polygon fill="rgba(36,124,131,.16)" points="220,395 370,395 220,245" stroke="#247c83" stroke-linejoin="round" stroke-width="1.5"></polygon>
+<circle cx="220" cy="395" fill="#247c83" r="4" stroke="#247c83" stroke-width="1"></circle>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="70" x2="370" y1="77" y2="77"></line>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="370" x2="70" y1="77" y2="77"></line>
+<text class="" fill="#5e6472" font-size="13" font-weight="700" text-anchor="middle" x="220" y="67">6cm</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="1.5" x1="392" x2="392" y1="245" y2="395"></line>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="1.5" x1="392" x2="392" y1="395" y2="245"></line>
+<text class="" fill="#c46a2b" font-size="13" font-weight="700" text-anchor="start" x="412" y="322.5">3cm</text>
+<rect fill="#fff" filter="url(#shadow)" height="86" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="245" x="440" y="105"></rect>
+<text class="" fill="#247c83" font-size="15" font-weight="700" text-anchor="middle" x="563" y="132">面積</text>
+<text class="" fill="#20222a" font-size="18" font-weight="700" text-anchor="middle" x="563" y="160">6×6 − 3×3÷2</text>
+<text class="" fill="#c46a2b" font-size="18" font-weight="700" text-anchor="middle" x="563" y="183">= 63/2 cm²</text>
+<rect fill="#fff2e4" height="110" rx="16" stroke="#e0b179" stroke-width="1" width="245" x="440" y="225"></rect>
+<text class="" fill="#c46a2b" font-size="15" font-weight="700" text-anchor="middle" x="563" y="251">ポイント</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="563" y="278">動く三角形を何枚も描かず</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="563" y="301">「外側−通らない部分」</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="563" y="324">に直す。</text>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図4：(2) Rを含む立体は四角すい</p><svg aria-label="問2(2)立方体切断のSVG図（問題文の向きに合わせた図）" role="img" viewBox="0 0 760 430">
+<title>問2(2)立方体切断のSVG図（問題文の向きに合わせた図）</title>
+<defs>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="394" rx="18" stroke="#cfd8e8" stroke-width="1" width="724" x="18" y="18"></rect>
+<text fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="380" y="43">問題文の向きに合わせて見ると、Rを含む部分は四角すい</text>
+<!-- cube -->
+<polygon fill="#f8fafc" points="110,95 260,125 260,255 110,225" stroke="#7e8a9c" stroke-width="2"></polygon>
+<polygon fill="#f8fafc" points="110,95 170,55 320,85 260,125" stroke="#7e8a9c" stroke-width="2"></polygon>
+<polygon fill="#f8fafc" points="260,125 320,85 320,215 260,255" stroke="#7e8a9c" stroke-width="2"></polygon>
+<line stroke="#9aa6b8" stroke-dasharray="5 4" stroke-width="2" x1="110" x2="170" y1="225" y2="185"></line>
+<line stroke="#9aa6b8" stroke-dasharray="5 4" stroke-width="2" x1="170" x2="170" y1="55" y2="185"></line>
+<line stroke="#9aa6b8" stroke-dasharray="5 4" stroke-width="2" x1="170" x2="320" y1="185" y2="215"></line>
+<!-- planes -->
+<polygon fill="rgba(36,124,131,.17)" points="170,55 320,85 260,255 110,225" stroke="#247c83" stroke-width="2.2"></polygon>
+<polygon fill="rgba(196,106,43,.17)" points="170,55 110,95 260,255 320,215" stroke="#c46a2b" stroke-width="2.2"></polygon>
+<!-- target pyramid -->
+<polygon fill="rgba(67,103,168,.22)" points="170,55 110,95 260,125 320,85" stroke="#4367a8" stroke-width="2.6"></polygon>
+<line stroke="#4367a8" stroke-width="2.6" x1="260" x2="170" y1="255" y2="55"></line>
+<line stroke="#4367a8" stroke-width="2.6" x1="260" x2="110" y1="255" y2="95"></line>
+<line stroke="#4367a8" stroke-width="2.6" x1="260" x2="260" y1="255" y2="125"></line>
+<line stroke="#4367a8" stroke-width="2.6" x1="260" x2="320" y1="255" y2="85"></line>
+<circle cx="260" cy="255" fill="#4367a8" r="5.8"></circle>
+<!-- labels -->
+<text fill="#20222a" font-size="15" font-weight="800" text-anchor="middle" x="170" y="48">P</text>
+<text fill="#20222a" font-size="15" font-weight="800" text-anchor="end" x="103" y="92">Q</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="267" y="122">R</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="328" y="83">S</text>
+<text fill="#20222a" font-size="15" font-weight="800" text-anchor="end" x="103" y="238">U</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="266" y="274">V</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="328" y="223">W</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="178" y="190">T</text>
+<!-- legends -->
+<rect fill="#fff" filter="url(#shadow)" height="112" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="300" x="395" y="80"></rect>
+<line stroke="#247c83" stroke-width="4" x1="420" x2="455" y1="114" y2="114"></line>
+<text fill="#20222a" font-size="14" font-weight="700" x="470" y="120">平面PUV（= P-S-V-U）</text>
+<line stroke="#c46a2b" stroke-width="4" x1="420" x2="455" y1="150" y2="150"></line>
+<text fill="#20222a" font-size="14" font-weight="700" x="470" y="156">平面PVW（= P-Q-V-W）</text>
+<line stroke="#4367a8" stroke-width="4" x1="420" x2="455" y1="186" y2="186"></line>
+<text fill="#20222a" font-size="14" font-weight="700" x="470" y="192">Rを含む立体 = 四角すい</text>
+<rect fill="#eef4ff" height="150" rx="16" stroke="#cad6f0" stroke-width="1.2" width="300" x="395" y="220"></rect>
+<text fill="#4367a8" font-size="17" font-weight="800" text-anchor="middle" x="545" y="252">Rを含む側の見方</text>
+<text fill="#20222a" font-size="15" font-weight="700" text-anchor="middle" x="545" y="286">底面：上面の PQRS</text>
+<text fill="#20222a" font-size="15" font-weight="700" text-anchor="middle" x="545" y="314">頂点：V</text>
+<text fill="#4367a8" font-size="21" font-weight="900" text-anchor="middle" x="545" y="342">四角すい</text>
+<text fill="#c46a2b" font-size="16" font-weight="800" text-anchor="middle" x="545" y="370">体積 = 9 × 3 ÷ 3 = 9 cm³</text>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図5：(3) 高さごとの断面を積み重ねる</p><svg aria-label="問2(3)断面積み上げのSVG図" role="img" viewBox="0 0 800 470">
+<title>問2(3)断面積み上げのSVG図</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="435" rx="18" stroke="#cfd8e8" stroke-width="1" width="760" x="18" y="18"></rect>
+<text class="" fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="390" y="43">三角すいの通過体積は「高さごとの断面」を積む</text>
+<polygon fill="rgba(36,124,131,.12)" points="110,335 320,335 110,125" stroke="#247c83" stroke-linejoin="round" stroke-width="2"></polygon>
+<line stroke="#4367a8" stroke-linecap="round" stroke-width="2.4" x1="110" x2="190" y1="335" y2="250"></line>
+<line stroke="#4367a8" stroke-linecap="round" stroke-width="1.8" x1="320" x2="190" y1="335" y2="250"></line>
+<line stroke="#4367a8" stroke-linecap="round" stroke-width="1.8" x1="110" x2="190" y1="125" y2="250"></line>
+<text class="" fill="#20222a" font-size="15" font-weight="800" text-anchor="middle" x="94" y="355">A</text>
+<text class="" fill="#20222a" font-size="15" font-weight="800" text-anchor="middle" x="334" y="355">B</text>
+<text class="" fill="#20222a" font-size="15" font-weight="800" text-anchor="middle" x="92" y="117">C</text>
+<text class="" fill="#20222a" font-size="15" font-weight="800" text-anchor="middle" x="200" y="258">D</text>
+<polygon fill="#8cc7c7" opacity=".85" points="127.6,316.3 253.6,316.3 127.6,190.3" stroke="#247c83" stroke-linejoin="round" stroke-width="1.3"></polygon>
+<polygon fill="#b5dddd" opacity=".85" points="148.4,294.2 232.4,294.2 148.4,210.2" stroke="#247c83" stroke-linejoin="round" stroke-width="1.3"></polygon>
+<polygon fill="#d7eeee" opacity=".85" points="168.4,272.95 214.60000000000002,272.95 168.4,226.75" stroke="#247c83" stroke-linejoin="round" stroke-width="1.3"></polygon>
+<text class="" fill="#247c83" font-size="13" font-weight="700" text-anchor="middle" x="210" y="112">断面は脚Lの直角二等辺三角形</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="2" x1="348" x2="448" y1="205" y2="205"></line>
+<rect fill="none" height="96" rx="0" stroke="#334" stroke-dasharray="6 4" stroke-width="1.6" width="96" x="470" y="201"></rect>
+<rect fill="#dff4f3" height="172.8" opacity=".92" rx="0" stroke="#68a9ad" stroke-width="2" width="172.8" x="470" y="124.2"></rect>
+<polygon fill="#fff" points="642.8,201 642.8,277.8 566,277.8" stroke="#c46a2b" stroke-linejoin="round" stroke-width="2"></polygon>
+<text class="" fill="#c46a2b" font-size="12" font-weight="700" text-anchor="middle" x="600.8" y="259.8">引く</text>
+<text class="" fill="#20222a" font-size="12" font-weight="700" text-anchor="middle" x="518" y="315">Aの道</text>
+<rect fill="#fff" filter="url(#shadow)" height="90" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="250" x="470" y="305"></rect>
+<text class="" fill="#247c83" font-size="15" font-weight="700" text-anchor="middle" x="595" y="332">断面の通過面積</text>
+<text class="" fill="#20222a" font-size="22" font-weight="800" text-anchor="middle" x="595" y="360">12L − L²/2</text>
+<text class="" fill="#5e6472" font-size="13" font-weight="700" text-anchor="middle" x="595" y="385">Lは3から0へ縮む</text>
+<rect fill="#fff2e4" height="54" rx="16" stroke="#e0b179" stroke-width="1" width="330" x="70" y="365"></rect>
+<text class="" fill="#c46a2b" font-size="13" font-weight="700" text-anchor="middle" x="235" y="389">体積：12Lの積み重ね − L²/2の積み重ね</text>
+<text class="" fill="#c46a2b" font-size="18" font-weight="800" text-anchor="middle" x="235" y="413">= 54 − 9/2 = 99/2 cm³</text>
+</svg></div>
+</div>
+<h4>切断のプロセスを立体的に見る（追加図解）</h4>
+<div class="svg-grid">
+<div class="svg-card wide"><p class="fig-title">SVG図4-補1：平面PUV は UV と平行な上面の辺 PS を通る</p><svg aria-label="平面PUVの切断プロセス" role="img" viewBox="0 0 860 360">
+<rect fill="#fbfcff" height="324" rx="18" stroke="#cfd8e8" stroke-width="1" width="824" x="18" y="18"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="430" y="42">平面PUVを決めると、上面では PS が切り口になる</text>
+<g transform="translate(28,58)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="120" y="20">① 元の立方体</text>
+<polygon fill="#f8fafc" points="40,70 150,90 150,200 40,180" stroke="#7e8a9c" stroke-width="2"></polygon>
+<polygon fill="#f8fafc" points="40,70 90,35 200,55 150,90" stroke="#7e8a9c" stroke-width="2"></polygon>
+<polygon fill="#f8fafc" points="150,90 200,55 200,165 150,200" stroke="#7e8a9c" stroke-width="2"></polygon>
+<line stroke="#9aa6b8" stroke-dasharray="5 4" stroke-width="2" x1="40" x2="90" y1="180" y2="145"></line>
+<line stroke="#9aa6b8" stroke-dasharray="5 4" stroke-width="2" x1="90" x2="90" y1="35" y2="145"></line>
+<line stroke="#9aa6b8" stroke-dasharray="5 4" stroke-width="2" x1="90" x2="200" y1="145" y2="165"></line>
+<line stroke="#247c83" stroke-width="3" x1="90" x2="150" y1="35" y2="200"></line>
+<line stroke="#247c83" stroke-width="3" x1="40" x2="150" y1="180" y2="200"></line>
+<line stroke="#247c83" stroke-width="3" x1="90" x2="200" y1="35" y2="55"></line>
+<text fill="#20222a" font-size="15" font-weight="800" x="90" y="26">P</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="28" y="70">Q</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="155" y="86">R</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="204" y="55">S</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="28" y="196">U</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="154" y="220">V</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="204" y="172">W</text>
+</g>
+<g transform="translate(300,58)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="120" y="20">② 切り口だけ抜き出す</text>
+<polygon fill="#fff" points="40,70 150,90 150,200 40,180" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="#fff" points="40,70 90,35 200,55 150,90" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="#fff" points="150,90 200,55 200,165 150,200" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="rgba(36,124,131,.18)" points="90,35 200,55 150,200 40,180" stroke="#247c83" stroke-width="3"></polygon>
+<text fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="122" y="232">平面PUV = 四角形 P-S-V-U</text>
+</g>
+<g transform="translate(572,58)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="120" y="20">③ この1回目の切断で残るR側</text>
+<polygon fill="#eef4ff" opacity=".55" points="40,70 150,90 150,200 40,180" stroke="#4367a8" stroke-width="2"></polygon>
+<polygon fill="#eef4ff" opacity=".55" points="40,70 90,35 200,55 150,90" stroke="#4367a8" stroke-width="2"></polygon>
+<polygon fill="#eef4ff" opacity=".55" points="150,90 200,55 200,165 150,200" stroke="#4367a8" stroke-width="2"></polygon>
+<polygon fill="rgba(36,124,131,.18)" points="90,35 200,55 150,200 40,180" stroke="#247c83" stroke-width="3"></polygon>
+<text fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="120" y="236">Rはこの平面の反対側にあるので、</text>
+<text fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="120" y="256">Rを含む側は「P-S-V-U」より右奥側。</text>
+</g>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図4-補2：次に平面PVWで切ると、上面PQRSを底面とする四角すいが残る</p><svg aria-label="平面PVWの切断プロセス" role="img" viewBox="0 0 860 390">
+<rect fill="#fbfcff" height="354" rx="18" stroke="#cfd8e8" stroke-width="1" width="824" x="18" y="18"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="430" y="34.0"><tspan dy="0" x="430">平面PVWは上面の辺PQを通る。</tspan><tspan dy="19" x="430">2回切ると、上面全部とVが残る</tspan></text>
+<g transform="translate(44,64)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="145" y="18">① 平面PVW = 四角形 P-Q-V-W</text>
+<polygon fill="#fff" points="40,70 150,90 150,200 40,180" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="#fff" points="40,70 90,35 200,55 150,90" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="#fff" points="150,90 200,55 200,165 150,200" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="rgba(196,106,43,.18)" points="90,35 40,70 150,200 200,165" stroke="#c46a2b" stroke-width="3"></polygon>
+<text fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="145" y="236">上面での切り口は PQ</text>
+</g>
+<g transform="translate(328,64)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="145" y="18">② 2枚の切断面の位置関係</text>
+<polygon fill="#fff" points="40,70 150,90 150,200 40,180" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="#fff" points="40,70 90,35 200,55 150,90" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="#fff" points="150,90 200,55 200,165 150,200" stroke="#c7d2df" stroke-width="2"></polygon>
+<polygon fill="rgba(36,124,131,.16)" points="90,35 200,55 150,200 40,180" stroke="#247c83" stroke-width="3"></polygon>
+<polygon fill="rgba(196,106,43,.16)" points="90,35 40,70 150,200 200,165" stroke="#c46a2b" stroke-width="3"></polygon>
+<polygon fill="rgba(67,103,168,.24)" points="90,35 40,70 150,90 200,55" stroke="#4367a8" stroke-width="3"></polygon>
+<line stroke="#4367a8" stroke-width="3" x1="150" x2="90" y1="200" y2="35"></line>
+<line stroke="#4367a8" stroke-width="3" x1="150" x2="40" y1="200" y2="70"></line>
+<line stroke="#4367a8" stroke-width="3" x1="150" x2="150" y1="200" y2="90"></line>
+<line stroke="#4367a8" stroke-width="3" x1="150" x2="200" y1="200" y2="55"></line>
+<text fill="#4367a8" font-size="13" font-weight="800" text-anchor="middle" x="145" y="236">青い部分がRを含む残り</text>
+</g>
+<g transform="translate(612,64)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="110" y="18">③ 取り出して見る</text>
+<polygon fill="rgba(67,103,168,.20)" points="38,62 160,82 112,118 0,98" stroke="#4367a8" stroke-width="2.8"></polygon>
+<line stroke="#4367a8" stroke-width="3" x1="112" x2="94" y1="118" y2="250"></line>
+<line stroke="#4367a8" stroke-width="3" x1="0" x2="94" y1="98" y2="250"></line>
+<line stroke="#4367a8" stroke-width="3" x1="38" x2="94" y1="62" y2="250"></line>
+<line stroke="#4367a8" stroke-width="3" x1="160" x2="94" y1="82" y2="250"></line>
+<text fill="#20222a" font-size="14" font-weight="800" x="80" y="44">底面 PQRS</text>
+<text fill="#20222a" font-size="15" font-weight="800" x="98" y="270">V</text>
+<text fill="#20222a" font-size="13" font-weight="700" x="110" y="210">高さは 3cm</text>
+<rect fill="#fff2e4" height="48" rx="14" stroke="#e0b179" stroke-width="1" width="200" x="10" y="286"></rect>
+<text fill="#c46a2b" font-size="16" font-weight="800" text-anchor="middle" x="110" y="316">体積 = 9×3÷3 = 9</text>
+</g>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図5-補：(3) を斜めから見て、断面を積み重ねるイメージを作る</p><svg aria-label="高さごとの断面の積み重ね" role="img" viewBox="0 0 860 400">
+<rect fill="#fbfcff" height="364" rx="18" stroke="#cfd8e8" stroke-width="1" width="824" x="18" y="18"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="430" y="34.0"><tspan dy="0" x="430">高さで切ると、どの高さでも</tspan><tspan dy="19" x="430">「小さくなった同じ向きの三角形」が現れる</tspan></text>
+<g transform="translate(40,68)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="145" y="18">① 三角すいを斜めから見る</text>
+<polygon fill="rgba(36,124,131,.12)" points="40,220 250,220 80,70" stroke="#247c83" stroke-width="2.5"></polygon>
+<line stroke="#4367a8" stroke-width="2.4" x1="40" x2="160" y1="220" y2="130"></line>
+<line stroke="#4367a8" stroke-width="2.4" x1="250" x2="160" y1="220" y2="130"></line>
+<line stroke="#4367a8" stroke-width="2.4" x1="80" x2="160" y1="70" y2="130"></line>
+<line stroke="#a34848" stroke-dasharray="6 5" stroke-width="2" x1="78" x2="220" y1="188" y2="188"></line>
+<line stroke="#a34848" stroke-dasharray="6 5" stroke-width="2" x1="96" x2="198" y1="156" y2="156"></line>
+<line stroke="#a34848" stroke-dasharray="6 5" stroke-width="2" x1="118" x2="176" y1="124" y2="124"></line>
+<text fill="#a34848" font-size="12" font-weight="800" x="258" y="192">高さが低い断面</text>
+<text fill="#a34848" font-size="12" font-weight="800" x="206" y="160">中くらい</text>
+<text fill="#a34848" font-size="12" font-weight="800" x="184" y="128">高い断面</text>
+</g>
+<g transform="translate(338,68)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="145" y="18">② 断面だけ取り出すと相似</text>
+<polygon fill="#8cc7c7" opacity=".8" points="20,230 190,230 20,60" stroke="#247c83" stroke-width="2"></polygon>
+<polygon fill="#b9e0e0" opacity=".9" points="54,196 166,196 54,84" stroke="#247c83" stroke-width="2"></polygon>
+<polygon fill="#def0f0" opacity=".95" points="88,162 142,162 88,108" stroke="#247c83" stroke-width="2"></polygon>
+<text fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="114" y="252">脚 L が 3→0 と縮む</text>
+<text fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="114" y="274">各断面は直角二等辺三角形</text>
+</g>
+<g transform="translate(618,68)">
+<text fill="#5e6472" font-size="14" font-weight="800" text-anchor="middle" x="100" y="18">③ 各断面の通過面積を積む</text>
+<rect fill="#dff4f3" height="182" stroke="#68a9ad" stroke-width="2" width="182" x="8" y="58"></rect>
+<polygon fill="#fff" points="190,149 190,240 99,240" stroke="#c46a2b" stroke-width="2"></polygon>
+<text fill="#20222a" font-size="13" font-weight="700" text-anchor="middle" x="98" y="272">1枚の断面の通過面積</text>
+<text fill="#c46a2b" font-size="18" font-weight="800" text-anchor="middle" x="98" y="292">12L − L²/2</text>
+<rect fill="#fff2e4" height="34" rx="12" stroke="#e0b179" width="200" x="0" y="310"></rect>
+<text fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="100" y="331">この式を高さごとに積み重ねる</text>
+</g>
+</svg></div>
+</div>
+<div class="note"><b>立体切断の見方の言語化：</b>「切り口の線は、向かい合う平行な辺にも現れる」「1回切ったあとに、残る側を決めてから次の切断を見る」「高さごとの断面は全部相似だから、1枚の断面の式を作って積み重ねる」と考えると、立体が急に見えやすくなります。</div>
+<div class="flowbox"><svg aria-label="問2の流れ" role="img" viewBox="0 0 760 118">
+<title>問2の流れ</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="82" rx="18" stroke="#cfd8e8" stroke-width="1" width="724" x="18" y="18"></rect>
+<rect fill="#eaf7f7" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="50.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="126.5" y="66">Aの道を固定</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="206.0" x2="214.0" y1="60" y2="60"></line>
+<rect fill="#fff2e4" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="219.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="295.5" y="66">通過範囲を囲む</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="375.0" x2="383.0" y1="60" y2="60"></line>
+<rect fill="#eaf7f7" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="388.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="464.5" y="66">通らない部分を引く</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="544.0" x2="552.0" y1="60" y2="60"></line>
+<rect fill="#fff2e4" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="557.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="633.5" y="66">断面を積む</text>
+</svg></div>
+<h3>本解</h3>
+<h4>(1) 平面の通過面積</h4>
+<p>三角形の向きは変わらないので、Aの通る正方形の周に、同じ向きの直角二等辺三角形を沿わせる。通過範囲は6cm×6cmの正方形から、脚3cmの直角二等辺三角形を引いたもの。</p>
+<p><span class="math">6×6 − 3×3÷2 ＝ 36 − 9/2 ＝ 63/2</span> cm<sup>2</sup>。</p>
+<h4>(2) 立方体の切断</h4>
+<p>平面PUVは、UVと平行な上面の辺PSも通る。同様に、平面PVWは、VWと平行な上面の辺PQも通る。よってRを含む部分は、上面PQRSを底面、Vを頂点とする四角すい。</p>
+<p>底面積は <span class="math">3×3＝9</span>、高さは3なので、体積は <span class="math">9×3÷3＝9</span> cm<sup>3</sup>。</p>
+<h4>(3) 三角すいの通過体積</h4>
+<p>ADに平行な高さで切ると、断面は脚の長さLの直角二等辺三角形になる。LはA側で3、D側で0へ小さくなる。</p>
+<p>その断面の通過面積は、(1)と同じ考えで <span class="math">12L − L²/2</span>。これを高さ方向に重ねる。</p>
+<p><span class="math">12L</span> の積み重ねは、脚3・高さ3の直角三角形12個分で <span class="math">12×(3×3÷2)=54</span>。<span class="math">L²/2</span> の積み重ねは、3本の直角な辺が3cmの三角すいで <span class="math">3×3×3÷6＝9/2</span>。</p>
+<p>したがって <span class="math">54 − 9/2 ＝ 99/2</span> cm<sup>3</sup>。</p>
+<div class="warn"><b>注意：</b>(3)の断面の脚Lは固定の3ではない。高さに応じて3から0へ縮む。</div>
+<div class="ans">答え： (1) 63/2 cm<sup>2</sup>　(2) 9 cm<sup>3</sup>　(3) 99/2 cm<sup>3</sup></div>
+<div class="related-wrap" id="q2-related">
+<h3>問2の類題（2題）</h3>
+
+<div class="related-card">
+<div class="head"><span>類題2-A</span></div>
+<h4>長方形スタンプが正方形のふちを1周する</h4>
+<div class="problem-mini">
+<p>横3cm、たて1cmの長方形スタンプがあります。スタンプの左下の角Aが、1辺4cmの正方形の周上を1周します。スタンプの向きは変わりません。</p>
+<p>スタンプが通過する面積を求めなさい。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>動く図形は代表点の道へ、立体切断は切り口の面へ置き換える練習です。元の問題と同じ見た目ではありませんが、「外側から抜く」「面で切った残りを見る」という構造が対応しています。</p><p><b>開いてから確認する見方：</b>見た目：長方形スタンプ ／ 構造：外側−通らない穴</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="長方形スタンプの通過範囲" role="img" viewBox="0 0 820 330">
+<rect fill="#fbfcff" height="298" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="42">Aの道を固定し、スタンプの広がりで通過範囲を見る</text>
+<rect fill="#dff4f3" height="180" stroke="#68a9ad" stroke-width="2" width="280" x="80" y="110"></rect>
+<rect fill="#fff" height="108" stroke="#c46a2b" stroke-width="2" width="40" x="200" y="146"></rect>
+<rect fill="none" height="72" stroke="#334" stroke-dasharray="7 5" stroke-width="2" width="160" x="80" y="218"></rect>
+<text fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="160" y="306">Aの道：4cm正方形</text>
+<text fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="220" y="205">通らない穴</text>
+<line stroke="#5e6472" stroke-width="1.5" x1="80" x2="360" y1="92" y2="92"></line><text fill="#5e6472" font-size="13" font-weight="800" text-anchor="middle" x="220" y="82">4+3=7cm</text>
+<line stroke="#5e6472" stroke-width="1.5" x1="382" x2="382" y1="110" y2="290"></line><text fill="#5e6472" font-size="13" font-weight="800" x="397" y="200">4+1=5cm</text>
+<rect fill="#fff" height="150" rx="16" stroke="#dfe3ee" width="236" x="470" y="94"></rect>
+<text fill="#247c83" font-size="15" font-weight="900" text-anchor="middle" x="588" y="126">面積の分解</text>
+<text fill="#20222a" font-size="18" font-weight="900" text-anchor="middle" x="588" y="160">外側：7×5</text>
+<text fill="#c46a2b" font-size="18" font-weight="900" text-anchor="middle" x="588" y="190">穴：1×3</text>
+<text fill="#247c83" font-size="18" font-weight="900" text-anchor="middle" x="588" y="220">35−3=32</text>
+</svg></div>
+<p><b>1. 動くスタンプを何枚も描かない。</b> 左下の角Aの道を固定します。Aは1辺4cmの正方形の周上を動きます。</p>
+<p><b>2. 外側の大きさを読む。</b> スタンプはAから右に3cm、上に1cm広がります。したがって通過範囲全体をおおう外側の長方形は、</p>
+<div class="formula-box">横：4＋3＝7cm　　たて：4＋1＝5cm</div>
+<p>外側の面積は <span class="math">7×5＝35</span> cm<sup>2</sup> です。</p>
+<p><b>3. 通らない穴を引く。</b> Aが正方形の周だけを動くので、中央に通らない部分が残ります。図の白い穴は、横1cm、たて3cmです。</p>
+<div class="expansion">穴の横：<span class="math">7−3−3＝1</span><br/>穴のたて：<span class="math">5−1−1＝3</span><br/>穴の面積：<span class="math">1×3＝3</span></div>
+<p>よって通過面積は、</p>
+<div class="formula-box"><span class="math">7×5 − 1×3 = 35−3 = 32</span></div>
+<div class="ans-mini">答え：32 cm<sup>2</sup></div>
+<p><b>問2との対応：</b>元の三角形では「大きな正方形−通らない三角形」でした。ここでは「大きな長方形−通らない長方形」です。図形の形は違っても、代表点の道を固定して外側から抜く考えは同じです。</p>
+</div></details>
+</div>
+<div class="related-card">
+<div class="head"><span>類題2-B</span></div>
+<h4>直方体を2つの平面で切る</h4>
+<div class="problem-mini">
+<p>たて4cm、横3cm、高さ6cmの直方体があります。上面の1つの頂点Pを通り、底面の1辺と平行な上面の辺も通るような平面で1回切ります。</p>
+<p>さらに、Pを通り、底面の別の1辺と平行な上面の辺も通る平面で切ります。2回切ったあと、Pの向かい側の上面を含む側に残る立体は、上面全体を底面とし、底面の1点を頂点とする四角すいになります。この立体の体積を求めなさい。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>動く図形は代表点の道へ、立体切断は切り口の面へ置き換える練習です。元の問題と同じ見た目ではありませんが、「外側から抜く」「面で切った残りを見る」という構造が対応しています。</p><p><b>開いてから確認する見方：</b>見た目：直方体の水槽 ／ 構造：切断面で残る角すいを読む</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="直方体の切断と四角すい" role="img" viewBox="0 0 820 350">
+<rect fill="#fbfcff" height="318" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="42">2枚の切断面で、上面を底面とする四角すいが残る</text>
+<g transform="translate(80,75)">
+<polygon fill="#f8fafc" points="60,55 210,75 260,35 110,15" stroke="#7e8a9c" stroke-width="2"></polygon>
+<polygon fill="#f8fafc" points="60,55 210,75 210,205 60,185" stroke="#7e8a9c" stroke-width="2"></polygon>
+<polygon fill="#f8fafc" points="210,75 260,35 260,165 210,205" stroke="#7e8a9c" stroke-width="2"></polygon>
+<polygon fill="rgba(36,124,131,.16)" points="110,15 260,35 210,205 60,185" stroke="#247c83" stroke-width="3"></polygon>
+<polygon fill="rgba(196,106,43,.16)" points="110,15 60,55 210,205 260,165" stroke="#c46a2b" stroke-width="3"></polygon>
+<polygon fill="rgba(67,103,168,.22)" points="60,55 210,75 260,35 110,15" stroke="#4367a8" stroke-width="3"></polygon>
+<line stroke="#4367a8" stroke-width="3" x1="210" x2="60" y1="205" y2="55"></line>
+<line stroke="#4367a8" stroke-width="3" x1="210" x2="110" y1="205" y2="15"></line>
+<line stroke="#4367a8" stroke-width="3" x1="210" x2="210" y1="205" y2="75"></line>
+<line stroke="#4367a8" stroke-width="3" x1="210" x2="260" y1="205" y2="35"></line>
+<text fill="#4367a8" font-size="13" font-weight="900" text-anchor="middle" x="150" y="236">残る立体：四角すい</text>
+</g>
+<rect fill="#fff" height="180" rx="16" stroke="#dfe3ee" width="220" x="500" y="88"></rect>
+<text fill="#247c83" font-size="16" font-weight="900" text-anchor="middle" x="610" y="122">体積</text>
+<text fill="#20222a" font-size="16" font-weight="900" text-anchor="middle" x="610" y="158">底面積 = 4×3</text>
+<text fill="#20222a" font-size="16" font-weight="900" text-anchor="middle" x="610" y="192">高さ = 6</text>
+<text fill="#c46a2b" font-size="19" font-weight="900" text-anchor="middle" x="610" y="230">4×3×6÷3</text>
+<text fill="#c46a2b" font-size="19" font-weight="900" text-anchor="middle" x="610" y="258">= 24</text>
+</svg></div>
+<p><b>1. 切断面の「上面での線」を見る。</b> 立体切断では、面そのものを頭で無理に想像するより、上面・底面にどんな線が現れるかを見ると楽になります。</p>
+<p>1回目の切断面は、底面の1辺と平行な上面の辺を通ります。2回目も同様に、別方向の上面の辺を通ります。</p>
+<p><b>2. 2枚の切断面で囲まれて残る形を読む。</b> 残る側は、上面の長方形全体を底面とし、底面側の1点を頂点とする四角すいです。</p>
+<div class="expansion"><b>体積を展開する。</b><br/>
+          底面積：<span class="math">4×3＝12</span><br/>
+          高さ：<span class="math">6</span><br/>
+          四角すいの体積：<span class="math">底面積×高さ÷3</span><br/>
+<span class="math">= 12×6÷3</span><br/>
+<span class="math">= 72÷3</span><br/>
+<span class="math">= 24</span>
+</div>
+<div class="ans-mini">答え：24 cm<sup>3</sup></div>
+<p><b>問2との対応：</b>元の問題は立方体でしたが、ここでは直方体です。数値は違いますが、「切断面が上面の辺を通る → 残りが四角すい → 底面積×高さ÷3」という構造を再利用します。</p>
+</div></details>
+</div>
+</div>
+</section>
+
+<section class="card" id="q3">
+<h2>3. 点数つきじゃんけん</h2>
+<div class="tags"><span class="tag">場合の数</span><span class="tag">ゲーム</span><span class="tag">符号つき変化</span><span class="tag">途中終了の除外</span></div>
+<div class="problem">
+    勝ったときは、自分が出した手に応じて、グー1点、チョキ2点、パー5点が加点される。負けたときは同じ点数が減点される。あいこは1回と数えない。最初はどちらも20点。どちらかが0点になったら終了する。
+  </div>
+<div class="note"><b>この問題の核：</b>アシカさんの勝ちを数えるなら、0点になるイルカさんの点だけを追う。各非あいこを「−1, −2, −5, ＋1, ＋2, ＋5」の変化に直す。</div>
+<div class="svg-grid">
+<div class="svg-card wide"><p class="fig-title">SVG図6：手の組をイルカさんの点数変化へ</p><svg aria-label="問3点数つきじゃんけん変換のSVG図" role="img" viewBox="0 0 800 500">
+<title>問3点数つきじゃんけん変換のSVG図</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="480" rx="18" stroke="#cfd8e8" stroke-width="1" width="760" x="18" y="18"></rect>
+<text class="" fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="390" y="43">じゃんけんを「イルカさんの点数変化」に変換する</text>
+<text class="" fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="110" y="82">アシカ</text>
+<text class="" fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="245" y="82">イルカ</text>
+<text class="" fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="405" y="82">イルカ点</text>
+<text class="" fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="610" y="82">意味</text>
+<rect fill="#fff" height="42" rx="10" stroke="#dfe3ee" stroke-width="1" width="690" x="48" y="84"></rect>
+<circle cx="110" cy="105" fill="#fff" r="18" stroke="#4367a8" stroke-width="2"></circle>
+<text class="" fill="#4367a8" font-size="13" font-weight="800" text-anchor="middle" x="110" y="111">パー</text>
+<circle cx="245" cy="105" fill="#fff" r="18" stroke="#c46a2b" stroke-width="2"></circle>
+<text class="" fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="245" y="111">グー</text>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="138" x2="218" y1="105" y2="105"></line>
+<rect fill="#fff7f7" height="40" rx="12" stroke="#a34848" stroke-width="1.6" width="82" x="358" y="85"></rect>
+<text class="" fill="#a34848" font-size="20" font-weight="800" text-anchor="middle" x="399" y="110">−1</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="start" x="492" y="111">イルカがグーで負ける</text>
+<rect fill="#f7fafc" height="42" rx="10" stroke="#dfe3ee" stroke-width="1" width="690" x="48" y="138"></rect>
+<circle cx="110" cy="159" fill="#fff" r="18" stroke="#4367a8" stroke-width="2"></circle>
+<text class="" fill="#4367a8" font-size="13" font-weight="800" text-anchor="middle" x="110" y="165">グー</text>
+<circle cx="245" cy="159" fill="#fff" r="18" stroke="#c46a2b" stroke-width="2"></circle>
+<text class="" fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="245" y="165">チョキ</text>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="138" x2="218" y1="159" y2="159"></line>
+<rect fill="#fff7f7" height="40" rx="12" stroke="#a34848" stroke-width="1.6" width="82" x="358" y="139"></rect>
+<text class="" fill="#a34848" font-size="20" font-weight="800" text-anchor="middle" x="399" y="164">−2</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="start" x="492" y="165">イルカがチョキで負ける</text>
+<rect fill="#fff" height="42" rx="10" stroke="#dfe3ee" stroke-width="1" width="690" x="48" y="192"></rect>
+<circle cx="110" cy="213" fill="#fff" r="18" stroke="#4367a8" stroke-width="2"></circle>
+<text class="" fill="#4367a8" font-size="13" font-weight="800" text-anchor="middle" x="110" y="219">チョキ</text>
+<circle cx="245" cy="213" fill="#fff" r="18" stroke="#c46a2b" stroke-width="2"></circle>
+<text class="" fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="245" y="219">パー</text>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="138" x2="218" y1="213" y2="213"></line>
+<rect fill="#fff7f7" height="40" rx="12" stroke="#a34848" stroke-width="1.6" width="82" x="358" y="193"></rect>
+<text class="" fill="#a34848" font-size="20" font-weight="800" text-anchor="middle" x="399" y="218">−5</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="start" x="492" y="219">イルカがパーで負ける</text>
+<rect fill="#f7fafc" height="42" rx="10" stroke="#dfe3ee" stroke-width="1" width="690" x="48" y="246"></rect>
+<circle cx="110" cy="267" fill="#fff" r="18" stroke="#4367a8" stroke-width="2"></circle>
+<text class="" fill="#4367a8" font-size="13" font-weight="800" text-anchor="middle" x="110" y="273">チョキ</text>
+<circle cx="245" cy="267" fill="#fff" r="18" stroke="#c46a2b" stroke-width="2"></circle>
+<text class="" fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="245" y="273">グー</text>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="138" x2="218" y1="267" y2="267"></line>
+<rect fill="#eff8ef" height="40" rx="12" stroke="#2f7a52" stroke-width="1.6" width="82" x="358" y="247"></rect>
+<text class="" fill="#2f7a52" font-size="20" font-weight="800" text-anchor="middle" x="399" y="272">＋1</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="start" x="492" y="273">イルカがグーで勝つ</text>
+<rect fill="#fff" height="42" rx="10" stroke="#dfe3ee" stroke-width="1" width="690" x="48" y="300"></rect>
+<circle cx="110" cy="321" fill="#fff" r="18" stroke="#4367a8" stroke-width="2"></circle>
+<text class="" fill="#4367a8" font-size="13" font-weight="800" text-anchor="middle" x="110" y="327">パー</text>
+<circle cx="245" cy="321" fill="#fff" r="18" stroke="#c46a2b" stroke-width="2"></circle>
+<text class="" fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="245" y="327">チョキ</text>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="138" x2="218" y1="321" y2="321"></line>
+<rect fill="#eff8ef" height="40" rx="12" stroke="#2f7a52" stroke-width="1.6" width="82" x="358" y="301"></rect>
+<text class="" fill="#2f7a52" font-size="20" font-weight="800" text-anchor="middle" x="399" y="326">＋2</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="start" x="492" y="327">イルカがチョキで勝つ</text>
+<rect fill="#f7fafc" height="42" rx="10" stroke="#dfe3ee" stroke-width="1" width="690" x="48" y="354"></rect>
+<circle cx="110" cy="375" fill="#fff" r="18" stroke="#4367a8" stroke-width="2"></circle>
+<text class="" fill="#4367a8" font-size="13" font-weight="800" text-anchor="middle" x="110" y="381">グー</text>
+<circle cx="245" cy="375" fill="#fff" r="18" stroke="#c46a2b" stroke-width="2"></circle>
+<text class="" fill="#c46a2b" font-size="13" font-weight="800" text-anchor="middle" x="245" y="381">パー</text>
+<line marker-end="url(#arr)" stroke="#5e6472" stroke-linecap="round" stroke-width="1.5" x1="138" x2="218" y1="375" y2="375"></line>
+<rect fill="#eff8ef" height="40" rx="12" stroke="#2f7a52" stroke-width="1.6" width="82" x="358" y="355"></rect>
+<text class="" fill="#2f7a52" font-size="20" font-weight="800" text-anchor="middle" x="399" y="380">＋5</text>
+<text class="" fill="#20222a" font-size="13" font-weight="700" text-anchor="start" x="492" y="381">イルカがパーで勝つ</text>
+<rect fill="#fff2e4" height="45" rx="14" stroke="#e0b179" stroke-width="1" width="655" x="78" y="420"></rect>
+<text class="" fill="#c46a2b" font-size="15" font-weight="800" text-anchor="middle" x="405" y="448">アシカ勝利を数える → イルカの点が20から0になる変化列を数える</text>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図7：最短4回、5回不可、次は6回</p><svg aria-label="問3最短回数を判定するSVG図" role="img" viewBox="0 0 800 400">
+<title>問3最短回数を判定するSVG図</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="365" rx="18" stroke="#cfd8e8" stroke-width="1" width="760" x="18" y="18"></rect>
+<text class="" fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="390" y="43">A=4、B=6を見抜くための点数バー</text>
+<rect fill="#fff" filter="url(#shadow)" height="235" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="205" x="60" y="75"></rect>
+<text class="" fill="#247c83" font-size="15" font-weight="800" text-anchor="middle" x="162" y="105">4回で可能</text>
+<line stroke="#c7ceda" stroke-linecap="round" stroke-width="3" x1="106" x2="106" y1="133" y2="275"></line>
+<text class="" fill="#5e6472" font-size="11" font-weight="700" text-anchor="middle" x="106" y="127">20</text>
+<text class="" fill="#5e6472" font-size="11" font-weight="700" text-anchor="middle" x="106" y="297">0</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="2" x1="145" x2="169" y1="133" y2="168.5"></line>
+<text class="" fill="#247c83" font-size="10" font-weight="800" text-anchor="middle" x="169" y="162.5">-5</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="2" x1="169" x2="193" y1="168.5" y2="204.0"></line>
+<text class="" fill="#247c83" font-size="10" font-weight="800" text-anchor="middle" x="193" y="198.0">-5</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="2" x1="193" x2="217" y1="204.0" y2="239.5"></line>
+<text class="" fill="#247c83" font-size="10" font-weight="800" text-anchor="middle" x="217" y="233.5">-5</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="2" x1="217" x2="241" y1="239.5" y2="275.0"></line>
+<text class="" fill="#247c83" font-size="10" font-weight="800" text-anchor="middle" x="241" y="269.0">-5</text>
+<text class="" fill="#20222a" font-size="12" font-weight="700" text-anchor="middle" x="162" y="288">5点×4 = 20</text>
+<rect fill="#fff" filter="url(#shadow)" height="235" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="205" x="285" y="75"></rect>
+<text class="" fill="#a34848" font-size="15" font-weight="800" text-anchor="middle" x="387" y="105">5回は不可</text>
+<line stroke="#c7ceda" stroke-linecap="round" stroke-width="3" x1="331" x2="331" y1="133" y2="275"></line>
+<text class="" fill="#5e6472" font-size="11" font-weight="700" text-anchor="middle" x="331" y="127">20</text>
+<text class="" fill="#5e6472" font-size="11" font-weight="700" text-anchor="middle" x="331" y="297">0</text>
+<line marker-end="url(#arrR)" stroke="#a34848" stroke-linecap="round" stroke-width="2" x1="370" x2="394" y1="133" y2="168.5"></line>
+<text class="" fill="#a34848" font-size="10" font-weight="800" text-anchor="middle" x="394" y="162.5">-5</text>
+<line marker-end="url(#arrR)" stroke="#a34848" stroke-linecap="round" stroke-width="2" x1="394" x2="418" y1="168.5" y2="204.0"></line>
+<text class="" fill="#a34848" font-size="10" font-weight="800" text-anchor="middle" x="418" y="198.0">-5</text>
+<line marker-end="url(#arrR)" stroke="#a34848" stroke-linecap="round" stroke-width="2" x1="418" x2="442" y1="204.0" y2="239.5"></line>
+<text class="" fill="#a34848" font-size="10" font-weight="800" text-anchor="middle" x="442" y="233.5">-5</text>
+<line marker-end="url(#arrR)" stroke="#a34848" stroke-linecap="round" stroke-width="2" x1="442" x2="466" y1="239.5" y2="253.7"></line>
+<text class="" fill="#a34848" font-size="10" font-weight="800" text-anchor="middle" x="466" y="247.7">-2</text>
+<line marker-end="url(#arrR)" stroke="#a34848" stroke-linecap="round" stroke-width="2" x1="466" x2="490" y1="253.7" y2="267.9"></line>
+<text class="" fill="#a34848" font-size="10" font-weight="800" text-anchor="middle" x="490" y="261.9">-2</text>
+<text class="" fill="#20222a" font-size="12" font-weight="700" text-anchor="middle" x="387" y="288">最大19 / 次は21</text>
+<rect fill="#fff" filter="url(#shadow)" height="235" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="205" x="510" y="75"></rect>
+<text class="" fill="#c46a2b" font-size="15" font-weight="800" text-anchor="middle" x="612" y="105">6回で可能</text>
+<line stroke="#c7ceda" stroke-linecap="round" stroke-width="3" x1="556" x2="556" y1="133" y2="275"></line>
+<text class="" fill="#5e6472" font-size="11" font-weight="700" text-anchor="middle" x="556" y="127">20</text>
+<text class="" fill="#5e6472" font-size="11" font-weight="700" text-anchor="middle" x="556" y="297">0</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="2" x1="595" x2="619" y1="133" y2="168.5"></line>
+<text class="" fill="#c46a2b" font-size="10" font-weight="800" text-anchor="middle" x="619" y="162.5">-5</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="2" x1="619" x2="643" y1="168.5" y2="204.0"></line>
+<text class="" fill="#c46a2b" font-size="10" font-weight="800" text-anchor="middle" x="643" y="198.0">-5</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="2" x1="643" x2="667" y1="204.0" y2="239.5"></line>
+<text class="" fill="#c46a2b" font-size="10" font-weight="800" text-anchor="middle" x="667" y="233.5">-5</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="2" x1="667" x2="691" y1="239.5" y2="253.7"></line>
+<text class="" fill="#c46a2b" font-size="10" font-weight="800" text-anchor="middle" x="691" y="247.7">-2</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="2" x1="691" x2="715" y1="253.7" y2="267.9"></line>
+<text class="" fill="#c46a2b" font-size="10" font-weight="800" text-anchor="middle" x="715" y="261.9">-2</text>
+<line marker-end="url(#arr2)" stroke="#c46a2b" stroke-linecap="round" stroke-width="2" x1="715" x2="739" y1="267.9" y2="275.0"></line>
+<text class="" fill="#c46a2b" font-size="10" font-weight="800" text-anchor="middle" x="739" y="269.0">-1</text>
+<text class="" fill="#20222a" font-size="12" font-weight="700" text-anchor="middle" x="612" y="288">5+5+5+2+2+1</text>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図8：6回の有効な並べ方</p><svg aria-label="問3有効な並べ方を数えるSVG図（重なり修正版）" role="img" viewBox="0 0 800 500">
+<title>問3有効な並べ方を数えるSVG図（重なり修正版）</title>
+<rect fill="#fbfcff" height="462" rx="18" stroke="#cfd8e8" stroke-width="1" width="760" x="18" y="18"></rect>
+<text fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="390" y="43">6回で終わる変化列：有効な並べ方だけ数える</text>
+<text fill="#5e6472" font-size="13" font-weight="800" text-anchor="middle" x="120" y="84">場合</text>
+<text fill="#5e6472" font-size="13" font-weight="800" text-anchor="middle" x="335" y="84">必要な変化</text>
+<text fill="#5e6472" font-size="13" font-weight="800" text-anchor="middle" x="620" y="84">有効数</text>
+<rect fill="#fff" height="62" rx="14" stroke="#dfe3ee" stroke-width="1" width="692" x="54" y="94"></rect>
+<text fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="120" y="131">勝ちなし</text>
+<text fill="#20222a" font-size="14" font-weight="700" text-anchor="middle" x="330" y="131">−5, −5, −5, −2, −2, −1</text>
+<rect fill="#eaf7f7" height="26" rx="8" stroke="#68a9ad" stroke-width="1" width="122" x="546" y="112"></rect>
+<text fill="#247c83" font-size="16" font-weight="800" text-anchor="middle" x="607" y="130">60通り</text>
+<text fill="#5e6472" font-size="11" font-weight="700" text-anchor="middle" x="705" y="131">6!÷(3!2!)</text>
+<rect fill="#f7fafc" height="62" rx="14" stroke="#dfe3ee" stroke-width="1" width="692" x="54" y="174"></rect>
+<text fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="120" y="211">＋1が1回</text>
+<text fill="#20222a" font-size="14" font-weight="700" text-anchor="middle" x="330" y="211">＋1, −5, −5, −5, −5, −1</text>
+<rect fill="#eaf7f7" height="26" rx="8" stroke="#68a9ad" stroke-width="1" width="122" x="546" y="192"></rect>
+<text fill="#247c83" font-size="16" font-weight="800" text-anchor="middle" x="607" y="210">24通り</text>
+<text fill="#a34848" font-size="11" font-weight="700" text-anchor="middle" x="705" y="211">除外6通り</text>
+<rect fill="#fff" height="62" rx="14" stroke="#dfe3ee" stroke-width="1" width="692" x="54" y="254"></rect>
+<text fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="120" y="291">＋2が1回</text>
+<text fill="#20222a" font-size="14" font-weight="700" text-anchor="middle" x="330" y="291">＋2, −5, −5, −5, −5, −2</text>
+<rect fill="#eaf7f7" height="26" rx="8" stroke="#68a9ad" stroke-width="1" width="122" x="546" y="272"></rect>
+<text fill="#247c83" font-size="16" font-weight="800" text-anchor="middle" x="607" y="290">24通り</text>
+<text fill="#a34848" font-size="11" font-weight="700" text-anchor="middle" x="705" y="291">除外6通り</text>
+<rect fill="#f7fafc" height="62" rx="14" stroke="#dfe3ee" stroke-width="1" width="692" x="54" y="334"></rect>
+<text fill="#247c83" font-size="14" font-weight="800" text-anchor="middle" x="120" y="371">＋5が1回</text>
+<text fill="#20222a" font-size="14" font-weight="700" text-anchor="middle" x="330" y="371">＋5, −5, −5, −5, −5, −5</text>
+<rect fill="#eaf7f7" height="26" rx="8" stroke="#68a9ad" stroke-width="1" width="122" x="546" y="352"></rect>
+<text fill="#247c83" font-size="16" font-weight="800" text-anchor="middle" x="607" y="370">4通り</text>
+<text fill="#a34848" font-size="11" font-weight="700" text-anchor="middle" x="705" y="371">除外2通り</text>
+<rect fill="#fff7f7" height="34" rx="12" stroke="#e0a1a1" stroke-width="1" width="624" x="88" y="418"></rect>
+<text fill="#a34848" font-size="12.0" font-weight="700" text-anchor="middle" x="400" y="432.0"><tspan dy="0" x="400">除外：途中で0点になる並べ方、</tspan><tspan dy="19" x="400">または0点になる前に大きすぎる減点を置く並べ方</tspan></text>
+<rect fill="#fff2e4" height="26" rx="10" stroke="#e0b179" stroke-width="1" width="420" x="190" y="452"></rect>
+<text fill="#c46a2b" font-size="18" font-weight="800" text-anchor="middle" x="400" y="470">60 + 24 + 24 + 4 = 112通り</text>
+</svg></div>
+</div>
+<div class="flowbox"><svg aria-label="問3の流れ" role="img" viewBox="0 0 760 118">
+<title>問3の流れ</title>
+<defs>
+<marker id="arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arr2" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrR" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+<filter height="140%" id="shadow" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="4" flood-color="#19313a" flood-opacity=".12" stddeviation="5"></fedropshadow></filter>
+</defs>
+<rect fill="#fbfcff" height="82" rx="18" stroke="#cfd8e8" stroke-width="1" width="724" x="18" y="18"></rect>
+<rect fill="#eaf7f7" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="50.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="126.5" y="66">イルカの点だけ見る</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="206.0" x2="214.0" y1="60" y2="60"></line>
+<rect fill="#fff2e4" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="219.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="295.5" y="66">最短4回を確認</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="375.0" x2="383.0" y1="60" y2="60"></line>
+<rect fill="#eaf7f7" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="388.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="464.5" y="66">5回不可を示す</text>
+<line marker-end="url(#arr)" stroke="#247c83" stroke-linecap="round" stroke-width="1.7" x1="544.0" x2="552.0" y1="60" y2="60"></line>
+<rect fill="#fff2e4" height="36" rx="12" stroke="#cfd8e8" stroke-width="1" width="153.0" x="557.0" y="42"></rect>
+<text class="" fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="633.5" y="66">6回の変化列を数える</text>
+</svg></div>
+<h3>本解</h3>
+<h4>(1) AとB</h4>
+<p>イルカさんの点を1回で最も多く減らせるのは5点。20点を0点にするには少なくとも4回必要で、<span class="math">−5</span> を4回なら可能。よって <span class="math">A＝4</span>。</p>
+<p>5回で全部負けるなら、1,2,5の5個の和を20にする必要がある。しかし5を3個までにすると最大 <span class="math">5+5+5+2+2=19</span>、5を4個にすると最小 <span class="math">5+5+5+5+1=21</span>。20は作れない。したがって5回は不可。</p>
+<p>6回なら <span class="math">5,5,5,2,2,1</span> を引けば20になるので可能。よって <span class="math">B＝6</span>。</p>
+<h4>(2) 6回でアシカさんが勝つ手の組</h4>
+<p>6回でイルカさんの合計変化を <span class="math">−20</span> にする。イルカさんが2回以上勝つと、残り4回で最大20点しか減らせず、合計−20に届かない。したがって勝つ回数は0回または1回だけ。</p>
+<table>
+<tr><th>場合</th><th>必要な変化</th><th>有効な並べ方</th></tr>
+<tr><td>イルカさんが勝たない</td><td>−5, −5, −5, −2, −2, −1</td><td class="num">60</td></tr>
+<tr><td>＋1が1回</td><td>＋1, −5, −5, −5, −5, −1</td><td class="num">24</td></tr>
+<tr><td>＋2が1回</td><td>＋2, −5, −5, −5, −5, −2</td><td class="num">24</td></tr>
+<tr><td>＋5が1回</td><td>＋5, −5, −5, −5, −5, −5</td><td class="num">4</td></tr>
+</table>
+<p>＋1や＋2の場合、増える回が6回目ならその前に0点になるか、0点を下回る。また増える回が5回目で最初4回がすべて−5でも、4回目で終了してしまう。これらを除くと24通りずつ。＋5の場合は、＋5が5回目または6回目だとその前に終了するので4通り。</p>
+<p>合計は <span class="math">60＋24＋24＋4＝112</span>。</p>
+<div class="warn"><b>注意：</b>あいこは回数に入らない。0点になったらその場で終了するので、その後に点が増える並べ方は数えない。</div>
+<div class="ans">答え： (1) A＝4, B＝6　(2) 112通り</div>
+<div class="related-wrap" id="q3-related">
+<h3>問3の類題（2題）</h3>
+
+<div class="related-card">
+<div class="head"><span>類題3-A</span></div>
+<h4>宝石カードゲーム</h4>
+<div class="problem-mini">
+<p>最初に宝石を7個持っています。1回カードを引くと、赤なら−4個、青なら−2個、白なら−1個、金なら＋1個になります。</p>
+<p>4回カードを引いて、ちょうど0個になりました。途中の1〜3回目で0個以下になってはいけません。カードの色の並びは何通りありますか。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>ゲームや移動の文章を「符号つき変化の列」に変換し、回数の組を決めてから並べ方を数える練習です。</p><p><b>開いてから確認する見方：</b>見た目：カードゲーム ／ 構造：変化列＋途中終了の除外</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="宝石カードゲームの変化列" role="img" viewBox="0 0 820 300">
+<rect fill="#fbfcff" height="268" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="42">0個にするには、4回の変化の合計が −7</text>
+<g transform="translate(80,80)">
+<rect fill="#fff7f7" height="46" rx="12" stroke="#e0a1a1" width="120" x="0" y="0"></rect><text fill="#a34848" font-size="15" font-weight="900" text-anchor="middle" x="60" y="29">赤 −4</text>
+<rect fill="#fff7f7" height="46" rx="12" stroke="#e0a1a1" width="120" x="150" y="0"></rect><text fill="#a34848" font-size="15" font-weight="900" text-anchor="middle" x="210" y="29">青 −2</text>
+<rect fill="#fff7f7" height="46" rx="12" stroke="#e0a1a1" width="120" x="300" y="0"></rect><text fill="#a34848" font-size="15" font-weight="900" text-anchor="middle" x="360" y="29">白 −1</text>
+<rect fill="#eff8ef" height="46" rx="12" stroke="#8ac39a" width="120" x="450" y="0"></rect><text fill="#2f7a52" font-size="15" font-weight="900" text-anchor="middle" x="510" y="29">金 +1</text>
+</g>
+<rect fill="#fff2e4" height="42" rx="14" stroke="#e0b179" width="624" x="92" y="170"></rect>
+<text fill="#c46a2b" font-size="16" font-weight="900" text-anchor="middle" x="404" y="197">合計変化 = −7、さらに途中で0以下にならない</text>
+</svg></div>
+<p><b>1. 文章を変化列に直す。</b> 最初が7個で、最後が0個なので、4回の合計変化は <span class="math">−7</span> です。</p>
+<p>使える変化は <span class="math">−4, −2, −1, +1</span> です。</p>
+<p><b>2. まず「どの変化を何回使うか」を決める。</b></p>
+<table><tr><th>金カードの回数</th><th>必要な残り</th><th>変化の組</th><th>並べ方</th></tr><tr><td>0回</td><td>4つの負の数で−7</td><td>−4,−1,−1,−1</td><td>4通り</td></tr><tr><td>0回</td><td>4つの負の数で−7</td><td>−2,−2,−2,−1</td><td>4通り</td></tr><tr><td>1回</td><td>金+1があるので、残り3つで−8</td><td>+1,−4,−2,−2</td><td>12通りから除外</td></tr></table>
+<div class="expansion"><b>0回の場合を展開する。</b><br/>
+<span class="math">−4−1−1−1＝−7</span> は、−4の位置を選ぶので <span class="math">4</span> 通り。<br/>
+<span class="math">−2−2−2−1＝−7</span> は、−1の位置を選ぶので <span class="math">4</span> 通り。<br/>
+          ここまでで <span class="math">4+4＝8</span> 通り。
+        </div>
+<div class="expansion"><b>金カード1回の場合を展開する。</b><br/>
+          変化の組は <span class="math">+1,−4,−2,−2</span>。並べ方は<br/>
+<span class="math">4!÷2!＝12</span> 通り。<br/>
+          ただし、金が最後だと、最初の3回で <span class="math">−4−2−2＝−8</span> になり、7個から見ると途中で <span class="math">7−8＝−1</span> となって失敗。<br/>
+          金が最後で、−4,−2,−2 の並べ方は <span class="math">3!÷2!＝3</span> 通り。<br/>
+          したがって有効なのは <span class="math">12−3＝9</span> 通り。
+        </div>
+<p>合計は、</p>
+<div class="formula-box"><span class="math">4 + 4 + (12−3) = 4+4+9 = 17</span></div>
+<div class="ans-mini">答え：17通り</div>
+<p><b>問3との対応：</b>元のじゃんけんと同じく、「勝ち負け」ではなく「点数変化の並び」に直します。また、途中で終わる並びを除外するところも同じです。</p>
+</div></details>
+</div>
+<div class="related-card">
+<div class="head"><span>類題3-B</span></div>
+<h4>地下へ向かうエレベーター</h4>
+<div class="problem-mini">
+<p>エレベーターは8階から出発します。ボタン操作は、下へ3階、下へ1階、上へ2階の3種類だけです。</p>
+<p>5回操作して、ちょうど1階ではなく地下0階に着きました。途中の1〜4回目で地下0階以下になってはいけません。操作の並びは何通りありますか。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>ゲームや移動の文章を「符号つき変化の列」に変換し、回数の組を決めてから並べ方を数える練習です。</p><p><b>開いてから確認する見方：</b>見た目：エレベーター ／ 構造：回数の組→順序→途中条件</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="エレベーターの変化列" role="img" viewBox="0 0 820 300">
+<rect fill="#fbfcff" height="268" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="42">8階から0階へ：5回の合計変化は −8</text>
+<line stroke="#b7c1d2" stroke-width="4" x1="110" x2="110" y1="230" y2="80"></line>
+<text fill="#5e6472" font-size="13" font-weight="800" x="86" y="86">8階</text><text fill="#5e6472" font-size="13" font-weight="800" x="86" y="236">0階</text>
+<rect fill="#fff7f7" height="46" rx="14" stroke="#e0a1a1" width="500" x="220" y="84"></rect><text fill="#a34848" font-size="16" font-weight="900" text-anchor="middle" x="470" y="112">必要な組：−3, −3, −3, −1, +2</text>
+<rect fill="#fff2e4" height="46" rx="14" stroke="#e0b179" width="500" x="220" y="160"></rect><text fill="#c46a2b" font-size="16" font-weight="900" text-anchor="middle" x="470" y="188">全部で 5!÷3! = 20 通り、途中失敗を引く</text>
+</svg></div>
+<p><b>1. 合計変化を作る。</b> 8階から0階へ行くので、合計変化は <span class="math">−8</span> です。</p>
+<p>下3をa回、下1をb回、上2をc回とします。</p>
+<div class="formula-box"><span class="math">a+b+c=5</span><br/><span class="math">−3a−b+2c=−8</span></div>
+<p>この2式から、<span class="math">a=3, b=1, c=1</span> となります。つまり必要な操作は、</p>
+<div class="formula-box"><span class="math">−3, −3, −3, −1, +2</span></div>
+<p><b>2. まず並べ方を数える。</b> −3が3回同じなので、</p>
+<div class="formula-box"><span class="math">5!÷3! = 20</span> 通り</div>
+<p><b>3. 途中で0階以下になるものを除く。</b> 失敗するのは、上2が遅すぎて、先に下がりすぎる並びです。</p>
+<div class="expansion"><b>失敗する並びを数える。</b><br/>
+          途中で0以下になる失敗は、次の5通りです。<br/>
+<span class="math">−3,−3,−3,−1,+2</span><br/>
+<span class="math">−3,−3,−3,+2,−1</span><br/>
+<span class="math">−3,−3,−1,−3,+2</span><br/>
+<span class="math">−3,−1,−3,−3,+2</span><br/>
+<span class="math">−1,−3,−3,−3,+2</span><br/>
+          どれも、最後より前に0階以下になってしまいます。
+        </div>
+<p>したがって有効な並びは、</p>
+<div class="formula-box"><span class="math">20 − 5 = 15</span></div>
+<div class="ans-mini">答え：15通り</div>
+<p><b>問3との対応：</b>こちらはじゃんけんではありませんが、点数を階数に置き換えただけです。先に回数の組を決め、次に順序を数え、最後に途中条件で除く流れが同じです。</p>
+</div></details>
+</div>
+</div>
+</section>
+
+<section class="card" id="q4">
+<h2>4. 角度命令で動くロボット</h2>
+<div class="tags"><span class="tag">移動</span><span class="tag">累積角</span><span class="tag">同じ長さの矢印</span><span class="tag">対称ペア</span></div>
+<div class="problem">
+    ロボットはOからAへ1m進む。その後、命令の角度だけ、現在の進行方向から反時計回りに向きを変えて1m進む。停止点Pについて、角AOPをOAに対して反時計回りに答える。
+  </div>
+<div class="note"><b>この問題の核：</b>命令角そのものではなく、実際に進んだ向きの累積角を書く。すべて1mなので、同じ始点から出した矢印の足し算として見る。</div>
+<div class="section-jumps">
+<a href="#q4-structure">構造を読む</a>
+<a href="#q4-translate">表現の置き換え</a>
+<a href="#q4-hyp">3つの入り口</a>
+<a href="#q4-verify">低コスト検証</a>
+<a href="#q4-related">問4の類題</a>
+</div>
+<h3 id="q4-structure">構造を深く読む</h3>
+<div class="insight-grid">
+<div class="insight">
+<h4>この問題の本質は何か</h4>
+<p>見た目は「曲がって進むロボット」の問題ですが、本質は <b>同じ長さの矢印を何本か足して、その合計の向きを求める問題</b> です。道順の絵に引っぱられると難しく見えますが、聞かれているのは長さではなく <b>向き</b> です。</p>
+<ul>
+<li>表面的な見え方：折れ線の軌跡、ロボットの道</li>
+<li>本質的な構造：1m矢印の和</li>
+<li>シンプル化した問題：同じ始点から出る1mの矢印が何本かある。合計はどの向きか。</li>
+</ul>
+</div>
+<div class="insight">
+<h4>どの条件が効いているか</h4>
+<ul>
+<li><b>強い条件1：</b>毎回進む長さが全部1m。→ 足し算しやすい。</li>
+<li><b>強い条件2：</b>聞かれているのは最終点までの <b>向き</b>。→ 正確な道順は不要。</li>
+<li><b>強い条件3：</b>角度は「今の向きから」曲がる。→ まず累積角に直す必要がある。</li>
+<li><b>弱い条件：</b>途中の折れ線の見た目、何歩目でどこを通るか。→ 今回の答えに直接は効きにくい。</li>
+</ul>
+<p class="mind">急所は、<b>命令角 → 累積角 → 同じ始点の矢印</b> と置き換えられるかどうかです。</p>
+</div>
+</div>
+<h3 id="q4-translate">問題文を、実際に解く表現へ置き換える</h3>
+<div class="case-card">
+<p><b>頭の中での翻訳</b> を言葉にすると、次のようになります。</p>
+<table class="hyp-table">
+<tr><th>問題文での言い方</th><th>解くときの言い方</th><th>頭の中で考えること</th></tr>
+<tr><td>「現在の進行方向から反時計回りに…」</td><td>前の向きに角度を足す</td><td>相対角では見えない。<b>累積角の表</b> に直す。</td></tr>
+<tr><td>「1m進む」</td><td>同じ長さの矢印を1本足す</td><td>長さが全部同じだから、<b>向きだけの整理</b> が効く。</td></tr>
+<tr><td>「停止点P」</td><td>全部の矢印の合計の先</td><td>折れ線を追うより、<b>矢印和</b> にした方が簡単。</td></tr>
+<tr><td>「角AOPを求める」</td><td>合計矢印の向きを読む</td><td>長さまで求めなくてもよい。<b>方向が分かれば勝ち</b>。</td></tr>
+</table>
+<p class="mind">見えない時は「累積角の表」にし、さらに見えない時は「同じ始点から矢印を出す図」に切り替えます。<br/>つまり、<b>文章 → 表 → 図</b> の順で見えやすい形へ変えていきます。</p>
+</div>
+<h3 id="q4-hyp">必ず持ちたい3つの入り口（仮説）</h3>
+<table class="hyp-table">
+<tr><th>仮説</th><th>どの観察から出るか</th><th>やること</th><th>筋の良さ</th></tr>
+<tr><td><b>仮説A</b><br/>折れ線をそのまま描く</td><td>「ロボットが進む」と書いてある</td><td>実際の道を順に描いて終点の向きを見る</td><td>小さい例では使えるが、長くなると図が崩れやすい。<b>確認用</b>。</td></tr>
+<tr><td><b>仮説B</b><br/>累積角の表にする</td><td>「今の向きから何度回す」が繰り返される</td><td>0°, 80°, 160°… のように実際の進行方向を書き出す</td><td><b>良い入り口</b>。ここで構造がかなり見える。</td></tr>
+<tr><td><b>仮説C</b><br/>同じ始点の1m矢印として足す</td><td>全部1mで、向きだけ問われている</td><td>対称な2本、反対向き、等間隔を探してまとめる</td><td><b>最も筋が良い本命</b>。対称性を使えて一気に簡単になる。</td></tr>
+</table>
+<div class="warn"><b>よくある失敗：</b>仮説Aのまま最後まで押し切ろうとすると、図がごちゃごちゃして「なぜその向きなのか」が説明できなくなります。<br/>難問では、<b>うまくいかない表現に固執しない</b> ことが大切です。</div>
+<h3 id="q4-verify">仮説を低コストで検証する</h3>
+<table class="hyp-table">
+<tr><th>仮説</th><th>低コストで試す方法</th><th>続行/見切りの判断</th><th>間違えやすい考え方</th></tr>
+<tr><td>折れ線で描く</td><td>2歩・3歩だけ描いてみる。向きが管理しやすいか確認する。</td><td>図がすぐ散らかるなら見切る。<b>説明の主役にはしない</b>。</td><td>「描けば分かるはず」と思い続けること。</td></tr>
+<tr><td>累積角の表</td><td>最初の数個だけ角を足してみる。規則や対称が出るか見る。</td><td>0°, 80°, 160°… のように整って出るなら続行。</td><td>命令角をそのまま向きと勘違いすること。</td></tr>
+<tr><td>1m矢印の和</td><td>小さい数で、反対向き・対称な組が作れるか試す。</td><td>対称ペアが見つかるなら本命。見えなければ別の並べ方や別表現へ切り替える。</td><td>長さを無視して「角度の平均」を取ってしまうこと。必要なのは矢印の和。</td></tr>
+</table>
+<div class="mind">センスの良い選び方は、<b>小さく試して、構造が見える表現に乗り換える</b> ことです。<br/>「一番早く対称性が見える方法はどれか？」と自分に問い続けると、筋の良い解法を選びやすくなります。</div>
+<div class="svg-grid">
+<div class="svg-card wide"><p class="fig-title">SVG図9：(1) 6本の1m矢印を対称に組む</p><svg aria-label="問4(1)方向ベクトルのSVG図（重なり修正版）" role="img" viewBox="0 0 800 500">
+<title>問4(1)方向ベクトルのSVG図（重なり修正版）</title>
+<defs>
+<marker id="arrQ41" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arrQ41R" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+</defs>
+<rect fill="#fbfcff" height="462" rx="18" stroke="#cfd8e8" stroke-width="1" width="760" x="18" y="18"></rect>
+<text fill="#247c83" font-size="18" font-weight="700" text-anchor="middle" x="390" y="43">累積角を書いてから、対称な矢印を組む</text>
+<circle cx="190" cy="245" fill="none" r="128" stroke="#cad2df" stroke-width="1.5"></circle>
+<line marker-end="url(#arrQ41)" stroke="#5e6472" stroke-width="1.8" x1="190" x2="315" y1="245" y2="245"></line><text fill="#5e6472" font-size="12" font-weight="800" x="334" y="249">0°</text>
+<line marker-end="url(#arrQ41)" stroke="#247c83" stroke-width="2.0" x1="190" x2="212" y1="245" y2="121"></line><text fill="#247c83" font-size="12" font-weight="800" x="220" y="104">80°</text>
+<line marker-end="url(#arrQ41)" stroke="#247c83" stroke-width="2.0" x1="190" x2="72" y1="245" y2="202"></line><text fill="#247c83" font-size="12" font-weight="800" x="36" y="199">160°</text>
+<line marker-end="url(#arrQ41)" stroke="#247c83" stroke-width="2.0" x1="190" x2="128" y1="245" y2="353"></line><text fill="#247c83" font-size="12" font-weight="800" x="100" y="382">240°</text>
+<line marker-end="url(#arrQ41)" stroke="#247c83" stroke-width="2.0" x1="190" x2="286" y1="245" y2="325"></line><text fill="#247c83" font-size="12" font-weight="800" x="300" y="344">320°</text>
+<line marker-end="url(#arrQ41)" stroke="#247c83" stroke-width="2.0" x1="190" x2="286" y1="245" y2="165"></line><text fill="#247c83" font-size="12" font-weight="800" x="300" y="156">40°</text>
+<text fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="190" y="250">O</text>
+<rect fill="#fff" height="258" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="300" x="392" y="86"></rect>
+<text fill="#247c83" font-size="16" font-weight="800" text-anchor="middle" x="542" y="118">対称な2本をまとめる</text>
+<text fill="#20222a" font-size="13" font-weight="700" x="422" y="160">0° と 40°</text>
+<line marker-end="url(#arrQ41)" stroke="#247c83" stroke-width="2.6" x1="540" x2="620" y1="155" y2="155"></line>
+<text fill="#247c83" font-size="12" font-weight="800" x="636" y="160">20°向き</text>
+<text fill="#20222a" font-size="13" font-weight="700" x="422" y="218">80° と 320°</text>
+<line marker-end="url(#arrQ41)" stroke="#247c83" stroke-width="2.6" x1="540" x2="620" y1="213" y2="213"></line>
+<text fill="#247c83" font-size="12" font-weight="800" x="636" y="218">20°向き</text>
+<text fill="#20222a" font-size="13" font-weight="700" x="422" y="276">160° と 240°</text>
+<line marker-end="url(#arrQ41R)" stroke="#a34848" stroke-width="2.6" x1="540" x2="620" y1="271" y2="271"></line>
+<text fill="#a34848" font-size="12" font-weight="800" x="636" y="276">200°向き</text>
+<text fill="#20222a" font-size="12" font-weight="700" text-anchor="middle" x="542" y="315">20°向きが2本、200°向きが1本</text>
+<rect fill="#fff2e4" height="58" rx="18" stroke="#e0b179" stroke-width="1" width="565" x="115" y="392"></rect>
+<text fill="#c46a2b" font-size="18" font-weight="800" text-anchor="middle" x="398" y="425">20°向きの合力の方が長く残る → 答え 20度</text>
+</svg></div>
+<div class="svg-card wide"><p class="fig-title">SVG図10：(2) 120度方向が残る</p><svg aria-label="問4(2)方向ベクトルのSVG図（重なり修正版）" role="img" viewBox="0 0 800 540">
+<title>問4(2)方向ベクトルのSVG図（重なり修正版）</title>
+<defs>
+<marker id="arrQ42" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+<marker id="arrQ42O" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker>
+<marker id="arrQ42R" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#a34848"></path></marker>
+</defs>
+<rect fill="#fbfcff" height="502" rx="18" stroke="#cfd8e8" stroke-width="1" width="760" x="18" y="18"></rect>
+<text fill="#247c83" font-size="12" font-weight="700" text-anchor="middle" x="390" y="43">累積角 0°, 80°, 220°, 100°, 240° を整理する</text>
+<circle cx="190" cy="260" fill="none" r="128" stroke="#cad2df" stroke-width="1.5"></circle>
+<line marker-end="url(#arrQ42)" stroke="#5e6472" stroke-width="1.9" x1="190" x2="315" y1="260" y2="260"></line><text fill="#5e6472" font-size="12" font-weight="800" x="333" y="264">0°</text>
+<line marker-end="url(#arrQ42)" stroke="#247c83" stroke-width="2.0" x1="190" x2="212" y1="260" y2="136"></line><text fill="#247c83" font-size="12" font-weight="800" x="220" y="119">80°</text>
+<line marker-end="url(#arrQ42)" stroke="#247c83" stroke-width="2.0" x1="190" x2="92" y1="260" y2="342"></line><text fill="#247c83" font-size="12" font-weight="800" x="54" y="362">220°</text>
+<line marker-end="url(#arrQ42)" stroke="#247c83" stroke-width="2.0" x1="190" x2="168" y1="260" y2="136"></line><text fill="#247c83" font-size="12" font-weight="800" x="150" y="119">100°</text>
+<line marker-end="url(#arrQ42)" stroke="#247c83" stroke-width="2.0" x1="190" x2="128" y1="260" y2="368"></line><text fill="#247c83" font-size="12" font-weight="800" x="100" y="396">240°</text>
+<text fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="190" y="265">O</text>
+<rect fill="#fff" height="340" rx="16" stroke="#dfe3ee" stroke-width="1.2" width="320" x="382" y="86"></rect>
+<text fill="#247c83" font-size="16" font-weight="800" text-anchor="middle" x="542" y="118">組み直して考える</text>
+<circle cx="542" cy="240" fill="none" r="92" stroke="#e2e7ef" stroke-width="1.2"></circle>
+<line marker-end="url(#arrQ42R)" stroke="#a34848" stroke-width="2.8" x1="542" x2="578" y1="240" y2="303"></line>
+<text fill="#a34848" font-size="12" font-weight="800" x="590" y="326">0° + 240° → 300°</text>
+<line marker-end="url(#arrQ42)" stroke="#4367a8" stroke-width="2.8" x1="542" x2="473" y1="240" y2="215"></line>
+<text fill="#4367a8" font-size="12" font-weight="800" x="430" y="212">100° + 220° → 160°</text>
+<line marker-end="url(#arrQ42)" stroke="#247c83" stroke-width="2.5" x1="542" x2="554" y1="240" y2="171"></line>
+<text fill="#247c83" font-size="12" font-weight="800" x="516" y="152">残り 80°</text>
+<line marker-end="url(#arrQ42O)" stroke="#c46a2b" stroke-width="4.2" x1="542" x2="484" y1="240" y2="138"></line>
+<text fill="#c46a2b" font-size="13" font-weight="900" x="452" y="129">最終 120°</text>
+<text fill="#20222a" font-size="12" font-weight="700" text-anchor="middle" x="542" y="348.0"><tspan dy="0" x="542">80° と 160° を足すと、</tspan><tspan dy="19" x="542">120°向きの長い矢印になる。</tspan></text>
+<text fill="#20222a" font-size="12" font-weight="700" text-anchor="middle" x="542" y="368.0"><tspan dy="0" x="542">300°向き1本はその反対向き。</tspan><tspan dy="19" x="542">差をとっても 120° が残る。</tspan></text>
+<rect fill="#fff2e4" height="48" rx="16" stroke="#e0b179" stroke-width="1" width="500" x="150" y="448"></rect>
+<text fill="#c46a2b" font-size="19" font-weight="800" text-anchor="middle" x="400" y="478">合計の向きは 120度 → 答え 120度</text>
+</svg></div>
+</div>
+<div class="flowbox"><svg aria-label="問4の流れ" role="img" viewBox="0 0 760 140">
+<title>問4の流れ</title>
+<defs>
+<marker id="arrFlow4" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker>
+</defs>
+<rect fill="#fbfcff" height="104" rx="18" stroke="#cfd8e8" stroke-width="1" width="724" x="18" y="18"></rect>
+<rect fill="#eaf7f7" height="38" rx="12" stroke="#cfd8e8" stroke-width="1" width="145" x="38" y="42"></rect>
+<text fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="110" y="67">① 向きを累積する</text>
+<line marker-end="url(#arrFlow4)" stroke="#247c83" stroke-width="1.8" x1="183" x2="210" y1="61" y2="61"></line>
+<rect fill="#fff2e4" height="38" rx="12" stroke="#cfd8e8" stroke-width="1" width="145" x="220" y="42"></rect>
+<text fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="292" y="67">② 1m矢印に直す</text>
+<line marker-end="url(#arrFlow4)" stroke="#247c83" stroke-width="1.8" x1="365" x2="392" y1="61" y2="61"></line>
+<rect fill="#eaf7f7" height="38" rx="12" stroke="#cfd8e8" stroke-width="1" width="145" x="402" y="42"></rect>
+<text fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="474" y="67">③ 対称な組を探す</text>
+<line marker-end="url(#arrFlow4)" stroke="#247c83" stroke-width="1.8" x1="547" x2="574" y1="61" y2="61"></line>
+<rect fill="#fff2e4" height="38" rx="12" stroke="#cfd8e8" stroke-width="1" width="138" x="584" y="42"></rect>
+<text fill="#20222a" font-size="13" font-weight="800" text-anchor="middle" x="653" y="67">④ 残った向きを読む</text>
+</svg></div>
+<h3>本解</h3>
+<h4>(1) 命令 (80, 80, 80, 80, 80)</h4>
+<p>実際に進む向きは、最初の0度も含めて <span class="math">0°, 80°, 160°, 240°, 320°, 40°</span>。</p>
+<p>0°と40°は20°向きにまとまる。80°と320°も20°向きにまとまる。160°と240°は反対側の200°向きにまとまるが、20°向きの合計の方が長く残る。よって最終方向は20°。</p>
+<h4>(2) 命令 (80, 140, 240, 140)</h4>
+<p>実際に進む向きは <span class="math">0°, 80°, 220°, 100°, 240°</span>。</p>
+<p>0°と240°を合わせると300°向きの1m矢印。100°と220°を合わせると160°向きの1m矢印。残った80°と160°を合わせると120°向きで、長さは1mより長い。300°向きの1mは120°の反対向きなので、それを引いても120°向きが残る。</p>
+<div class="warn"><b>注意：</b>命令の角度は「OAからの角度」ではなく、「その時点の進行方向から曲がる角度」。最初の0°の1mも必ず足す。</div>
+<div class="ans">答え： (1) 20度　(2) 120度</div>
+<div class="related-wrap" id="q4-related">
+<h3>問4の類題（2題）</h3>
+
+<div class="related-card">
+<div class="head"><span>類題4-A</span></div>
+<h4>4人が同じ力でロープを引く</h4>
+<div class="problem-mini">
+<p>4人が中心Oから、同じ強さで 0°, 120°, 240°, 60° の向きにロープを引きます。全体としてどの向きに引かれますか。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>向きの問題を、矢印の打ち消し・合成に置き換える練習です。ロボットの命令とは見た目を変えています。</p><p><b>開いてから確認する見方：</b>見た目：ロープの合力 ／ 構造：対称な矢印の合成</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="ロープの合力" role="img" viewBox="0 0 820 320">
+<defs><marker id="q4a_arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker><marker id="q4a_or" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker></defs>
+<rect fill="#fbfcff" height="288" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="34.0"><tspan dy="0" x="410">0°,120°,240° の3本は</tspan><tspan dy="19" x="410">正三角形の対称で打ち消し合う</tspan></text>
+<circle cx="230" cy="165" fill="none" r="92" stroke="#cad2df"></circle>
+<line marker-end="url(#q4a_arr)" stroke="#247c83" stroke-width="3" x1="230" x2="330" y1="165" y2="165"></line><text fill="#247c83" font-size="13" font-weight="800" x="342" y="169">0°</text>
+<line marker-end="url(#q4a_arr)" stroke="#247c83" stroke-width="3" x1="230" x2="180" y1="165" y2="78"></line><text fill="#247c83" font-size="13" font-weight="800" x="150" y="76">120°</text>
+<line marker-end="url(#q4a_arr)" stroke="#247c83" stroke-width="3" x1="230" x2="180" y1="165" y2="252"></line><text fill="#247c83" font-size="13" font-weight="800" x="150" y="260">240°</text>
+<line marker-end="url(#q4a_or)" stroke="#c46a2b" stroke-width="4" x1="230" x2="280" y1="165" y2="78"></line><text fill="#c46a2b" font-size="13" font-weight="900" x="292" y="76">60°</text>
+<rect fill="#fff" height="130" rx="16" stroke="#dfe3ee" width="250" x="460" y="96"></rect>
+<text fill="#20222a" font-size="15" font-weight="900" text-anchor="middle" x="585" y="132">3本は合計0</text>
+<text fill="#247c83" font-size="18" font-weight="900" text-anchor="middle" x="585" y="166">0°+120°+240°=0</text>
+<text fill="#c46a2b" font-size="18" font-weight="900" text-anchor="middle" x="585" y="202">残りは60°</text>
+</svg></div>
+<p><b>1. 角度を数字の平均で考えない。</b> 方向の問題では、角度を足して平均するのではなく、矢印として足します。</p>
+<p><b>2. 対称な組を探す。</b> 0°,120°,240° の3本は、正三角形の3方向に同じ長さで出ているので、ちょうど打ち消し合います。</p>
+<div class="expansion"><b>矢印の和を展開する。</b><br/>
+<span class="math">(0°の矢印) + (120°の矢印) + (240°の矢印) = 0</span><br/>
+          したがって全体は、残った <span class="math">60°</span> の矢印だけになります。
+        </div>
+<div class="ans-mini">答え：60度方向</div>
+<p><b>問4との対応：</b>ロボットではありませんが、「同じ長さの矢印を同じ始点から出して、対称なものを消す」考え方が同じです。</p>
+</div></details>
+</div>
+<div class="related-card">
+<div class="head"><span>類題4-B</span></div>
+<h4>船と潮の流れ</h4>
+<div class="problem-mini">
+<p>船が東へ2km、北へ2km進みました。その後、潮に流されて「西へ1km、南へ1km」と同じ移動をしました。</p>
+<p>出発点から見た最終位置の向きは何度ですか。東を0°、北を90°とします。</p>
+</div>
+
+<details class="solution"><summary>解答解説を開く</summary><div class="solution-body"><div class="compare-note hidden-after-open"><b>この解説で見抜く構造</b><p><b>類題群のねらい：</b>向きの問題を、矢印の打ち消し・合成に置き換える練習です。ロボットの命令とは見た目を変えています。</p><p><b>開いてから確認する見方：</b>見た目：船の進路 ／ 構造：成分に分けて打ち消す</p></div><p><b>図で確認する：</b>問題文を解くための表現に置き換えると、次のように見えます。</p><div class="mini-svg"><svg aria-label="船の進路の成分分解" role="img" viewBox="0 0 820 330">
+<defs><marker id="q4b_arr" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#247c83"></path></marker><marker id="q4b_or" markerHeight="9" markerWidth="9" orient="auto" refX="7" refY="3.5"><path d="M0,0 L7,3.5 L0,7 Z" fill="#c46a2b"></path></marker></defs>
+<rect fill="#fbfcff" height="298" rx="18" stroke="#cfd8e8" width="788" x="16" y="16"></rect>
+<text fill="#247c83" font-size="18" font-weight="800" text-anchor="middle" x="410" y="42">東西成分と南北成分に分ける</text>
+<line marker-end="url(#q4b_arr)" stroke="#247c83" stroke-width="3" x1="120" x2="330" y1="250" y2="250"></line><text fill="#247c83" font-size="13" font-weight="900" x="335" y="255">東2</text>
+<line marker-end="url(#q4b_arr)" stroke="#247c83" stroke-width="3" x1="330" x2="330" y1="250" y2="90"></line><text fill="#247c83" font-size="13" font-weight="900" x="338" y="90">北2</text>
+<line marker-end="url(#q4b_or)" stroke="#c46a2b" stroke-width="3" x1="330" x2="225" y1="90" y2="170"></line><text fill="#c46a2b" font-size="13" font-weight="900" x="252" y="120">西1・南1</text>
+<line marker-end="url(#q4b_arr)" stroke="#4367a8" stroke-width="4" x1="120" x2="225" y1="250" y2="170"></line><text fill="#4367a8" font-size="14" font-weight="900" x="150" y="185">残り：東1・北1</text>
+<rect fill="#fff" height="150" rx="16" stroke="#dfe3ee" width="240" x="470" y="98"></rect>
+<text fill="#20222a" font-size="16" font-weight="900" text-anchor="middle" x="590" y="132">成分で計算</text>
+<text fill="#247c83" font-size="16" font-weight="900" text-anchor="middle" x="590" y="166">東西：2−1=1</text>
+<text fill="#247c83" font-size="16" font-weight="900" text-anchor="middle" x="590" y="196">南北：2−1=1</text>
+<text fill="#c46a2b" font-size="18" font-weight="900" text-anchor="middle" x="590" y="228">東1・北1 → 45°</text>
+</svg></div>
+<p><b>1. 斜めの動きを成分に分ける。</b> 「西へ1km、南へ1km」と同じ移動は、東西方向では−1、南北方向では−1です。</p>
+<table><tr><th>動き</th><th>東西成分</th><th>南北成分</th></tr><tr><td>東へ2km</td><td>+2</td><td>0</td></tr><tr><td>北へ2km</td><td>0</td><td>+2</td></tr><tr><td>西1・南1</td><td>−1</td><td>−1</td></tr></table>
+<div class="expansion"><b>成分を展開する。</b><br/>
+          東西成分：<span class="math">+2 + 0 − 1 = 1</span><br/>
+          南北成分：<span class="math">0 + 2 − 1 = 1</span>
+</div>
+<p>最終的には、出発点から見て「東に1km、北に1km」の位置です。東と北が同じだけ残るので、向きは北東、つまり45°です。</p>
+<div class="ans-mini">答え：45度</div>
+<p><b>問4との対応：</b>元の問題では同じ長さの矢印を対称に組みました。こちらは長さがそろっていないので、東西・南北の成分に分けてから打ち消します。見た目は違っても、「移動を矢印に直す」考えは共通です。</p>
+</div></details>
+</div>
+</div>
+</section>
+
+<section class="card" id="summary">
+<h2>今回の問題で育てたい見方</h2>
+<div class="summary-grid">
+<div><b>1. 表は差を見る</b><br/>値を全部作らず、比べる列の差がどう変わるかを追う。</div>
+<div><b>2. 動く図形は道を固定</b><br/>代表点Aの軌跡に図形を沿わせ、外側と通らない部分を見る。</div>
+<div><b>3. ゲームは数に変換</b><br/>勝ち負けの枝分かれを、点数変化の並べ方に直す。</div>
+<div><b>4. 移動は矢印に分ける</b><br/>同じ長さの矢印を対称ペアにまとめ、方向だけを読む。</div>
+</div>
+</section>
+</main>
+</div>
+</body>
+</html>
