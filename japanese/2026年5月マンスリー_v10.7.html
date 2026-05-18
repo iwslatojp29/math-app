@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6月マンスリー_2026_国語_分析 HTML解答解説</title>
+<style>
+:root{--bg:#f4f5f7;--paper:#fff;--ink:#1f2937;--sub:#4b5563;--line:#e5e7eb;--accent:#7c3aed;--accent2:#0f766e;--soft:#f8fafc;--warn:#fff7ed;--good:#ecfdf5;--bad:#fef2f2;--font:16px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#f8fafc 0,#f4f5f7 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;font-size:var(--font);line-height:1.9}
+.top-panel{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 14px;max-height:34vh;overflow:auto}
+.nav-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.nav-row a,.nav-row button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 10px;text-decoration:none;color:var(--ink);font-size:.88rem;cursor:pointer;white-space:nowrap}
+.nav-row button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.app-shell{max-width:1180px;margin:0 auto;padding:22px 18px 80px}
+.hero,.card,.q-card{background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 30px rgba(15,23,42,.06);padding:24px;margin:18px 0}
+h1{font-size:1.9rem;line-height:1.3;margin:0 0 8px}
+h2{font-size:1.45rem;margin:26px 0 12px;border-left:6px solid var(--accent);padding-left:12px}
+h3{font-size:1.2rem;margin:0 0 10px}
+h4{font-size:1.05rem;margin:20px 0 8px;color:var(--accent)}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.badge,.label,.accuracy{display:inline-block;border-radius:999px;padding:3px 10px;font-size:.86rem;background:#eef2ff;color:#3730a3}
+.label{background:#ecfeff;color:#155e75;margin-right:8px}
+.accuracy{background:#fef3c7;color:#92400e;margin-left:12px}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill-row a{border-radius:999px;background:#f8fafc;border:1px solid var(--line);padding:6px 10px;color:var(--sub);text-decoration:none}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.detail-box,.answer-box,.question,.pitfall,.test-box{border-radius:14px;padding:14px 16px;margin:10px 0}
+.detail-box{background:#f8fafc;border:1px solid var(--line)}
+.answer-box{background:var(--good);border:1px solid #bbf7d0}
+.question{background:#fafafa;border:1px dashed #cbd5e1}
+.pitfall{background:var(--warn);border:1px solid #fed7aa}
+.subhead{font-weight:700;color:#111827;margin-top:16px;margin-bottom:6px;border-bottom:1px solid var(--line);padding-bottom:3px}
+.subhead.small{font-size:.95rem;border-bottom:none;margin-top:10px}
+.table-wrap{overflow:auto;margin:10px 0}
+table{border-collapse:separate;border-spacing:0;width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:10px 11px;vertical-align:top}
+th:last-child,td:last-child{border-right:none}
+tr:last-child td{border-bottom:none}
+th{background:#f1f5f9;text-align:left;color:#334155}
+.choice-table th:nth-child(1){width:22%}.choice-table th:nth-child(2){width:34%}.choice-table th:nth-child(3){width:34%}.choice-table th:nth-child(4){width:10%}
+.text-block{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0}
+.quote{padding:4px 5px;border-radius:6px}
+.main{background:#ede9fe;text-decoration:underline 2px #7c3aed}
+.keyword{background:#e0f2fe}
+.cause{background:#fff7ed;text-decoration:underline 2px #f97316}
+.result{background:#ecfdf5;text-decoration:underline 2px #10b981}
+.emotion{background:#fef3c7;text-decoration:underline 2px #f59e0b}
+.trigger{background:#fce7f3;text-decoration:underline 2px #ec4899}
+.scene{background:#f1f5f9}
+.note{font-size:.85rem;color:var(--sub);margin-left:4px}
+.meta-row{margin-bottom:10px;color:var(--sub)}
+.choice-list{margin:8px 0 8px 20px}
+details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+.test-box{background:#faf5ff;border:1px solid #ddd6fe}
+.mini-note{font-size:.9rem;color:var(--sub)}
+.final-table td:nth-child(3){font-weight:600}
+@media(max-width:760px){.grid-2{grid-template-columns:1fr}.hero,.card,.q-card{padding:16px}body{font-size:15px}}
+@page{size:A4 portrait;margin:12mm}
+@media print{.top-panel{display:none}body{background:#fff;font-size:11pt}.app-shell{max-width:none;padding:0}.hero,.card,.q-card{box-shadow:none;border:1px solid #ddd;break-inside:avoid;page-break-inside:avoid}.test-box{break-inside:avoid}a{color:inherit;text-decoration:none}}
+</style>
+<script>
+function changeFont(delta){
+  const root=document.documentElement;
+  const cur=parseFloat(getComputedStyle(root).getPropertyValue('--font'))||16;
+  root.style.setProperty('--font', Math.max(13, Math.min(22, cur+delta))+'px');
+}
+function resetFont(){document.documentElement.style.setProperty('--font','16px')}
+</script>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<nav class="top-panel">
+  <div class="nav-row">
+    <button class="primary" onclick="window.print()">PDF出力</button>
+    <button onclick="changeFont(1)">＋</button><button onclick="changeFont(-1)">−</button><button onclick="resetFont()">標準</button>
+    <a href="#reading">本文の読み方診断</a><a href="#dai3">大問3</a><a href="#dai4">大問4</a><a href="#answers">最終答案一覧</a><a href="#summary">今回の学習まとめ</a>
+    <a href="#q3-1">3-1</a><a href="#q3-2">3-2</a><a href="#q3-3">3-3</a><a href="#q3-4">3-4</a><a href="#q3-5">3-5</a><a href="#q3-6">3-6</a><a href="#q3-7">3-7</a><a href="#q3-8">3-8</a>
+    <a href="#q4-1">4-1</a><a href="#q4-2">4-2</a><a href="#q4-3">4-3</a><a href="#q4-4">4-4</a><a href="#q4-5">4-5</a><a href="#q4-6">4-6</a><a href="#q4-7">4-7</a><a href="#q4-8">4-8</a>
+  </div>
+</nav>
+<main class="app-shell">
+<section class="hero">
+  <h1>6月マンスリー_2026_国語_分析 HTML解答解説</h1>
+  <div class="badges"><span class="badge">文章ジャンル：説明文＋物語文</span><span class="badge">設問タイプ：空欄・抜き出し・選択肢・記述・正誤</span><span class="badge">A4縦PDF対応</span></div>
+  <p>添付PDFの大問3・大問4の長文問題について、本文根拠をもとに解答・解説を作成しました。公式解答ページは添付範囲内で確認できなかったため、本文と設問から独立に解答しています。</p>
+  <div class="pill-row"><a href="#dai3">大問3：植物の花とタネ</a><a href="#dai4">大問4：ゆめ発表会</a><a href="#answers">最終答案一覧</a></div>
+</section>
+
+<section id="reading" class="card print-unit">
+  <h2>本文の読み方診断</h2>
+  <div class="grid-2">
+    <div class="detail-box"><h3>文章全体の主題・流れ</h3><p>大問3は、花を咲かせる理由を「春の暖かさ」ではなく「タネをつくって過酷な季節を越すため」と説明する文章です。問い→答え→新たな問い→実験→まとめの順に進みます。大問4は、夢を発表する場面で、ぼくが「夢がない」ことを正直に言うまでの心の変化を描く物語です。</p></div>
+    <div class="detail-box"><h3>読みの勝負所</h3><p>大問3は、一般的な見方と筆者の主張を分けること、大問4は、人物の言葉の表面ではなく、後悔・本音・人の目という心情の流れを読むことが勝負所です。どちらも、直前だけでなく、少し前のまとめ文に戻ると答えが安定します。</p></div>
+  </div>
+</section>
+
+<section id="dai3" class="card print-unit">
+  <h2>大問3</h2>
+  <h3>文章ジャンル・設問タイプ</h3>
+  <p>説明文。設問は、接続語、理由選択、抜き出し、内容一致、実験理解、記述、正誤判定。</p>
+  <h3>文章の主題・流れ</h3>
+  <p>春に多くの草花が花を咲かせる理由を、暖かさや虫の活動ではなく、タネをつくって暑さや寒さを越すためだと説明する。さらに、植物が夜の長さで季節を予測することを、アサガオの実験で確かめる。</p>
+  <h3>本文の要約</h3>
+  <p>春になると多くの草花が花を咲かせるため、私たちは暖かくなったから、虫が活動するからだと思いがちである。しかし筆者は、それは草花の心を誤解していると言う。花を咲かせる本当の目的はタネをつくることであり、タネは植物の姿では耐えにくい暑さ・寒さ・乾燥などを乗り越える力をもつ。春に咲く草花は、夏の暑さをタネで過ごすために、春に花を咲かせて姿を消す。また、植物は葉で夜の長さをはかり、気温の変化より早く季節の訪れを知る。アサガオの実験でも、一回長い夜を与えた鉢だけが花を咲かせることから、植物が夜の長さを感じているとわかる。花は人間には季節を楽しんでいるように見えるが、草花にとっては命の終わりへ向かう終活でもある。</p>
+  <h3>本文文字数</h3><p>約1,550字（PDF本文をもとにした概算）。</p>
+  <h3>この大問で使う線の凡例・線の引き方</h3>
+  <div class="table-wrap"><table class="choice-table"><thead><tr><th>箇所</th><th>対応する塾技</th><th>線種</th><th>役割</th></tr></thead><tbody><tr><td>「なぜ、春に…」</td><td>問いの発見</td><td>問い線</td><td>筆者が答えるべき中心の問い。</td></tr><tr><td>「それは、草花たちの心を誤解」</td><td>一般論と主張の対比</td><td>対比線</td><td>よくある見方を否定する主張。</td></tr><tr><td>「タネには…役割」</td><td>キーワード</td><td>キーワード線</td><td>タネの役割が選択肢問題の根拠。</td></tr><tr><td>「夜の長さをはかる」</td><td>因果の発見</td><td>原因線</td><td>植物が季節を知るしくみ。</td></tr><tr><td>「タネをつくって、姿を消します」</td><td>まとめ</td><td>まとめ線</td><td>筆者の結論と問六・問七の根拠。</td></tr></tbody></table></div>
+  <h3>本文の線引き再現</h3>
+  <div class="text-block">
+    <p><span class="quote main">「なぜ、春に、多くの植物が花を咲かせるのか」</span><span class="note">問い</span>という疑問が浮かびます。花を咲かせるのに、ちょうどいい暖かさになってきたからとか、虫が活動をはじめるからのように思われがちです。<span class="quote main">それは、草花たちの心を誤解しています。</span><span class="note">筆者の主張</span></p>
+    <p>草花が花を咲かせるのは、<span class="quote keyword">タネをつくるため</span>です。タネには、不都合な環境に耐えて生きのびる役割があります。<span class="quote result">植物の姿では耐えられない、暑さや寒さ、乾燥などの不都合な環境を耐え忍ぶ力</span>をもっているのです。</p>
+    <p>春に花咲く草花にとっては、毎年訪れる不都合な環境は、夏の暑さです。<span class="quote cause">暑さに弱い草花は、夏の暑い期間をタネで過ごすため</span>に、春にツボミをつくって花を咲かせ、タネをつくり、姿を消していきます。</p>
+    <p>草花は、<span class="quote keyword">葉っぱが夜の長さをはかる</span>ことによって、暑さや寒さの訪れを前もって知ります。アサガオの実験では、<span class="quote cause">一回の長い夜を与えられたほうだけ</span>が、数週間後に花を咲かせました。</p>
+    <p>春に咲く草花も秋に咲く草花も、花を咲かせるのはタネをつくるためです。<span class="quote result">タネをつくって、姿を消します。</span>花を咲かせるのは、草花たちにとっては<span class="quote main">生涯の終わりの終活</span>なのです。</p>
+  </div>
+</section>
+
+    <article class="q-card print-unit" id="q3-1">
+      <h3>大問3-問1</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>空欄補充・接続語<span class="accuracy">推定正答率 76%（前後の接続関係を分けられるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>A〜Cにあてはまることばとして、最もふさわしいものを次の中から選び、それぞれ記号で答えなさい。（ただし、同じ記号は一回しか使えません。）</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">Aは、前の「暖かさになってきたから」「虫が活動をはじめるから」という一般的な見方を受け、直後で「それは、草花たちの心を誤解しています」と打ち消しています。だから逆接の「でも」。Bは「不都合な環境は、夏の暑さです」を受けて、「暑さに弱い草花は、夏をタネで過ごすために…」と理由から結果に進むので「そのため」。Cは「花を咲かせるのは、タネをつくるため」から「タネをつくって、姿を消します」と続くので、順接の「そして」が自然です。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>A＝エ、B＝オ、C＝ウ</div>
+      <div class="subhead">空欄群の個別解説</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>記号</th><th>本文の前後関係</th><th>入る語</th><th>理由</th><th>誤りやすい点</th></tr></thead><tbody><tr><td>A</td><td>一般的な見方→筆者の否定</td><td>でも</td><td>「思われがち」から「誤解」へ反対に進む。</td><td>「たとえば」とすると例示になり、直後の否定に合わない。</td></tr><tr><td>B</td><td>夏の暑さ→タネで過ごす</td><td>そのため</td><td>夏の暑さが理由で、タネをつくる行動に進む。</td><td>「そして」だと理由・結果の強さが弱い。</td></tr><tr><td>C</td><td>タネをつくる→姿を消す</td><td>そして</td><td>同じ流れの次の動作を足している。</td><td>「でも」だと反対になってしまう。</td></tr></tbody></table></div>
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア また</td><td>「それは、草花たちの心を誤解しています」は前文の「暖かさ」「ハチやチョウ」を受けて、考えを追加するのではなく打ち消す流れ。</td><td>【接続関係の違い】「また」は追加。本文は「思われがちです」→「誤解」と反対に進む。<br><b>【作問者の意図】</b>説明文でよく出るつなぎ語を入れ、Aの逆接を見落とさせている。</td><td>×</td></tr><tr><td>イ たとえば</td><td>具体例を出すときに使う語だが、A直後は例ではなく筆者の判定「誤解」。</td><td>【具体例ではない】「それは」は前の一般的な考え全体を受け、例示ではない。<br><b>【作問者の意図】</b>前文に「ハチやチョウ」という例があるため、例示語に引っ張らせている。</td><td>×</td></tr><tr><td>ウ そして</td><td>Cでは「タネをつくるため」→「タネをつくって、姿を消します」と手順が続く。</td><td>【A・Bには不適】Aは逆接、Bは理由・結果なので「そして」では弱い。Cでは「タネをつくる」後に「姿を消す」が続くため自然。</td><td>○（C）</td></tr><tr><td>エ でも</td><td>Aでは「花を咲かせるのは暖かいからと思われがち」→「それは誤解」と、前の見方を打ち消している。</td><td>不一致なし。<br><b>【作問者の意図】</b>本文の「思われがち」と「誤解」を対にして読めるかを見る。</td><td>○（A）</td></tr><tr><td>オ そのため</td><td>Bでは「不都合な環境は、夏の暑さです」→「暑さに弱い草花は、夏をタネで過ごすために…」と結果が示される。</td><td>不一致なし。<br><b>【作問者の意図】</b>原因「夏の暑さ」から行動「タネで過ごす」への流れを見抜かせる。</td><td>○（B）</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">A・B・Cの三つをすべて埋め、同じ記号を二回使っていないか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>空欄直前の語だけでなく、空欄直後の文の向きまで見ること。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問3-問1：</strong>A〜Cにあてはまることばを選びなさい。</p>
+      <ol class="choice-list"><li><strong>ア</strong> けれど</li><li><strong>イ</strong> つまり</li><li><strong>ウ</strong> そのため</li><li><strong>エ</strong> そして</li><li><strong>オ</strong> たとえば</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>A＝ア、B＝ウ、C＝エ</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア けれど</td><td>Aの「思われがち」→「誤解」に合う。</td><td>B・Cの続きには合わない。</td><td>○（A）</td></tr><tr><td>イ つまり</td><td>言い換え・まとめの語だが、空欄の流れには不要。</td><td>Aは逆接、Bは結果、Cは順接。</td><td>×</td></tr><tr><td>ウ そのため</td><td>Bの「夏の暑さ」→「タネで過ごす」に合う。</td><td>A・Cには合わない。</td><td>○（B）</td></tr><tr><td>エ そして</td><td>Cの「タネをつくる」→「姿を消す」に合う。</td><td>A・Bには合わない。</td><td>○（C）</td></tr><tr><td>オ たとえば</td><td>例示ではない。</td><td>空欄前後は例を出す関係ではない。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q3-2">
+      <h3>大問3-問2</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・理由把握<span class="accuracy">推定正答率 82%（タネの役割と夜の長さを混同しないか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線①「植物たちは、夏の暑い期間をタネで過ごす」とありますが、タネにどのような力があるからですか。最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">線①の前には「タネには、いろいろの大切な役割」があり、その一つとして「不都合な環境に耐えて生きのびること」と説明されています。さらに「植物の姿では耐えられない、暑さや寒さ、乾燥などの不都合な環境を耐え忍ぶ力」とあります。したがって、タネの力は季節を予測する力ではなく、植物の姿では生きにくい環境を乗り越える力です。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>エ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 気温や夜の長さの変化を用いて次に訪れる季節を予測する力。</td><td>本文には「葉っぱが夜の長さをはかる」とあり、植物が季節を予測する説明はある。</td><td>【対象のすり替え】問われているのは「タネにどのような力があるか」。予測するのは葉・植物側で、タネの力ではない。<br><b>【作問者の意図】</b>後半の夜の長さの説明を混ぜ、タネの役割から目をそらしている。</td><td>×</td></tr><tr><td>イ 植物が過酷な環境の中で生きぬけるように養分を蓄える力。</td><td>「不都合な環境に耐えて生きのびる」と近い。</td><td>【本文にない要素の追加】本文は「養分を蓄える」とは言っていない。タネの力は「環境を耐え忍ぶ力」。<br><b>【作問者の意図】</b>タネ＝栄養という一般知識を持ち込み、本文根拠ではない説明を選ばせる。</td><td>×</td></tr><tr><td>ウ 春に花を咲かせられるように厳しい寒さをじっと耐え忍ぶ力。</td><td>「寒さ」を耐えるという点は本文にある。</td><td>【季節・目的のずれ】本文は夏の暑さも寒さも含む「植物の姿では耐えられない環境」。春に花を咲かせるためだけではない。<br><b>【作問者の意図】</b>本文の「寒さ」を残し、範囲を春の花に狭めている。</td><td>×</td></tr><tr><td>エ 植物の姿では生き残ることがむずかしい環境を乗り越える力。</td><td>「植物の姿では耐えられない、暑さや寒さ、乾燥などの不都合な環境を耐え忍ぶ力」を、選択肢では「生き残ることがむずかしい環境を乗り越える力」と言い換えている。</td><td>不一致なし。<br><b>【作問者の意図】</b>本文の「耐え忍ぶ」を「乗り越える」と言い換えて、同じ意味だと見抜けるかを見る。</td><td>○</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">「タネそのものの力」を答える問題です。後半の「夜の長さをはかる」説明を答えにしないように確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>本文にある語でも、問われている対象が「タネ」か「葉・植物」かを分ける。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問3-問2：</strong>線①「植物たちは、夏の暑い期間をタネで過ごす」とありますが、タネにどのような力があるからですか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 暑さや寒さ、乾燥などを、植物の姿ではなくタネの形でしのぐ力。</li><li><strong>イ</strong> 夜の長さをはかって、季節を早く知る力。</li><li><strong>ウ</strong> 花を咲かせるための養分をためる力。</li><li><strong>エ</strong> 虫に運んでもらって遠くへ移動する力。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 暑さや寒さ、乾燥などを、植物の姿ではなくタネの形でしのぐ力。</td><td>「植物の姿では耐えられない、暑さや寒さ、乾燥など」を言い換えている。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ 夜の長さをはかって、季節を早く知る力。</td><td>夜の長さの話は本文にある。</td><td>タネの力ではなく葉・植物の働き。</td><td>×</td></tr><tr><td>ウ 花を咲かせるための養分をためる力。</td><td>タネと養分は一般知識として近い。</td><td>本文根拠にない。</td><td>×</td></tr><tr><td>エ 虫に運んでもらって遠くへ移動する力。</td><td>虫は冒頭に出る。</td><td>本文は虫を理由から外している。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q3-3">
+      <h3>大問3-問3</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>抜き出し・心情表現<span class="accuracy">推定正答率 68%（指定字数と抜き出し範囲を守れるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線②「花を咲かせ、タネをつくる」とありますが、このときの植物にはどのような思いが感じられますか。筆者の考えを「□□という思い。」の形で答えるとき、□□にあてはまる部分を本文中から二十六字以上三十字以内でさがし、はじめと終わりの五字をぬき出して答えなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">線②の直後だけでなく、同じ話題がまとめ直される段落を探します。本文には「植物たちの『花を咲かせ、タネをつくる』という思いとは」とあり、その直後に答えそのものが示されています。指定は二十六字以上三十字以内なので、「タネになって、暑さや寒さに負けずに打ち勝って、生きていこう」（29字）が条件に合います。したがって、はじめの五字と終わりの五字を答えます。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>はじめ：タネになっ　／　終わり：きていこう<br><span class="mini-note">該当箇所全体：タネになって、暑さや寒さに負けずに打ち勝って、生きていこう</span></div>
+      
+      
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">二十六字以上三十字以内の範囲に収まるか、はじめ五字・終わり五字だけを書いているかを確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>線②の近くだけで探さず、「思いとは」と言い直している後半のまとめまで戻る。</div>
+      
+    </article>
+    
+    <article class="q-card print-unit" id="q3-4">
+      <h3>大問3-問4</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・指示内容<span class="accuracy">推定正答率 64%（春だけでなく秋の草花まで広げられるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線③「同じ生き方」とありますが、どのような生き方ですか。最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">線③は「春に花を咲かせる草花だけでなく、秋に花を咲かせるキクやコスモスなどの草花も」を受けています。直後には「夜の長さをはかることによって、寒さ、暑さの訪れを前もって知り、花を咲かせてタネをつくり」とあります。したがって、春の「暑さ」だけに限定せず、夜の長さを手がかりに、次に来る季節に合わせて姿を変える生き方を選びます。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>ウ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 一日の長さをはかることで二か月前の季節を知り、花を咲かせる生き方。</td><td>「約二か月前に知る」は本文にある。</td><td>【対象語のずれ】本文は「夜の長さ」をはかる。選択肢は「一日の長さ」としており、本文語をずらしている。<br><b>【作問者の意図】</b>夜の長さと一日の長さを似た言葉として混同させている。</td><td>×</td></tr><tr><td>イ 夜の長さをはかることで、暑さの訪れを前もって知り、タネをつくる生き方。</td><td>春に咲く草花については「暑さの訪れを前もって知り、タネをつくる」と合う。</td><td>【範囲の不足】線③は春の草花だけでなく、秋に咲くキクやコスモスも含む。秋の草花では「寒さ」の訪れも考える必要がある。<br><b>【作問者の意図】</b>直前の春の草花の説明だけを使い、線③の広がりを落としている。</td><td>×</td></tr><tr><td>ウ 夜の長さをはかることで、予測した季節に合わせてすがたを変える生き方。</td><td>「夜の長さをはかる」→「寒さ、暑さの訪れを前もって知り」→「花を咲かせてタネをつくり、暑さ、寒さを耐え忍ぶ」を、「予測した季節に合わせてすがたを変える」とまとめている。</td><td>不一致なし。<br><b>【作問者の意図】</b>本文の「花を咲かせてタネをつくる」「姿を消す」を抽象化した選択肢。抽象語に言い換えられても根拠に戻れるかを見る。</td><td>○</td></tr><tr><td>エ 気温の変化をはかることで、次に来る季節を予測して花を咲かせる生き方。</td><td>季節を予測して花を咲かせるという方向は本文に近い。</td><td>【原因のすり替え】本文は「夜の長さ」をはかる。選択肢は「気温の変化」をはかるとしており、決め手が違う。<br><b>【作問者の意図】</b>「気温の変化」という本文内の近い語を使い、本当の原因をすり替えている。</td><td>×</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">線③の直前だけでなく、直後のまとめ文「寒さ、暑さの訪れ」まで読んだか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>春の草花の説明だけで答えると、秋に咲く草花の「寒さ」を落としやすい。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問3-問4：</strong>線③「同じ生き方」とありますが、どのような生き方ですか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 夜の長さを手がかりに、暑さや寒さを予測してタネになる生き方。</li><li><strong>イ</strong> 気温が上がってから、あわてて花を咲かせる生き方。</li><li><strong>ウ</strong> 虫が活動し始めたら花を咲かせる生き方。</li><li><strong>エ</strong> 一日中光を浴びれば花を咲かせる生き方。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 夜の長さを手がかりに、暑さや寒さを予測してタネになる生き方。</td><td>「夜の長さ」「寒さ、暑さの訪れを前もって知り」に合う。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ 気温が上がってから、あわてて花を咲かせる生き方。</td><td>気温は本文に出る。</td><td>本文は夜の長さで前もって知る。</td><td>×</td></tr><tr><td>ウ 虫が活動し始めたら花を咲かせる生き方。</td><td>虫は冒頭に出る。</td><td>筆者はその見方を誤解とする。</td><td>×</td></tr><tr><td>エ 一日中光を浴びれば花を咲かせる生き方。</td><td>照明は実験に出る。</td><td>一日中照明ではツボミを作らない。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q3-5">
+      <h3>大問3-問5</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・実験の意味<span class="accuracy">推定正答率 86%（実験道具と実験条件を区別できるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線④の実験からどのようなことがわかりましたか。最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">実験では、二つのアサガオを一日中電灯で育て、片方だけに夕方から朝までダンボール箱をかぶせて「長い夜の暗黒」を与えます。その結果、長い夜を一回だけ与えられたほうだけが花を咲かせました。つまり、確かめたことは「植物は本当に夜の長さを感じてツボミをつくり、花を咲かせるのか」です。ダンボールそのものが花を咲かせたわけではありません。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>ア</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 植物は花を咲かせる前に、本当に夜の長さを感じとっているということ。</td><td>実験は「一回の長い夜」を与えた鉢だけが数週間後に花を咲かせた。本文の疑問「夜の長さを感じてツボミをつくり、花を咲かせるのか」に対応する。</td><td>不一致なし。<br><b>【作問者の意図】</b>ダンボール箱という具体物ではなく、実験で確かめた中心「長い夜」を読めるかを見る。</td><td>○</td></tr><tr><td>イ 植物はダンボールをかぶせられると、自然と花を咲かせるということ。</td><td>ダンボールをかぶせた鉢だけが花を咲かせたという事実はある。</td><td>【原因の取り違え】花を咲かせた理由はダンボールそのものではなく、「夕方から朝まで長い夜の暗黒」を与えたこと。<br><b>【作問者の意図】</b>実験道具を原因と勘違いさせている。</td><td>×</td></tr><tr><td>ウ 植物は日光以外でも、何らかの光を感じられれば花を咲かせるということ。</td><td>電灯で照明し続ける場面は本文にある。</td><td>【本文との逆】本文では一日中電灯で照明し続けるとツボミをつくらない。光を感じれば咲くのではない。<br><b>【作問者の意図】</b>「電灯で照明」という語を使い、実験の結論を反対にしている。</td><td>×</td></tr><tr><td>エ 植物は花を咲かせるにあたって、適切な時期を選択できるということ。</td><td>植物が季節に応じて花を咲かせる話題には近い。</td><td>【結論が広すぎる】実験の結論は「夜の長さを感じるか」。適切な時期を選択できるという一般論までは、この実験だけでは言えない。<br><b>【作問者の意図】</b>本文全体の主題らしい言い方で、実験のねらいからずらしている。</td><td>×</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">「ダンボール箱」ではなく「長い夜」を与えたことが実験条件だと確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>実験に出てくる道具を、そのまま原因だと思わない。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問3-問5：</strong>線④の実験からどのようなことがわかりましたか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> アサガオは一度だけ長い夜を経験しても、数週間後に花を咲かせる。</li><li><strong>イ</strong> ダンボール箱の中に入ると、植物は日光がなくてもよく育つ。</li><li><strong>ウ</strong> 電灯を当て続けるほど、アサガオは早く花を咲かせる。</li><li><strong>エ</strong> 植物は人間が見ているときだけ花を咲かせる。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア アサガオは一度だけ長い夜を経験しても、数週間後に花を咲かせる。</td><td>「一回の長い夜」「数週間が経過すると…花を咲かせます」に合う。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ ダンボール箱の中に入ると、植物は日光がなくてもよく育つ。</td><td>ダンボールは出る。</td><td>結論は長い夜を感じること。</td><td>×</td></tr><tr><td>ウ 電灯を当て続けるほど、アサガオは早く花を咲かせる。</td><td>電灯は出る。</td><td>本文は電灯を当て続けるとツボミを作らない。</td><td>×</td></tr><tr><td>エ 植物は人間が見ているときだけ花を咲かせる。</td><td>本文にない。</td><td>実験条件と無関係。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q3-6">
+      <h3>大問3-問6</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・筆者の見方<span class="accuracy">推定正答率 61%（人間の見方と草花の思いを分けるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線⑤「花を咲かせているときの思い」とありますが、どのような思いだと考えられますか。最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">線⑤の直前に「タネをつくって、姿を消します」「花を咲かせるのは…生涯の終わりの終活」とあります。人間は花を見ると「その季節を喜んで謳歌している」と感じますが、筆者はそれとは違うかもしれないと言っています。したがって、草花の思いとしては、花を咲かせる喜びよりも、植物としての姿を失う方向が合います。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>イ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 過酷な環境に耐えねばならないタネになることの悲しみ。</td><td>タネになって過酷な環境を耐える話は本文にある。</td><td>【感情の付け足し】本文は「悲しみ」とは言っていない。線⑤直前の「姿を消します」「終活」が中心。<br><b>【作問者の意図】</b>「耐え忍ぶ」を暗い感情に変え、本文にない悲しみを足している。</td><td>×</td></tr><tr><td>イ これから植物としての姿を失うことに対するさびしさ。</td><td>「タネをつくって、姿を消します」「終活として花を咲かせている」を、選択肢では「植物としての姿を失う」と言い換えている。</td><td>不一致なし。<br><b>【作問者の意図】</b>本文の「終活」「姿を消す」を心情語にした選択肢。人間の感じ方として本文の対比を読めるかを見る。</td><td>○</td></tr><tr><td>ウ 無事に花を咲かせることができたことへの安心。</td><td>花を咲かせるという語は本文にある。</td><td>【本文にない感情】安心とは書かれていない。むしろ人間が「喜んで謳歌」と見る気持ちと違うと言っている。<br><b>【作問者の意図】</b>花が咲く＝よかったという見た目の印象に寄せている。</td><td>×</td></tr><tr><td>エ 花を咲かせるのにちょうどいい季節になったことへの喜び。</td><td>春の暖かさや季節の喜びという見方は冒頭で触れられる。</td><td>【本文が否定した見方】冒頭で「暖かさになってきたから」は「草花たちの心を誤解」とされる。<br><b>【作問者の意図】</b>私たちの見方「季節を喜んで謳歌」を、そのまま草花の思いにしてしまう誤りを誘っている。</td><td>×</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">人間の見方「喜んで謳歌」と、草花側の「終活」を分けて確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>きれいな花＝喜び、という見た目の印象だけで選ばない。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問3-問6：</strong>線⑤「花を咲かせているときの思い」とありますが、どのような思いだと考えられますか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 季節を楽しんでいる明るい気持ち。</li><li><strong>イ</strong> 姿を消してタネになる、命の終わりに向かう気持ち。</li><li><strong>ウ</strong> 虫に見つけてもらえない不安。</li><li><strong>エ</strong> 暑さに勝ったことをほこる気持ち。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>イ</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 季節を楽しんでいる明るい気持ち。</td><td>人間側の見方として出る。</td><td>本文はそれと違うかもしれないと言う。</td><td>×</td></tr><tr><td>イ 姿を消してタネになる、命の終わりに向かう気持ち。</td><td>「姿を消します」「終活」を言い換えている。</td><td>不一致なし。</td><td>○</td></tr><tr><td>ウ 虫に見つけてもらえない不安。</td><td>虫は冒頭に出る。</td><td>本文の中心ではない。</td><td>×</td></tr><tr><td>エ 暑さに勝ったことをほこる気持ち。</td><td>暑さに耐える話はある。</td><td>花を咲かせる時点の思いとして本文にない。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q3-7">
+      <h3>大問3-問7</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>記述問題・理由説明<span class="accuracy">推定正答率 59%（誤解の中身を本文の対比で説明できるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線「それは、草花たちの心を誤解しています」とありますが、なぜ「誤解」といえるのですか。説明しなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">冒頭の誤解は、「春が暖かいから」「虫が活動するから」花を咲かせるという見方です。しかし筆者は、草花が花を咲かせるのは「タネをつくるため」だと言います。春に咲く草花は、夏の暑さを植物の姿では越えにくいので、春にタネをつくって姿を消します。つまり、花は季節を喜ぶためではなく、次の過酷な環境をタネで乗り越えるための行動です。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>草花が春に花を咲かせるのは、春の暖かさを喜ぶためではなく、夏の暑さなどに耐えるためのタネをつくり、姿を消す準備をするためだから。</div>
+      <div class="subhead">文末設計</div><div class="detail-box">「〜ためではなく、〜ためだから。」の対比型でまとめると、誤解の中身と本文の正しい理由を両方入れられます。</div><div class="subhead">採点基準</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>観点</th><th>内容</th></tr></thead><tbody><tr><td>誤解の内容</td><td>暖かさ・虫・季節を喜ぶために咲く、という見方を入れる。</td></tr><tr><td>本文の正しい理由</td><td>タネをつくるためを入れる。</td></tr><tr><td>目的</td><td>暑さや寒さなどをタネで乗り越えるためを入れる。</td></tr></tbody></table></div><div class="subhead">正解の幅3パターン</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>型</th><th>答案例</th></tr></thead><tbody><tr><td>短め</td><td>暖かい春を喜ぶためではなく、夏の暑さをタネで越すために花を咲かせるから。</td></tr><tr><td>標準</td><td>春に花を咲かせるのは、春を楽しむためではなく、夏の暑さに備えてタネをつくり姿を消すためだから。</td></tr><tr><td>詳しめ</td><td>花は美しい季節を楽しむしるしではなく、植物がタネになって不都合な環境を耐え忍ぶための終活だから。</td></tr></tbody></table></div>
+      
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">「誤解」と「本当の理由」の両方が入っているか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「花がきれいだから」など、本文にない印象で説明しない。</div>
+      
+    </article>
+    
+    <article class="q-card print-unit" id="q3-8">
+      <h3>大問3-問8</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>正誤判定<span class="accuracy">推定正答率 72%（本文の範囲と言いすぎを見抜けるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>次のア〜オについて、本文の内容として、正しいものは〇、正しくないものは×と、それぞれ答えなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">アは「春にしか花を咲かせることができない」と言い切っているため誤りです。本文には秋に咲くキクやコスモスも出ています。イは、植物の姿では乾燥などの不都合な環境に耐えられないことがあるので正しいです。ウは、春に花咲いていた多くの草花は夏に見つけることができないという本文に合います。エは、夜の長さが変化したその日に咲くのではなく、実験でも数週間後に咲くので誤りです。オは、秋に花を咲かせる植物も同じ生き方をするので、寒い冬をタネで越すと考えられます。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>ア＝×、イ＝〇、ウ＝〇、エ＝×、オ＝〇</div>
+      
+      
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">五つすべてに〇×をつけ、空欄を残していないか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「本文に近い」だけで〇にせず、「春にしか」などの言いすぎをチェックする。</div>
+      
+    </article>
+    
+
+<section id="dai4" class="card print-unit">
+  <h2>大問4</h2>
+  <h3>文章ジャンル・設問タイプ</h3>
+  <p>物語文。設問は、擬態語の空欄、理由選択、記述、心情理由、行動理由、心情説明。</p>
+  <h3>文章の主題・流れ</h3>
+  <p>「ゆめ発表会」を前に、夢がないぼくと、夢を言えなかった過去をもつハシケン先生の言葉を通して、周りにどう思われるかではなく、自分の本当の気持ちを大切にすることに気づいていく流れ。</p>
+  <h3>本文の要約</h3>
+  <p>四年生の「ゆめ発表会」に向けて、ぼくのクラスでは将来の夢を話し合う。しかし、ぼくには夢がなく、相川くんも同じように夢がないと言う。ハシケン先生は、自分も小学生のころ本当は漫画家になりたかったが、笑われるのがこわくて正直に言えず、学校の先生になりたいと言ったと話す。その後悔から、先生はみんなにはどんな夢でも堂々と発表してほしいと伝える。しかし、他の先生たちに怒られないように、ぼくたちはうその夢を言おうとする。発表会当日、大河と叶希ちゃんは練習と違い、自分の本当の夢を発表する。ぼくは迷うが、先生の後悔の話を思い出し、「夢がありません」と正直に言う。そして、得意なことがなくても自分のやりたいことを探せばよいと気づく。最後にぼくは、人の評価より自分の気持ちを大切にして、これから夢を見つけていこうと前向きになる。</p>
+  <h3>本文文字数</h3><p>約2,300字（PDF本文をもとにした概算）。</p>
+  <h3>この大問で使う線の凡例・線の引き方</h3>
+  <div class="table-wrap"><table class="choice-table"><thead><tr><th>箇所</th><th>対応する塾技</th><th>線種</th><th>役割</th></tr></thead><tbody><tr><td>「本当に漫画家になりたくて」</td><td>人物の本心</td><td>本心線</td><td>先生の本当の夢。</td></tr><tr><td>「みんなに笑われそうで」</td><td>心情原因</td><td>原因線</td><td>夢を言えなかった理由。</td></tr><tr><td>「後悔している」</td><td>変化のきっかけ</td><td>変化線</td><td>ぼくが本音を言う根拠。</td></tr><tr><td>「どうしよう」</td><td>葛藤</td><td>心情線</td><td>ぼくの迷い。</td></tr><tr><td>「夢がありません」</td><td>行動の転換</td><td>変化線</td><td>ぼくが正直に発表した場面。</td></tr><tr><td>「だれがどう思ったかじゃなくて」</td><td>主題</td><td>主題線</td><td>物語全体の結論。</td></tr></tbody></table></div>
+  <h3>本文の線引き再現</h3>
+  <div class="text-block">
+    <p>ハシケン先生は、子どものころ<span class="quote emotion">本当に漫画家になりたくて</span>、でも<span class="quote cause">みんなに笑われそうで、言いたくなかった</span>と話します。<span class="quote main">「あのとき、正直に言えば良かったなって」</span>という後悔を語り、みんなには後悔しないでほしいと伝えます。</p>
+    <p>発表会当日、大河は肉屋ではなくゲーマー、叶希ちゃんはお菓子作りではなくプロボクサーになりたいと、練習と違う本当の夢を発表します。ぼくは<span class="quote emotion">「どうしよう」</span><span class="note">葛藤</span>と感じ、ハシケン先生のためにうその夢を言うべきか迷います。</p>
+    <p>発表の直前、ぼくは<span class="quote trigger">ハシケン先生の後悔</span>を思い出し、正直に<span class="quote main">「ぼくは……夢がありません」</span>と発表します。さらに「得意なことがなくても、ぼくは、ぼくのやりたいことをすればいい」と気づきます。</p>
+    <p>帰り道、大河と叶希ちゃんの本音を聞き、ぼくは<span class="quote main">「たいせつなのは、だれがどう思ったかじゃなくて、ぼくがどう思うか」</span>と分かります。叶希ちゃんの「夢、見つかるといいね」に、ぼくは前向きにうなずきます。</p>
+  </div>
+</section>
+
+    <article class="q-card print-unit" id="q4-1">
+      <h3>大問4-問1</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>空欄補充・擬態語<span class="accuracy">推定正答率 80%（場面の空気を言葉にできるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>A〜Cにあてはまることばとして、最もふさわしいものを選び、それぞれ記号で答えなさい。（ただし、同じ記号は一回しか使えません。）</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">Aは、大河が予定と違う本当の夢を言ったあと、「オレは、やったぞ」と見える場面です。得意げに大きく笑うので「ニカッと」が合います。Bは、ぼくが発表前に詰まり、保護者や先生が見ている中で空気が「張りつめて」いる場面なので「ピンッと」。Cは、ぼくの発表後に微笑む人やうなずく人が出て、空気が「やわらいだ」場面なので「ふわっと」です。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>A＝エ、B＝イ、C＝ア</div>
+      <div class="subhead">空欄群の個別解説</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>記号</th><th>本文の前後関係</th><th>入る語</th><th>理由</th><th>誤りやすい点</th></tr></thead><tbody><tr><td>A</td><td>大河が本音を言い、ぼくに笑ってピースする。</td><td>ニカッと</td><td>得意げで明るい笑い。</td><td>「きょとんと」は分からない顔なので合わない。</td></tr><tr><td>B</td><td>ぼくが発表に詰まり、会場全体が緊張する。</td><td>ピンッと</td><td>張りつめた空気を表す。</td><td>「どよんと」は重く沈む感じで、張りつめるとは違う。</td></tr><tr><td>C</td><td>ぼくの正直な発表を聞いて、会場の緊張がほどける。</td><td>ふわっと</td><td>やわらいだ空気を表す。</td><td>「ニカッと」は人の笑いに使う。</td></tr></tbody></table></div>
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア ふわっと</td><td>Cでは「体育館の空気が、やわらいだ」とあるので、緊張がほどける感じの「ふわっと」が合う。</td><td>Aの大河の笑いは勢いがあり、Bの張りつめる空気には合わない。</td><td>○（C）</td></tr><tr><td>イ ピンッと</td><td>Bでは「空気が張りつめて、体がガチガチ」とあるので、緊張して張る感じの「ピンッと」が合う。</td><td>Aの笑い、Cのやわらぎには合わない。</td><td>○（B）</td></tr><tr><td>ウ どよんと</td><td>重く沈んだ空気を表す語。</td><td>本文のAは明るい笑い、Bは緊張、Cは安心。重く沈む場面はない。<br><b>【作問者の意図】</b>発表前の不安な場面に引っ張らせる。</td><td>×</td></tr><tr><td>エ ニカッと</td><td>Aでは大河が「オレは、やったぞ」と言ったように見える笑いなので、明るく得意げな「ニカッと」が合う。</td><td>B・Cには合わない。</td><td>○（A）</td></tr><tr><td>オ きょとんと</td><td>驚いてわからない顔を表す語。</td><td>Aの大河は得意げ、Bは緊張、Cはやわらぎ。どの空欄にも最適ではない。</td><td>×</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">A・B・Cそれぞれで、人物の表情か空気の様子かを分けて確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>擬態語は意味だけでなく、直後の「笑う」「張りつめる」「やわらぐ」と合わせる。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問4-問1：</strong>A〜Cにあてはまることばを選びなさい。</p>
+      <ol class="choice-list"><li><strong>ア</strong> にやりと</li><li><strong>イ</strong> ぴんと</li><li><strong>ウ</strong> すっと</li><li><strong>エ</strong> ふわりと</li><li><strong>オ</strong> しょんぼり</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>A＝ア、B＝イ、C＝エ</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア にやりと</td><td>大河の得意げな笑いに合う。</td><td>B・Cには合わない。</td><td>○（A）</td></tr><tr><td>イ ぴんと</td><td>「張りつめて」に合う。</td><td>A・Cには合わない。</td><td>○（B）</td></tr><tr><td>ウ すっと</td><td>空気の変化を表せるが、どの空欄にも決め手が弱い。</td><td>「笑って」「張りつめて」「やわらいだ」のどれにも最適ではない。</td><td>×</td></tr><tr><td>エ ふわりと</td><td>「やわらいだ」に合う。</td><td>A・Bには合わない。</td><td>○（C）</td></tr><tr><td>オ しょんぼり</td><td>落ちこむ様子。</td><td>大河・空気の変化に合わない。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q4-2">
+      <h3>大問4-問2</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・理由把握<span class="accuracy">推定正答率 84%（先生の夢とぼくの悩みを混同しないか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線①「それを言いたくなかったんだよなぁ」とありますが、なぜですか。その理由として、最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">「それ」は直前の「漫画家になりたかったんだ」を受けます。先生は「本当に漫画家になりたくてね。でも、そんなことを言ったら、みんなに笑われそうで、言いたくなかったんだ。自信がなかったから」と説明しています。だから、夢がないからではなく、本気の夢を笑われるのがこわかったからです。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>ウ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 絵を描くのが苦手だったので、「漫画家になりたい」と言ったらみんなに笑われると思ったから。</td><td>「漫画家になりたい」「笑われそう」は本文にある。</td><td>【原因のすり替え】本文は「自信がなかったから」と言うが、絵が苦手だったとは書かれていない。<br><b>【作問者の意図】</b>「漫画家」と「絵」を結びつけ、本文にない下手さを足している。</td><td>×</td></tr><tr><td>イ 運動も勉強も苦手だったので、「先生になりたい」と言ったらみんなに笑われると思ったから。</td><td>「運動も勉強も苦手」は本文にある。</td><td>【夢のすり替え】言いたくなかったのは「漫画家になりたい」。選択肢は「先生になりたい」に変えている。<br><b>【作問者の意図】</b>後で「学校の先生になりたいと言った」を混ぜて、時点をずらしている。</td><td>×</td></tr><tr><td>ウ 漫画家を本気で目指しているという夢を発表したら、みんなに笑われると思ったから。</td><td>「本当に漫画家になりたくてね」「みんなに笑われそうで、言いたくなかったんだ」を、そのまままとめている。</td><td>不一致なし。<br><b>【作問者の意図】</b>「本気だったから、笑われたくなくて」というぼくの受け止めと照合できるかを見る。</td><td>○</td></tr><tr><td>エ 得意なことがなく夢を持てずにいることが、みんなにばれたら笑われると思ったから。</td><td>夢を持てずにいるのは「ぼく」の問題として後半に出る。</td><td>【主語のすり替え】ハシケン先生は夢がないのではなく「漫画家になりたい」という夢があった。<br><b>【作問者の意図】</b>ぼくの悩みを先生の過去に混ぜている。</td><td>×</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">「それ」が何を指すかを先に置換し、「漫画家になりたい」を入れて自然か確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>ぼくの「夢がない」と先生の「夢を言えない」を混ぜない。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問4-問2：</strong>線①「それを言いたくなかったんだよなぁ」とありますが、なぜですか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 漫画家になりたいという本気の夢を、みんなに笑われるのがこわかったから。</li><li><strong>イ</strong> 先生になりたいという夢を、大人に反対されると思ったから。</li><li><strong>ウ</strong> 夢が何もないことを、友だちに知られたくなかったから。</li><li><strong>エ</strong> 絵が下手だと先生に叱られると思ったから。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 漫画家になりたいという本気の夢を、みんなに笑われるのがこわかったから。</td><td>「本当に漫画家になりたくて」「笑われそうで」に合う。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ 先生になりたいという夢を、大人に反対されると思ったから。</td><td>先生という語は後に出る。</td><td>言いたくなかった夢は漫画家。</td><td>×</td></tr><tr><td>ウ 夢が何もないことを、友だちに知られたくなかったから。</td><td>夢がないのはぼく・相川くん。</td><td>先生には夢があった。</td><td>×</td></tr><tr><td>エ 絵が下手だと先生に叱られると思ったから。</td><td>絵の話題に近い。</td><td>本文にない。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q4-3">
+      <h3>大問4-問3</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>記述問題・主題把握<span class="accuracy">推定正答率 63%（先生の過去話の目的をまとめられるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線②「あのとき、正直に言えば良かったなって」とありますが、ハシケン先生が自分の過去の話をしてくれたのはみんなにどのようなことを伝えるためですか。わかりやすく説明しなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">先生は「漫画家になりたい」と本当の夢を言えず、「学校の先生になりたい」と言ったことを後悔しています。そのうえで「みんなには、後悔しないでほしい」「どんな夢でも、堂々と発表してほしい」と言っています。つまり、過去の話は失敗談の披露ではなく、笑われることを恐れて本当の夢を隠すと後悔するので、自分の気持ちを正直に言ってほしいというメッセージです。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>笑われることを恐れて本当の夢を隠すと後悔するので、どんな夢でも自分の気持ちを正直に堂々と発表してほしいということ。</div>
+      <div class="subhead">文末設計</div><div class="detail-box">「〜ので、〜してほしいということ。」で、先生の過去の後悔と子どもたちへの願いをつなげます。</div><div class="subhead">採点基準</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>観点</th><th>内容</th></tr></thead><tbody><tr><td>先生の後悔</td><td>本当の夢を言えなかったことへの後悔を入れる。</td></tr><tr><td>伝えたいこと</td><td>笑われることを恐れず正直に発表してほしいことを入れる。</td></tr><tr><td>相手</td><td>みんな／子どもたちへの願いとして書く。</td></tr></tbody></table></div><div class="subhead">正解の幅3パターン</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>型</th><th>答案例</th></tr></thead><tbody><tr><td>短め</td><td>本当の夢を言わないと後悔するので、正直に発表してほしいということ。</td></tr><tr><td>標準</td><td>笑われるのを恐れて本当の夢を隠すと後悔するから、堂々と自分の夢を言ってほしいということ。</td></tr><tr><td>詳しめ</td><td>自分は本気の夢を言えず後悔したので、みんなには人に笑われることを恐れず、自分の大切な夢を正直に発表してほしいということ。</td></tr></tbody></table></div>
+      
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">「先生が後悔した」だけで終わらず、「みんなにどうしてほしいか」まで書いたか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>先生が漫画家になれなかった理由を書く問題ではない。</div>
+      
+    </article>
+    
+    <article class="q-card print-unit" id="q4-4">
+      <h3>大問4-問4</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・心情理由<span class="accuracy">推定正答率 77%（胸にしみる理由を先生の願いに戻せるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線③「先生の言葉が、じんわりと胸にしみていった」とありますが、なぜだと考えられますか。その理由として、最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">線③の直前で先生は「みんなには、後悔しないでほしい」「どんな夢でも、堂々と発表してほしい」と話しています。ここで胸にしみたのは、先生の昔の夢がおもしろいからではなく、自分の後悔を話してまで子どもたちを守ろうとする真剣さです。選択肢では、その願いが最もよくまとまっているものを選びます。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>イ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 夢を失う人がいたらそれは間違っていると断言しているハシケン先生がとても頼もしく、かっこよかったから。</td><td>先生は「笑ったりする人がいたら、それは間違っている」と言う。</td><td>【中心のずれ】「かっこよかった」ではなく、先生の「後悔しないでほしい」という願いが胸にしみた。<br><b>【作問者の意図】</b>強い言い方「間違っている」だけを使い、ぼくの受け止めをずらしている。</td><td>×</td></tr><tr><td>イ ハシケン先生の真剣な様子から、生徒のみんなには後悔してほしくないという思いがひしひしと伝わってきたから。</td><td>「一つだけ、後悔している」「みんなには、後悔しないでほしい」が、選択肢の「後悔してほしくない」と対応する。</td><td>不一致なし。<br><b>【作問者の意図】</b>先生の過去と現在の願いを一つにまとめており、心情の根拠を追えるかを見る。</td><td>○</td></tr><tr><td>ウ 本当は漫画家になりたかったハシケン先生が、今では自分たちの担任になっているという偶然がおかしかったから。</td><td>漫画家になりたかった先生が今は先生であることは本文にある。</td><td>【感情の反転】線③は「胸にしみる」で、笑い・おかしさではない。<br><b>【作問者の意図】</b>会場に笑いが起きる場面と、胸にしみる場面を混同させている。</td><td>×</td></tr><tr><td>エ ハシケン先生の中に、夢を見つけられずなんでいる自分と重なる部分を見つけ、親しみをいただいたから。</td><td>みんなが「自分のことと重ね合わせているような気がする」は本文にある。</td><td>【内容のずれ】先生は夢を見つけられなかったのではなく、夢を言えなかった。ぼくの悩みと同じではない。<br><b>【作問者の意図】</b>「自分のことと重ね合わせている」を使い、先生の状況をぼくと同じにしている。</td><td>×</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">「胸にしみる」場面の直前にある先生の言葉を確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「笑いが起きた」場面と「胸にしみた」場面を混同しない。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問4-問4：</strong>線③「先生の言葉が、じんわりと胸にしみていった」とありますが、なぜだと考えられますか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 先生が自分の後悔を話し、みんなには後悔しないでほしいと真剣に願っていたから。</li><li><strong>イ</strong> 先生が漫画家になる方法を具体的に教えてくれたから。</li><li><strong>ウ</strong> 先生の昔の失敗が面白く、教室のみんなが笑っていたから。</li><li><strong>エ</strong> 先生が夢のない人をきびしく注意したから。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 先生が自分の後悔を話し、みんなには後悔しないでほしいと真剣に願っていたから。</td><td>「後悔している」「後悔しないでほしい」に合う。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ 先生が漫画家になる方法を具体的に教えてくれたから。</td><td>漫画家は出る。</td><td>方法は教えていない。</td><td>×</td></tr><tr><td>ウ 先生の昔の失敗が面白く、教室のみんなが笑っていたから。</td><td>笑いの場面はある。</td><td>線③は胸にしみる場面。</td><td>×</td></tr><tr><td>エ 先生が夢のない人をきびしく注意したから。</td><td>夢がない人の話はある。</td><td>先生は注意せず相談すると言う。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q4-5">
+      <h3>大問4-問5</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・葛藤把握<span class="accuracy">推定正答率 70%（驚きと動揺の違いを見抜けるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線④「鼓動が激しくて、息をするのも苦しい」とありますが、なぜですか。その理由として、最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">大河も叶希ちゃんも、練習のときと違う本当の夢を言いました。ぼくは「だって、ハシケン先生のために……」と考え、先生を守るためにうその夢を言うべきか、先生の言葉どおり正直に言うべきかで揺れています。だから苦しいのは、単なる発表の緊張でも、二人への怒りでもなく、どうするべきか判断できない動揺です。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>ウ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 大河と叶希ちゃんの発表が終わり、自分の番が近づいてきたので、上手に発表できるか緊張しているから。</td><td>自分の番が近いことは状況としてある。</td><td>【理由の浅さ】ぼくが苦しくなったのは、上手に話せるかではなく、二人が練習と違う本音を言ったことで自分もどうするか揺れたため。<br><b>【作問者の意図】</b>発表会一般の緊張にずらしている。</td><td>×</td></tr><tr><td>イ 大河と叶希ちゃんが練習のときと違うことを発表したため、自分だけが仲間はずれだと思い、怒っているから。</td><td>「練習のときと違うこと」は本文にある。</td><td>【感情のすり替え】ぼくは怒っているのではなく「どうしよう」と動揺している。<br><b>【作問者の意図】</b>二人への驚きを、仲間はずれの怒りに変えている。</td><td>×</td></tr><tr><td>ウ 大河と叶希ちゃんの発表を受けて、ハシケン先生のためにうその夢を言うべきかどうか判断できず、動揺しているから。</td><td>「練習のときと違う」「どうしよう」「だって、ハシケン先生のために……」が、選択肢の「判断できず、動揺」と対応する。</td><td>不一致なし。<br><b>【作問者の意図】</b>ぼくの表向きの理由「先生のため」と、本当の揺れをつなげて読めるかを見る。</td><td>○</td></tr><tr><td>エ 大河と叶希ちゃんの、ゲーマーとプロボクサーになりたいという夢を初めて知って、おどろいているから。</td><td>二人の本当の夢を知って驚いたことはある。</td><td>【理由の不足】驚きだけでなく、自分の発表をどうするかという苦しさが中心。<br><b>【作問者の意図】</b>直前の出来事だけで止まり、ぼくの内面の選択に進ませない。</td><td>×</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">直前の「どうしよう」「ハシケン先生のために」を根拠にしたか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「自分の番が近いから緊張」と一般化しすぎない。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問4-問5：</strong>線④「鼓動が激しくて、息をするのも苦しい」とありますが、なぜですか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 二人が本音を言ったため、自分も本当のことを言うべきか迷っているから。</li><li><strong>イ</strong> 二人が笑われたので、自分も笑われると腹を立てているから。</li><li><strong>ウ</strong> 発表の順番をまちがえたことに気づいてあせっているから。</li><li><strong>エ</strong> 大河の夢を初めて聞いて、うらやましくなったから。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 二人が本音を言ったため、自分も本当のことを言うべきか迷っているから。</td><td>「練習のときと違う」「どうしよう」に合う。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ 二人が笑われたので、自分も笑われると腹を立てているから。</td><td>笑いはある。</td><td>怒りではなく動揺。</td><td>×</td></tr><tr><td>ウ 発表の順番をまちがえたことに気づいてあせっているから。</td><td>発表順はある。</td><td>本文にない。</td><td>×</td></tr><tr><td>エ 大河の夢を初めて聞いて、うらやましくなったから。</td><td>大河の夢は出る。</td><td>うらやましいとはない。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q4-6">
+      <h3>大問4-問6</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・行動理由<span class="accuracy">推定正答率 67%（直前の笑顔だけでなく過去話まで戻れるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線⑤「ぼくは……夢がありません」とありますが、「ぼく」が正直な気持ちを発表したのはなぜですか。その理由として、最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">ぼくは、発表直前に「ハシケン先生だって、本当のことを言わなかったから、後悔しているって」と思い出しています。先生はぼくらに同じ後悔をしてほしくないから、自分の過去を話してくれたのだと、ぼくは受け止めています。ハシケン先生の笑顔も支えになりますが、決め手は「自分も後悔したくない」という思いです。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>エ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア ほかの先生たちが心配そうに自分のことを見ている一方で、ハシケン先生だけが笑顔で自分を見ているので安心したから。</td><td>「一人だけにこにこ笑っている」は本文にある。</td><td>【きっかけ止まり】笑顔は支えだが、正直に言った理由の中心は「先生の後悔」と「ぼくも後悔したくない」こと。<br><b>【作問者の意図】</b>直前の目が合う場面だけを理由にしている。</td><td>×</td></tr><tr><td>イ 大河も叶希ちゃんも自分が本当になりたいものについて発表したので、自分だけ本当のことを言わないのは気が引けたから。</td><td>二人が本音を発表したことは、ぼくを揺らすきっかけ。</td><td>【理由の言いすぎ】「気が引けたから」とは本文にない。ぼくはハシケン先生の言葉を思い出している。<br><b>【作問者の意図】</b>仲間への同調に見せて、先生の言葉の重みを落としている。</td><td>×</td></tr><tr><td>ウ ハシケン先生が自分たちを怖がらせるために「言ったことが本当になる」と話したので、うそをつくことが不安になったから。</td><td>「言ったことが、本当になってしまうこともある」は本文にある。</td><td>【目的のすり替え】先生は怖がらせるためではなく、後悔しないでほしいために話している。<br><b>【作問者の意図】</b>印象的な「言霊」を使い、先生の意図を反対にしている。</td><td>×</td></tr><tr><td>エ ハシケン先生が本当のことを言わなかったことを後悔していると言っていたので、自分は後悔したくないと思ったから。</td><td>「本当のことを言わなかったから、後悔している」「ぼくらに同じ思いをしてほしくない」が、選択肢の「自分は後悔したくない」と対応する。</td><td>不一致なし。<br><b>【作問者の意図】</b>線⑤の直前だけでなく、先生の過去話まで戻れるかを見る。</td><td>○</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">線⑤の直前だけでなく、先生の「後悔」の話まで戻って理由を確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>目が合った笑顔だけを理由にすると、ぼくの内面の変化が浅くなる。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問4-問6：</strong>線⑤「ぼくは……夢がありません」とありますが、ぼくが正直な気持ちを発表したのはなぜですか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 先生の後悔の話を思い出し、自分も本当のことを言わないで後悔したくないと思ったから。</li><li><strong>イ</strong> 保護者席がざわめいて、早く発表を終わらせたかったから。</li><li><strong>ウ</strong> 校長先生にほめられるために、目立つことを言いたかったから。</li><li><strong>エ</strong> 大河と叶希ちゃんの夢をまねしてもよいと思ったから。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 先生の後悔の話を思い出し、自分も本当のことを言わないで後悔したくないと思ったから。</td><td>「後悔している」「同じ思いをしてほしくない」に合う。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ 保護者席がざわめいて、早く発表を終わらせたかったから。</td><td>ざわめきは発表後。</td><td>理由の時点が逆。</td><td>×</td></tr><tr><td>ウ 校長先生にほめられるために、目立つことを言いたかったから。</td><td>校長先生は出る。</td><td>ほめられるためとはない。</td><td>×</td></tr><tr><td>エ 大河と叶希ちゃんの夢をまねしてもよいと思ったから。</td><td>二人は影響を与える。</td><td>夢をまねたのではない。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q4-7">
+      <h3>大問4-問7</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>選択肢問題・人物評価<span class="accuracy">推定正答率 74%（会場の反応ではなく正直さを見るか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線⑥「二人とも、すごいな」とありますが、二人のどのようなところを「すごい」と思ったのですか。最もふさわしいものを選びなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">大河は家の精肉店をつぐと言うはずだったのに、世界で活躍するゲーマーになりたいと言いました。叶希ちゃんも、お菓子作りではなく、プロボクサーになりたいと正直に言いました。二人は、人からどう思われるかよりも、自分が本当に好きなことを言えたので、ぼくは「すごい」と感じています。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>エ</div>
+      
+      <div class="subhead">選択肢ごとの照合結果</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 自分が本当になりたいものを発表して、会場にいる人たちを笑わせたり、おどろかせたりしたところ。</td><td>大河で笑い、叶希でどよめきが起きた。</td><td>【結果へのすり替え】すごいのは会場の反応を起こしたことではなく、本音を言えたこと。<br><b>【作問者の意図】</b>目立つ反応を使い、心情の中心からずらしている。</td><td>×</td></tr><tr><td>イ ずっとなりたいと思っていた自分の夢を変えるほど、ハシケン先生の話をきちんと聞いているところ。</td><td>先生の話で二人が自分を見直したことはある。</td><td>【内容の誇張】二人は「夢を変えた」のではなく、親や周囲の期待ではなく自分の好きなことを言った。<br><b>【作問者の意図】</b>「肉屋」「お菓子作り」からの変更を、夢そのものの乗り換えのように見せている。</td><td>×</td></tr><tr><td>ウ 自分のなりたいものがはっきりと決まっており、その夢に向かってひたむきに努力しているところ。</td><td>二人にはなりたいものがある。</td><td>【本文にない要素の追加】努力しているとは書かれていない。ぼくが感心したのは正直さ。<br><b>【作問者の意図】</b>夢＝努力という一般的な美談にすり替えている。</td><td>×</td></tr><tr><td>エ 人にどう思われるか気にせず、自分が本当に好きなことや、なりたいものを正直に発表していたところ。</td><td>大河はゲーマー、叶希はプロボクサーと、練習と違って本音を言った。本文の「だれがどう思ったかじゃなくて、ぼくがどう思うか」とも対応する。</td><td>不一致なし。<br><b>【作問者の意図】</b>二人の行動を、ぼくが得た結論「自分がどう思うか」にまとめて読ませる。</td><td>○</td></tr></tbody></table></div>
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">二人が会場を笑わせたことではなく、「自分の本音を言ったこと」を答えにしているか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>目立った結果ではなく、人物の内面の強さを読む。</div>
+      
+    <div class="subhead">理解確認テスト</div>
+    <div class="test-box">
+      <p class="question-mini"><strong>大問4-問7：</strong>線⑥「二人とも、すごいな」とありますが、二人のどのようなところを「すごい」と思ったのですか。</p>
+      <ol class="choice-list"><li><strong>ア</strong> 人の見方を気にせず、自分が本当に好きなことを言えたところ。</li><li><strong>イ</strong> 発表でみんなを笑わせるために、わざと変な夢を言ったところ。</li><li><strong>ウ</strong> 夢のために毎日努力していることを、詳しく説明したところ。</li><li><strong>エ</strong> ハシケン先生を守るために、うその夢を言い通したところ。</li></ol>
+      <details>
+        <summary>解答・解説を表示</summary>
+        <div class="subhead small">解答</div>
+        <div class="answer-box"><strong>解答：</strong>ア</div>
+        <div class="subhead small">選択肢ごとの照合結果</div>
+        <div class="table-wrap"><table class="choice-table"><thead><tr><th>選択肢（全文）</th><th>合致するところ（本文引用＋選択肢表現の対応）</th><th>合致しないところ</th><th>判定</th></tr></thead><tbody><tr><td>ア 人の見方を気にせず、自分が本当に好きなことを言えたところ。</td><td>「だれがどう思ったかじゃなくて、ぼくがどう思うか」と対応。</td><td>不一致なし。</td><td>○</td></tr><tr><td>イ 発表でみんなを笑わせるために、わざと変な夢を言ったところ。</td><td>笑いは起きる。</td><td>目的は笑わせることではない。</td><td>×</td></tr><tr><td>ウ 夢のために毎日努力していることを、詳しく説明したところ。</td><td>夢の話題に近い。</td><td>努力の説明はない。</td><td>×</td></tr><tr><td>エ ハシケン先生を守るために、うその夢を言い通したところ。</td><td>先生のためという考えはぼくにある。</td><td>二人は本音を言っている。</td><td>×</td></tr></tbody></table></div>
+      </details>
+    </div>
+    
+    </article>
+    
+    <article class="q-card print-unit" id="q4-8">
+      <h3>大問4-問8</h3>
+      <div class="meta-row"><span class="label">問題タイプ</span>記述問題・心情説明<span class="accuracy">推定正答率 62%（前向きな変化を言葉にできるか）</span></div>
+      <div class="question"><strong>設問文の再掲：</strong>線⑦「ぼくはうなずいた」とありますが、このときの「ぼく」の気持ちを説明しなさい。</div>
+      <div class="subhead">思考プロセス＋解説</div>
+      <div class="detail-box">叶希ちゃんの「夢、見つかるといいね」を聞いたとき、ぼくはもう「夢がないからだめだ」とは思っていません。発表で「得意なことがなくても、ぼくは、ぼくのやりたいことをすればいい」と気づき、帰り道でも「たいせつなのは、だれがどう思ったかじゃなくて、ぼくがどう思うか」と分かっています。だから、うなずきには、これから自分の本当にやりたいことを探していこうという前向きな気持ちがあります。</div>
+      <div class="subhead">解答</div>
+      <div class="answer-box"><strong>解答：</strong>自分のやりたいことを大切にしていれば、これから夢が見つかるかもしれないと前向きになり、叶希ちゃんの言葉を受け入れている気持ち。</div>
+      <div class="subhead">文末設計</div><div class="detail-box">「〜と思い、〜している気持ち。」で、気づきと現在の心情をつなげます。</div><div class="subhead">採点基準</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>観点</th><th>内容</th></tr></thead><tbody><tr><td>気づき</td><td>大切なのは周りの評価ではなく自分がどう思うか、を入れる。</td></tr><tr><td>夢への見方</td><td>夢がないことを否定的に見すぎず、これから見つければよいと入れる。</td></tr><tr><td>心情</td><td>前向き・受け入れている・安心などを入れる。</td></tr></tbody></table></div><div class="subhead">正解の幅3パターン</div><div class="table-wrap"><table class="choice-table"><thead><tr><th>型</th><th>答案例</th></tr></thead><tbody><tr><td>短め</td><td>自分のやりたいことを大切にすれば、これから夢が見つかると思っている気持ち。</td></tr><tr><td>標準</td><td>人の目ではなく自分の気持ちを大切にしていれば、いつか夢が見つかると前向きになっている気持ち。</td></tr><tr><td>詳しめ</td><td>夢がない自分をだめだと思わず、これから自分が本当に好きなことを見つけていけばよいと、叶希ちゃんの言葉を素直に受け止めている気持ち。</td></tr></tbody></table></div>
+      
+      <div class="subhead">答案チェック</div>
+      <div class="detail-box">「うなずく」動作を、同意だけでなく前向きな気持ちとして説明できているか確認します。</div>
+      <div class="pitfall"><strong>間違えやすい点：</strong>「夢が見つかった」と言い切らない。本文では、これから見つかると思っている段階です。</div>
+      
+    </article>
+    
+
+<section id="answers" class="card print-unit">
+  <h2>最終答案一覧</h2>
+  <div class="table-wrap"><table class="final-table"><thead><tr><th>大問</th><th>問</th><th>最終答案</th></tr></thead><tbody>
+  <tr><td>3</td><td>問1</td><td>A＝エ、B＝オ、C＝ウ</td></tr><tr><td>3</td><td>問2</td><td>エ</td></tr><tr><td>3</td><td>問3</td><td>はじめ：タネになっ／終わり：きていこう</td></tr><tr><td>3</td><td>問4</td><td>ウ</td></tr><tr><td>3</td><td>問5</td><td>ア</td></tr><tr><td>3</td><td>問6</td><td>イ</td></tr><tr><td>3</td><td>問7</td><td>草花が春に花を咲かせるのは、春の暖かさを喜ぶためではなく、夏の暑さなどに耐えるためのタネをつくり、姿を消す準備をするためだから。</td></tr><tr><td>3</td><td>問8</td><td>ア＝×、イ＝〇、ウ＝〇、エ＝×、オ＝〇</td></tr><tr><td>4</td><td>問1</td><td>A＝エ、B＝イ、C＝ア</td></tr><tr><td>4</td><td>問2</td><td>ウ</td></tr><tr><td>4</td><td>問3</td><td>笑われることを恐れて本当の夢を隠すと後悔するので、どんな夢でも自分の気持ちを正直に堂々と発表してほしいということ。</td></tr><tr><td>4</td><td>問4</td><td>イ</td></tr><tr><td>4</td><td>問5</td><td>ウ</td></tr><tr><td>4</td><td>問6</td><td>エ</td></tr><tr><td>4</td><td>問7</td><td>エ</td></tr><tr><td>4</td><td>問8</td><td>自分のやりたいことを大切にしていれば、これから夢が見つかるかもしれないと前向きになり、叶希ちゃんの言葉を受け入れている気持ち。</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="summary" class="card print-unit">
+  <h2>今回の学習まとめ</h2>
+  <h3>再現したい手順</h3>
+  <ol>
+    <li>説明文では、最初の問いと最後のまとめをつなぐ。</li>
+    <li>物語文では、言葉・動作・表情を「気持ち」に直す。</li>
+    <li>選択肢は、本文の語句があるだけで選ばず、主語・理由・時点・結論を照合する。</li>
+    <li>記述は、本文の対比や心情変化を「〜だから」「〜と思って」の形で組み立てる。</li>
+  </ol>
+  <h3>間違えやすい点</h3>
+  <div class="detail-box">大問3では「暖かいから花が咲く」という見た目の理由に引っ張られやすいです。大問4では「発表で緊張した」という一般的な理由に飛びつくと、ぼくの本当の葛藤を落とします。</div>
+  <h3>次に同タイプで使う塾技</h3>
+  <div class="detail-box">説明文は「問い→答え→実験→まとめ」を追う。物語文は「本心とは違う言動」と「気持ちの変化のきっかけ」を線で結ぶ。</div>
+  <h3>問ごとの塾技活用まとめ</h3>
+  <div class="table-wrap"><table class="choice-table"><thead><tr><th>問</th><th>使う塾技</th><th>次に再現すること</th></tr></thead><tbody><tr><td>大問3-問1</td><td>接続語は前後の関係で決める</td><td>逆接・理由結果・順接を分ける。</td></tr><tr><td>大問3-問2</td><td>設問対象を固定する</td><td>「タネの力」と「葉が夜をはかる力」を混同しない。</td></tr><tr><td>大問3-問3</td><td>同じ語の再登場を探す</td><td>「思いとは」のような言い直しが抜き出しの決め手。</td></tr><tr><td>大問3-問4</td><td>直後のまとめまで読む</td><td>春だけでなく秋の草花まで含む範囲を読む。</td></tr><tr><td>大問3-問5</td><td>実験は目的と条件を分ける</td><td>道具ではなく、何を変えた実験かを読む。</td></tr><tr><td>大問3-問6</td><td>対比を読む</td><td>人間の見方と草花側の意味を分ける。</td></tr><tr><td>大問3-問7</td><td>理由記述は対比型</td><td>誤解→本当の理由の順で書く。</td></tr><tr><td>大問3-問8</td><td>〇×は言いすぎを消す</td><td>「〜しか」など本文より強い表現に注意。</td></tr><tr><td>大問4-問1</td><td>擬態語は場面固定</td><td>表情・空気・緊張の種類を分ける。</td></tr><tr><td>大問4-問2</td><td>指示語を置換する</td><td>「それ」＝漫画家になりたいという夢。</td></tr><tr><td>大問4-問3</td><td>過去話の目的を見る</td><td>先生の失敗談ではなく、子どもたちへの願い。</td></tr><tr><td>大問4-問4</td><td>心情の理由は直前の言葉</td><td>「後悔しないでほしい」が決め手。</td></tr><tr><td>大問4-問5</td><td>葛藤を読む</td><td>驚きではなく、うそを言うか本音を言うかの迷い。</td></tr><tr><td>大問4-問6</td><td>行動理由は少し前まで戻る</td><td>先生の後悔の話が発表の決め手。</td></tr><tr><td>大問4-問7</td><td>人物評価は結果より内面</td><td>笑わせたことではなく、本音を言えたこと。</td></tr><tr><td>大問4-問8</td><td>動作を心情に直す</td><td>うなずく＝前向きな受け入れ。</td></tr></tbody></table></div>
+  <h3>記述の書き方ミニまとめ</h3>
+  <div class="detail-box">大問3-問7は「〜のためではなく、〜のためだから」の対比型。大問4-問3は「先生が後悔したので、みんなには〜してほしいということ」の目的型。大問4-問8は「〜と思い、〜している気持ち」の心情型で書くと、本文根拠が入りやすくなります。</div>
+</section>
+</main>
+</body>
+</html>
