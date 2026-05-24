@@ -1,0 +1,2574 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic AI 完全構築ガイド ― ゼロから同じシステムを作る</title>
+<style>
+  :root {
+    --navy: #0f2c4a;
+    --navy-light: #1e4976;
+    --navy-soft: #2c5f8d;
+    --accent: #c8941f;
+    --accent-light: #f4e4b8;
+    --accent-deep: #8b6914;
+    --bg: #fafbfc;
+    --bg-card: #ffffff;
+    --border: #d8dde3;
+    --border-soft: #e8ebef;
+    --text: #1a2332;
+    --text-soft: #4a5568;
+    --text-mute: #6b7480;
+    --info-bg: #eef4fb;
+    --info-bd: #b8d4ed;
+    --warn-bg: #fdf6e7;
+    --warn-bd: #e8c878;
+    --tip-bg: #ecf6ed;
+    --tip-bd: #afd4b6;
+    --danger-bg: #fcecec;
+    --danger-bd: #e8a8a8;
+    --code-bg: #f3f4f6;
+    --code-block-bg: #1a2332;
+    --code-block-text: #e8ecf2;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.78;
+    font-size: 15px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  /* Sidebar */
+  aside {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--navy);
+    color: #e8ecf2;
+    padding: 28px 20px;
+    border-right: 1px solid var(--navy-light);
+  }
+  aside::-webkit-scrollbar { width: 6px; }
+  aside::-webkit-scrollbar-track { background: var(--navy); }
+  aside::-webkit-scrollbar-thumb { background: var(--navy-soft); border-radius: 3px; }
+  aside .brand {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  aside h1 {
+    font-size: 17px;
+    line-height: 1.4;
+    margin: 0 0 24px 0;
+    color: #fff;
+    font-weight: 600;
+  }
+  aside nav ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: section;
+    font-size: 12.5px;
+  }
+  aside nav ol li {
+    counter-increment: section;
+    margin: 2px 0;
+  }
+  aside nav ol li a {
+    display: block;
+    color: #c0cad6;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.4;
+  }
+  aside nav ol li a::before {
+    content: counter(section, decimal-leading-zero) " · ";
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  aside nav ol li a:hover {
+    background: var(--navy-light);
+    color: #fff;
+  }
+  aside .footnote {
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1px solid var(--navy-light);
+    font-size: 11px;
+    color: #8a98aa;
+    line-height: 1.6;
+  }
+  /* Main */
+  main {
+    padding: 0 56px 100px;
+    max-width: 1080px;
+  }
+  header.hero {
+    padding: 56px 0 32px;
+    border-bottom: 3px solid var(--navy);
+    margin-bottom: 48px;
+  }
+  header.hero .eyebrow {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  header.hero h1 {
+    font-size: 32px;
+    line-height: 1.3;
+    margin: 0 0 12px 0;
+    color: var(--navy);
+    font-weight: 700;
+  }
+  header.hero .lede {
+    color: var(--text-soft);
+    font-size: 16px;
+    max-width: 800px;
+    margin: 0 0 8px 0;
+  }
+  header.hero .lede strong { color: var(--navy); }
+  header.hero .meta {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    font-size: 12.5px;
+    color: var(--text-mute);
+  }
+  header.hero .meta span strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  section {
+    margin-bottom: 72px;
+    scroll-margin-top: 24px;
+  }
+  section > h2 {
+    font-size: 24px;
+    color: var(--navy);
+    border-left: 5px solid var(--accent);
+    padding: 4px 0 4px 14px;
+    margin: 0 0 22px 0;
+    font-weight: 700;
+  }
+  section > h2 .num {
+    color: var(--accent);
+    margin-right: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  section > .lede {
+    color: var(--text-soft);
+    font-size: 15px;
+    border-left: 2px solid var(--border);
+    padding: 4px 0 4px 16px;
+    margin-bottom: 24px;
+  }
+  h3 {
+    font-size: 18px;
+    color: var(--navy-light);
+    margin: 36px 0 12px 0;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  h4 {
+    font-size: 15px;
+    margin: 22px 0 6px 0;
+    color: var(--navy);
+    font-weight: 700;
+  }
+  p { margin: 8px 0 12px 0; }
+  ul, ol { margin: 8px 0 16px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  strong { color: var(--text); font-weight: 700; }
+
+  /* Inline code */
+  code {
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 0.88em;
+    color: #b13a4d;
+  }
+  /* Code blocks */
+  pre {
+    background: var(--code-block-bg);
+    color: var(--code-block-text);
+    padding: 16px 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 12px 0 20px 0;
+    border-left: 4px solid var(--accent);
+  }
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+  }
+  pre .c-com { color: #7a8b9c; font-style: italic; }
+  pre .c-kw { color: #ff9b6e; }
+  pre .c-str { color: #b8e6a8; }
+  pre .c-fn { color: #8ec5ff; }
+  pre .c-num { color: #f4d06f; }
+
+  /* TOOLTIP - the core feature for term explanations */
+  .term {
+    border-bottom: 1.5px dotted var(--accent);
+    cursor: help;
+    position: relative;
+    color: var(--accent-deep);
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .term:hover { background: var(--accent-light); }
+  .term::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: normal;
+    width: 320px;
+    max-width: 90vw;
+    z-index: 100;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s 0.05s, visibility 0.15s 0.05s;
+    pointer-events: none;
+    text-align: left;
+  }
+  .term::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--navy);
+    z-index: 101;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s 0.05s, visibility 0.15s 0.05s;
+    pointer-events: none;
+  }
+  .term:hover::after, .term:hover::before {
+    opacity: 1;
+    visibility: visible;
+  }
+  /* Tooltip variant: below (for terms near top of page) */
+  .term.tip-below::after {
+    bottom: auto;
+    top: calc(100% + 8px);
+  }
+  .term.tip-below::before {
+    bottom: auto;
+    top: calc(100% + 2px);
+    border-top-color: transparent;
+    border-bottom-color: var(--navy);
+  }
+
+  /* Callouts */
+  .callout {
+    border-left: 4px solid;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px;
+  }
+  .callout .label {
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .callout.info { background: var(--info-bg); border-color: #4a86c4; }
+  .callout.info .label { color: #2a5a8c; }
+  .callout.warn { background: var(--warn-bg); border-color: var(--accent); }
+  .callout.warn .label { color: var(--accent-deep); }
+  .callout.tip { background: var(--tip-bg); border-color: #5a9a64; }
+  .callout.tip .label { color: #3a6a44; }
+  .callout.danger { background: var(--danger-bg); border-color: #c45a5a; }
+  .callout.danger .label { color: #8b3a3a; }
+  .callout p:first-child { margin-top: 0; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--navy);
+    padding: 16px 18px;
+    border-radius: 4px;
+  }
+  .card.accent { border-top-color: var(--accent); }
+  .card h4 {
+    margin: 0 0 8px 0;
+    color: var(--navy);
+    font-size: 14px;
+  }
+  .card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.65;
+  }
+  .card .badge {
+    display: inline-block;
+    background: var(--info-bg);
+    color: var(--navy-light);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px 0;
+    font-size: 13.5px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12.5px;
+  }
+  td {
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text-soft);
+  }
+  tr:nth-child(even) td { background: #f6f8fa; }
+  td strong { color: var(--text); }
+
+  /* Diagram */
+  .diagram {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram .caption {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-mute);
+    font-style: italic;
+  }
+
+  /* Step list */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+  }
+  .steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 14px 18px 14px 60px;
+    margin-bottom: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    width: 32px;
+    height: 32px;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .steps > li > strong:first-child {
+    display: block;
+    color: var(--navy);
+    margin-bottom: 6px;
+    font-size: 14.5px;
+  }
+  .steps > li > strong:first-child + p { margin-top: 0; }
+
+  /* Glossary */
+  .glossary {
+    margin: 12px 0;
+  }
+  .glossary dt {
+    font-weight: 700;
+    color: var(--navy);
+    margin-top: 16px;
+    font-size: 14.5px;
+    border-left: 3px solid var(--accent);
+    padding-left: 10px;
+  }
+  .glossary dd {
+    margin: 4px 0 0 12px;
+    padding-left: 0;
+    color: var(--text-soft);
+    font-size: 13.5px;
+  }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent-deep);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin: 0 4px 4px 0;
+    letter-spacing: 0.02em;
+  }
+  .tag.aws { background: #ff9900; color: #232f3e; }
+  .tag.fw { background: #d8e7f5; color: #1e4976; }
+  .tag.lang { background: #d4e6dc; color: #2c5c3a; }
+  .tag.opt { background: #ece8f5; color: #4c3a8a; }
+
+  /* Two column */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 16px 0;
+  }
+  .two-col > div { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; }
+  .two-col h4 { margin-top: 0; }
+
+  /* Section divider/header inside section */
+  .section-bar {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 4px;
+    margin: 24px 0 12px 0;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .section-bar .num { color: var(--accent); margin-right: 8px; }
+
+  /* Reading guide marker */
+  .reading-tag {
+    display: inline-block;
+    background: var(--info-bg);
+    color: var(--navy);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  @media print {
+    aside { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    main { padding: 0 20px; }
+    .term { border-bottom: none; color: var(--text); }
+    .term::after, .term::before { display: none; }
+  }
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; }
+    main { padding: 20px; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<div class="layout">
+  <aside>
+    <div class="brand">Complete Build Guide</div>
+    <h1>Agentic AI を<br/>ゼロから構築する</h1>
+    <nav>
+      <ol>
+        <li><a href="#sec0">ガイドの読み方</a></li>
+        <li><a href="#sec1">前提の3つの世界</a></li>
+        <li><a href="#sec2">Agentic AIとは</a></li>
+        <li><a href="#sec3">題材プロジェクト</a></li>
+        <li><a href="#sec4">全体アーキテクチャ</a></li>
+        <li><a href="#sec5">AWSサービス基礎</a></li>
+        <li><a href="#sec6">マルチエージェント設計</a></li>
+        <li><a href="#sec7">RAG設計と構築</a></li>
+        <li><a href="#sec8">プロンプト設計</a></li>
+        <li><a href="#sec9">技術スタック詳細</a></li>
+        <li><a href="#sec10">開発環境セットアップ</a></li>
+        <li><a href="#sec11">AWSアカウント準備</a></li>
+        <li><a href="#sec12">インフラ構築（CDK手順）</a></li>
+        <li><a href="#sec13">Agentの実装</a></li>
+        <li><a href="#sec14">Orchestratorの実装</a></li>
+        <li><a href="#sec15">Backendの実装</a></li>
+        <li><a href="#sec16">UIの実装</a></li>
+        <li><a href="#sec17">RAGの構築手順</a></li>
+        <li><a href="#sec18">デプロイと動作確認</a></li>
+        <li><a href="#sec19">運用・監視</a></li>
+        <li><a href="#sec20">トラブルシューティング</a></li>
+        <li><a href="#sec21">拡張・次のステップ</a></li>
+        <li><a href="#sec22">用語集（50音順）</a></li>
+      </ol>
+    </nav>
+    <div class="footnote">
+      下線付きの<span style="color:var(--accent);border-bottom:1.5px dotted var(--accent);">用語</span>にマウスを当てると、その場で意味が表示されます。<br/><br/>
+      題材：調達向け情報検索エージェント（PoC開発、2026年3月納品物一式）
+    </div>
+  </aside>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Agentic AI · Build From Zero</div>
+      <h1>Agentic AI 完全構築ガイド<br/>― ゼロから同じシステムを作るための実践書 ―</h1>
+      <p class="lede">
+        本資料は、<strong>「クラウドもLambdaも知らない」</strong>状態から出発し、
+        Agentic AIシステムを<strong>自分で構築できるところまで</strong>到達することを目的としています。
+        実在の納品案件「調達向け情報検索エージェント」を題材に、概念・設計・コード・コマンド・運用を
+        体系立てて解説します。専門用語にはマウスホバーで意味が表示されます。
+      </p>
+      <div class="meta">
+        <span><strong>対象：</strong>クラウド初学者／Lambdaを知らないレベルからOK</span>
+        <span><strong>到達点：</strong>同等システムの自力構築</span>
+        <span><strong>章数：</strong>22章</span>
+        <span><strong>所要時間：</strong>通読3〜4時間／実装は数週間</span>
+      </div>
+    </header>
+
+    <!-- ========== Section 0 ========== -->
+    <section id="sec0">
+      <h2><span class="num">00</span>このガイドの読み方</h2>
+      <p class="lede">
+        本ガイドは「読む順番」を前提に組み立てられています。途中から読んでも理解できるよう用語ツールチップを各所に入れていますが、可能なら頭から進めるのが最短です。
+      </p>
+
+      <h3>3つの読み方</h3>
+      <div class="card-grid">
+        <div class="card">
+          <h4>① 全体を理解したい</h4>
+          <p>01〜09章を順に読む。Agentic AIとは何か、何で構成されるか、各要素が何をやるかが体系的に分かります（約2時間）。</p>
+        </div>
+        <div class="card accent">
+          <h4>② 同じものを作りたい</h4>
+          <p>全章を通読のうえ、10章以降を実機で実施。AWSアカウント取得 → CDKデプロイ → Agent実装 → RAG構築の順で進む構成です。</p>
+        </div>
+        <div class="card">
+          <h4>③ 部分参考にしたい</h4>
+          <p>22章の用語集から関連章へ飛ぶ。各章は独立して読めるように書かれており、相互参照リンクで補完されます。</p>
+        </div>
+      </div>
+
+      <h3>ツールチップの使い方</h3>
+      <p>
+        本文中の<span class="term tip-below" data-tip="この下線の付いた語にマウスを乗せると、こうやって説明が表示されます。専門用語の意味をその場で確認できます。">下線付き用語</span>は、マウスを乗せるとその場で意味が表示されます。
+        スマホで閲覧する場合はタップしても表示されます。詳細は22章の用語集を参照してください。
+      </p>
+
+      <div class="callout info">
+        <span class="label">本ガイドが目指す到達点</span>
+        <p>読了後にあなたが「自力で」できるようになることは次の通りです：</p>
+        <ul>
+          <li>AWSアカウントを取得し、必要な権限・サービスを有効化する</li>
+          <li><span class="term tip-below" data-tip="AWS Cloud Development Kit。AWSリソース構成をTypeScript等のコードで定義し、cdk deployコマンドで自動構築するツール。">AWS CDK</span>でインフラ一式（CloudFront、API Gateway、Lambda、S3、Cognito等）を自動構築する</li>
+          <li>Strands AgentsとBedrock AgentCoreで複数のAIエージェントを実装・デプロイする</li>
+          <li>Bedrock Knowledge BasesでRAGの知識基盤を構築する</li>
+          <li>Next.jsとassistant-uiでチャット画面を作る</li>
+          <li>会話履歴・トレース・ログを観測し運用する</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== Section 1: 3つの前提世界 ========== -->
+    <section id="sec1">
+      <h2><span class="num">01</span>前提として知っておくべき3つの世界</h2>
+      <p class="lede">
+        Agentic AIシステムは「AI」「クラウド」「コード」の3つの世界が絡み合った構築物です。
+        まずこの3つそれぞれが何なのか、最低限の前提を揃えましょう。
+      </p>
+
+      <h3>1-1. AIの世界 ―<span class="term" data-tip="Large Language Model（大規模言語モデル）。GPT、Claude、Llamaなど。膨大なテキストで事前学習され、自然言語の理解と生成を行う。">LLM</span>とは何か</h3>
+      <p>
+        <span class="term" data-tip="Large Language Model。大量のテキストで学習されたAIで、文脈を理解し人間のような文章を生成できる。GPT-4、Claude、Geminiなどが代表的。">LLM</span>（大規模言語モデル）は、文章を入力するとそれに続く文章を確率的に予測するAIです。
+        OpenAIの<span class="term" data-tip="OpenAI社が開発したLLMシリーズ。GPT-4o、GPT-4等。APIで利用可能。">GPT</span>シリーズ、Anthropicの<span class="term" data-tip="Anthropic社が開発したLLMシリーズ。Claude Sonnet/Opus/Haikuなど。AWS Bedrock経由でも利用可能。">Claude</span>シリーズ、Metaの<span class="term" data-tip="Meta社が公開しているオープンウェイトのLLM。自前のサーバでも動かせる。">Llama</span>などが代表例です。LLMは「事前学習」した知識しか持っていないため、社内文書や最新情報を扱うには工夫（<span class="term" data-tip="Retrieval-Augmented Generation。外部DBから関連文書を検索しLLMに渡して回答精度を上げる手法。">RAG</span>やツール連携）が必要になります。
+      </p>
+
+      <h4>LLMの呼び出し方</h4>
+      <p>LLMは多くの場合<span class="term" data-tip="Application Programming Interface。プログラム同士がデータをやり取りするための約束事。HTTPリクエストでアクセスする形が一般的。">API</span>で呼び出します。本案件では、AWS上の<span class="term" data-tip="AWSが提供する基盤モデル統合サービス。Claude、Llama、Titanなど複数LLMを統一APIで呼び出せる。">Bedrock</span>経由でClaude Sonnet 4.5を呼んでいます。</p>
+
+      <pre><code><span class="c-com"># Python: LLMを呼び出す最小コード</span>
+<span class="c-kw">from</span> strands <span class="c-kw">import</span> Agent
+<span class="c-kw">from</span> strands.models.bedrock <span class="c-kw">import</span> BedrockModel
+
+model = BedrockModel(
+    model_id=<span class="c-str">"us.anthropic.claude-sonnet-4-5-20250929-v1:0"</span>,
+    max_tokens=<span class="c-num">10000</span>,
+    temperature=<span class="c-num">0.35</span>,
+)
+agent = Agent(model=model, system_prompt=<span class="c-str">"あなたは調達分析の専門家です"</span>)
+response = agent(<span class="c-str">"銅価格の動向を教えて"</span>)
+<span class="c-fn">print</span>(response)</code></pre>
+
+      <h3>1-2. クラウドの世界 ― AWSとは何か</h3>
+      <p>
+        <span class="term" data-tip="Amazon Web Services。Amazon社が提供するクラウドコンピューティングサービス群。世界最大手のクラウド。サーバー、ストレージ、AI等あらゆる機能を従量課金で利用できる。">AWS</span>（Amazon Web Services）は、サーバーやストレージ、データベース、AI機能を<strong>必要なときだけ借りられる</strong>サービスです。自前で物理サーバーを買う必要がなく、使った分だけ課金されます。本案件のシステムは100%AWS上で動いています。
+      </p>
+      <p>
+        AWSは200以上のサービスを提供していますが、Agentic AIで使うのはおおむね10〜20種類です。本資料では05章で1つずつ説明します。今は「<span class="term" data-tip="サーバーレス関数実行サービス。コードをアップロードすると、リクエストが来た時だけ自動でサーバを起動して実行してくれる。サーバを自前管理しなくてよい。">Lambda</span>＝関数を動かすサービス」「<span class="term" data-tip="Amazon Simple Storage Service。ファイル置き場のクラウド版。動画も書類もJSONも、何でも入れられる安いストレージ。">S3</span>＝ファイル置き場」程度の理解でOKです。
+      </p>
+
+      <h4>クラウドの基本概念</h4>
+      <table>
+        <thead><tr><th style="width:24%">概念</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td><strong><span class="term" data-tip="AWSのデータセンターが置かれている地理的な領域。東京リージョン (ap-northeast-1)、バージニアリージョン (us-east-1) など。サービスごとに使えるリージョンが違う。">リージョン</span></strong></td><td>AWSのデータセンターがある地域。日本なら<code>ap-northeast-1</code>（東京）。AIサービスは<code>us-east-1</code>（バージニア）が最も新機能が早い。</td></tr>
+          <tr><td><strong><span class="term" data-tip="Identity and Access Management。AWS上で誰が何にアクセスできるかを制御する仕組み。ユーザー、ロール、ポリシーで構成。">IAM</span></strong></td><td>「誰が何を操作してよいか」の権限管理。すべてのAWS操作の土台。</td></tr>
+          <tr><td><strong><span class="term" data-tip="Amazon Resource Name。AWSのリソースを一意に識別する文字列。例: arn:aws:lambda:us-east-1:123456789012:function:MyFunction">ARN</span></strong></td><td>AWSの各リソースに付く一意の識別子。<code>arn:aws:lambda:us-east-1:123456789012:function:Foo</code>のような形式。</td></tr>
+          <tr><td><strong><span class="term" data-tip="サーバーを自前で管理しなくてよいアーキテクチャ。リクエストが来たときだけ実行され、使った分だけ課金される。Lambda、API Gateway、DynamoDB等。">サーバーレス</span></strong></td><td>サーバーの起動・停止・パッチ適用を意識せず、コードだけ書く方式。Lambdaが代表。</td></tr>
+          <tr><td><strong><span class="term" data-tip="Infrastructure as Code。AWSリソース構成をコードで記述し、再現可能にする手法。CDK、Terraform、CloudFormationなど。">IaC</span></strong></td><td>クラウド構成をコードで管理する方法。本案件はAWS CDKで実装。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>1-3. コードの世界 ― 言語・フレームワーク</h3>
+      <p>
+        Agentic AIの開発では、層によって使う言語が異なります。
+        AI/Agent層は<span class="term" data-tip="動的型付けスクリプト言語。AI・データ分析・機械学習で標準。Strands Agents等のAgentフレームワークもPython中心。">Python</span>、UI/Backend層は<span class="term" data-tip="JavaScriptに静的型を追加した言語。Web開発の事実上の標準。Next.js、AWS CDKの主要言語。">TypeScript</span>を使うのが標準的です。
+      </p>
+      <table>
+        <thead><tr><th style="width:24%">層</th><th>言語</th><th>主なフレームワーク</th></tr></thead>
+        <tbody>
+          <tr><td>AI/Agent</td><td>Python 3.14</td><td>Strands Agents, Bedrock AgentCore, FastAPI</td></tr>
+          <tr><td>Backend (API)</td><td>TypeScript / Node.js 24</td><td>AWS Lambda PowerTools, Zod</td></tr>
+          <tr><td>UI</td><td>TypeScript</td><td>Next.js, React, assistant-ui, Tailwind CSS</td></tr>
+          <tr><td>IaC</td><td>TypeScript</td><td>AWS CDK v2</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout tip">
+        <span class="label">学習順序の助言</span>
+        プログラミング未経験から始める場合は、Python基礎 → AWS基礎 → TypeScript基礎 → 本ガイドの順がスムーズです。経験者なら、本ガイドを読み進めながら必要なところを補強してください。
+      </div>
+    </section>
+
+    <!-- ========== Section 2: Agentic AIとは ========== -->
+    <section id="sec2">
+      <h2><span class="num">02</span>Agentic AIとは何か</h2>
+      <p class="lede">
+        「Agentic AI」と「チャットAI」は別物です。違いを明確にしておくと、後の設計が腑に落ちます。
+      </p>
+
+      <h3>定義</h3>
+      <p>
+        <strong>Agentic AI</strong>とは、目的を与えられたとき、<strong>必要な手段を自律的に選び・実行し・結果を統合して回答できるAI</strong>です。
+        単一の<span class="term" data-tip="LLMに対する指示文。「何を、どう答えるか」の方針をテキストで与える。">プロンプト</span>応答ではなく、複数の手段（検索、計算、API呼び出し、データ照会）を組み合わせて、複数の<span class="term" data-tip="エージェント。AI自体が「行動を選択できる主体」として動作する単位。1つのプロンプト+モデル+ツール群でできている。">エージェント</span>を協調させて動きます。
+      </p>
+
+      <h3>従来チャットAIとの比較</h3>
+      <table>
+        <thead><tr><th style="width:18%">観点</th><th>従来のチャットAI</th><th>Agentic AI</th></tr></thead>
+        <tbody>
+          <tr><td><strong>主な動作</strong></td><td>1ターンで応答</td><td>タスク分解→ツール実行→結果統合のループ</td></tr>
+          <tr><td><strong>知識源</strong></td><td>モデル学習時の知識のみ</td><td>RAG、社内DB、外部API、ファイル等を都度参照</td></tr>
+          <tr><td><strong>処理時間</strong></td><td>数秒</td><td>数十秒〜数時間（最大8時間の長時間タスクも）</td></tr>
+          <tr><td><strong>失敗時の対応</strong></td><td>そのまま回答（誤情報の可能性）</td><td>結果の十分性を自己評価し、再検索する</td></tr>
+          <tr><td><strong>必要な基盤</strong></td><td>LLM APIへのアクセスのみ</td><td><span class="term" data-tip="複数Agentを統制する司令塔。誰がいつ何をやるかを決め、結果を集約する。">Orchestrator</span>、<span class="term" data-tip="Agentが呼び出せる関数。Web検索、DB照会、計算、グラフ描画など。LLMが「腕」として使う。">ツール</span>、<span class="term" data-tip="知識検索基盤。社内文書をベクトル化して保存し、質問に関連する文書を返す仕組み。">知識基盤</span>、認証、観測、状態管理</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Agentic AIの5大構成要素</h3>
+      <div class="card-grid">
+        <div class="card accent">
+          <h4>① LLM（推論エンジン）</h4>
+          <p>会話を理解し、次の行動を決める頭脳。Claude、GPT、Llama等。本案件は<span class="term" data-tip="Anthropic Claude Sonnet 4.5 (2025年9月版)。バランス型のClaudeモデルで、コスト/性能の妥協点が良い。">Claude Sonnet 4.5</span>。</p>
+        </div>
+        <div class="card accent">
+          <h4>② ツール（Tool）</h4>
+          <p>AIが呼び出せる「腕」。RAG検索、API呼び出し、計算、SVG生成、グラフ描画など。<span class="term" data-tip="Function Calling。LLMが関数を呼び出すべきかを判断し、引数を生成する機能。OpenAI APIで提唱され広まった。">関数呼び出し</span>と呼ばれる仕組みでLLMから起動。</p>
+        </div>
+        <div class="card accent">
+          <h4>③ 知識基盤（RAG）</h4>
+          <p>LLMが知らない情報を<span class="term" data-tip="テキストを数値ベクトルに変換する処理。意味が近いテキストは近いベクトルになる。検索の基礎技術。">ベクトル化</span>して保存し、質問時に類似文書を検索する仕組み。社内ドキュメント活用の定番。</p>
+        </div>
+        <div class="card accent">
+          <h4>④ Orchestrator</h4>
+          <p>複数Agentを束ねる司令塔。ユーザー質問を受け、適切なAgentに振り分け、結果を統合する。</p>
+        </div>
+        <div class="card accent">
+          <h4>⑤ 観測・状態管理</h4>
+          <p>会話履歴・<span class="term" data-tip="リクエストがシステム内をどう流れたかを記録したもの。分散システムの「足跡」。OpenTelemetry標準でCloudWatchやLangfuseに送る。">トレース</span>・実行ログを保存し、何が起きたか追跡できるようにする層。</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="label">なぜ「複数Agent」にするのか</span>
+        1つのLLMに全部やらせると、プロンプトが肥大化して品質が落ち、コストも増えます。「分解Agent」「検索Agent」「要約Agent」と役割分担すれば、各Agentのプロンプトは短く保てて、テスト・改修・差し替えがしやすくなります。<strong>マイクロサービスのAI版</strong>と考えると分かりやすいです。
+      </div>
+    </section>
+
+    <!-- ========== Section 3: 題材プロジェクト ========== -->
+    <section id="sec3">
+      <h2><span class="num">03</span>題材プロジェクト：調達向け情報検索エージェント</h2>
+      <p class="lede">
+        本ガイドの題材は、三菱電機 AXイノベーションセンター 基盤開発部向けに2026年3月に納品された<span class="term" data-tip="Proof of Concept。本格導入の前に小規模に試して、技術的・業務的に成立するかを検証する取り組み。">PoC</span>案件です。
+        調達業務の担当者が自然言語で問い合わせると、AIが市況・サプライヤー・調達方針・サステナビリティの4領域を横断検索して根拠付き回答を返します。
+      </p>
+
+      <h3>ユースケース例</h3>
+      <div class="callout tip">
+        <span class="label">User Query 1</span>
+        「銅素材の価格動向と将来の展望を教えて。」
+      </div>
+      <div class="callout tip">
+        <span class="label">User Query 2</span>
+        「A社のサステナビリティ評価を、過去のSAQ回答とともに確認したい。」
+      </div>
+
+      <h3>裏側で何が起きるか</h3>
+      <ol class="steps">
+        <li>
+          <strong>UIで質問入力</strong>
+          <p>ブラウザで動くチャット画面（Next.js）にユーザが質問を打ち込み、送信ボタンを押す。</p>
+        </li>
+        <li>
+          <strong>認証＆Backend経由でOrchestrator呼び出し</strong>
+          <p>UIから<span class="term" data-tip="JSON Web Token。ユーザー認証情報を含む電子署名付きトークン。HTTPヘッダで送って認証する。">JWT</span>付きでBackend (Lambda) のAPIを叩き、BackendがAgent層のOrchestratorを<strong>非同期で</strong>起動する。</p>
+        </li>
+        <li>
+          <strong>問い合わせ分解</strong>
+          <p>Orchestratorがまず<strong>問い合わせAgent</strong>を呼び、質問をMECEな調査タスク（最大12個）に分解。</p>
+        </li>
+        <li>
+          <strong>専門Agent並列実行</strong>
+          <p>分解されたタスクを、<span class="term" data-tip="Agent-to-Agent Protocol。エージェント同士の通信標準。AgentCardでスキル公開、JSON-RPCでメッセージ交換、ストリーミング応答に対応。">A2A</span>プロトコルで市況検索／サプライヤー検索／調達方針検索／サステナ検索の各Agentに送る。</p>
+        </li>
+        <li>
+          <strong>各AgentがRAG検索</strong>
+          <p>各Agentが<span class="term" data-tip="Bedrock Knowledge Basesのretrieve API。質問文をベクトル化して、類似する文書チャンクを上位N件返す。">kb_retrieve</span>ツールで関連文書を取得。スコア付きで返す。</p>
+        </li>
+        <li>
+          <strong>証拠十分性の自己評価</strong>
+          <p>結果を再度問い合わせAgentに渡し、「証拠は十分か」を点数評価。60点未満なら再分解→再検索。</p>
+        </li>
+        <li>
+          <strong>要約Agentで統合</strong>
+          <p>十分性OKなら<strong>要約Agent</strong>へ。Markdown形式で「結論／根拠／注意点／出典」に整形。必要に応じてSVGチャートや<span class="term" data-tip="テキストで記述する図表記法。フローチャート、シーケンス図、ガントチャートなどをMarkdown的に書ける。GitHub等でレンダリングされる。">Mermaid</span>図を生成。</p>
+        </li>
+        <li>
+          <strong>結果をS3に書き出し</strong>
+          <p>Orchestratorが各ターンの会話履歴・実行状態をS3に書き込み、UIは3秒ごとにポーリングして結果を取得・表示。</p>
+        </li>
+      </ol>
+
+      <h3>納品物の全体像</h3>
+      <table>
+        <thead><tr><th style="width:30%">納品物</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td><strong>全体アーキテクチャ設計</strong></td><td>UI／Agent／データ／インフラ層の構成と接続関係（pptx, docx, pdf）</td></tr>
+          <tr><td><strong>Agent設計ドキュメント</strong></td><td>各Agentの役割・呼び出し関係・プロンプト・ツール定義</td></tr>
+          <tr><td><strong>プログラムコード一式</strong></td><td>UI (Next.js)、Backend (Lambda×9)、Orchestrator、専門Agent×6 の計17パッケージ</td></tr>
+          <tr><td><strong>構築情報 (IaC)</strong></td><td>AWS CDK (TypeScript) のスタック定義一式 + CloudFormationテンプレート</td></tr>
+          <tr><td><strong>IaC外の設定手順書</strong></td><td>手動で行う設定（Guardrail構築、Agentデプロイ等）の手順</td></tr>
+          <tr><td><strong>利用元データ／RAGデータ</strong></td><td>知識基盤の原本データと、前処理後のRAG用データ</td></tr>
+          <tr><td><strong>試験仕様書兼成績書</strong></td><td>UI/Backend/Orchestrator/インフラ各層の試験項目と結果</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== Section 4: 全体アーキテクチャ ========== -->
+    <section id="sec4">
+      <h2><span class="num">04</span>全体アーキテクチャ</h2>
+      <p class="lede">
+        本案件は<strong>4層構成</strong>のシステムです。UI層、Backend層、Agent層、データ層の順に、画面から最下層のベクトルDBまで一気通貫で繋がっています。リージョン構成も2つ（東京とバージニア）に分割されています。
+      </p>
+
+      <h3>システム全体図</h3>
+      <div class="diagram">
+        <svg viewBox="0 0 820 480" xmlns="http://www.w3.org/2000/svg" style="font-family:sans-serif;font-size:12px">
+          <defs>
+            <marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#0f2c4a"/>
+            </marker>
+          </defs>
+          <!-- User -->
+          <rect x="20" y="40" width="130" height="60" fill="#f4e4b8" stroke="#c8941f" stroke-width="2" rx="4"/>
+          <text x="85" y="65" text-anchor="middle" font-weight="bold" fill="#6b4d12">作業端末</text>
+          <text x="85" y="85" text-anchor="middle" fill="#6b4d12" font-size="11">ブラウザ</text>
+
+          <!-- ap-northeast-1 -->
+          <rect x="190" y="20" width="320" height="430" fill="#eef4fb" stroke="#4a86c4" stroke-width="1.5" stroke-dasharray="4 3" rx="4"/>
+          <text x="350" y="40" text-anchor="middle" font-weight="bold" fill="#1e4976">ap-northeast-1（東京）</text>
+          <text x="350" y="54" text-anchor="middle" font-size="10" fill="#1e4976">UI層 + Backend層</text>
+
+          <rect x="210" y="70" width="135" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="277" y="90" text-anchor="middle" font-size="11" font-weight="bold">CloudFront</text>
+          <text x="277" y="105" text-anchor="middle" font-size="10" fill="#666">CDN配信＋WAF</text>
+
+          <rect x="355" y="70" width="135" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="422" y="90" text-anchor="middle" font-size="11" font-weight="bold">S3 (Web)</text>
+          <text x="422" y="105" text-anchor="middle" font-size="10" fill="#666">Next.js静的ファイル</text>
+
+          <rect x="210" y="140" width="280" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="350" y="160" text-anchor="middle" font-size="11" font-weight="bold">API Gateway + Cognito Authorizer</text>
+          <text x="350" y="175" text-anchor="middle" font-size="10" fill="#666">JWT検証 / カスタムドメイン</text>
+
+          <rect x="210" y="210" width="280" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="350" y="230" text-anchor="middle" font-size="11" font-weight="bold">Lambda × 9本（Backend API）</text>
+          <text x="350" y="245" text-anchor="middle" font-size="10" fill="#666">Node.js 24 / TypeScript</text>
+
+          <rect x="210" y="280" width="135" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="277" y="300" text-anchor="middle" font-size="11" font-weight="bold">S3 (会話履歴)</text>
+          <text x="277" y="315" text-anchor="middle" font-size="10" fill="#666">JSONL / JSON</text>
+
+          <rect x="355" y="280" width="135" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="422" y="300" text-anchor="middle" font-size="11" font-weight="bold">Athena</text>
+          <text x="422" y="315" text-anchor="middle" font-size="10" fill="#666">スレッド一覧SQL</text>
+
+          <rect x="210" y="350" width="135" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="277" y="370" text-anchor="middle" font-size="11" font-weight="bold">Cognito</text>
+          <text x="277" y="385" text-anchor="middle" font-size="10" fill="#666">認証/JWT発行</text>
+
+          <rect x="355" y="350" width="135" height="50" fill="#fff" stroke="#1e4976" rx="3"/>
+          <text x="422" y="370" text-anchor="middle" font-size="11" font-weight="bold">SES</text>
+          <text x="422" y="385" text-anchor="middle" font-size="10" fill="#666">2FAメール送信</text>
+
+          <!-- us-east-1 -->
+          <rect x="540" y="20" width="270" height="430" fill="#ecf6ed" stroke="#5a9a64" stroke-width="1.5" stroke-dasharray="4 3" rx="4"/>
+          <text x="675" y="40" text-anchor="middle" font-weight="bold" fill="#3a6a44">us-east-1（バージニア）</text>
+          <text x="675" y="54" text-anchor="middle" font-size="10" fill="#3a6a44">Agent層 + データ層</text>
+
+          <rect x="560" y="70" width="230" height="50" fill="#fff" stroke="#3a6a44" rx="3"/>
+          <text x="675" y="90" text-anchor="middle" font-size="11" font-weight="bold">Orchestrator</text>
+          <text x="675" y="105" text-anchor="middle" font-size="10" fill="#666">AgentCore Runtime / Python</text>
+
+          <rect x="560" y="140" width="110" height="40" fill="#fff" stroke="#3a6a44" rx="3"/>
+          <text x="615" y="158" text-anchor="middle" font-size="10" font-weight="bold">問い合わせ</text>
+          <text x="615" y="172" text-anchor="middle" font-size="10">Agent</text>
+          <rect x="680" y="140" width="110" height="40" fill="#fff" stroke="#3a6a44" rx="3"/>
+          <text x="735" y="158" text-anchor="middle" font-size="10" font-weight="bold">要約</text>
+          <text x="735" y="172" text-anchor="middle" font-size="10">Agent</text>
+          <rect x="560" y="195" width="110" height="40" fill="#fff" stroke="#3a6a44" rx="3"/>
+          <text x="615" y="213" text-anchor="middle" font-size="10" font-weight="bold">市況検索</text>
+          <text x="615" y="227" text-anchor="middle" font-size="10">Agent</text>
+          <rect x="680" y="195" width="110" height="40" fill="#fff" stroke="#3a6a44" rx="3"/>
+          <text x="735" y="213" text-anchor="middle" font-size="10" font-weight="bold">サプライヤー</text>
+          <text x="735" y="227" text-anchor="middle" font-size="10">Agent</text>
+          <rect x="560" y="250" width="110" height="40" fill="#fff" stroke="#3a6a44" rx="3"/>
+          <text x="615" y="268" text-anchor="middle" font-size="10" font-weight="bold">調達方針</text>
+          <text x="615" y="282" text-anchor="middle" font-size="10">Agent</text>
+          <rect x="680" y="250" width="110" height="40" fill="#fff" stroke="#3a6a44" rx="3"/>
+          <text x="735" y="268" text-anchor="middle" font-size="10" font-weight="bold">サステナ</text>
+          <text x="735" y="282" text-anchor="middle" font-size="10">Agent</text>
+
+          <rect x="560" y="305" width="230" height="55" fill="#fafbfc" stroke="#3a6a44" stroke-dasharray="3 3" rx="3"/>
+          <text x="675" y="322" text-anchor="middle" font-size="11" font-weight="bold">Bedrock Knowledge Bases × 4</text>
+          <text x="675" y="338" text-anchor="middle" font-size="10" fill="#666">market / supplier /</text>
+          <text x="675" y="352" text-anchor="middle" font-size="10" fill="#666">procurement-policy / sustainability</text>
+
+          <rect x="560" y="370" width="230" height="35" fill="#fafbfc" stroke="#3a6a44" stroke-dasharray="3 3" rx="3"/>
+          <text x="675" y="386" text-anchor="middle" font-size="11" font-weight="bold">S3 Vectors</text>
+          <text x="675" y="400" text-anchor="middle" font-size="10" fill="#666">埋め込みベクトル保存</text>
+
+          <rect x="560" y="415" width="230" height="28" fill="#fafbfc" stroke="#3a6a44" stroke-dasharray="3 3" rx="3"/>
+          <text x="675" y="433" text-anchor="middle" font-size="11" font-weight="bold">Bedrock (Claude Sonnet 4.5)</text>
+
+          <!-- Arrows -->
+          <path d="M150,70 L210,90" stroke="#0f2c4a" stroke-width="1.5" fill="none" marker-end="url(#ar1)"/>
+          <path d="M277,120 L277,140" stroke="#0f2c4a" stroke-width="1.5" fill="none" marker-end="url(#ar1)"/>
+          <path d="M350,190 L350,210" stroke="#0f2c4a" stroke-width="1.5" fill="none" marker-end="url(#ar1)"/>
+          <path d="M350,260 L350,280" stroke="#0f2c4a" stroke-width="1.5" fill="none" marker-end="url(#ar1)"/>
+          <path d="M490,235 L560,90" stroke="#0f2c4a" stroke-width="1.5" fill="none" marker-end="url(#ar1)"/>
+          <text x="500" y="175" font-size="10" fill="#0f2c4a">非同期 invoke</text>
+          <path d="M675,120 L675,140" stroke="#3a6a44" stroke-width="1.5" fill="none" marker-end="url(#ar1)"/>
+          <text x="685" y="135" font-size="9" fill="#3a6a44">A2A</text>
+        </svg>
+        <div class="caption">図 4-1：システム全体のリージョン分割と層構造</div>
+      </div>
+
+      <h3>各層の責務</h3>
+      <table>
+        <thead><tr><th style="width:14%">層</th><th style="width:32%">責務</th><th>主要コンポーネント</th></tr></thead>
+        <tbody>
+          <tr><td><strong>UI層</strong></td><td>画面表示、ユーザー操作、認証フロー</td><td><span class="term" data-tip="Reactベースのフルスタックフレームワーク。SSR/CSR/SSGをサポート。Vercel社が開発。">Next.js</span>, assistant-ui, CloudFront, S3</td></tr>
+          <tr><td><strong>Backend層</strong></td><td>APIエンドポイント、認証検証、Agent起動</td><td>API Gateway, Lambda×9, Cognito</td></tr>
+          <tr><td><strong>Agent層</strong></td><td>AI推論、タスク分解、検索、要約</td><td>Bedrock AgentCore Runtime, Strands Agents</td></tr>
+          <tr><td><strong>データ層</strong></td><td>知識検索、会話履歴、状態管理</td><td>Bedrock Knowledge Bases, S3 Vectors, S3, Athena</td></tr>
+        </tbody>
+      </table>
+
+      <h3>リージョンを分けている理由</h3>
+      <p>
+        UI/Backendは東京（<code>ap-northeast-1</code>）、Agentはバージニア（<code>us-east-1</code>）で動かしています。
+        理由は<strong>AWSのAIサービス（Bedrock AgentCore、Knowledge Bases、最新Claudeモデル等）の多くがus-east-1で先行リリースされる</strong>からです。日本リージョンには遅れて来るため、PoC時点ではus-east-1で構築するのが定石です。
+      </p>
+      <div class="callout warn">
+        <span class="label">2リージョン構成の注意点</span>
+        UI（東京）からAgent（バージニア）への呼び出しはネットワーク遅延が増えます。本案件では<strong>Backendが非同期でAgent起動 → UIはS3経由でポーリング</strong>することで遅延を吸収しています。同期APIで太平洋を越えると数百ms追加されるため、設計が必要です。
+      </div>
+
+      <h3>データフロー：1往復の完全な流れ</h3>
+      <ol class="steps">
+        <li>
+          <strong>ユーザー認証</strong>
+          <p>ブラウザがCloudFront経由でUIを取得。Cognito Hosted UIにリダイレクトし、ユーザがログイン。Cognitoが<span class="term" data-tip="JSON Web Token。3つのパートが . で連結された文字列。電子署名されており、改ざんできない。ヘッダ.ペイロード.署名 の形式。">JWT</span>トークンを発行し、ブラウザの<span class="term" data-tip="ブラウザ内にデータを保存する仕組み。ログイン状態の保持などに使う。">LocalStorage</span>に保存。</p>
+        </li>
+        <li>
+          <strong>API呼び出し</strong>
+          <p>UIが<code>POST /api/chat/{Thread ID}</code>を叩き、JWTを<code>Authorization</code>ヘッダで送信。CloudFrontを経由してAPI Gatewayへ到達。</p>
+        </li>
+        <li>
+          <strong>JWT検証</strong>
+          <p>API Gatewayの<span class="term" data-tip="API Gatewayの認証機能。リクエストのJWTトークンをCognitoユーザープールで検証する。">Cognito Authorizer</span>がトークンを検証。OKなら対応するLambda（<code>chat-start-handler</code>）を起動。</p>
+        </li>
+        <li>
+          <strong>Orchestrator非同期起動</strong>
+          <p>LambdaがAgentCore Runtimeの<code>/invocation</code> APIを<strong>非同期モード</strong>で呼び出し。即座にRun IDが返り、Lambdaは終了（数百ms）。</p>
+        </li>
+        <li>
+          <strong>Orchestrator内部処理</strong>
+          <p>Orchestratorが問い合わせAgent→各専門Agent→要約Agentと順に呼ぶ。各ターンごとにS3に<code>talk.jsonl</code>と<code>status.json</code>を書き込み。</p>
+        </li>
+        <li>
+          <strong>UIのポーリング</strong>
+          <p>UIは3秒ごとに<code>GET /api/runs/{Run ID}</code>を叩き、S3の<code>status.json</code>を読みに行く。<code>status: "complete"</code>になったら最終結果を表示。</p>
+        </li>
+      </ol>
+
+      <h3>非同期パターンの重要性</h3>
+      <p>
+        AgentCore Runtimeは同期APIだと最大15分、非同期APIだと最大8時間まで実行できます。
+        Agentic AIの実行は数十秒〜数分かかることが多いため、<strong>同期APIだと先にタイムアウトしてしまう</strong>のです。
+        本案件では「Lambdaが非同期で投げる→S3で状態を共有→UIがポーリングする」という王道パターンを採用しています。
+      </p>
+
+      <pre><code><span class="c-com"># Backend Lambda (TypeScript): Orchestrator非同期起動</span>
+<span class="c-kw">const</span> client = <span class="c-kw">new</span> <span class="c-fn">BedrockAgentCoreClient</span>({ region: <span class="c-str">"us-east-1"</span> });
+<span class="c-kw">const</span> response = <span class="c-kw">await</span> client.<span class="c-fn">send</span>(<span class="c-kw">new</span> <span class="c-fn">InvokeAgentRuntimeCommand</span>({
+  agentRuntimeArn: <span class="c-str">"arn:aws:bedrock-agentcore:us-east-1:xxx:runtime/orchestrator-xxx"</span>,
+  runtimeSessionId: threadId,
+  payload: <span class="c-fn">JSON.stringify</span>({ user_prompt: userMessage, history: [...] }),
+  executionMode: <span class="c-str">"ASYNC"</span>,  <span class="c-com">// ★ 非同期モード</span>
+}));
+<span class="c-kw">return</span> { runId: response.taskId };  <span class="c-com">// 即座にUIへ返す</span></code></pre>
+    </section>
+
+    <!-- ========== Section 5: AWSサービス基礎 ========== -->
+    <section id="sec5">
+      <h2><span class="num">05</span>AWSサービス基礎 ― 1つずつ理解する</h2>
+      <p class="lede">
+        ここではAgentic AI構築で使うAWSサービスを<strong>1つずつゼロから</strong>説明します。Lambdaを知らない人でも理解できるよう、何なのか・なぜ必要か・どう使うかを順に整理します。
+      </p>
+
+      <div class="section-bar"><span class="num">▶</span>コンピューティング系</div>
+
+      <h3>Lambda</h3>
+      <p>
+        <span class="term" data-tip="AWSのサーバーレス関数実行サービス。コードをアップロードし、HTTPリクエストやイベントが来た時だけ起動して実行される。サーバ管理が不要で、使った分だけ課金（ミリ秒単位）。">Lambda</span>は「コードを1つの<strong>関数</strong>として動かすクラウドサービス」です。
+        従来は「サーバを買って→OSを入れて→アプリを動かす」必要がありましたが、Lambdaは関数のコードだけ書けば、<strong>リクエストが来たとき自動で起動・実行・停止</strong>してくれます。
+      </p>
+      <ul>
+        <li><strong>用途</strong>：本案件ではBackend APIの実装に9本のLambdaを使う（スレッド作成、ユーザプロンプト送信、状態取得など）</li>
+        <li><strong>言語</strong>：Node.js / Python / Java / Go など主要言語に対応</li>
+        <li><strong>料金</strong>：実行時間（ミリ秒）×メモリ量。アイドル時は無料</li>
+        <li><strong>制限</strong>：1回の実行は最大15分。それ以上は別の仕組み（Step Functions、AgentCore非同期等）が必要</li>
+      </ul>
+
+      <h3>API Gateway</h3>
+      <p>
+        <span class="term" data-tip="HTTPリクエストを受け付けてLambdaやその他のサービスにルーティングする「玄関」サービス。認証・スロットリング・キャッシュ機能も持つ。">API Gateway</span>は「APIの玄関」です。
+        ブラウザからのHTTPリクエストを受け、URLパスやメソッドに応じて適切なLambdaに振り分けます。認証チェック、IP制限、リクエスト数制限なども担います。
+      </p>
+      <p>
+        本案件では<code>/api/chat</code>, <code>/api/runs/{id}</code>などのエンドポイント定義をすべてAPI Gatewayで集中管理し、それぞれを対応するLambdaに紐付けています。
+      </p>
+
+      <h3>Bedrock AgentCore Runtime</h3>
+      <p>
+        <span class="term" data-tip="AWSが提供するAIエージェント専用の実行ランタイム。コンテナ化したAgentコードをホスティングし、同期15分／非同期8時間まで実行可能。セッション管理・認証・スケーリングを自動化。">AgentCore Runtime</span>は、Agentic AI向けの<strong>専用Lambdaのような存在</strong>です。
+        通常のLambdaは15分制限があるため、長時間動くAgentには向きません。AgentCore Runtimeは非同期実行で最大8時間動かせて、<span class="term" data-tip="アプリケーションをOSごとまとめて1つのパッケージにする技術。Dockerコンテナなど。実行環境のばらつきを吸収。">コンテナ</span>として動くため、Pythonの大きな依存ライブラリも同梱できます。
+      </p>
+
+      <div class="section-bar"><span class="num">▶</span>ストレージ・データベース系</div>
+
+      <h3>S3</h3>
+      <p>
+        <span class="term" data-tip="Amazon Simple Storage Service。クラウド版の巨大なファイル置き場。動画、画像、JSON、HTML、ベクトル、何でも入る。99.999999999%（11ナイン）の耐久性。">S3</span>は「クラウド版のファイルサーバ」です。
+        無制限にファイルを入れられて、HTTPで取り出せます。本案件では3つの用途で使っています：
+      </p>
+      <ul>
+        <li><strong>UIホスティング</strong>：Next.jsをbuildした静的HTML/JS/CSSファイルを置く</li>
+        <li><strong>会話履歴保存</strong>：Orchestratorの<code>talk.jsonl</code>、<code>status.json</code>を保存</li>
+        <li><strong>RAGの原本格納</strong>：知識ベースのソースとなる文書ファイル</li>
+      </ul>
+
+      <h3>S3 Vectors</h3>
+      <p>
+        <span class="term" data-tip="S3に格納されるベクトルストア（2025年GA）。Bedrock Knowledge Basesのバックエンドとして使え、OpenSearchより安価。">S3 Vectors</span>はS3の新しい派生機能で、<strong>テキストの埋め込みベクトルを安く保存できるストレージ</strong>です。
+        RAGで必須となる「ベクトル類似検索」のバックエンドとして使います。本案件では領域ごと（market/supplier等）に1つずつ作成しています。
+      </p>
+
+      <h3>Athena</h3>
+      <p>
+        <span class="term" data-tip="S3上のファイル（CSV/JSON/Parquet等）にSQLを直接実行できるサービス。事前にデータベースを立てる必要がない。スキャン量で課金。">Athena</span>はS3上のファイルに対して<strong>SQLを投げられる</strong>サービスです。
+        本案件では「ユーザーのスレッド一覧取得」で、S3に分散して保存された会話履歴JSONを横断的にSQL検索するのに使います。
+      </p>
+
+      <div class="section-bar"><span class="num">▶</span>AI/ML系</div>
+
+      <h3>Bedrock</h3>
+      <p>
+        <span class="term" data-tip="AWSが提供する基盤モデル統合サービス。Anthropic Claude、Meta Llama、Amazon Titan、Cohere、Stability AIなど複数社のLLMを統一APIで使える。">Bedrock</span>は<strong>複数社のLLMをまとめて呼べるサービス</strong>です。
+        Claude（Anthropic）、Llama（Meta）、Titan（Amazon）等が選択でき、ベンダーロックインを避けつつLLMの能力を切り替えられます。
+      </p>
+      <p>
+        本案件は<span class="term" data-tip="Anthropic社が2025年9月29日にリリースしたClaude Sonnet 4.5。本案件で利用されているメインLLM。">Claude Sonnet 4.5</span>を使い、リージョン横断推論（<span class="term" data-tip="複数リージョンのBedrockキャパシティをまとめて使うプロファイル。スロットリングを避けやすい。">Cross-Region Inference Profile</span>）でUS全体のキャパシティを活用しています。
+      </p>
+
+      <h3>Bedrock Knowledge Bases</h3>
+      <p>
+        <span class="term" data-tip="AWSのマネージドRAGサービス。S3にデータを置くだけで自動的にチャンク化・ベクトル化・インデックス作成してくれる。検索はretrieve APIで行う。">Bedrock Knowledge Bases</span>は<strong>RAG（検索拡張生成）をマネージドで提供するサービス</strong>です。
+        ファイルをS3に置く→Bedrock KBが自動チャンキング・ベクトル化・インデックス構築→<code>retrieve</code> APIで類似文書を取得、という流れがワンストップで実現できます。
+      </p>
+
+      <h3>Bedrock Guardrails</h3>
+      <p>
+        <span class="term" data-tip="LLMの入出力に対する安全フィルタ。プロンプトインジェクション、機密情報、暴力・性的な表現などを検知して止める。">Bedrock Guardrails</span>は<strong>AIへの不適切な入力／不適切な出力をフィルタリング</strong>する機能です。
+        本案件では「プロンプト攻撃」を高敷居値でブロックし、引っかかったら定型文を返す設定にしています。
+      </p>
+
+      <h3>AgentCore Memory</h3>
+      <p>
+        <span class="term" data-tip="Bedrock AgentCoreの記憶機能。短期記憶（直近会話）と長期記憶（ユーザー嗜好や過去の文脈）を提供する。">AgentCore Memory</span>はAgentの記憶を司ります。
+        <span class="term" data-tip="Short-Term Memory。直近の会話履歴を保持する短期記憶。1セッション内で利用。">STM</span>（短期記憶）と<span class="term" data-tip="Long-Term Memory。ユーザーごとの嗜好や過去の文脈を長期保持する記憶。複数セッションで再利用。">LTM</span>（長期記憶）の2階層を持ち、Strands Agentsから透過的に使えます。
+      </p>
+
+      <div class="section-bar"><span class="num">▶</span>認証・配信系</div>
+
+      <h3>Cognito</h3>
+      <p>
+        <span class="term" data-tip="AWSの認証サービス。ユーザー登録・ログイン・JWT発行・2要素認証などを提供。Hosted UIで既製のログイン画面も使える。">Cognito</span>は<strong>ユーザー認証の全部入りサービス</strong>です。ユーザープール（ID・パスワード保管庫）、Hosted UI（ログイン画面）、JWTトークン発行、二段階認証など、認証で必要なものが全て揃っています。
+      </p>
+      <p>
+        本案件はHosted UIを使い、Emailによる二段階認証を必須にしています。ユーザがログインに成功するとJWTが発行され、UIはこれを各APIに付けて送信します。
+      </p>
+
+      <h3>CloudFront</h3>
+      <p>
+        <span class="term" data-tip="AWSのCDN（Content Delivery Network）。世界中のエッジサーバから静的コンテンツを高速配信。WAFやIP制限と組み合わせて使う。">CloudFront</span>は<strong>世界中のエッジサーバから素早くコンテンツを配信するCDN</strong>です。
+        S3に置いたNext.jsのファイルをCloudFront経由で配信し、API Gatewayへのアクセスも一旦CloudFrontを通すことで、すべての通信に一貫したIP制限・SSL証明書を適用しています。
+      </p>
+
+      <h3>WAF</h3>
+      <p>
+        <span class="term" data-tip="Web Application Firewall。HTTPリクエストレベルでの攻撃防御。SQLインジェクション、XSS、IPブロック、レート制限など。">WAF</span>は<strong>Webアプリケーション用のファイアウォール</strong>です。
+        本案件では「許可されたIPアドレスからしかアクセスできない」設定にしており、不正アクセスをブラウザレベルで遮断します。
+      </p>
+
+      <h3>SES</h3>
+      <p>
+        <span class="term" data-tip="Simple Email Service。AWSのメール送信サービス。Cognitoの2FAメール送信や、システム通知メールに使う。">SES</span>はAWSの<strong>メール送信サービス</strong>です。
+        本案件ではCognitoの二段階認証メールを送るために使います。新規アカウントは「サンドボックスモード」で送信先制限がかかるので、本番利用時は<strong>解除申請</strong>が必要です。
+      </p>
+
+      <h3>Route 53 / ACM / KMS</h3>
+      <table>
+        <thead><tr><th style="width:18%">サービス</th><th>役割</th></tr></thead>
+        <tbody>
+          <tr><td><strong><span class="term" data-tip="AWSのDNSサービス。ドメイン名とIPアドレスを紐付ける。">Route 53</span></strong></td><td>DNS管理。<code>auth.example.com</code>のような独自ドメインを使うために必要。</td></tr>
+          <tr><td><strong><span class="term" data-tip="AWS Certificate Manager。SSL/TLS証明書を無料発行してくれるサービス。CloudFrontやAPI Gatewayに紐付ける。">ACM</span></strong></td><td>SSL証明書発行。HTTPSを使うために必要。</td></tr>
+          <tr><td><strong><span class="term" data-tip="Key Management Service。暗号鍵を管理するサービス。S3やLambda、Bedrockなどの暗号化に使う。">KMS</span></strong></td><td>暗号鍵管理。S3や各種データの暗号化に使う。</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-bar"><span class="num">▶</span>運用・観測系</div>
+
+      <h3>CloudWatch</h3>
+      <p>
+        <span class="term" data-tip="AWSの監視サービス。ログ、メトリクス、アラームをまとめて扱う。Lambdaのprintは自動でCloudWatch Logsに送られる。">CloudWatch</span>は<strong>AWSの監視・ログ集約サービス</strong>です。
+        Lambdaやコンテナの標準出力は自動的にCloudWatch Logsに送られ、エラー検知やパフォーマンス確認に使います。
+      </p>
+
+      <h3>CloudWatch GenAI</h3>
+      <p>
+        <span class="term" data-tip="CloudWatchの生成AI向け拡張。LLM呼び出し、ツール実行、トークン消費を会話単位で可視化。OpenTelemetry経由でデータを受ける。">CloudWatch GenAI</span>はCloudWatchの<strong>生成AI向け拡張</strong>です。
+        各Agentが何を考え、どのツールを呼び、どれだけトークンを消費したかが会話単位で追跡できます。<span class="term" data-tip="OpenTelemetry。分散トレーシングの業界標準。OTEL SDKでアプリ計装→収集側はCloudWatch GenAIやLangfuseなど。">OpenTelemetry</span>経由でデータを送ります。
+      </p>
+
+      <div class="callout info">
+        <span class="label">本案件で使うAWSサービス総まとめ</span>
+        <p><strong>必須：</strong>Lambda, API Gateway, S3, CloudFront, Cognito, Bedrock, AgentCore Runtime, Bedrock KB, S3 Vectors, AgentCore Memory, Bedrock Guardrails, IAM, CloudWatch, CloudWatch GenAI, Athena, WAF, SES, Route 53, ACM, KMS（計20種類）</p>
+      </div>
+    </section>
+
+    <!-- ========== Section 6: マルチエージェント設計 ========== -->
+    <section id="sec6">
+      <h2><span class="num">06</span>マルチエージェント設計</h2>
+      <p class="lede">
+        Agentic AIの中核となる発想は「1つの巨大プロンプトに全て詰め込まない」こと。役割ごとに小さなエージェントを作り、Orchestratorで束ねる構成（<span class="term" data-tip="Multi-Agent System。複数のAIエージェントが協調して動作するシステム。1Agentよりも保守性・拡張性・品質が高い。">MAS</span>）が定石です。
+      </p>
+
+      <h3>Agent一覧（題材プロジェクト）</h3>
+      <table>
+        <thead><tr><th style="width:22%">Agent名</th><th style="width:14%">分類</th><th>役割</th><th style="width:12%">ツール</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Orchestrator</strong></td><td>司令塔</td><td>各Agentへの会話転送、状態S3保存</td><td>A2A SDK</td></tr>
+          <tr><td><strong>inquiry_agent</strong><br/>(問い合わせAgent)</td><td>制御</td><td>(1) MECE分解、(2) 証拠十分性スコア判定</td><td>なし</td></tr>
+          <tr><td><strong>text_summary_agent</strong><br/>(要約Agent)</td><td>制御</td><td>Markdown＋SVG＋Mermaidで回答整形</td><td>svg_chart_tool, svg_bubble_chart_tool, svg_stat_map_tool</td></tr>
+          <tr><td><strong>market_search_agent</strong></td><td>専門</td><td>LME価格・JEITA統計・港湾統計を検索</td><td>kb_retrieve</td></tr>
+          <tr><td><strong>supplier_search_agent</strong></td><td>専門</td><td>取引先決算・パートナー区分・リスク分類</td><td>kb_retrieve</td></tr>
+          <tr><td><strong>procurement_policy_search_agent</strong></td><td>専門</td><td>各社公開の調達方針</td><td>kb_retrieve</td></tr>
+          <tr><td><strong>sustainability_search_agent</strong></td><td>専門</td><td>SAQ・RBA等のサステナ文書</td><td>search_documents（直接検索）</td></tr>
+        </tbody>
+      </table>
+
+      <h3>役割分担の鉄則4つ</h3>
+      <div class="card-grid">
+        <div class="card accent">
+          <h4>① 1 Agent 1 責務</h4>
+          <p>検索Agentは「検索＋無関係除外」のみ。推論や要約はしない。役割を混ぜると判断ブレが増え品質が落ちる。</p>
+        </div>
+        <div class="card accent">
+          <h4>② ツールは最小限</h4>
+          <p>検索Agentが持つツールはRAG検索のみ。可視化は要約Agentに集中。</p>
+        </div>
+        <div class="card accent">
+          <h4>③ 自己評価ループ</h4>
+          <p>問い合わせAgentが「証拠十分性」を点数化（60点以上で合格）。不足なら再分解・再検索を起動。</p>
+        </div>
+        <div class="card accent">
+          <h4>④ ドメイン知識はプロンプトに</h4>
+          <p>各検索Agentのシステムプロンプトに、扱うデータ・優先順位・出典基準を埋め込む。汎用LLMを専門家化する。</p>
+        </div>
+      </div>
+
+      <h3>Agent間通信：A2Aプロトコル</h3>
+      <p>
+        Agent同士は<span class="term" data-tip="Agent-to-Agent Protocol。エージェント同士の通信標準。AgentCardでスキル公開、JSON-RPCでメッセージ交換、ストリーミング応答対応。Anthropicが提唱。">A2A</span>プロトコルで通信します。各Agentは<span class="term" data-tip="AgentCard。Agentの自己紹介JSON。名前、説明、扱えるタスク、入出力モード、エンドポイントなどを記述。">AgentCard</span>というメタ情報を公開し、Orchestratorはこれを読んで「誰に何を頼むか」を判断します。
+      </p>
+      <p>通信フォーマットは<span class="term" data-tip="JSON-RPC。JSONベースの遠隔手続き呼び出しプロトコル。シンプルでHTTPと相性がよい。">JSON-RPC</span> 2.0/0.3.0。ストリーミング応答にも対応します。</p>
+
+      <h4>AgentCardの例（市況検索Agent）</h4>
+      <pre><code>{
+  <span class="c-str">"name"</span>: <span class="c-str">"market_search_agent"</span>,
+  <span class="c-str">"description"</span>: <span class="c-str">"市況情報に関連する内部情報を検索して取得"</span>,
+  <span class="c-str">"version"</span>: <span class="c-str">"1.0.0"</span>,
+  <span class="c-str">"protocolVersion"</span>: <span class="c-str">"0.3.0"</span>,
+  <span class="c-str">"preferredTransport"</span>: <span class="c-str">"http"</span>,
+  <span class="c-str">"defaultInputModes"</span>: [<span class="c-str">"text"</span>],
+  <span class="c-str">"defaultOutputModes"</span>: [<span class="c-str">"text"</span>],
+  <span class="c-str">"capabilities"</span>: { <span class="c-str">"streaming"</span>: <span class="c-kw">true</span> },
+  <span class="c-str">"skills"</span>: [{
+    <span class="c-str">"id"</span>: <span class="c-str">"kb_retrieve"</span>,
+    <span class="c-str">"description"</span>: <span class="c-str">"市況Knowledge Basesから関連文書を取得"</span>
+  }],
+  <span class="c-str">"url"</span>: <span class="c-str">"https://bedrock-agentcore.us-east-1.amazonaws.com/runtimes/.../invocations/"</span>
+}</code></pre>
+
+      <h3>OrchestratorのAgent管理ファイル</h3>
+      <p>Orchestratorは<code>agent.json</code>を起動時に読み込み、各Agentのエンドポイントとリトライ数を把握します。</p>
+      <pre><code>{
+  <span class="c-str">"agents"</span>: [
+    { <span class="c-str">"name"</span>: <span class="c-str">"inquiry"</span>,        <span class="c-str">"endpoint"</span>: <span class="c-str">"https://...inquiry_agent.../invocations/"</span> },
+    { <span class="c-str">"name"</span>: <span class="c-str">"text-summary"</span>,   <span class="c-str">"endpoint"</span>: <span class="c-str">"https://...text_summary.../invocations/"</span> },
+    { <span class="c-str">"name"</span>: <span class="c-str">"market-search"</span>,  <span class="c-str">"endpoint"</span>: <span class="c-str">"https://...market_search.../invocations/"</span>, <span class="c-str">"max_calls"</span>: <span class="c-num">3</span> },
+    { <span class="c-str">"name"</span>: <span class="c-str">"supplier-search"</span>,<span class="c-str">"endpoint"</span>: <span class="c-str">"https://...supplier_search.../invocations/"</span>, <span class="c-str">"max_calls"</span>: <span class="c-num">3</span> }
+  ]
+}</code></pre>
+
+      <h3>自己評価ループの実装</h3>
+      <p>問い合わせAgentは2モードで動作します：</p>
+      <table>
+        <thead><tr><th style="width:18%">モード</th><th>入力</th><th>出力</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Mode 1: 分解</strong></td><td>ユーザー質問</td><td><code>{"tasks":[{"task":"...", "weight": 0.3}, ...]}</code> 最大12タスク、weight合計1.0</td></tr>
+          <tr><td><strong>Mode 2: 評価</strong></td><td>タスク＋検索結果</td><td><code>{"enough": true/false, "reason": "..."}</code> 合計60点以上で合格</td></tr>
+        </tbody>
+      </table>
+
+      <h4>分解の順序（プロンプトに埋め込み）</h4>
+      <ol>
+        <li>判定基準の定義</li>
+        <li>核心となる事実</li>
+        <li>補足情報（背景・比較・市場）</li>
+        <li>最新性</li>
+      </ol>
+
+      <div class="callout tip">
+        <span class="label">なぜA2Aを採用するのか</span>
+        独自APIではなく標準プロトコルにすることで、(1) Agentを後から差し替えやすい、(2) 外部組織のAgentを呼べる、(3) フレームワークの進化に追従しやすい、というメリットがあります。「Agentのマイクロサービス化」と理解すると分かりやすいです。
+      </div>
+    </section>
+
+    <!-- ========== Section 7: RAG設計 ========== -->
+    <section id="sec7">
+      <h2><span class="num">07</span>RAG設計と構築</h2>
+      <p class="lede">
+        <span class="term" data-tip="Retrieval-Augmented Generation。LLMが知らない情報を外部DBからベクトル検索して取得し、回答に組み込む手法。社内文書活用の定番。">RAG</span>はLLMに「社内の知識」を持たせる仕組みです。本章では原理と具体的な構築方法を解説します。
+      </p>
+
+      <h3>RAGの2フェーズ</h3>
+      <div class="diagram">
+        <svg viewBox="0 0 780 240" xmlns="http://www.w3.org/2000/svg" style="font-family:sans-serif;font-size:12px">
+          <defs>
+            <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#0f2c4a"/>
+            </marker>
+          </defs>
+          <text x="20" y="25" font-weight="bold" fill="#0f2c4a" font-size="13">① インデックス構築フェーズ（事前準備）</text>
+          <rect x="20" y="40" width="130" height="55" fill="#f4e4b8" stroke="#c8941f" rx="3"/>
+          <text x="85" y="60" text-anchor="middle" font-size="11" font-weight="bold">原本データ</text>
+          <text x="85" y="78" text-anchor="middle" font-size="10">PDF/Word/Excel/CSV</text>
+          <rect x="175" y="40" width="130" height="55" fill="#eef4fb" stroke="#4a86c4" rx="3"/>
+          <text x="240" y="60" text-anchor="middle" font-size="11" font-weight="bold">前処理</text>
+          <text x="240" y="78" text-anchor="middle" font-size="10">テキスト抽出/章分割</text>
+          <rect x="330" y="40" width="130" height="55" fill="#eef4fb" stroke="#4a86c4" rx="3"/>
+          <text x="395" y="60" text-anchor="middle" font-size="11" font-weight="bold">埋め込み</text>
+          <text x="395" y="78" text-anchor="middle" font-size="10">テキスト→ベクトル</text>
+          <rect x="485" y="40" width="130" height="55" fill="#ecf6ed" stroke="#5a9a64" rx="3"/>
+          <text x="550" y="60" text-anchor="middle" font-size="11" font-weight="bold">ベクトルDB</text>
+          <text x="550" y="78" text-anchor="middle" font-size="10">S3 Vectors</text>
+          <rect x="640" y="40" width="120" height="55" fill="#ecf6ed" stroke="#5a9a64" rx="3"/>
+          <text x="700" y="60" text-anchor="middle" font-size="11" font-weight="bold">Bedrock KB</text>
+          <text x="700" y="78" text-anchor="middle" font-size="10">インデックス完成</text>
+          <path d="M150,67 L175,67" stroke="#0f2c4a" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <path d="M305,67 L330,67" stroke="#0f2c4a" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <path d="M460,67 L485,67" stroke="#0f2c4a" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <path d="M615,67 L640,67" stroke="#0f2c4a" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+          <text x="20" y="135" font-weight="bold" fill="#0f2c4a" font-size="13">② 問い合わせ時フェーズ（毎リクエスト）</text>
+          <rect x="20" y="150" width="130" height="55" fill="#f4e4b8" stroke="#c8941f" rx="3"/>
+          <text x="85" y="170" text-anchor="middle" font-size="11" font-weight="bold">質問</text>
+          <text x="85" y="188" text-anchor="middle" font-size="10">「銅価格動向」</text>
+          <rect x="175" y="150" width="130" height="55" fill="#eef4fb" stroke="#4a86c4" rx="3"/>
+          <text x="240" y="170" text-anchor="middle" font-size="11" font-weight="bold">類似検索</text>
+          <text x="240" y="188" text-anchor="middle" font-size="10">retrieve API</text>
+          <rect x="330" y="150" width="130" height="55" fill="#eef4fb" stroke="#4a86c4" rx="3"/>
+          <text x="395" y="170" text-anchor="middle" font-size="11" font-weight="bold">関連文書</text>
+          <text x="395" y="188" text-anchor="middle" font-size="10">上位N件 + score</text>
+          <rect x="485" y="150" width="275" height="55" fill="#ecf6ed" stroke="#5a9a64" rx="3"/>
+          <text x="622" y="170" text-anchor="middle" font-size="11" font-weight="bold">LLM回答生成</text>
+          <text x="622" y="188" text-anchor="middle" font-size="10">引用付き</text>
+          <path d="M150,177 L175,177" stroke="#0f2c4a" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <path d="M305,177 L330,177" stroke="#0f2c4a" stroke-width="1.5" marker-end="url(#ar2)"/>
+          <path d="M460,177 L485,177" stroke="#0f2c4a" stroke-width="1.5" marker-end="url(#ar2)"/>
+        </svg>
+        <div class="caption">図 7-1：RAGの2フェーズ。①事前に文書をベクトル化、②問い合わせ時に類似検索→LLMが文脈付きで回答</div>
+      </div>
+
+      <h3>用途別にRAGを分ける（本案件の戦略）</h3>
+      <p>1つの巨大RAGではなく、<strong>用途別に4つのRAGに分離</strong>しています。検索精度と運用性の両立が目的です。</p>
+      <table>
+        <thead><tr><th style="width:24%">RAG名</th><th style="width:32%">対象データ</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr><td><strong>market</strong></td><td>LME価格・在庫、JEITA統計、港湾統計</td><td>外部公開統計中心</td></tr>
+          <tr><td><strong>procurement-policy</strong></td><td>調達活動方針、自社・他社戦略</td><td>公開文書のみ</td></tr>
+          <tr><td><strong>supplier</strong></td><td>取引先決算、パートナー区分、リスク分類、財務</td><td>社内データ中心</td></tr>
+          <tr><td><strong>sustainability</strong></td><td>SAQ・RBA等</td><td>現状はRAG未使用、直接ファイル検索</td></tr>
+        </tbody>
+      </table>
+
+      <h3>チャンキング戦略 ― RAG精度の最重要要素</h3>
+      <p>
+        <span class="term" data-tip="長い文書を検索単位（チャンク）に分割する処理。チャンクサイズ・分割方法でRAG精度が大きく変わる。固定長／意味単位／章単位など複数戦略がある。">チャンキング</span>はRAGの精度を左右する最大の要素です。本案件ではデータ性質に応じて3種類の戦略を使い分けています。
+      </p>
+      <div class="card-grid">
+        <div class="card">
+          <span class="badge">text</span>
+          <h4>文章データ (md/txt)</h4>
+          <p>章単位など意味のまとまりで分割。<span class="term" data-tip="セマンティックチャンキング。固定長ではなく文の意味的近接性に基づいて分割する手法。文脈を保ったままRAG精度を上げる。">セマンティックチャンキング</span>で関連文を束ねる。</p>
+        </div>
+        <div class="card">
+          <span class="badge">record</span>
+          <h4>構造化データ (csv/jsonl)</h4>
+          <p><code>RECORD_BASED_STRUCTURE_METADATA</code>を使い、メタデータフィルタで絞り込めるよう整備。</p>
+        </div>
+        <div class="card">
+          <span class="badge">raw</span>
+          <h4>原本ファイル</h4>
+          <p>自動チャンキングのまま保持。前処理が難しい資料はここに寄せる。</p>
+        </div>
+      </div>
+
+      <h3>命名規則（CloudFormation構築時）</h3>
+      <p>本案件のRAGはCloudFormationテンプレート（<code>bedrockKB-poc.yaml</code>）から構築され、規則的なリソース名が付きます。</p>
+      <table>
+        <thead><tr><th style="width:36%">リソース</th><th>命名規則</th></tr></thead>
+        <tbody>
+          <tr><td>S3バケット（原本）</td><td><code>melco-{env}-rag-{kind}-s3</code></td></tr>
+          <tr><td>S3 Vectors</td><td><code>melco-{env}-rag-{kind}-s3vec</code></td></tr>
+          <tr><td>Bedrock Knowledge Base</td><td><code>melco-{env}-rag-{kind}-bkb</code></td></tr>
+          <tr><td>ベクトルインデックス</td><td><code>melco-{env}-rag-{kind}-bkb-idx</code></td></tr>
+          <tr><td>データソース</td><td><code>melco-{env}-rag-{kind}-bkb-ds-{type}</code></td></tr>
+        </tbody>
+      </table>
+      <p>※ <code>env</code>: poc/dev/stg/prd、<code>kind</code>: market/supplier/procurement-policy/sustainability、<code>type</code>: text/data/raw</p>
+
+      <h3>retrieveの呼び出し</h3>
+      <p>Agentからは<code>kb_retrieve</code>ツール経由でKBに問い合わせます。</p>
+      <pre><code><span class="c-com"># market_search_agent/tools/kb_retrieve.py（概要）</span>
+<span class="c-kw">from</span> strands <span class="c-kw">import</span> tool
+<span class="c-kw">import</span> boto3
+
+bedrock_agent = boto3.<span class="c-fn">client</span>(<span class="c-str">"bedrock-agent-runtime"</span>, region_name=<span class="c-str">"us-east-1"</span>)
+
+@<span class="c-fn">tool</span>(name=<span class="c-str">"kb_retrieve"</span>, description=<span class="c-str">"市況Knowledge Basesから関連文書を取得"</span>)
+<span class="c-kw">def</span> <span class="c-fn">kb_retrieve</span>(query: <span class="c-kw">str</span>, top_k: <span class="c-kw">int</span> = <span class="c-num">10</span>, metadata_filter: <span class="c-kw">dict</span> = <span class="c-kw">None</span>):
+    response = bedrock_agent.<span class="c-fn">retrieve</span>(
+        knowledgeBaseId=<span class="c-str">"KB_ID_MARKET"</span>,
+        retrievalQuery={<span class="c-str">"text"</span>: query},
+        retrievalConfiguration={
+            <span class="c-str">"vectorSearchConfiguration"</span>: {
+                <span class="c-str">"numberOfResults"</span>: top_k,
+                <span class="c-str">"filter"</span>: metadata_filter <span class="c-kw">or</span> {},
+            }
+        }
+    )
+    <span class="c-kw">return</span> [{
+        <span class="c-str">"text"</span>: r[<span class="c-str">"content"</span>][<span class="c-str">"text"</span>],
+        <span class="c-str">"source"</span>: r[<span class="c-str">"location"</span>],
+        <span class="c-str">"score"</span>: r[<span class="c-str">"score"</span>]
+    } <span class="c-kw">for</span> r <span class="c-kw">in</span> response[<span class="c-str">"retrievalResults"</span>]]</code></pre>
+
+      <div class="callout warn">
+        <span class="label">実装上の注意点</span>
+        Bedrock KBのExcel/Word/PDF自動解析は<strong>精度が十分でない</strong>ため、前処理でテキスト抽出と章分割を行ったmdファイル＋メタデータをデータソースに使う方が結果が安定します。チャンクサイズは「やや大きめ（最大8kトークン）」に設定し、後段Agentが必要部分のみ抜き出す方針です。
+      </div>
+    </section>
+
+    <!-- ========== Section 8: プロンプト設計 ========== -->
+    <section id="sec8">
+      <h2><span class="num">08</span>プロンプト設計の作法</h2>
+      <p class="lede">
+        Agentic AIシステムの「品質」を決めるのは、コードよりも<strong>プロンプト設計</strong>です。本章では本案件で使われている実プロンプトの構造と工夫を解説します。
+      </p>
+
+      <h3>システムプロンプトとユーザープロンプト</h3>
+      <ul>
+        <li><strong><span class="term" data-tip="LLMに「あなたは何者で、何をどう答えるべきか」を指示する固定文。会話の最初に1度だけ渡される。役割・出力形式・禁止事項などを定義。">システムプロンプト</span></strong>：Agentの恒久的な役割設定。「あなたは市況検索の専門家で、必ず出典付きで返答する」のような指示。</li>
+        <li><strong><span class="term" data-tip="ユーザー（または上位Agent）が都度送る具体的な質問・指示。">ユーザープロンプト</span></strong>：その都度の質問。ユーザー質問が上位、Agent間ではOrchestratorからの依頼。</li>
+      </ul>
+
+      <h3>本案件の問い合わせAgentシステムプロンプト（抜粋）</h3>
+      <pre><code><span class="c-com"># 問い合わせAgent: 役割定義</span>
+あなたは調達業務の分析エキスパートです。
+ユーザーの質問を受け取った場合は <span class="c-str">Mode 1</span> でタスクに分解し、
+タスクと検索結果を受け取った場合は <span class="c-str">Mode 2</span> で十分性を判定します。
+
+<span class="c-com">## Mode 1: タスク分解</span>
+- 出力は必ず JSON: {<span class="c-str">"tasks"</span>:[{<span class="c-str">"task"</span>:<span class="c-str">"..."</span>,<span class="c-str">"weight"</span>:<span class="c-num">0.3</span>}]}
+- task は日本語、一問一答形式、「〜を教えて」で終わる
+- 最大12タスク、weight合計1.0
+- 分解順序: 判定基準 → 核心事実 → 補足（背景/比較/市場）→ 最新性
+
+<span class="c-com">## Mode 2: 十分性判定</span>
+- 出力は必ず JSON: {<span class="c-str">"enough"</span>: <span class="c-kw">true</span>/<span class="c-kw">false</span>, <span class="c-str">"reason"</span>:<span class="c-str">"..."</span>}
+- 合計スコア 60点以上で enough = true
+- 不足理由を具体的に書く
+
+<span class="c-com">## 制約</span>
+- 三菱電機の価値観（信頼/品質/技術/倫理/環境）を踏まえる
+- アイビー・ケース・システムの思考フレームワークを使う
+- 出力以外の説明文は禁止</code></pre>
+
+      <h3>要約Agentシステムプロンプト（抜粋）</h3>
+      <pre><code><span class="c-com">## 出力フォーマット（必須）</span>
+- 必ず日本語Markdown
+- 出力は必ず「<span class="c-str">## 結論</span>」から始める
+- 構造: <span class="c-str">結論 / 根拠 / 注意点 / 出典</span>
+- 絵文字禁止
+- 「以下に〜を記載します」のような前置き禁止
+- タスク分解の話は出力に含めない
+- Agentエラーへの言及禁止
+
+<span class="c-com">## 可視化</span>
+- 意思決定に最も役立つ図を1つだけ選ぶ
+- 利用可能: svg_chart_tool / svg_bubble_chart_tool / svg_stat_map_tool / mermaid
+- グラフ種別: bar / line / area / scatter / stacked_bar / pareto /
+            waterfall / radar / bubble / stat_map_japan / stat_map_world</code></pre>
+
+      <h3>プロンプト設計の7つの原則</h3>
+      <ol class="steps">
+        <li><strong>役割を明示する</strong><p>「あなたは○○の専門家です」と立場を固定。LLMの応答の一貫性が高まる。</p></li>
+        <li><strong>出力形式を厳密に指定</strong><p>JSONなら「JSON以外を出力するな」とまで書く。Markdownなら見出しレベルまで指定。</p></li>
+        <li><strong>禁止事項を明示</strong><p>「前置き禁止」「絵文字禁止」「謝罪禁止」など、ユーザー体験を損なう応答を明示的に止める。</p></li>
+        <li><strong>例（Few-shot）を入れる</strong><p>具体的な入力例と望ましい出力例を1〜3組プロンプトに含める。応答品質が大きく上がる。</p></li>
+        <li><strong>段階的に考えさせる</strong><p>「まず分解、次に評価、最後に統合」など順序を明示。<span class="term" data-tip="Chain-of-Thought。LLMに推論過程を段階的に書かせる手法。複雑なタスクで精度が上がる。">CoT</span>の効果。</p></li>
+        <li><strong>不確実なときは「分からない」と言わせる</strong><p>「証拠が不十分なら推測せず『記載なし』と返す」と明示。<span class="term" data-tip="LLMが事実でないことを自信ありげに生成する現象。RAGや不確実性表現で抑制する。">ハルシネーション</span>を抑える。</p></li>
+        <li><strong>テスト用ケースで継続改善</strong><p>本番でうまくいかないケースを集め、システムプロンプトとFew-shotに反映していく。</p></li>
+      </ol>
+    </section>
+
+    <!-- ========== Section 9: 技術スタック詳細 ========== -->
+    <section id="sec9">
+      <h2><span class="num">09</span>技術スタック詳細</h2>
+      <p class="lede">
+        各層で使う言語・フレームワーク・ライブラリと、それぞれの「なぜ選んだか」を整理します。実コードの<code>pyproject.toml</code>と<code>package.json</code>に基づきます。
+      </p>
+
+      <h3>UI層：Next.js + assistant-ui</h3>
+      <table>
+        <thead><tr><th style="width:32%">技術</th><th>役割</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag lang">TypeScript</span></td><td>静的型でバグを早期発見、コード補完が効く</td></tr>
+          <tr><td><span class="tag fw">Next.js 16</span></td><td><span class="term" data-tip="Client-Side Rendering。ブラウザ側でHTMLを生成する方式。ログイン状態やリアルタイム更新と相性がよい。">CSR</span>で実装。S3に静的ファイルとして配置可能</td></tr>
+          <tr><td><span class="tag fw">React 19</span></td><td>UIコンポーネントの再利用基盤</td></tr>
+          <tr><td><span class="tag fw">assistant-ui 0.12</span></td><td><span class="term" data-tip="チャットUIの汎用ライブラリ（MITライセンス）。スレッド管理・メッセージ表示・カスタムAPI接続を提供。OpenAI API互換のコネクタも標準装備。">assistant-ui</span> フレームワーク。スレッド管理・ストリーミング表示などを担う</td></tr>
+          <tr><td><span class="tag fw">Tailwind CSS 4</span></td><td>ユーティリティクラスでスタイリング</td></tr>
+          <tr><td><span class="tag fw">mermaid 11</span></td><td>AI出力のMermaid記法を図に変換</td></tr>
+          <tr><td><span class="tag fw">Radix UI</span></td><td>アクセシブルなUIプリミティブ</td></tr>
+          <tr><td><span class="tag fw">Zustand 5</span></td><td>クライアント状態管理</td></tr>
+          <tr><td><span class="tag fw">remark-gfm</span></td><td>GitHub Flavored Markdownの拡張記法</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Backend層：Lambda + TypeScript</h3>
+      <table>
+        <thead><tr><th style="width:32%">技術</th><th>役割</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag lang">TypeScript / Node.js 24</span></td><td>Lambda関数の実装言語</td></tr>
+          <tr><td><span class="tag fw">@aws-lambda-powertools</span></td><td>構造化ロギング、入力バリデーション</td></tr>
+          <tr><td><span class="tag fw">@middy/core</span></td><td>Lambdaのミドルウェア層</td></tr>
+          <tr><td><span class="tag fw">Zod 4</span></td><td>リクエスト/レスポンスのスキーマ検証</td></tr>
+          <tr><td><span class="tag fw">AWS SDK v3</span></td><td>S3, Athena, AgentCoreへのアクセス</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Agent層：Python + Strands Agents</h3>
+      <table>
+        <thead><tr><th style="width:32%">技術</th><th>役割</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag lang">Python 3.14</span></td><td>Agentの実装言語</td></tr>
+          <tr><td><span class="tag fw">strands-agents 1.22-1.24</span></td><td><span class="term" data-tip="AWS発のオープンソースAgent開発フレームワーク（Python）。LLM呼び出し、ツール、A2A、OpenTelemetryを統合的にサポート。">Strands Agents</span>。Agent開発の中核フレームワーク</td></tr>
+          <tr><td><span class="tag fw">bedrock-agentcore 1.1.5</span></td><td>AgentCore Runtime対応SDK</td></tr>
+          <tr><td><span class="tag fw">bedrock-agentcore-starter-toolkit</span></td><td>Agentデプロイ用CLI</td></tr>
+          <tr><td><span class="tag fw">a2a-sdk 0.3.22</span></td><td>A2Aプロトコル公式SDK（Orchestrator側）</td></tr>
+          <tr><td><span class="tag fw">FastAPI 0.128</span></td><td>Agent内部のWebサーバ</td></tr>
+          <tr><td><span class="tag fw">mcp 1.19+</span></td><td><span class="term" data-tip="Model Context Protocol。Anthropic提唱の、LLMと外部ツール・データソース接続の標準プロトコル。">MCP</span>対応</td></tr>
+          <tr><td><span class="tag fw">aws-opentelemetry-distro</span></td><td>OpenTelemetryでトレース送信</td></tr>
+          <tr><td><span class="tag fw">structlog / tenacity</span></td><td>構造化ログ、リトライ制御</td></tr>
+          <tr><td><span class="tag fw">httpx 0.28</span></td><td>非同期HTTPクライアント</td></tr>
+          <tr><td><span class="tag fw">pyjwt 2.10</span></td><td>JWTトークン検証</td></tr>
+        </tbody>
+      </table>
+
+      <h3>IaC：AWS CDK</h3>
+      <table>
+        <thead><tr><th style="width:32%">技術</th><th>役割</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag fw">aws-cdk v2.232+</span></td><td><span class="term" data-tip="AWS Cloud Development Kit。AWSリソース構成をTypeScript等のコードで定義してデプロイするツール。CloudFormationテンプレートを自動生成する。">CDK</span>本体</td></tr>
+          <tr><td><span class="tag fw">aws-cdk-lib</span></td><td>各種AWSリソースのL2 Construct</td></tr>
+          <tr><td><span class="tag fw">cdk-dia</span></td><td>構成図を自動生成</td></tr>
+          <tr><td><span class="tag fw">esbuild</span></td><td>LambdaコードのTypeScriptビルド</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout info">
+        <span class="label">なぜこのスタック？</span>
+        <p>AI層をPython、Web層をTypeScriptで分離する選定は、業界標準です。AI系ライブラリ（Strands Agents、A2A SDK、AgentCore）がPython中心で発展しているのに対し、Web系の生産性とエコシステムはTypeScriptが圧倒的だからです。<strong>「適材適所」</strong>の最たる例です。</p>
+      </div>
+    </section>
+
+    <!-- ========== Section 10: 開発環境セットアップ ========== -->
+    <section id="sec10">
+      <h2><span class="num">10</span>開発環境セットアップ（ローカルPC）</h2>
+      <p class="lede">
+        ここから「実際に手を動かして構築する」フェーズに入ります。まずローカルPCの開発環境を整えます。所要時間は1〜2時間。
+      </p>
+
+      <h3>10-1. OSと推奨スペック</h3>
+      <ul>
+        <li><strong>OS</strong>: macOS / Linux / Windows（Windowsは<span class="term" data-tip="Windows Subsystem for Linux 2。Windows上でLinux環境を動かす仕組み。AI開発はWSL2推奨。">WSL2</span>推奨）</li>
+        <li><strong>メモリ</strong>: 16GB以上（推奨32GB）</li>
+        <li><strong>ストレージ</strong>: 空き50GB以上</li>
+        <li><strong>ネットワーク</strong>: 安定したインターネット接続（モデルダウンロードや依存解決で大量通信あり）</li>
+      </ul>
+
+      <h3>10-2. 必須ツールのインストール</h3>
+      <p>以下を順にインストールします。macOSなら<span class="term" data-tip="macOS/Linux向けパッケージマネージャ。コマンドラインで簡単にツールをインストールできる。">Homebrew</span>を使うと早いです。</p>
+
+      <h4>Python 3.14</h4>
+      <pre><code><span class="c-com"># macOS</span>
+brew install python@3.14
+
+<span class="c-com"># 確認</span>
+python3 --version  <span class="c-com"># Python 3.14.x と表示されればOK</span></code></pre>
+
+      <h4>uv（Pythonパッケージマネージャ）</h4>
+      <p><span class="term" data-tip="Pythonの高速パッケージマネージャ。Astral社が開発。pipより数十倍速く、依存解決もrobust。">uv</span>はAstral社製の高速Pythonパッケージマネージャです。本案件のPythonコードは全部<code>uv</code>を使う前提です。</p>
+      <pre><code>curl -LsSf https://astral.sh/uv/install.sh | sh
+uv --version  <span class="c-com"># 動作確認</span></code></pre>
+
+      <h4>Node.js 24</h4>
+      <pre><code><span class="c-com"># nvm（バージョン管理ツール）経由が推奨</span>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+nvm install 24
+nvm use 24
+node --version  <span class="c-com"># v24.x.x</span></code></pre>
+
+      <h4>AWS CLI v2</h4>
+      <pre><code><span class="c-com"># macOS</span>
+brew install awscli
+aws --version  <span class="c-com"># aws-cli/2.x</span></code></pre>
+
+      <h4>AWS CDK</h4>
+      <pre><code>npm install -g aws-cdk
+cdk --version  <span class="c-com"># 2.232.x</span></code></pre>
+
+      <h4>Docker Desktop</h4>
+      <p>AgentCore Runtimeはコンテナで動くため、<span class="term" data-tip="アプリケーションをOSごとパッケージ化して動かす技術。コンテナを管理するのがDocker。">Docker</span>が必要です。<a href="https://www.docker.com/products/docker-desktop">Docker公式</a>からDocker Desktopをダウンロードしインストール。</p>
+      <pre><code>docker --version  <span class="c-com"># Docker version 25.x</span></code></pre>
+
+      <h4>Git</h4>
+      <pre><code>brew install git
+git --version</code></pre>
+
+      <h4>VS Code（推奨）</h4>
+      <p>以下の拡張機能を入れておくと開発が捗ります：</p>
+      <ul>
+        <li>Python（Microsoft）</li>
+        <li>TypeScript and JavaScript Language Features</li>
+        <li>AWS Toolkit</li>
+        <li>Docker</li>
+        <li>Markdown Preview Mermaid Support</li>
+        <li>Ruff（Pythonリンター）</li>
+        <li>ESLint / Prettier</li>
+      </ul>
+
+      <h3>10-3. 環境変数の準備</h3>
+      <p>AWS CLIを使う前に<span class="term" data-tip="AWSアクセスキーとシークレットキー。プログラムからAWS APIを呼ぶときの認証情報。">クレデンシャル</span>を設定します。</p>
+      <pre><code>aws configure
+<span class="c-com"># 以下を入力:</span>
+<span class="c-com"># AWS Access Key ID: AKIA...</span>
+<span class="c-com"># AWS Secret Access Key: ****</span>
+<span class="c-com"># Default region: us-east-1</span>
+<span class="c-com"># Default output: json</span></code></pre>
+
+      <h3>10-4. プロジェクトディレクトリ構成（推奨）</h3>
+      <pre><code>melco-research/
+├── infra/              <span class="c-com"># AWS CDKコード</span>
+├── orchestrator/       <span class="c-com"># Orchestratorのpython</span>
+├── agents/             <span class="c-com"># 各専門Agent</span>
+│   ├── inquiry-agent/
+│   ├── text-summary-agent/
+│   ├── market-search-agent/
+│   ├── supplier-search-agent/
+│   ├── procurement-policy-search-agent/
+│   └── sustainability-search-agent/
+├── backend/            <span class="c-com"># Lambda functions（TypeScript）</span>
+│   └── lambda/
+├── ui/                 <span class="c-com"># Next.js</span>
+└── docs/               <span class="c-com"># ドキュメント</span></code></pre>
+
+      <h3>10-5. ローカルでLLMを呼んでみる（疎通テスト）</h3>
+      <p>環境が整ったら、AWS Bedrock経由でLLMを1回呼んでみましょう。</p>
+      <pre><code><span class="c-com"># test_bedrock.py</span>
+<span class="c-kw">import</span> boto3
+<span class="c-kw">import</span> json
+
+client = boto3.<span class="c-fn">client</span>(<span class="c-str">"bedrock-runtime"</span>, region_name=<span class="c-str">"us-east-1"</span>)
+response = client.<span class="c-fn">invoke_model</span>(
+    modelId=<span class="c-str">"us.anthropic.claude-sonnet-4-5-20250929-v1:0"</span>,
+    body=json.<span class="c-fn">dumps</span>({
+        <span class="c-str">"anthropic_version"</span>: <span class="c-str">"bedrock-2023-05-31"</span>,
+        <span class="c-str">"max_tokens"</span>: <span class="c-num">200</span>,
+        <span class="c-str">"messages"</span>: [{<span class="c-str">"role"</span>: <span class="c-str">"user"</span>, <span class="c-str">"content"</span>: <span class="c-str">"こんにちは"</span>}]
+    })
+)
+<span class="c-fn">print</span>(json.<span class="c-fn">loads</span>(response[<span class="c-str">"body"</span>].<span class="c-fn">read</span>()))</code></pre>
+      <pre><code>python3 test_bedrock.py</code></pre>
+      <p>応答が返ってくれば疎通成功です。エラーが出た場合は11章「AWSアカウント準備」のBedrockモデル有効化を確認してください。</p>
+    </section>
+
+    <!-- ========== Section 11: AWSアカウント準備 ========== -->
+    <section id="sec11">
+      <h2><span class="num">11</span>AWSアカウント準備</h2>
+      <p class="lede">
+        AWSアカウントを取得し、必要な権限・サービスを有効化します。所要時間は1〜2時間（一部のサービス有効化は1日待つことも）。
+      </p>
+
+      <h3>11-1. AWSアカウント作成</h3>
+      <ol class="steps">
+        <li><strong>サインアップ</strong><p><a href="https://aws.amazon.com/jp/">aws.amazon.com</a>から「AWSアカウントを作成」。クレジットカードと電話認証が必要。</p></li>
+        <li><strong>ルートユーザでログイン</strong><p>作成直後はルートユーザでログインできるが、<strong>日常使いは禁止</strong>。次のステップでIAMユーザを作る。</p></li>
+        <li><strong>請求アラートを設定</strong><p>「Billing Dashboard → Cost Anomaly Detection」でアラート閾値を設定。AIサービスは想定外に高くなることがあるため、$50/月でも設定しておくと安全。</p></li>
+      </ol>
+
+      <h3>11-2. IAMユーザ・ロール準備</h3>
+      <p>ルートユーザは使わず、開発用のIAMユーザを作ります。</p>
+      <ol class="steps">
+        <li><strong>IAMユーザ作成</strong><p>IAMコンソールで「Users → Create user」。プログラム経由アクセス用にアクセスキーを発行。</p></li>
+        <li><strong>権限ポリシーをアタッチ</strong><p>本案件レベルの開発には<code>AdministratorAccess</code>を一旦付与。本番では最小権限ポリシーに絞る。</p></li>
+        <li><strong>MFA有効化</strong><p>多要素認証を必ず有効化。AWSコンソールへのログイン時に1回パスワード＋ワンタイムコード。</p></li>
+      </ol>
+
+      <h3>11-3. Bedrockモデルアクセス申請</h3>
+      <p>Bedrockは初期状態では<strong>どのモデルも使えません</strong>。明示的に有効化する必要があります。</p>
+      <ol class="steps">
+        <li><strong>us-east-1へ切り替え</strong><p>右上のリージョン表示を「US East (N. Virginia)」へ。本案件のAgent層はus-east-1で動かす。</p></li>
+        <li><strong>Bedrockコンソールへ</strong><p>サービス検索で「Bedrock」を開く。左メニュー「Model access」。</p></li>
+        <li><strong>使うモデルにチェック</strong><p>必要なモデル（Claude Sonnet 4.5、Claude Haiku、Titan Embeddings v2 など）にチェックを入れて「Request model access」。</p></li>
+        <li><strong>承認を待つ</strong><p>Anthropic製は即時、他は数時間〜1日。承認後Bedrockから呼び出し可能になる。</p></li>
+        <li><strong>Cross-Region Inferenceの有効化</strong><p>本案件は<code>us.anthropic.claude-sonnet-4-5-...</code>を使っているが、これはCross-Region Inference Profileで、複数リージョンのキャパシティを束ねる。これも同じModel access画面で有効化。</p></li>
+      </ol>
+
+      <h3>11-4. ドメイン取得（任意・推奨）</h3>
+      <p>本案件はカスタムドメイン（<code>ai-strategy.strategy-tec.com</code>等）でUIを公開しています。本格的に運用するなら自社ドメインの取得を推奨。</p>
+      <ul>
+        <li>Route 53で「Register domain」</li>
+        <li>取得したドメインのDNS管理をRoute 53で行う（Hosted Zoneを自動作成）</li>
+      </ul>
+      <p>ドメインなしでもCloudFrontのデフォルトURL（<code>xxx.cloudfront.net</code>）で公開可能です。その場合、本案件の<code>cdk.json</code>のドメイン関連項目を空にして対応します。</p>
+
+      <h3>11-5. SES（メール送信）の準備</h3>
+      <ol class="steps">
+        <li><strong>SESコンソールへ</strong><p>SESを使うリージョンを選択（本案件はus-east-1の隣接、東京等）。</p></li>
+        <li><strong>送信元メール（From）の検証</strong><p>「Verified identities」で送信元になるメールアドレスを登録。受信した検証メールのリンクをクリック。</p></li>
+        <li><strong>サンドボックス解除申請</strong><p>初期状態は「送信先も検証済みアドレスのみ」というサンドボックス。本番利用には<strong>解除申請</strong>が必要。AWSサポート経由で申請、承認に数日。</p></li>
+      </ol>
+    </section>
+
+    <!-- ========== Section 12: CDK構築 ========== -->
+    <section id="sec12">
+      <h2><span class="num">12</span>インフラ構築（CDKデプロイ手順）</h2>
+      <p class="lede">
+        本案件のIaCはAWS CDKで実装されています。<strong>9つのCDKスタック</strong>を順にデプロイすれば、UI/Backend/認証/CDN/WAF/カスタムドメイン一式が自動構築されます。
+      </p>
+
+      <h3>12-1. cdk.jsonの編集</h3>
+      <p>まず<code>infra/cdk.json</code>を編集して自分の環境に合わせます。下記が編集が必要な項目です（設定手順書より）：</p>
+      <table>
+        <thead><tr><th style="width:24%">項目</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>apiStageName</code></td><td>API Gatewayのステージ名（dev/production）</td></tr>
+          <tr><td><code>region</code></td><td>UI/Backendのデプロイ先（例：ap-northeast-1）</td></tr>
+          <tr><td><code>orchestratorRegion</code></td><td>Orchestrator/Agentのデプロイ先（例：us-east-1）</td></tr>
+          <tr><td><code>hostedZoneDomain</code></td><td>使うHosted Zoneのドメイン</td></tr>
+          <tr><td><code>apiHostName</code></td><td>UIのFQDN（例：www.ai-strategy.example.com）</td></tr>
+          <tr><td><code>authHostName</code></td><td>CognitoのFQDN（例：auth.ai-strategy.example.com）</td></tr>
+          <tr><td><code>cognitoSesFromEmail</code></td><td>2FA送信元メール（hostedZoneDomain配下）</td></tr>
+          <tr><td><code>cognitoSesRegion</code></td><td>SESを動かすリージョン</td></tr>
+          <tr><td><code>wafAllowedIpAddresses</code></td><td>UIアクセス可IP一覧（CIDR表記）</td></tr>
+          <tr><td><code>webBucketName</code></td><td>UI格納S3バケット名</td></tr>
+          <tr><td><code>agentStatusBucketName</code></td><td>会話履歴格納S3バケット名</td></tr>
+          <tr><td><code>originVerifyHeaderValue</code></td><td>CloudFront/API Gateway間の共有秘密</td></tr>
+        </tbody>
+      </table>
+
+      <h3>12-2. 前準備</h3>
+      <pre><code><span class="c-kw">cd</span> infra/
+npm install
+npm run build
+npx cdk bootstrap  <span class="c-com"># 初回のみ。CDKのメタデータ用S3バケット作成</span></code></pre>
+
+      <h3>12-3. デプロイ順序（重要）</h3>
+      <p>CDKスタックには依存関係があり、<strong>順番が重要</strong>です。設定手順書に基づき以下の順で進めます。</p>
+
+      <ol class="steps">
+        <li>
+          <strong>HostedZoneStack をデプロイ</strong>
+          <pre><code>npx cdk deploy MelcoResearchHostedZoneStack</code></pre>
+          <p>Route 53のHosted Zoneを作成。出力された<code>HostedZoneNameServers</code>の値を、ドメインレジストラ側のNSレコードに登録する。</p>
+          <p><strong>動作確認</strong>：<code>dig soa your-domain.com</code> でDNSが浸透したことを確認。</p>
+        </li>
+        <li>
+          <strong>CertificatesStack をデプロイ（SSL証明書）</strong>
+          <pre><code>npx cdk deploy MelcoResearchCertificatesStack</code></pre>
+          <p>ACM証明書を作成。出力された<code>ApiCertificateArn</code> / <code>CognitoCertificateArn</code>を<code>cdk.json</code>に書き戻す。</p>
+        </li>
+        <li>
+          <strong>ApiLambdaStack をデプロイ（Backend Lambda群）</strong>
+          <pre><code>npx cdk deploy MelcoResearchApiLambdaStack</code></pre>
+          <p>9本のLambda関数とAthena WorkGroupを作成。</p>
+        </li>
+        <li>
+          <strong>WafStack をデプロイ（us-east-1で）</strong>
+          <pre><code>npx cdk deploy MelcoResearchWafStack</code></pre>
+          <p>CloudFront用WAFはus-east-1必須。出力された<code>WebAclArn</code>を<code>cdk.json</code>に設定。</p>
+        </li>
+        <li>
+          <strong>Orchestratorをデプロイ（手動）</strong>
+          <p>Bedrock AgentCore Starter Toolkitで手動デプロイ（13章参照）。完成後の<code>orchestratorRuntimeArn</code>を<code>cdk.json</code>に設定。</p>
+        </li>
+        <li>
+          <strong>InfraStack をデプロイ（CloudFront/API Gateway/Cognito等）</strong>
+          <pre><code>npx cdk deploy MelcoResearchInfraStack</code></pre>
+          <p>UIホスティング、API Gateway、Cognito等の本体を構築。出力された<code>UserPoolId</code>を<code>cdk.json</code>に設定。</p>
+        </li>
+        <li>
+          <strong>SESサンドボックス解除申請</strong>
+          <p>Cognitoの2FAメールを送るため、AWSサポートに申請。</p>
+        </li>
+        <li>
+          <strong>CognitoCustomDomainStack をデプロイ</strong>
+          <pre><code>npx cdk deploy MelcoResearchCognitoCustomDomainStack</code></pre>
+          <p>Cognitoのカスタムドメイン（auth.〜）を構築。</p>
+        </li>
+        <li>
+          <strong>UIをbuildしてS3にアップロード</strong>
+          <pre><code><span class="c-kw">cd</span> ../ui
+npm install
+npm run build
+aws s3 sync ./out s3://your-web-bucket-name/ --delete
+<span class="c-com"># CloudFrontキャッシュを無効化</span>
+aws cloudfront create-invalidation --distribution-id XXXXX --paths <span class="c-str">"/*"</span></code></pre>
+        </li>
+      </ol>
+
+      <div class="callout warn">
+        <span class="label">DNS浸透待ちと依存順序</span>
+        Step 1〜2の間で<strong>NSレコードが伝播するのを待つ</strong>必要があります（通常5〜30分、最大48時間）。せっかちにStep 2を実行するとACMの証明書発行（DNS-01検証）が失敗します。
+      </div>
+    </section>
+
+    <!-- ========== Section 13: Agentの実装 ========== -->
+    <section id="sec13">
+      <h2><span class="num">13</span>Agentの実装</h2>
+      <p class="lede">
+        各専門Agentを実装します。本案件では6つのAgentが似たディレクトリ構造を持ち、<code>system_prompts</code>と<code>tools</code>を差し替えることで個性を出しています。
+      </p>
+
+      <h3>13-1. Agent標準ディレクトリ構成</h3>
+      <pre><code>market-search-agent/
+├── pyproject.toml          <span class="c-com"># 依存定義</span>
+├── agent.py                <span class="c-com"># Agent本体（FastAPI + Strands + A2A）</span>
+├── agent_base.py           <span class="c-com"># 名前、説明、LLMモデル設定</span>
+├── auth.py                 <span class="c-com"># Cognito JWT検証</span>
+├── aws_session.py          <span class="c-com"># boto3セッション</span>
+├── a2a_context.py          <span class="c-com"># A2Aコンテキスト管理</span>
+├── Dockerfile              <span class="c-com"># コンテナビルド定義</span>
+├── system_prompts/         <span class="c-com"># システムプロンプト（複数mdを連結）</span>
+│   ├── 01_role.md
+│   ├── 02_data_sources.md
+│   └── 03_output_format.md
+└── tools/                  <span class="c-com"># Agentが使うツール</span>
+    └── kb_retrieve.py</code></pre>
+
+      <h3>13-2. pyproject.toml（依存定義）</h3>
+      <pre><code>[project]
+name = <span class="c-str">"melco-market-search-agent"</span>
+version = <span class="c-str">"0.1.0"</span>
+requires-python = <span class="c-str">"&gt;=3.14"</span>
+dependencies = [
+    <span class="c-str">"boto3[crt]==1.42.26"</span>,
+    <span class="c-str">"strands-agents[a2a,otel]==1.22.0"</span>,
+    <span class="c-str">"strands-agents-tools==0.2.19"</span>,
+    <span class="c-str">"bedrock-agentcore==1.1.5"</span>,
+    <span class="c-str">"bedrock-agentcore-starter-toolkit==0.2.6"</span>,
+    <span class="c-str">"fastapi==0.128.0"</span>,
+    <span class="c-str">"uvicorn==0.40.0"</span>,
+    <span class="c-str">"pyjwt==2.10.1"</span>,
+    <span class="c-str">"aws-opentelemetry-distro==0.14.1"</span>,
+    <span class="c-str">"mcp &gt;= 1.19.0"</span>,
+]</code></pre>
+
+      <h3>13-3. agent_base.py（モデル設定）</h3>
+      <pre><code>AGENT_NAME = <span class="c-str">"market_search_agent"</span>
+AGENT_DESCRIPTION = <span class="c-str">"市況情報に関連する内部情報を検索して取得"</span>
+
+MODEL_NAME = <span class="c-str">"us.anthropic.claude-sonnet-4-5-20250929-v1:0"</span>
+
+MODEL_PARAMETERS = {
+    <span class="c-str">"max_tokens"</span>: <span class="c-num">64000</span>,
+    <span class="c-str">"temperature"</span>: <span class="c-num">0.35</span>,
+    <span class="c-str">"additional_request_fields"</span>: {
+        <span class="c-str">"anthropic_beta"</span>: [<span class="c-str">"context-1m-2025-08-07"</span>],
+    }
+}</code></pre>
+
+      <h3>13-4. agent.py（Agent本体）</h3>
+      <p>実装の中核です。Strands Agents + A2A Server + AgentCore Runtimeを組み合わせます。</p>
+      <pre><code><span class="c-kw">from</span> strands <span class="c-kw">import</span> Agent
+<span class="c-kw">from</span> strands.models.bedrock <span class="c-kw">import</span> BedrockModel
+<span class="c-kw">from</span> strands.multiagent.a2a <span class="c-kw">import</span> A2AServer
+<span class="c-kw">from</span> strands.tools.loader <span class="c-kw">import</span> load_tools_from_file_path
+<span class="c-kw">from</span> bedrock_agentcore.memory.integrations.strands.session_manager <span class="c-kw">import</span> AgentCoreMemorySessionManager
+<span class="c-kw">from</span> agent_base <span class="c-kw">import</span> AGENT_NAME, AGENT_DESCRIPTION, MODEL_NAME, MODEL_PARAMETERS
+<span class="c-kw">from</span> pathlib <span class="c-kw">import</span> Path
+<span class="c-kw">import</span> uvicorn
+
+<span class="c-kw">def</span> <span class="c-fn">_load_system_prompt</span>() -&gt; <span class="c-kw">str</span>:
+    <span class="c-com"># system_prompts/*.md を全部読んで連結</span>
+    prompts_dir = Path(<span class="c-str">"system_prompts"</span>)
+    files = <span class="c-fn">sorted</span>(prompts_dir.<span class="c-fn">glob</span>(<span class="c-str">"*.md"</span>))
+    <span class="c-kw">return</span> <span class="c-str">"\n\n"</span>.<span class="c-fn">join</span>(f.<span class="c-fn">read_text</span>(encoding=<span class="c-str">"utf-8"</span>) <span class="c-kw">for</span> f <span class="c-kw">in</span> files)
+
+<span class="c-kw">def</span> <span class="c-fn">_load_tools</span>():
+    tools = []
+    <span class="c-kw">for</span> tool_path <span class="c-kw">in</span> Path(<span class="c-str">"tools"</span>).<span class="c-fn">glob</span>(<span class="c-str">"*.py"</span>):
+        tools.<span class="c-fn">extend</span>(load_tools_from_file_path(<span class="c-fn">str</span>(tool_path)))
+    <span class="c-kw">return</span> tools
+
+<span class="c-com"># Strands Agent本体を構築</span>
+model = BedrockModel(model_id=MODEL_NAME, **MODEL_PARAMETERS)
+agent = <span class="c-fn">Agent</span>(
+    name=AGENT_NAME,
+    description=AGENT_DESCRIPTION,
+    model=model,
+    system_prompt=_load_system_prompt(),
+    tools=_load_tools(),
+)
+
+<span class="c-com"># A2AServerでHTTP公開</span>
+a2a = <span class="c-fn">A2AServer</span>(agent=agent, host=<span class="c-str">"0.0.0.0"</span>, port=<span class="c-num">8000</span>)
+app = a2a.<span class="c-fn">build</span>()
+
+<span class="c-kw">if</span> __name__ == <span class="c-str">"__main__"</span>:
+    uvicorn.<span class="c-fn">run</span>(app, host=<span class="c-str">"0.0.0.0"</span>, port=<span class="c-num">8000</span>)</code></pre>
+
+      <h3>13-5. tools/kb_retrieve.py（RAG検索ツール）</h3>
+      <pre><code><span class="c-kw">from</span> strands <span class="c-kw">import</span> tool
+<span class="c-kw">import</span> boto3
+<span class="c-kw">import</span> os
+
+KB_ID = os.<span class="c-fn">environ</span>[<span class="c-str">"KB_ID_MARKET"</span>]  <span class="c-com"># デプロイ時に注入</span>
+client = boto3.<span class="c-fn">client</span>(<span class="c-str">"bedrock-agent-runtime"</span>, region_name=<span class="c-str">"us-east-1"</span>)
+
+@<span class="c-fn">tool</span>(
+    name=<span class="c-str">"kb_retrieve"</span>,
+    description=<span class="c-str">"市況Knowledge Basesから関連文書を取得する"</span>,
+)
+<span class="c-kw">def</span> <span class="c-fn">kb_retrieve</span>(
+    query: <span class="c-kw">str</span>,
+    top_k: <span class="c-kw">int</span> = <span class="c-num">10</span>,
+    metadata_filter: <span class="c-kw">dict</span> | <span class="c-kw">None</span> = <span class="c-kw">None</span>,
+) -&gt; <span class="c-kw">list</span>[<span class="c-kw">dict</span>]:
+    config = {<span class="c-str">"vectorSearchConfiguration"</span>: {<span class="c-str">"numberOfResults"</span>: top_k}}
+    <span class="c-kw">if</span> metadata_filter:
+        config[<span class="c-str">"vectorSearchConfiguration"</span>][<span class="c-str">"filter"</span>] = metadata_filter
+
+    response = client.<span class="c-fn">retrieve</span>(
+        knowledgeBaseId=KB_ID,
+        retrievalQuery={<span class="c-str">"text"</span>: query},
+        retrievalConfiguration=config,
+    )
+
+    <span class="c-kw">return</span> [{
+        <span class="c-str">"text"</span>: r[<span class="c-str">"content"</span>][<span class="c-str">"text"</span>],
+        <span class="c-str">"source_file"</span>: r[<span class="c-str">"location"</span>].<span class="c-fn">get</span>(<span class="c-str">"s3Location"</span>, {}).<span class="c-fn">get</span>(<span class="c-str">"uri"</span>),
+        <span class="c-str">"score"</span>: <span class="c-fn">round</span>(r[<span class="c-str">"score"</span>], <span class="c-num">4</span>),
+    } <span class="c-kw">for</span> r <span class="c-kw">in</span> response[<span class="c-str">"retrievalResults"</span>]]</code></pre>
+
+      <h3>13-6. ローカル起動</h3>
+      <pre><code><span class="c-kw">cd</span> agents/market-search-agent
+uv sync                <span class="c-com"># 依存ライブラリ取得</span>
+uv run python agent.py <span class="c-com"># http://localhost:8000 で起動</span></code></pre>
+
+      <h3>13-7. AgentCore Runtimeへのデプロイ</h3>
+      <p>本案件では<span class="term" data-tip="AgentCoreにAgentをデプロイするためのCLIツール。コンテナビルド・ECRプッシュ・Runtime登録を自動化。">AgentCore Starter Toolkit</span>でデプロイします。</p>
+      <pre><code>uv run agentcore configure  <span class="c-com"># 初期設定（リージョン、IAMロール等）</span>
+uv run agentcore launch     <span class="c-com"># Dockerビルド → ECR push → Runtime登録</span>
+
+<span class="c-com"># デプロイ完了後、ARNが表示される。orchestrator/agent.jsonに登録</span>
+<span class="c-com"># 例: arn:aws:bedrock-agentcore:us-east-1:xxx:runtime/melco_market_search_agent-XXXX</span></code></pre>
+
+      <p>デプロイ時の指定項目（設定手順書より）：</p>
+      <ul>
+        <li>RAG（Bedrock Knowledge Base ID）</li>
+        <li>Bedrock Guardrail ID</li>
+        <li>稼働リージョン</li>
+        <li>Cognito認証先（CDK構築値）</li>
+        <li>IAMロール（CDK構築値）</li>
+      </ul>
+    </section>
+
+    <!-- ========== Section 14: Orchestratorの実装 ========== -->
+    <section id="sec14">
+      <h2><span class="num">14</span>Orchestratorの実装</h2>
+      <p class="lede">
+        Orchestratorは全Agentの司令塔です。本案件ではA2AではなくAgentCoreの<code>/invocation</code> API（非同期実行サポート）として実装されています。
+      </p>
+
+      <h3>14-1. なぜOrchestratorは非同期API？</h3>
+      <p>
+        AgentCore Runtimeの仕様：
+      </p>
+      <ul>
+        <li>同期API（A2A）：最大15分</li>
+        <li>非同期API（<code>/invocation</code>）：最大8時間</li>
+      </ul>
+      <p>Agentの処理は将来的に15分を超える可能性があるため、Orchestratorは非同期APIで実装します。</p>
+
+      <h3>14-2. ディレクトリ構成</h3>
+      <pre><code>orchestrator/
+├── pyproject.toml
+├── app.py                  <span class="c-com"># BedrockAgentCoreApp + エンドポイント</span>
+├── execute.py              <span class="c-com"># メインの実行ロジック</span>
+├── agent_processing.py     <span class="c-com"># A2A SDK経由でAgent呼び出し</span>
+├── orchestrator_definitions.py  <span class="c-com"># agent.json読み込み</span>
+├── agent.json              <span class="c-com"># 各Agentのエンドポイント定義</span>
+├── orchestrator.md         <span class="c-com"># Orchestratorのシステムプロンプト</span>
+├── s3_storage.py           <span class="c-com"># S3への会話履歴書き込み</span>
+├── models.py               <span class="c-com"># Pydanticモデル定義</span>
+├── auth.py                 <span class="c-com"># Cognito JWT検証</span>
+└── telemetry.py            <span class="c-com"># OpenTelemetry設定</span></code></pre>
+
+      <h3>14-3. app.py（エントリポイント）</h3>
+      <pre><code><span class="c-kw">from</span> bedrock_agentcore.runtime <span class="c-kw">import</span> BedrockAgentCoreApp, RequestContext
+<span class="c-kw">from</span> pydantic <span class="c-kw">import</span> TypeAdapter
+<span class="c-kw">from</span> agent_processing <span class="c-kw">import</span> AgentCallProcessor
+<span class="c-kw">from</span> execute <span class="c-kw">import</span> StrandsOrchestrator
+<span class="c-kw">from</span> auth <span class="c-kw">import</span> get_auth_context_from_authorization_header
+<span class="c-kw">from</span> s3_storage <span class="c-kw">import</span> S3Storage, TalkLogAsyncAppender
+<span class="c-kw">from</span> telemetry <span class="c-kw">import</span> configure_telemetry
+
+app = <span class="c-fn">BedrockAgentCoreApp</span>()
+configure_telemetry(app)
+
+@app.<span class="c-fn">entrypoint</span>
+<span class="c-kw">async def</span> <span class="c-fn">handler</span>(request: <span class="c-kw">dict</span>, context: RequestContext):
+    <span class="c-com"># 1. JWT検証</span>
+    auth_ctx = <span class="c-fn">get_auth_context_from_authorization_header</span>(
+        context.headers.<span class="c-fn">get</span>(<span class="c-str">"Authorization"</span>)
+    )
+    <span class="c-com"># 2. リクエスト解析</span>
+    req = <span class="c-fn">ExecuteRequest</span>.<span class="c-fn">model_validate</span>(request)
+    thread_id = req.thread_id
+    user_prompt = req.user_prompt
+
+    <span class="c-com"># 3. S3に会話開始を記録</span>
+    storage = <span class="c-fn">S3Storage</span>(bucket=BUCKET, user_id=auth_ctx.user_id, run_id=req.run_id)
+    <span class="c-fn">storage</span>.<span class="c-fn">write_status</span>({<span class="c-str">"status"</span>: <span class="c-str">"running"</span>, <span class="c-str">"message"</span>: <span class="c-str">"入力内容を解析しています"</span>})
+
+    <span class="c-com"># 4. Orchestrator本体を起動（非同期で別スレッド実行）</span>
+    orchestrator = <span class="c-fn">StrandsOrchestrator</span>(
+        agent_call_processor=<span class="c-fn">AgentCallProcessor</span>(auth_token=auth_ctx.token),
+        storage=storage,
+    )
+    <span class="c-kw">return await</span> orchestrator.<span class="c-fn">run</span>(thread_id, user_prompt)</code></pre>
+
+      <h3>14-4. execute.py 中核ロジック（イメージ）</h3>
+      <pre><code><span class="c-kw">class</span> <span class="c-fn">StrandsOrchestrator</span>:
+    <span class="c-kw">async def</span> <span class="c-fn">run</span>(self, thread_id, user_prompt):
+        history = self.<span class="c-fn">load_history</span>(thread_id)
+
+        <span class="c-com"># Step 1: 問い合わせAgentで分解</span>
+        decomposition = <span class="c-kw">await</span> self.agent_call_processor.<span class="c-fn">call</span>(
+            <span class="c-str">"inquiry"</span>, {<span class="c-str">"mode"</span>: <span class="c-str">"decompose"</span>, <span class="c-str">"query"</span>: user_prompt}
+        )
+        tasks = decomposition[<span class="c-str">"tasks"</span>]
+
+        <span class="c-com"># Step 2: 各タスクを適切な専門Agentに振り分けて並列実行</span>
+        agent_results = []
+        <span class="c-kw">for</span> task <span class="c-kw">in</span> tasks:
+            target = self.<span class="c-fn">select_agent</span>(task)  <span class="c-com"># Orchestratorプロンプトで判定</span>
+            result = <span class="c-kw">await</span> self.agent_call_processor.<span class="c-fn">call</span>(target, task)
+            agent_results.<span class="c-fn">append</span>({<span class="c-str">"task"</span>: task, <span class="c-str">"result"</span>: result})
+            self.storage.<span class="c-fn">append_talk_log</span>(...)  <span class="c-com"># 都度S3書き込み</span>
+
+        <span class="c-com"># Step 3: 問い合わせAgentで十分性判定</span>
+        eval_result = <span class="c-kw">await</span> self.agent_call_processor.<span class="c-fn">call</span>(
+            <span class="c-str">"inquiry"</span>, {<span class="c-str">"mode"</span>: <span class="c-str">"evaluate"</span>, <span class="c-str">"results"</span>: agent_results}
+        )
+        <span class="c-kw">if not</span> eval_result[<span class="c-str">"enough"</span>]:
+            <span class="c-com"># 不足なら再分解＋再検索（再帰）</span>
+            <span class="c-kw">return await</span> self.<span class="c-fn">run</span>(thread_id, user_prompt + f<span class="c-str">"\n追加: {eval_result['reason']}"</span>)
+
+        <span class="c-com"># Step 4: 要約Agentで統合</span>
+        summary = <span class="c-kw">await</span> self.agent_call_processor.<span class="c-fn">call</span>(
+            <span class="c-str">"text-summary"</span>, {<span class="c-str">"query"</span>: user_prompt, <span class="c-str">"results"</span>: agent_results}
+        )
+
+        <span class="c-com"># Step 5: 完了状態をS3に書き込み</span>
+        self.storage.<span class="c-fn">write_status</span>({<span class="c-str">"status"</span>: <span class="c-str">"complete"</span>})
+        self.storage.<span class="c-fn">append_talk_log</span>({<span class="c-str">"source"</span>: <span class="c-str">"assistant"</span>, <span class="c-str">"message"</span>: summary})
+        <span class="c-kw">return</span> summary</code></pre>
+
+      <h3>14-5. S3への状態出力</h3>
+      <p>Orchestratorは以下4つのファイルをS3に書き込みます（パターン：<code>/orchestrator/(UID)/(RunID)/</code>）：</p>
+      <table>
+        <thead><tr><th style="width:24%">ファイル</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td><code>talk.jsonl</code></td><td>会話ログ。各行が1ターン（user/assistant/Orchestrator/Agent名）</td></tr>
+          <tr><td><code>exec_*.json</code></td><td>各Agentへの送信ペイロード（直前3件の履歴のみ）</td></tr>
+          <tr><td><code>status.json</code></td><td>実行状態（running/complete + 短メッセージ）</td></tr>
+          <tr><td><code>title.json</code></td><td>スレッドタイトル（後から自動生成）</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== Section 15: Backendの実装 ========== -->
+    <section id="sec15">
+      <h2><span class="num">15</span>Backendの実装（Lambda × 9）</h2>
+      <p class="lede">
+        BackendはLambda9本でAPIを提供します。すべてTypeScript／Node.js 24で書かれ、CDKでデプロイされます。
+      </p>
+
+      <h3>15-1. API一覧</h3>
+      <table>
+        <thead><tr><th style="width:6%">No</th><th style="width:18%">Lambda関数名</th><th style="width:10%">メソッド</th><th>パス</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>chatFunction</td><td>POST</td><td><code>/api/chat</code>（スレッド作成）</td></tr>
+          <tr><td>2</td><td>chatStartFunction</td><td>POST</td><td><code>/api/chat/{Thread ID}</code>（ユーザプロンプト送信）</td></tr>
+          <tr><td>3</td><td>chatDetailFunction</td><td>GET</td><td><code>/api/chat/{Thread ID}</code>（スレッド内容取得）</td></tr>
+          <tr><td>4</td><td>listFunction</td><td>GET</td><td><code>/api/list</code>（スレッド一覧取得）</td></tr>
+          <tr><td>5</td><td>generateTitleFunction</td><td>GET</td><td><code>/api/chat/{Thread ID}/generateTitle</code></td></tr>
+          <tr><td>6</td><td>runStatusFunction</td><td>GET</td><td><code>/api/runs/{Run ID}</code>（実行状態取得）</td></tr>
+          <tr><td>7</td><td>chatStatusFunction</td><td>GET</td><td>スレッド状態取得</td></tr>
+          <tr><td>8</td><td>uploadFunction</td><td>POST</td><td>添付ファイル用 presigned URL</td></tr>
+          <tr><td>9</td><td>downloadFunction</td><td>GET</td><td>添付ファイル用 presigned URL</td></tr>
+        </tbody>
+      </table>
+
+      <h3>15-2. Lambda関数の例：chat-start-handler.ts</h3>
+      <pre><code><span class="c-kw">import</span> { APIGatewayProxyHandler } <span class="c-kw">from</span> <span class="c-str">"aws-lambda"</span>;
+<span class="c-kw">import</span> { BedrockAgentCoreClient, InvokeAgentRuntimeCommand } <span class="c-kw">from</span> <span class="c-str">"@aws-sdk/client-bedrock-agentcore"</span>;
+<span class="c-kw">import</span> { z } <span class="c-kw">from</span> <span class="c-str">"zod"</span>;
+
+<span class="c-kw">const</span> bodySchema = z.<span class="c-fn">object</span>({
+  message: z.<span class="c-fn">object</span>({
+    role: z.<span class="c-fn">literal</span>(<span class="c-str">"user"</span>),
+    content: z.<span class="c-fn">string</span>(),
+    createdAt: z.<span class="c-fn">string</span>().<span class="c-fn">datetime</span>(),
+  }),
+});
+
+<span class="c-kw">const</span> agentcore = <span class="c-kw">new</span> <span class="c-fn">BedrockAgentCoreClient</span>({ region: <span class="c-str">"us-east-1"</span> });
+
+<span class="c-kw">export const</span> handler: APIGatewayProxyHandler = <span class="c-kw">async</span> (event) =&gt; {
+  <span class="c-kw">const</span> threadId = event.pathParameters!.threadId!;
+  <span class="c-kw">const</span> body = bodySchema.<span class="c-fn">parse</span>(<span class="c-fn">JSON.parse</span>(event.body!));
+  <span class="c-kw">const</span> userId = event.requestContext.authorizer!.claims.sub;
+
+  <span class="c-com">// AgentCore非同期起動</span>
+  <span class="c-kw">const</span> resp = <span class="c-kw">await</span> agentcore.<span class="c-fn">send</span>(<span class="c-kw">new</span> <span class="c-fn">InvokeAgentRuntimeCommand</span>({
+    agentRuntimeArn: process.env.ORCHESTRATOR_ARN!,
+    runtimeSessionId: threadId,
+    payload: <span class="c-fn">JSON.stringify</span>({ thread_id: threadId, user_prompt: body.message.content, user_id: userId }),
+    executionMode: <span class="c-str">"ASYNC"</span>,
+  }));
+
+  <span class="c-kw">const</span> runId = `run_${threadId}_${resp.taskId}`;
+  <span class="c-kw">return</span> { statusCode: <span class="c-num">200</span>, body: <span class="c-fn">JSON.stringify</span>({ runId }) };
+};</code></pre>
+
+      <h3>15-3. スレッド一覧取得（Athena経由）</h3>
+      <p>S3に分散したJSONファイルを横断的に検索するためAthenaを使います。</p>
+      <pre><code><span class="c-kw">import</span> { AthenaClient, StartQueryExecutionCommand, GetQueryResultsCommand } <span class="c-kw">from</span> <span class="c-str">"@aws-sdk/client-athena"</span>;
+
+<span class="c-kw">const</span> athena = <span class="c-kw">new</span> <span class="c-fn">AthenaClient</span>({});
+<span class="c-kw">const</span> query = `
+  SELECT thread_id, title, status, created_at
+  FROM agent_status_db.thread_index
+  WHERE user_id = <span class="c-str">'${userId}'</span> AND status = <span class="c-str">'regular'</span>
+  ORDER BY created_at DESC
+  LIMIT 100
+`;
+<span class="c-kw">const</span> start = <span class="c-kw">await</span> athena.<span class="c-fn">send</span>(<span class="c-kw">new</span> <span class="c-fn">StartQueryExecutionCommand</span>({
+  QueryString: query,
+  WorkGroup: process.env.ATHENA_WORKGROUP,
+}));</code></pre>
+    </section>
+
+    <!-- ========== Section 16: UI ========== -->
+    <section id="sec16">
+      <h2><span class="num">16</span>UIの実装（Next.js + assistant-ui）</h2>
+      <p class="lede">
+        UIは<span class="term" data-tip="ブラウザ側でJavaScriptがHTMLを生成するレンダリング方式。初期表示は遅いが、SPAとして滑らかに動く。">CSR</span>のNext.jsアプリです。assistant-uiでチャット画面の大部分を組み上げ、不足分をカスタマイズします。
+      </p>
+
+      <h3>16-1. ディレクトリ構成（主要部）</h3>
+      <pre><code>ui/
+├── app/
+│   ├── page.tsx              <span class="c-com"># トップページ</span>
+│   ├── assistant.tsx         <span class="c-com"># メインのチャットUI</span>
+│   ├── AgentProvider.tsx     <span class="c-com"># カスタムAPIコネクタ</span>
+│   ├── layout.tsx            <span class="c-com"># レイアウト</span>
+│   ├── callback/page.tsx     <span class="c-com"># Cognitoログインcallback</span>
+│   └── logout/page.tsx       <span class="c-com"># ログアウト</span>
+├── components/
+│   ├── assistant-ui/
+│   │   ├── thread.tsx              <span class="c-com"># スレッド表示</span>
+│   │   ├── thread-list.tsx         <span class="c-com"># スレッド一覧</span>
+│   │   ├── markdown-text.tsx       <span class="c-com"># Markdownレンダラ</span>
+│   │   └── threadlist-sidebar.tsx
+│   └── ui/                   <span class="c-com"># Radix UIラッパー</span>
+├── lib/
+│   ├── auth/                 <span class="c-com"># Cognito連携</span>
+│   └── threads/              <span class="c-com"># Backend API呼び出し</span>
+└── package.json</code></pre>
+
+      <h3>16-2. assistant-uiのカスタムコネクタ</h3>
+      <p>assistant-uiはデフォルトでOpenAI APIを呼ぶ前提ですが、本案件は独自Backendなので<strong>カスタムコネクタ</strong>を作ります。</p>
+      <pre><code><span class="c-com">// app/AgentProvider.tsx</span>
+<span class="c-kw">import</span> { useChatRuntime } <span class="c-kw">from</span> <span class="c-str">"@assistant-ui/react"</span>;
+
+<span class="c-kw">export function</span> <span class="c-fn">AgentProvider</span>({ children }) {
+  <span class="c-kw">const</span> runtime = <span class="c-fn">useChatRuntime</span>({
+    api: <span class="c-str">"/api/chat"</span>,  <span class="c-com">// Backend経由</span>
+
+    <span class="c-com">// カスタム送信ロジック</span>
+    onSendMessage: <span class="c-kw">async</span> ({ threadId, message }) =&gt; {
+      <span class="c-kw">const</span> jwt = <span class="c-fn">getJwtFromLocalStorage</span>();
+      <span class="c-kw">const</span> resp = <span class="c-kw">await</span> <span class="c-fn">fetch</span>(`/api/chat/${threadId}`, {
+        method: <span class="c-str">"POST"</span>,
+        headers: { <span class="c-str">"Authorization"</span>: `Bearer ${jwt}` },
+        body: <span class="c-fn">JSON.stringify</span>({ message }),
+      });
+      <span class="c-kw">const</span> { runId } = <span class="c-kw">await</span> resp.<span class="c-fn">json</span>();
+
+      <span class="c-com">// 3秒ごとにポーリング</span>
+      <span class="c-kw">return</span> <span class="c-fn">pollRunStatus</span>(runId);
+    },
+  });
+  <span class="c-kw">return</span> &lt;AssistantRuntimeProvider runtime={runtime}&gt;{children}&lt;/AssistantRuntimeProvider&gt;;
+}</code></pre>
+
+      <h3>16-3. ポーリング実装</h3>
+      <pre><code><span class="c-kw">async function</span> <span class="c-fn">pollRunStatus</span>(runId: <span class="c-kw">string</span>) {
+  <span class="c-kw">while</span> (<span class="c-kw">true</span>) {
+    <span class="c-kw">const</span> resp = <span class="c-kw">await</span> <span class="c-fn">fetch</span>(`/api/runs/${runId}`);
+    <span class="c-kw">const</span> data = <span class="c-kw">await</span> resp.<span class="c-fn">json</span>();
+    <span class="c-kw">if</span> (data.status === <span class="c-str">"complete"</span>) <span class="c-kw">return</span> data.result;
+    <span class="c-kw">await</span> <span class="c-kw">new</span> <span class="c-fn">Promise</span>(r =&gt; <span class="c-fn">setTimeout</span>(r, <span class="c-num">3000</span>));
+  }
+}</code></pre>
+
+      <h3>16-4. Markdown＋SVG＋Mermaidレンダラ</h3>
+      <p>AI出力はMarkdown形式で、図はSVGまたはMermaidで埋め込まれます。</p>
+      <pre><code><span class="c-kw">import</span> ReactMarkdown <span class="c-kw">from</span> <span class="c-str">"react-markdown"</span>;
+<span class="c-kw">import</span> remarkGfm <span class="c-kw">from</span> <span class="c-str">"remark-gfm"</span>;
+<span class="c-kw">import</span> mermaid <span class="c-kw">from</span> <span class="c-str">"mermaid"</span>;
+
+<span class="c-kw">export function</span> <span class="c-fn">MarkdownText</span>({ content }) {
+  <span class="c-fn">useEffect</span>(() =&gt; { mermaid.<span class="c-fn">contentLoaded</span>(); }, [content]);
+  <span class="c-kw">return</span> (
+    &lt;ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        code({ className, children }) {
+          <span class="c-kw">if</span> (className === <span class="c-str">"language-mermaid"</span>)
+            <span class="c-kw">return</span> &lt;div className=<span class="c-str">"mermaid"</span>&gt;{children}&lt;/div&gt;;
+          <span class="c-kw">return</span> &lt;code&gt;{children}&lt;/code&gt;;
+        },
+      }}
+    &gt;{content}&lt;/ReactMarkdown&gt;
+  );
+}</code></pre>
+    </section>
+
+    <!-- ========== Section 17: RAGの構築手順 ========== -->
+    <section id="sec17">
+      <h2><span class="num">17</span>RAGの構築手順</h2>
+      <p class="lede">
+        本案件のRAGはCloudFormationテンプレート<code>bedrockKB-poc.yaml</code>で構築されます。S3／S3 Vectors／Bedrock Knowledge Base／インデックス／データソースが一発で作られます。
+      </p>
+
+      <h3>17-1. RAG構築の全体フロー</h3>
+      <ol class="steps">
+        <li><strong>原本データを準備</strong><p>PDF, Word, Excel, CSV, テキスト等を集める。本案件ではzipで利用元データ一式を納品。</p></li>
+        <li><strong>前処理（必要に応じて）</strong><p>Excel/Word/PDFはBedrock KBの自動解析が弱いため、テキスト抽出 → 章単位mdに変換しメタデータを付ける。</p></li>
+        <li><strong>S3にアップロード</strong><p>命名規則<code>melco-{env}-rag-{kind}-s3</code>のバケットにアップロード。</p></li>
+        <li><strong>CloudFormationでKB構築</strong><p><code>bedrockKB-poc.yaml</code>を使ってBedrock KB、S3 Vectors、インデックスを一括作成。</p></li>
+        <li><strong>データソース同期</strong><p>Bedrock KBコンソールから「Sync」実行。S3のファイルが自動的にチャンク化＋ベクトル化＋インデックス登録される。</p></li>
+        <li><strong>動作確認</strong><p>Bedrock KBコンソールの「Test Knowledge Base」でテスト検索。期待する文書が上位にヒットすればOK。</p></li>
+      </ol>
+
+      <h3>17-2. CloudFormationでの構築</h3>
+      <pre><code>aws cloudformation deploy \
+    --template-file bedrockKB-poc.yaml \
+    --stack-name melco-poc-rag-market \
+    --parameter-overrides \
+        EnvValue=poc \
+        AccountValue=396231126219 \
+        RegionValue=us-east-1 \
+        KindValue=market \
+    --capabilities CAPABILITY_NAMED_IAM</code></pre>
+      <p>同じ要領で<code>supplier</code>, <code>procurement-policy</code>, <code>sustainability</code>のスタックも作成します。</p>
+
+      <h3>17-3. データの前処理サンプル（Python）</h3>
+      <p>Excel→mdへの変換例：</p>
+      <pre><code><span class="c-kw">import</span> pandas <span class="c-kw">as</span> pd
+<span class="c-kw">from</span> pathlib <span class="c-kw">import</span> Path
+
+<span class="c-kw">def</span> <span class="c-fn">excel_to_md</span>(xlsx_path: <span class="c-kw">str</span>, out_dir: Path):
+    xl = pd.<span class="c-fn">ExcelFile</span>(xlsx_path)
+    <span class="c-kw">for</span> sheet_name <span class="c-kw">in</span> xl.sheet_names:
+        df = pd.<span class="c-fn">read_excel</span>(xl, sheet_name=sheet_name)
+        md = f<span class="c-str">"# {Path(xlsx_path).stem} - {sheet_name}\n\n"</span>
+        md += df.<span class="c-fn">to_markdown</span>(index=<span class="c-kw">False</span>)
+        out_path = out_dir / f<span class="c-str">"{Path(xlsx_path).stem}_{sheet_name}.md"</span>
+        out_path.<span class="c-fn">write_text</span>(md, encoding=<span class="c-str">"utf-8"</span>)
+
+        <span class="c-com"># メタデータJSONも作成</span>
+        meta = {<span class="c-str">"metadataAttributes"</span>: {
+            <span class="c-str">"source_file"</span>: Path(xlsx_path).name,
+            <span class="c-str">"sheet"</span>: sheet_name,
+            <span class="c-str">"doc_type"</span>: <span class="c-str">"data"</span>,
+        }}
+        (out_path.with_suffix(<span class="c-str">".md.metadata.json"</span>)).<span class="c-fn">write_text</span>(json.<span class="c-fn">dumps</span>(meta))</code></pre>
+
+      <h3>17-4. メタデータフィルタの活用</h3>
+      <p>本案件ではメタデータでデータの絞り込みができます。例：パートナー一覧だけ検索する。</p>
+      <pre><code>kb_retrieve(
+    query=<span class="c-str">"取引先パートナー区分"</span>,
+    top_k=<span class="c-num">20</span>,
+    metadata_filter={
+        <span class="c-str">"equals"</span>: {<span class="c-str">"key"</span>: <span class="c-str">"doc_type"</span>, <span class="c-str">"value"</span>: <span class="c-str">"list"</span>}
+    }
+)</code></pre>
+      <p>利用可能なフィルタ演算子：<code>andAll, equals, greaterThan, greaterThanOrEquals, in, lessThan, lessThanOrEquals, listContains, notEquals, notIn, orAll</code></p>
+
+      <h3>17-5. Guardrailの構築</h3>
+      <p>設定手順書より：</p>
+      <ul>
+        <li><strong>不正時返却文</strong>：「申し訳ありませんが、セキュリティ上の理由により本システムではこの質問に回答できません。」</li>
+        <li><strong>フィルタリング対象</strong>：プロンプト攻撃（敷居値 = 高）</li>
+      </ul>
+      <p>Bedrockコンソール → Guardrails → Create guardrail で設定。Guardrail IDをAgentデプロイ時に指定します。</p>
+    </section>
+
+    <!-- ========== Section 18: デプロイ・動作確認 ========== -->
+    <section id="sec18">
+      <h2><span class="num">18</span>デプロイと動作確認</h2>
+      <p class="lede">
+        すべての部品が揃ったら、システム全体を組み上げて動作確認します。エンドツーエンドの試験は本案件の試験仕様書を参考にします。
+      </p>
+
+      <h3>18-1. デプロイの全体順序</h3>
+      <ol class="steps">
+        <li><strong>RAG構築</strong><p>各領域のCloudFormationスタックを作成（17章）。Bedrock KB IDをメモ。</p></li>
+        <li><strong>Guardrail構築</strong><p>Bedrockコンソールで作成。Guardrail IDをメモ。</p></li>
+        <li><strong>専門Agent群をデプロイ</strong><p><code>uv run agentcore launch</code>を各Agentで実行。デプロイ後のARNをメモ。</p></li>
+        <li><strong>OrchestratorのAgent.jsonを更新</strong><p>各AgentのARNを<code>agent.json</code>に書き込む。</p></li>
+        <li><strong>Orchestratorをデプロイ</strong><p>同じく<code>uv run agentcore launch</code>。ARNをcdk.jsonに設定。</p></li>
+        <li><strong>CDKでインフラ展開</strong><p>12章のCDKデプロイ手順を実施。</p></li>
+        <li><strong>UIをbuild & S3アップロード</strong><p><code>npm run build && aws s3 sync</code>。</p></li>
+        <li><strong>CloudFrontキャッシュ無効化</strong><p>新UI反映のため<code>create-invalidation</code>。</p></li>
+      </ol>
+
+      <h3>18-2. 動作確認</h3>
+      <ol>
+        <li>ブラウザでUIのURLにアクセス</li>
+        <li>Cognitoのログイン画面が表示されたら、登録したアカウントでログイン</li>
+        <li>2FA（メール）コードを入力</li>
+        <li>チャット画面が表示される</li>
+        <li>「銅素材の価格動向を教えて」と質問</li>
+        <li>「入力内容を解析しています」「関連キーワードを抽出しています」「専門エージェント間の調整を行っています」「回答文を構築しています」と状態が遷移</li>
+        <li>結論・根拠・注意点・出典の形で回答が返ってくれば成功</li>
+      </ol>
+
+      <h3>18-3. ユニットテスト・結合テスト</h3>
+      <p>本案件の試験仕様書（xlsx）は4ファイル：UI／Backend／Orchestrator／インフラに分かれており、それぞれ「項番・試験項目・期待結果・実施結果・担当者・実施日・判定」を記録する形式です。同じテンプレートで自分の試験仕様書を作ると体系的です。</p>
+      <p>主な確認観点：</p>
+      <ul>
+        <li>認証：未ログインユーザは画面表示NG／ログイン後のJWT有効期限</li>
+        <li>API：各エンドポイントが仕様通りのJSONを返す／不正リクエストで400</li>
+        <li>Agent：分解→検索→評価→要約の各段階が期待通り進む</li>
+        <li>RAG：類似検索の上位N件が期待する文書か</li>
+        <li>非機能：応答時間／同時アクセス耐性／長時間タスクの完了</li>
+      </ul>
+    </section>
+
+    <!-- ========== Section 19: 運用・監視 ========== -->
+    <section id="sec19">
+      <h2><span class="num">19</span>運用・監視</h2>
+      <p class="lede">
+        Agentic AIシステムは「動かして終わり」ではなく、ログ・トレース・コストを継続的に観測して改善する必要があります。
+      </p>
+
+      <h3>19-1. 観測ポイント</h3>
+      <table>
+        <thead><tr><th style="width:24%">観点</th><th>ツール</th><th>確認内容</th></tr></thead>
+        <tbody>
+          <tr><td>関数の動作ログ</td><td>CloudWatch Logs</td><td>各Lambda・Agentの標準出力</td></tr>
+          <tr><td>会話単位の追跡</td><td>CloudWatch GenAI</td><td>LLM呼び出し、ツール実行、トークン消費</td></tr>
+          <tr><td>分散トレース</td><td>OpenTelemetry → CloudWatch GenAI</td><td>1リクエストの全Agent経路</td></tr>
+          <tr><td>コスト監視</td><td>Cost Explorer / Budgets</td><td>BedrockトークンコストとAgentCore実行時間</td></tr>
+          <tr><td>エラー検知</td><td>CloudWatch Alarms</td><td>Lambda異常、Agentエラー率、SES送信失敗</td></tr>
+          <tr><td>ユーザー分析</td><td>Athena + S3会話履歴</td><td>よく使われる質問パターン、未解決クエリ</td></tr>
+        </tbody>
+      </table>
+
+      <h3>19-2. OpenTelemetryの活用</h3>
+      <p>本案件はOpenTelemetryで分散トレースを送ります。各Agentに以下のような計装が入っています：</p>
+      <pre><code><span class="c-kw">from</span> opentelemetry <span class="c-kw">import</span> trace
+tracer = trace.<span class="c-fn">get_tracer</span>(<span class="c-str">"a2a-server"</span>)
+
+<span class="c-kw">async def</span> <span class="c-fn">handle_request</span>(req):
+    <span class="c-kw">with</span> tracer.<span class="c-fn">start_as_current_span</span>(<span class="c-str">"inquiry"</span>) <span class="c-kw">as</span> span:
+        span.<span class="c-fn">set_attribute</span>(<span class="c-str">"user.id"</span>, req.user_id)
+        span.<span class="c-fn">set_attribute</span>(<span class="c-str">"thread.id"</span>, req.thread_id)
+        result = <span class="c-kw">await</span> <span class="c-fn">process</span>(req)
+        span.<span class="c-fn">set_attribute</span>(<span class="c-str">"tokens.used"</span>, result.tokens)
+        <span class="c-kw">return</span> result</code></pre>
+      <p>ローカル開発時は<span class="term" data-tip="LLM観測・評価ツール。プロンプト・応答・トレース・コストを可視化する。SaaS版とセルフホスト版がある。本案件ではローカル開発時の挙動調査に利用。">Langfuse</span>にデータを送る設定にすると挙動調査が捗ります。</p>
+
+      <h3>19-3. コスト管理のコツ</h3>
+      <ul>
+        <li><strong>モデル使い分け</strong>：簡単な分解はHaiku、複雑な要約はSonnet等、タスクに応じて切り替え</li>
+        <li><strong>キャッシュ活用</strong>：頻出質問は<span class="term" data-tip="Anthropicのプロンプトキャッシュ機能。同じシステムプロンプトを使い回す場合、キャッシュヒットで料金が10分の1になる。">プロンプトキャッシュ</span>でコストを下げる</li>
+        <li><strong>コンテキスト圧縮</strong>：会話履歴を圧縮してトークン消費を抑える（共通Agentに機能あり）</li>
+        <li><strong>Guardrailで早期遮断</strong>：不正プロンプトはGuardrailで止め、無駄なLLM消費を防ぐ</li>
+        <li><strong>AgentCore非同期完了通知</strong>：実行完了をイベント通知にし、ポーリング負荷を下げる検討</li>
+      </ul>
+
+      <h3>19-4. セキュリティ運用</h3>
+      <ul>
+        <li><strong>WAFのアクセス制限</strong>：許可IPアドレスリストの定期見直し</li>
+        <li><strong>Cognitoのパスワードポリシー</strong>：定期変更、複雑さ要件</li>
+        <li><strong>IAMの最小権限化</strong>：本番ではAdministratorAccessをAgent専用ロールに絞る</li>
+        <li><strong>KMSキーローテーション</strong>：年1回以上</li>
+        <li><strong>監査ログ</strong>：CloudTrailで全API呼び出しを記録</li>
+      </ul>
+    </section>
+
+    <!-- ========== Section 20: トラブルシューティング ========== -->
+    <section id="sec20">
+      <h2><span class="num">20</span>トラブルシューティング</h2>
+      <p class="lede">
+        構築時によく遭遇する問題と対処を整理します。
+      </p>
+
+      <h3>20-1. CDKデプロイ系</h3>
+      <table>
+        <thead><tr><th style="width:36%">症状</th><th>原因と対処</th></tr></thead>
+        <tbody>
+          <tr><td><code>cdk bootstrap</code>が失敗</td><td>IAM権限不足。<code>AdministratorAccess</code>を一旦付与。<code>aws configure</code>のリージョンも確認。</td></tr>
+          <tr><td>ACM証明書が発行されない</td><td>Route 53のNSレコードが正しく登録されていない／DNS未浸透。<code>dig NS your-domain.com</code>で確認、伝播待ち。</td></tr>
+          <tr><td>CloudFrontがアクセスエラー</td><td>WAFのIP制限に自分のIPが含まれていない。<code>cdk.json</code>の<code>wafAllowedIpAddresses</code>を確認。</td></tr>
+          <tr><td>2FAメールが届かない</td><td>SESがサンドボックスモード。解除申請が必要。</td></tr>
+          <tr><td>「Resource is not authorized」エラー</td><td>Lambda実行ロールに必要権限が無い。CDKのGrant文を確認。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>20-2. Agent系</h3>
+      <table>
+        <thead><tr><th style="width:36%">症状</th><th>原因と対処</th></tr></thead>
+        <tbody>
+          <tr><td>Bedrock呼び出しが「AccessDenied」</td><td>Bedrockコンソールでモデルアクセス申請をしていない。「Model access」画面でチェック。</td></tr>
+          <tr><td>「ThrottlingException」が頻発</td><td>Bedrockのキャパシティ上限。Cross-Region Inferenceを使う、Quotaを引き上げ申請。</td></tr>
+          <tr><td>Agentが返事を返さない</td><td>15分の同期API制限を越えている。非同期APIに切り替え。</td></tr>
+          <tr><td>AgentCardが取得できない</td><td>AgentCoreがlocalhostアドレスを返している。A2A SDKのラッパで変換処理を追加（本案件のorchestrator実装参照）。</td></tr>
+          <tr><td>LLM出力がJSONとして壊れている</td><td>プロンプトに「JSON以外を出力するな」と強く明示。<code>response_format</code>指定も検討。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>20-3. RAG系</h3>
+      <table>
+        <thead><tr><th style="width:36%">症状</th><th>原因と対処</th></tr></thead>
+        <tbody>
+          <tr><td>retrieveが空配列を返す</td><td>データソースが同期されていない。KBコンソールの「Sync」を実行。</td></tr>
+          <tr><td>関連性の低い文書が返る</td><td>チャンクサイズが大きすぎる／メタデータが不適切／前処理が雑。前処理を再検討、チャンキング戦略を見直す。</td></tr>
+          <tr><td>Excel/PDFが正しく取り込まれない</td><td>Bedrock KBの自動解析は精度が低い。テキスト抽出 → md化を前処理で行う。</td></tr>
+          <tr><td>メタデータフィルタが効かない</td><td><code>RECORD_BASED_STRUCTURE_METADATA</code>形式で投入していない。フォーマット確認。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>20-4. UI系</h3>
+      <table>
+        <thead><tr><th style="width:36%">症状</th><th>原因と対処</th></tr></thead>
+        <tbody>
+          <tr><td>ログイン後リダイレクトが繰り返す</td><td>CloudFrontの「/api以外をUIにredirect」設定でループ。callbackパスを除外。</td></tr>
+          <tr><td>JWTが「expired」エラー</td><td>1時間程度の有効期限切れ。Cognitoのリフレッシュトークンで更新する処理を追加。</td></tr>
+          <tr><td>ストリーミング応答が表示されない</td><td>CloudFrontのキャッシュ設定がストリーミングを阻害。<code>Cache-Control: no-cache</code>を付ける。</td></tr>
+          <tr><td>Mermaid図がレンダリングされない</td><td>mermaid.contentLoaded()が呼ばれていない。useEffectでcontent変更を監視。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== Section 21: 拡張・次のステップ ========== -->
+    <section id="sec21">
+      <h2><span class="num">21</span>拡張・次のステップ</h2>
+      <p class="lede">
+        PoCを実運用に持っていくとき、または次フェーズで取り組むべき拡張ポイントを整理します。
+      </p>
+
+      <h3>21-1. 題材プロジェクト時点の制約</h3>
+      <table>
+        <thead><tr><th style="width:36%">項目</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr><td>会話内容に基づく不正検知</td><td>Guardrailは入力のみ、出力動的検知は未実装</td></tr>
+          <tr><td>コンテキスト圧縮</td><td>長時間対話時のトークン削減ロジックは未実装</td></tr>
+          <tr><td>Orchestratorダウン時の再復帰</td><td>会話の自動再開には未対応</td></tr>
+          <tr><td>ヒューマン・イン・ザ・ループ</td><td>承認・修正フローは未実装</td></tr>
+          <tr><td>Agent評価・自動チューニング</td><td>ユーザーフィードバック収集は未対応</td></tr>
+          <tr><td>画像・図・OCR</td><td>RAG対象外（テキスト抽出可能なものに限定）</td></tr>
+          <tr><td>スレッド数増加時の表示最適化</td><td>大量スレッドのUI最適化は未着手</td></tr>
+        </tbody>
+      </table>
+
+      <h3>21-2. 実運用に向けた拡張ポイント</h3>
+      <div class="card-grid">
+        <div class="card">
+          <h4>評価ループの自動化</h4>
+          <p>ユーザーフィードバックを構造化保存し、定期的にAgent品質をスコアリング。プロンプトの自動チューニング機構と連動させる。</p>
+        </div>
+        <div class="card">
+          <h4>マルチモーダル対応</h4>
+          <p>図表・PDFの画像領域・スキャン文書をOCRと画像理解で取り込む。Claude Vision、AWS Textract活用。</p>
+        </div>
+        <div class="card">
+          <h4>ヒューマン・イン・ザ・ループ</h4>
+          <p>重要判断や外部送信前に人間の承認を挟むワークフロー。承認画面・差し戻し・監査ログが必要。</p>
+        </div>
+        <div class="card">
+          <h4>コスト最適化</h4>
+          <p>モデル使い分け、プロンプトキャッシュ、Guardrailによるトークン消費抑制、結果キャッシュ。</p>
+        </div>
+        <div class="card">
+          <h4>セキュリティ強化</h4>
+          <p>PII検出、機密データのマスキング、テナント分離、出力フィルタリング、監査証跡。</p>
+        </div>
+        <div class="card">
+          <h4>Agent追加・差し替え</h4>
+          <p>新業務領域ごとに専門Agentを追加。AgentCardでOrchestratorに登録するだけで拡張可能。</p>
+        </div>
+        <div class="card">
+          <h4>A2UI（AI生成UI）</h4>
+          <p>業務ごとに動的にフォーム・ワークフロー画面をAIが生成。assistant-uiが将来対応予定。</p>
+        </div>
+        <div class="card">
+          <h4>大規模スケール</h4>
+          <p>千人規模の同時利用を想定したスケーリング設計。Athenaクエリ最適化、S3コスト管理。</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="label">本番運用の心構え</span>
+        <p>Agentic AIは「100%正解する自動化装置」ではなく<strong>「人間の判断を高速化する補助装置」</strong>として設計するのが現実解です。<strong>根拠の提示・出典の明示・『分からない』と返せる挙動・人間がレビューできる出力構造</strong> の4点が揃って初めて業務利用に値するシステムになります。</p>
+      </div>
+    </section>
+
+    <!-- ========== Section 22: 用語集 ========== -->
+    <section id="sec22">
+      <h2><span class="num">22</span>用語集（50音順）</h2>
+      <p class="lede">
+        本ガイドで登場した専門用語を50音順／アルファベット順で整理します。本文中の下線付き用語にマウスを乗せると、同じ説明が表示されます。
+      </p>
+
+      <h3>あ行〜わ行</h3>
+      <dl class="glossary">
+        <dt>アーカイブ（archived）</dt><dd>スレッドの状態の一つで、非表示扱い。スレッド一覧には出ない。</dd>
+        <dt>埋め込み（Embedding）</dt><dd>テキストを高次元の数値ベクトルに変換する処理。意味の近いテキストは近い位置に配置され、類似度検索が可能になる。</dd>
+        <dt>オーケストレータ（Orchestrator）</dt><dd>複数のAgentを統制する司令塔。ユーザー要求を受け、適切なAgentに依頼を振り分け、結果を統合する。</dd>
+        <dt>カスタムドメイン</dt><dd>独自のドメイン名（例：<code>auth.example.com</code>）でCognitoやAPI Gatewayを公開すること。ACM証明書とDNS設定が必要。</dd>
+        <dt>関数呼び出し（Function Calling）</dt><dd>LLMが関数を呼び出すべきかを判断し、引数を生成する機能。OpenAI APIで提唱され広まった。</dd>
+        <dt>クロスリージョン推論</dt><dd>複数リージョンのBedrockキャパシティをまとめて使うプロファイル。スロットリングを避けやすい。</dd>
+        <dt>サーバーレス</dt><dd>サーバの起動・停止・パッチ適用を自前管理せず、コードだけ書く方式。Lambdaが代表。</dd>
+        <dt>システムプロンプト</dt><dd>LLMに「あなたは何者でどう答えるか」を指示する固定文。会話の最初に1度だけ渡される。</dd>
+        <dt>セマンティックチャンキング</dt><dd>固定長ではなく意味的近接性に基づいて文書を分割する手法。文脈を保ったままRAG精度を上げる。</dd>
+        <dt>ツール（Tool）</dt><dd>Agentが呼び出せる関数。Web検索、DB照会、計算、グラフ描画など。LLMが「腕」として使う。</dd>
+        <dt>ハルシネーション</dt><dd>LLMが事実でないことを自信ありげに生成する現象。RAGや不確実性表現で抑制する。</dd>
+        <dt>非同期</dt><dd>処理をバックグラウンドで進め、即座にレスポンスを返す方式。長時間処理に必須。</dd>
+        <dt>ポーリング</dt><dd>クライアントが一定間隔でサーバに状態を問い合わせる方式。本案件ではUIが3秒ごと。</dd>
+        <dt>リージョン</dt><dd>AWSのデータセンターがある地域。本案件はap-northeast-1（東京）とus-east-1（バージニア）の2リージョン構成。</dd>
+      </dl>
+
+      <h3>アルファベット</h3>
+      <dl class="glossary">
+        <dt>A2A（Agent-to-Agent Protocol）</dt><dd>エージェント同士が通信するためのオープン標準プロトコル。AgentCardによるスキル公開、JSON-RPC形式のメッセージ交換、ストリーミング応答を規定。</dd>
+        <dt>ACM（AWS Certificate Manager）</dt><dd>SSL/TLS証明書を無料発行してくれるサービス。CloudFrontやAPI Gatewayに紐付ける。</dd>
+        <dt>AgentCard</dt><dd>各Agentが自身のメタ情報（名前・能力・入出力モード・スキル）を公開するためのJSON。Orchestratorが動的にAgentを発見するために使う。</dd>
+        <dt>AgentCore</dt><dd>AWS Bedrock AgentCore。AIエージェント実行基盤。Runtime（実行環境）、Memory（記憶）、Identity等。コンテナベース。</dd>
+        <dt>API Gateway</dt><dd>HTTPリクエストを受けてLambdaやその他サービスにルーティングするAWSサービス。認証・スロットリング・キャッシュも担う。</dd>
+        <dt>ARN（Amazon Resource Name）</dt><dd>AWSのリソースを一意に識別する文字列。例: <code>arn:aws:lambda:us-east-1:123456789012:function:MyFn</code></dd>
+        <dt>Athena</dt><dd>S3上のファイルにSQLを直接実行できるサービス。事前にデータベースを立てる必要がない。</dd>
+        <dt>AWS</dt><dd>Amazon Web Services。Amazonのクラウドサービス群。世界最大手。</dd>
+        <dt>Bedrock</dt><dd>AWSの基盤モデル統合サービス。Claude、Llama、Titanなど複数LLMを統一APIで使える。</dd>
+        <dt>Bedrock Knowledge Bases</dt><dd>AWSのマネージドRAGサービス。データソース管理、自動チャンキング、ベクトル化、retrieve APIまでをワンストップで提供。</dd>
+        <dt>Bedrock Guardrails</dt><dd>LLMの入出力に対する安全フィルタ。プロンプト攻撃、機密情報、有害表現などを検知・遮断。</dd>
+        <dt>CDK（AWS Cloud Development Kit）</dt><dd>AWSリソースをTypeScript等のコードで定義してデプロイするツール。CloudFormationテンプレートを自動生成する。</dd>
+        <dt>CDN</dt><dd>Content Delivery Network。世界中のエッジサーバから素早くコンテンツを配信する仕組み。CloudFrontが代表。</dd>
+        <dt>CloudFront</dt><dd>AWSのCDNサービス。S3のコンテンツを世界中のエッジで高速配信。WAFやACM証明書と組み合わせて使う。</dd>
+        <dt>CloudWatch</dt><dd>AWSの監視サービス。ログ、メトリクス、アラーム、ダッシュボードをまとめて扱う。</dd>
+        <dt>CloudWatch GenAI</dt><dd>CloudWatchの生成AI拡張。LLM呼び出し・ツール実行・トークン消費を会話単位で可視化。</dd>
+        <dt>Cognito</dt><dd>AWSの認証サービス。ユーザープール、Hosted UI、JWT発行、2FAなど認証一式を提供。</dd>
+        <dt>CSR</dt><dd>Client-Side Rendering。ブラウザ側でHTMLを生成する方式。本案件のUIはCSRで構築。</dd>
+        <dt>Docker</dt><dd>アプリケーションをOSごとパッケージ化して動かす技術（コンテナ）。AgentCore Runtimeはコンテナベース。</dd>
+        <dt>FastAPI</dt><dd>Pythonの高速Webフレームワーク。Agent内部のHTTPサーバとして利用。</dd>
+        <dt>Guardrails</dt><dd>Bedrock Guardrails参照。</dd>
+        <dt>Homebrew</dt><dd>macOS/Linux向けパッケージマネージャ。</dd>
+        <dt>IaC（Infrastructure as Code）</dt><dd>クラウドリソースの構成をコードで定義・管理する手法。CDK、Terraform、CloudFormation等。</dd>
+        <dt>IAM</dt><dd>Identity and Access Management。AWS上で誰が何にアクセスできるかを制御する仕組み。</dd>
+        <dt>JSON-RPC</dt><dd>JSONベースの遠隔手続き呼び出しプロトコル。A2Aの通信フォーマットとして採用。</dd>
+        <dt>JWT（JSON Web Token）</dt><dd>認証情報を含む電子署名付きトークン。Cognitoが発行し、API Gateway/Lambdaで検証。</dd>
+        <dt>KMS</dt><dd>Key Management Service。AWSの暗号鍵管理サービス。</dd>
+        <dt>Lambda</dt><dd>AWSのサーバーレス関数実行サービス。コードをアップロードし、リクエスト時に自動起動。</dd>
+        <dt>Langfuse</dt><dd>LLM観測・評価ツール。プロンプト・応答・トレース・コストを可視化。本案件ではローカル開発時に利用。</dd>
+        <dt>LLM</dt><dd>Large Language Model。大規模言語モデル。GPT、Claude、Llama等。</dd>
+        <dt>LTM</dt><dd>Long-Term Memory。長期記憶。複数セッションをまたいで保持。</dd>
+        <dt>MAS</dt><dd>Multi-Agent System。複数Agentが協調動作するシステム。</dd>
+        <dt>MCP</dt><dd>Model Context Protocol。Anthropic提唱の、LLMと外部ツール・データソース接続の標準プロトコル。</dd>
+        <dt>MECE</dt><dd>Mutually Exclusive, Collectively Exhaustive。「重複なく漏れなく」分解する考え方。問い合わせAgentの分解原則。</dd>
+        <dt>Mermaid</dt><dd>テキストで記述する図表記法。フローチャート、シーケンス図、ガントチャート等。Markdown内に埋め込み可能。</dd>
+        <dt>MFA</dt><dd>Multi-Factor Authentication。多要素認証。本案件はEmailコードで2FA。</dd>
+        <dt>Next.js</dt><dd>Reactベースのフルスタックフレームワーク。Vercel社が開発。</dd>
+        <dt>OpenTelemetry（OTEL）</dt><dd>分散システムのトレース・メトリクス・ログを統一する標準。CloudWatch GenAIやLangfuseが受け取る。</dd>
+        <dt>PoC</dt><dd>Proof of Concept。本格導入前に小規模に試して成立性を検証。本案件はPoC。</dd>
+        <dt>RAG</dt><dd>Retrieval-Augmented Generation。LLMが知らない情報を外部DBから検索して回答に組み込む手法。</dd>
+        <dt>Route 53</dt><dd>AWSのDNSサービス。ドメイン名管理。</dd>
+        <dt>S3</dt><dd>Amazon Simple Storage Service。クラウド版ファイル置き場。</dd>
+        <dt>S3 Vectors</dt><dd>S3のベクトルストア機能。Bedrock KBのバックエンドとして利用。</dd>
+        <dt>SES</dt><dd>Simple Email Service。AWSのメール送信サービス。Cognito 2FAメール送信に使う。</dd>
+        <dt>SAQ</dt><dd>Self-Assessment Questionnaire。サプライヤー自己評価質問票。サステナビリティ評価に使う。</dd>
+        <dt>RBA</dt><dd>Responsible Business Alliance。電子業界の責任ある企業同盟。サプライヤー行動規範を策定。</dd>
+        <dt>Strands Agents</dt><dd>AWS発のオープンソースAgent開発フレームワーク（Python）。LLM・ツール・A2A・OTELを統合。</dd>
+        <dt>STM</dt><dd>Short-Term Memory。短期記憶。1セッション内の会話履歴。</dd>
+        <dt>Tailwind CSS</dt><dd>ユーティリティクラス指向のCSSフレームワーク。</dd>
+        <dt>TypeScript</dt><dd>JavaScriptに静的型を追加した言語。Web開発の事実上の標準。</dd>
+        <dt>uv</dt><dd>Astral社製の高速Pythonパッケージマネージャ。本案件のPythonコード全てで利用。</dd>
+        <dt>WAF</dt><dd>Web Application Firewall。HTTPレベルでの攻撃防御、IP制限、レート制限。</dd>
+        <dt>Zod</dt><dd>TypeScript用のスキーマバリデーションライブラリ。Backend Lambdaで入力検証に利用。</dd>
+        <dt>Zustand</dt><dd>軽量なReact状態管理ライブラリ。本案件のUIで利用。</dd>
+      </dl>
+    </section>
+
+    <footer style="margin-top:64px;padding:24px 0;border-top:2px solid var(--navy);color:var(--text-mute);font-size:12px;text-align:center;line-height:1.8;">
+      <strong>Agentic AI 完全構築ガイド</strong><br/>
+      題材：調達向け情報検索エージェント（PoC開発、2026年3月納品物一式）<br/>
+      対象：クラウド/Lambdaを知らないレベルから始めて、同等システムを自力構築できるまで
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>
