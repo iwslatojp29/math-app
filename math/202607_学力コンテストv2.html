@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>学コン問題 解答解説 v14.0</title>
+  <style>
+    :root{
+      --ink:#1d2733;
+      --muted:#5d6978;
+      --line:#d9e0e8;
+      --soft:#f6f8fb;
+      --soft2:#fff8ec;
+      --accent:#214f8f;
+      --accent2:#0f766e;
+      --warn:#a16207;
+      --paper:#ffffff;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      font-family:"Hiragino Maru Gothic ProN","Hiragino Maru Gothic Pro","Yu Gothic","Meiryo",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+      background:#eef3f8;
+      line-height:1.75;
+    }
+    header.hero{
+      background:linear-gradient(135deg,#173b6d,#1d6f78);
+      color:white;
+      padding:28px 22px 18px;
+      border-bottom:4px solid rgba(255,255,255,.25);
+    }
+    .hero-inner{max-width:1180px;margin:0 auto;}
+    .hero h1{margin:0 0 8px;font-size:28px;letter-spacing:.02em;}
+    .hero p{margin:4px 0;color:#e9f3ff;font-size:14px;}
+    .problem-nav{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+      box-shadow:0 2px 10px rgba(20,40,70,.08);
+    }
+    .problem-nav .nav-inner{
+      max-width:1180px;
+      margin:0 auto;
+      padding:10px 14px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .problem-nav a{
+      text-decoration:none;
+      color:var(--accent);
+      background:#eef5ff;
+      border:1px solid #cfe0f7;
+      padding:7px 12px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:13px;
+    }
+    main{max-width:1180px;margin:22px auto 60px;padding:0 14px;}
+    .answer-summary{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px 20px;
+      box-shadow:0 8px 24px rgba(23,48,80,.08);
+      margin-bottom:22px;
+    }
+    .answer-summary h2{margin:0 0 10px;font-size:20px;color:#123b68;}
+    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+    .summary-card{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px;}
+    .summary-card strong{color:#123b68;display:block;margin-bottom:4px;}
+    article.problem-analysis{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:22px;
+      margin:26px 0;
+      box-shadow:0 12px 32px rgba(23,48,80,.10);
+    }
+    article.problem-analysis h2{
+      margin:0 0 14px;
+      padding-bottom:10px;
+      border-bottom:3px solid #dce8f7;
+      color:#123b68;
+      font-size:24px;
+    }
+    h3.section-title{
+      margin:26px 0 10px;
+      color:#173b6d;
+      border-left:6px solid var(--accent);
+      padding-left:10px;
+      font-size:18px;
+    }
+    h4{margin:14px 0 6px;color:#184a7a;}
+    .overview-table,
+    .reading-table,
+    .step-table,
+    .mini-table,
+    .count-table{
+      width:100%;
+      border-collapse:collapse;
+      margin:10px 0 14px;
+      table-layout:fixed;
+    }
+    .overview-table th,
+    .overview-table td,
+    .reading-table th,
+    .reading-table td,
+    .step-table th,
+    .step-table td,
+    .mini-table th,
+    .mini-table td,
+    .count-table th,
+    .count-table td{
+      border:1px solid var(--line);
+      vertical-align:top;
+      padding:10px 12px;
+    }
+    .overview-table th,
+    .reading-table th,
+    .step-table th,
+    .mini-table th,
+    .count-table th{
+      background:#eaf2fb;
+      color:#163f6d;
+      font-weight:800;
+    }
+    .overview-table th:nth-child(1){width:46%;}
+    .overview-table th:nth-child(2){width:24%;}
+    .overview-table th:nth-child(3){width:30%;}
+    .problem-ocr{
+      white-space:pre-wrap;
+      background:#fbfdff;
+      border:1px solid #d8e4f2;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:13px;
+      line-height:1.85;
+      max-height:470px;
+      overflow:auto;
+    }
+    .problem-shot-note{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .theme-list{margin:0;padding-left:1.2em;}
+    .theme-list li{margin:4px 0;}
+    .point-box{
+      background:#f7fbf7;
+      border:1px solid #cfe8da;
+      border-radius:12px;
+      padding:10px 12px;
+    }
+    .source-note{
+      background:#fffaf0;
+      border:1px solid #f2d7a6;
+      border-radius:12px;
+      padding:10px 12px;
+      color:#5b3d06;
+      font-size:13px;
+      margin:10px 0 16px;
+    }
+    .setup-box,.representation-box{
+      background:var(--soft);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px 16px;
+      margin:10px 0 16px;
+    }
+    .representation-box{
+      background:#f3faf8;
+      border-color:#cbe7e1;
+    }
+    .tool-note{
+      background:#fff8ec;
+      border:1px solid #f4d69d;
+      border-left:6px solid #d99a20;
+      border-radius:10px;
+      padding:9px 12px;
+      margin:10px 0;
+      color:#55360a;
+      font-size:13px;
+    }
+    .ascii-diagram{
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      white-space:pre;
+      overflow:auto;
+      background:#101827;
+      color:#f7fbff;
+      border-radius:12px;
+      padding:12px 14px;
+      line-height:1.45;
+      font-size:13px;
+      margin:10px 0;
+    }
+    .formula{
+      font-family:"Yu Gothic","Meiryo",sans-serif;
+      background:#f8fbff;
+      border:1px dashed #b7cbe5;
+      border-radius:10px;
+      padding:8px 10px;
+      margin:8px 0;
+    }
+    .solution-step-table th:nth-child(1),
+    .solution-step-table td:nth-child(1){width:30%;}
+    .solution-step-table th:nth-child(2),
+    .solution-step-table td:nth-child(2){width:70%;}
+    .step-table td ul{margin:0;padding-left:1.2em;}
+    .step-table td p{margin:.25em 0 .6em;}
+    .answer{
+      display:inline-block;
+      background:#e8f7f1;
+      border:1px solid #bde2d4;
+      color:#09513f;
+      border-radius:999px;
+      padding:5px 10px;
+      font-weight:800;
+      margin:4px 4px 4px 0;
+    }
+    .mistake-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+    .mistake-card{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+    }
+    .mistake-card strong{color:#8a3a09;}
+    .memo-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .memo-box div{
+      background:#f8fbff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+    }
+    details{
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      margin:10px 0;
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      padding:12px 14px;
+      background:#edf5ff;
+      color:#123b68;
+      font-weight:800;
+    }
+    .accordion-body{padding:12px 16px 16px;}
+    .candidate-points{margin:6px 0 10px;padding-left:1.25em;}
+    .work-steps{
+      margin:8px 0 10px;
+      padding-left:1.4em;
+    }
+    .work-steps li{margin:5px 0;}
+    .transfer-answer{
+      background:#f1fbf6;
+      border:1px solid #bee7d2;
+      border-radius:10px;
+      padding:10px 12px;
+      color:#084c3a;
+      margin:10px 0 0;
+      font-weight:700;
+    }
+    .shape-svg{
+      display:block;
+      max-width:430px;
+      width:100%;
+      height:auto;
+      margin:8px 0;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+    }
+    .small{font-size:12px;color:var(--muted);}
+    .nowrap{white-space:nowrap;}
+    .list-tight{margin:.2em 0;padding-left:1.2em;}
+    .list-tight li{margin:.15em 0;}
+    @media (max-width:900px){
+      .summary-grid{grid-template-columns:1fr 1fr;}
+      .overview-table,.overview-table thead,.overview-table tbody,.overview-table tr,.overview-table th,.overview-table td{display:block;width:100%!important;}
+      .overview-table th{border-bottom:none;}
+      .mistake-grid{grid-template-columns:1fr;}
+      .memo-box{grid-template-columns:1fr;}
+    }
+    @media print{
+      body{background:white;}
+      .problem-nav{position:static;}
+      article.problem-analysis,.answer-summary{box-shadow:none;break-inside:avoid;}
+      details[open]{break-inside:avoid;}
+    }
+  </style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>学コン問題 解答解説 v14.0</h1>
+    <p>問題文はPDF誌面をテキスト化し、各問題を「初見の見方 → 最初の整理 → 本解 → 別解 → 転移」までつなげて整理しています。</p>
+  </div>
+</header>
+<nav class="problem-nav">
+  <div class="nav-inner">
+    <a href="#answers">解答一覧</a>
+    <a href="#p1">1. 得票数</a>
+    <a href="#p2">2. 0/1数字の積</a>
+    <a href="#p3">3. L字型六角形</a>
+    <a href="#p4">4. 輪ゴムの数え上げ</a>
+  </div>
+</nav>
+<main>
+  <section class="answer-summary" id="answers">
+    <h2>解答一覧</h2>
+    <div class="summary-grid">
+      <div class="summary-card"><strong>1. 得票数</strong>（1）アシカ25票、イルカ22票<br>（2）アシカ140票、イルカ119票</div>
+      <div class="summary-card"><strong>2. 0/1数字の積</strong>（1）①30、②30<br>（2）82<br>（3）730個</div>
+      <div class="summary-card"><strong>3. L字型六角形</strong>（1）DE＝140/29 cm<br>（2）DE＝35/2 cm</div>
+      <div class="summary-card"><strong>4. 輪ゴム</strong>（1）41通り<br>（2）ア 57通り、イ 131通り</div>
+    </div>
+  </section>
+
+  <article class="problem-analysis" id="p1">
+    <h2>1. 得票数と「逆転」の境目</h2>
+    <table class="overview-table">
+      <thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead>
+      <tbody><tr>
+        <td>
+          <div class="problem-ocr">1. 東京と大阪の２地区で、アシカさんとイルカさんの２人の人気投票を行いました。投票は１人１票で、白票や棄権はなかったものとします。
+
+（1）東京では、アシカさんがイルカさんに勝ちました。もしアシカさんに投票した人のうちのちょうど「8％」がイルカさんに投票していたら、イルカさんは逆転していました。また、「8％」が「4％」の場合、アシカさんの勝ちのままであることが分かっています。このとき考えられるアシカさんの得票数のうち、最少の場合を答えなさい。またそのときのイルカさんの得票数を答えなさい。
+
+（2）大阪でも、アシカさんがイルカさんに勝ちました。イルカさんの得票数は、アシカさんの得票数のちょうど85％でした。もしアシカさんに投票した人のうち、「11人」がイルカさんに投票していたら、イルカさんは逆転していました。また、「11人」が「9人」の場合、アシカさんの勝ちのままであることが分かっています。このとき、アシカさんとイルカさんの得票数を答えなさい。</div>
+          <p class="problem-shot-note">PDF問題文をOCRテキスト化</p>
+        </td>
+        <td>
+          <ul class="theme-list">
+            <li><strong>表向き</strong>：得票数と割合の問題</li>
+            <li><strong>実際</strong>：票が移動したときの「差」がどう変わるかを見る問題</li>
+          </ul>
+        </td>
+        <td>
+          <div class="point-box">アシカ票からイルカ票へ1票動くと、アシカは1票減り、イルカは1票増える。つまり<strong>差は2票縮む</strong>。だから「逆転した」「勝ちのまま」は、もとの差の上限・下限を教えている。</div>
+        </td>
+      </tr></tbody>
+    </table>
+    <div class="source-note">誌面照合メモ：PDFの1ページ目には問題文と解答欄のみがあり、公式解説本文は含まれていません。ここでは誌面の条件「8％/4％」「85％」「11人/9人」をそのまま使って整理しています。</div>
+
+    <h3 class="section-title">1. 問題文の読み方と初見の時の試し方</h3>
+    <table class="reading-table">
+      <tbody>
+        <tr><th>最強条件・不自然条件</th><td>「逆転していました」「勝ちのままである」がいちばん強い条件です。勝敗が変わるかどうかは、もとの得票差と、移動した票数の2倍との大小で決まります。まず「得票数そのもの」より「差」を見ると気づけます。</td></tr>
+        <tr><th>数字・配置・端の意味</th><td>8％＝2/25、4％＝1/25なので、（1）のアシカ票は25の倍数です。（2）の85％＝17/20なので、アシカ票は20の倍数です。さらに11人と9人は、差が22票より小さく18票より大きいことを示します。</td></tr>
+        <tr><th>条件をどのように翻訳するか</th><td>アシカ票をA、イルカ票をI、差をd＝A−Iとします。t票がアシカからイルカへ動くと、差は d−2t になります。逆転なら d−2t &lt; 0、アシカの勝ちのままなら d−2t &gt; 0 です。</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">2. 最初に書く図・表・式</h3>
+    <div class="setup-box">
+      <p>紙の上には、まず次の「差の表」を置きます。</p>
+      <table class="mini-table">
+        <thead><tr><th>状態</th><th>アシカ</th><th>イルカ</th><th>差</th></tr></thead>
+        <tbody>
+          <tr><td>はじめ</td><td>A</td><td>I</td><td>d＝A−I</td></tr>
+          <tr><td>アシカからt票が移動</td><td>A−t</td><td>I＋t</td><td>d−2t</td></tr>
+        </tbody>
+      </table>
+      <div class="tool-note">1票が動くと差は1ではなく2縮む。この問題の急所はここです。</div>
+      <div class="ascii-diagram">アシカ        イルカ
+  A票   ──t票移動──▶  I票
+  差 d は 2t だけ小さくなる</div>
+    </div>
+
+    <h3 class="section-title">3. 解答解説（本解）</h3>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>差 d＝A−I を使う。</li><li>「逆転」「勝ち」を不等式にする。</li><li>「ちょうど％」から倍数条件を使う。</li></ul></td>
+          <td>
+            <p><strong>共通の式</strong></p>
+            <div class="formula">t票がアシカからイルカへ動くと、差は d−2t。</div>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>8％と4％は、アシカ票Aをもとにする。</li><li>Aを25の倍数にして、最小から試す。</li></ul></td>
+          <td>
+            <p><strong>（1）東京</strong></p>
+            <p>Aは25の倍数なので、A＝25n とおきます。</p>
+            <ul class="list-tight">
+              <li>4％＝1/25 なので、4％の移動人数は n 人。</li>
+              <li>8％＝2/25 なので、8％の移動人数は 2n 人。</li>
+            </ul>
+            <p>4％ならアシカの勝ちのまま：</p>
+            <div class="formula">d−2n &gt; 0　つまり　d &gt; 2n</div>
+            <p>8％ならイルカが逆転：</p>
+            <div class="formula">d−4n &lt; 0　つまり　d &lt; 4n</div>
+            <p>よって</p>
+            <div class="formula">2n &lt; d &lt; 4n</div>
+            <p>Aを最小にしたいので n＝1 を試すと、</p>
+            <div class="formula">2 &lt; d &lt; 4　だから　d＝3</div>
+            <p>A＝25、差が3なので、I＝25−3＝22。</p>
+            <p><span class="answer">答え：（1）アシカ25票、イルカ22票</span></p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>85％は17/20。</li><li>差はアシカ票の15％。</li><li>9人と11人で差の範囲をはさむ。</li></ul></td>
+          <td>
+            <p><strong>（2）大阪</strong></p>
+            <p>イルカ票はアシカ票の85％なので、</p>
+            <div class="formula">I＝17/20 A</div>
+            <p>A＝20n とおくと、I＝17n。差 d は</p>
+            <div class="formula">d＝A−I＝20n−17n＝3n</div>
+            <p>9人が移動してもアシカの勝ち：</p>
+            <div class="formula">d−18 &gt; 0　つまり　d &gt; 18</div>
+            <p>11人が移動したらイルカが逆転：</p>
+            <div class="formula">d−22 &lt; 0　つまり　d &lt; 22</div>
+            <p>したがって、</p>
+            <div class="formula">18 &lt; 3n &lt; 22</div>
+            <p>3の倍数でこの間にあるのは21だけ。だから 3n＝21、n＝7。</p>
+            <div class="formula">A＝20n＝140、I＝17n＝119</div>
+            <p><span class="answer">答え：（2）アシカ140票、イルカ119票</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">4. 解答解説（別解）</h3>
+    <div class="representation-box">
+      <p><strong>別の置き方：</strong>「何人動くと初めて逆転するか」を先に考えます。もとの差dに対して、t人動いた後の差は d−2t。したがって、t人で逆転する条件は <strong>d &lt; 2t</strong> です。</p>
+    </div>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>（1）は最小のAを試す。</li><li>25票なら4％＝1人、8％＝2人。</li></ul></td>
+          <td>
+            <p>Aが最小になる可能性として A＝25 を見ると、4％は1人、8％は2人です。</p>
+            <p>1人動いてもアシカの勝ちなら、差 d は2より大きい。2人動いたらイルカが逆転するなら、差 d は4より小さい。</p>
+            <div class="formula">2 &lt; d &lt; 4　より　d＝3</div>
+            <p>よって、アシカ25票、イルカ22票。</p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>（2）は差そのものを候補にする。</li><li>9人では足りず、11人では足りる。</li></ul></td>
+          <td>
+            <p>9人動いてもアシカの勝ちなので、差は18票より大きい。11人動くとイルカが逆転するので、差は22票より小さい。</p>
+            <div class="formula">差 d の候補は 19、20、21</div>
+            <p>一方、イルカ票がアシカ票の85％なので、差はアシカ票の15％＝3/20です。A＝20n とすると差は3n、つまり3の倍数。</p>
+            <p>19、20、21 のうち3の倍数は21だけなので、d＝21。</p>
+            <div class="formula">A−I＝21、I＝17/20A → A＝140、I＝119</div>
+            <p><span class="answer">答え：アシカ140票、イルカ119票</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">5. つまずきと直し方</h3>
+    <div class="mistake-grid">
+      <div class="mistake-card"><strong>こう止まる</strong><br>1票動くと差が1だけ変わると思う。<br><strong>こう直す</strong><br>片方が1減り、もう片方が1増えるので、差は2変わる。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>8％や4％を全体票数の割合にしてしまう。<br><strong>こう直す</strong><br>「アシカさんに投票した人のうち」なので、アシカ票Aの割合にする。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>同点を勝ちとして扱う。<br><strong>こう直す</strong><br>「逆転」「勝ちのまま」はどちらも厳しい不等号。d−2t＝0 は入れない。</div>
+    </div>
+
+    <h3 class="section-title">6. この問題で残すメモ</h3>
+    <div class="memo-box">
+      <div><strong>使った力</strong><br>勝敗の問題を「得票差」に変える力。票の移動で差が2倍ずつ変わることを使う力。</div>
+      <div><strong>再利用メモ</strong><br>「AからBへt動く」なら、差は2t縮む。割合が出たら、まず分母の倍数条件も見る。</div>
+    </div>
+
+    <h3 class="section-title">7. 転移テスト問題と自分で作る問題</h3>
+    <details>
+      <summary>転移テスト問題：75％と4人・5人</summary>
+      <div class="accordion-body">
+        <p>太郎さんと花子さんの得票で、太郎さんが勝ちました。花子さんの得票は太郎さんの75％です。太郎さんに投票した人のうち5人が花子さんに投票していたら花子さんが逆転し、4人なら太郎さんの勝ちのままでした。太郎さんと花子さんの得票数を求めなさい。</p>
+        <h4>同じ構造の理由</h4>
+        <ul class="candidate-points"><li>片方から片方へ票が動くので、差は2倍で変わります。</li><li>75％＝3/4なので、太郎票は4の倍数になります。</li></ul>
+        <h4>解答解説</h4>
+        <ol class="work-steps">
+          <li>太郎票をT、花子票をHとすると、H＝3/4T。T＝4n、H＝3n とおける。</li>
+          <li>差は T−H＝n。</li>
+          <li>4人動いても太郎の勝ちなので、n−8 &gt; 0、つまり n &gt; 8。</li>
+          <li>5人動くと花子が逆転するので、n−10 &lt; 0、つまり n &lt; 10。</li>
+          <li>よって n＝9。T＝36、H＝27。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：太郎36票、花子27票</p>
+      </div>
+    </details>
+    <details>
+      <summary>自分で作る問題：差の範囲を先に決める</summary>
+      <div class="accordion-body">
+        <h4>自作問題の例</h4>
+        <p>イルカさんの得票はアシカさんの80％です。アシカさんからイルカさんへ6人が動くとイルカさんが逆転し、5人ならアシカさんの勝ちのままです。得票数を求めなさい。</p>
+        <h4>その解答解説</h4>
+        <ol class="work-steps">
+          <li>80％＝4/5なので、アシカ票を5n、イルカ票を4n とおく。</li>
+          <li>差は n。</li>
+          <li>5人動いても勝ちのまま：n−10 &gt; 0 → n &gt; 10。</li>
+          <li>6人動くと逆転：n−12 &lt; 0 → n &lt; 12。</li>
+          <li>よって n＝11。アシカ票は55、イルカ票は44。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：アシカ55票、イルカ44票</p>
+      </div>
+    </details>
+  </article>
+
+  <article class="problem-analysis" id="p2">
+    <h2>2. 0/1だけの10桁整数と積の各位の和</h2>
+    <table class="overview-table">
+      <thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead>
+      <tbody><tr>
+        <td>
+          <div class="problem-ocr">2. A、Bは10桁の整数で、十億の位の数字は1であり、それ以外の位の数字はすべて0か1です。積A×Bの各位の数字の和をSとします。
+このとき、次の問いに答えなさい。
+
+（1）次のそれぞれの場合に、Sを求めなさい。
+① A＝1111100000、B＝1111110000 の場合
+② A＝1001011001、B＝1101010011 の場合
+
+（2）Sとして考えられる値のうち、10より大きい素数で割り切れるものが1つだけあります。そのようなSの値を求めなさい。
+
+（3）次の条件をみたす A、B の組は何個ありますか。A、Bを入れかえただけの組も異なるものとして数えます。
+〈条件〉Sは70より大きく、10の倍数ではない。</div>
+          <p class="problem-shot-note">PDF問題文をOCRテキスト化</p>
+        </td>
+        <td>
+          <ul class="theme-list">
+            <li><strong>表向き</strong>：大きな10桁整数のかけ算</li>
+            <li><strong>実際</strong>：1の個数を数え、繰り上がりが起きるかだけを見る問題</li>
+          </ul>
+        </td>
+        <td><div class="point-box">0と1だけの数では、かけ算の各列に出る数は「1×1の組の個数」。少なくとも片方の1の個数が9個以下なら各列は9以下なので、繰り上がりが起きず、S＝Aの1の個数×Bの1の個数になります。</div></td>
+      </tr></tbody>
+    </table>
+    <div class="source-note">誌面照合メモ：PDFの2ページ目には問題文と解答欄のみがあります。誌面の2つの具体例はいずれも「1の個数が5個と6個」になるように作られているため、この構造を解説に取り込みます。</div>
+
+    <h3 class="section-title">1. 問題文の読み方と初見の時の試し方</h3>
+    <table class="reading-table">
+      <tbody>
+        <tr><th>最強条件・不自然条件</th><td>「各位の数字の和」なのに、AとBの数字が0か1だけという条件が強いです。大きな数をそのまま計算するのではなく、1が何個あるかに注目します。</td></tr>
+        <tr><th>数字・配置・端の意味</th><td>10桁なので、1の個数は1個から10個までです。片方に1が9個以下なら、同じ位に集まる1×1の数は多くても9個で、繰り上がりが起きません。両方が10個のときだけ特別です。</td></tr>
+        <tr><th>条件をどのように翻訳するか</th><td>Aの1の個数をa、Bの1の個数をbとします。各1の組み合わせが積のどこかの位に1を1個足すので、繰り上がりがなければ S＝a×b と翻訳できます。</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">2. 最初に書く図・表・式</h3>
+    <div class="setup-box">
+      <p>最初に、次の対応表を書きます。</p>
+      <table class="mini-table">
+        <thead><tr><th>見るもの</th><th>意味</th><th>使う式</th></tr></thead>
+        <tbody>
+          <tr><td>a</td><td>Aの中にある1の個数</td><td rowspan="2">普通は S＝a×b</td></tr>
+          <tr><td>b</td><td>Bの中にある1の個数</td></tr>
+          <tr><td>例外</td><td>AもBも1111111111</td><td>S＝82</td></tr>
+        </tbody>
+      </table>
+      <div class="tool-note">なぜ例外があるか：10個の1どうしをかけると、中央の列に10が出て、そこだけ繰り上がりが起こります。</div>
+      <div class="ascii-diagram">1111111111 × 1111111111 の「繰り上がる前」の列の数
+1 2 3 4 5 6 7 8 9 10 9 8 7 6 5 4 3 2 1
+                         ↑
+                    10だけが繰り上がる</div>
+    </div>
+
+    <h3 class="section-title">3. 解答解説（本解）</h3>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>まず補助ルールを作る。</li><li>かけ算そのものではなく、1の個数を数える。</li></ul></td>
+          <td>
+            <p><strong>補助ルール</strong></p>
+            <p>Aの1の個数をa、Bの1の個数をbとします。もし両方が1111111111でなければ、少なくとも片方の1の個数は9個以下です。そのため、どの位にも1×1は多くて9個しか集まらず、繰り上がりません。</p>
+            <div class="formula">したがって、普通は S＝a×b。</div>
+            <p>ただし、a＝b＝10 のときだけ、</p>
+            <div class="formula">1111111111×1111111111＝1234567900987654321</div>
+            <p>この各位の和は</p>
+            <div class="formula">1＋2＋3＋4＋5＋6＋7＋9＋0＋0＋9＋8＋7＋6＋5＋4＋3＋2＋1＝82</div>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>具体例は1の個数を数えるだけ。</li><li>どちらも5個と6個。</li></ul></td>
+          <td>
+            <p><strong>（1）</strong></p>
+            <table class="mini-table">
+              <thead><tr><th>場合</th><th>Aの1の個数</th><th>Bの1の個数</th><th>S</th></tr></thead>
+              <tbody>
+                <tr><td>①</td><td>5</td><td>6</td><td>5×6＝30</td></tr>
+                <tr><td>②</td><td>5</td><td>6</td><td>5×6＝30</td></tr>
+              </tbody>
+            </table>
+            <p><span class="answer">答え：（1）①30、②30</span></p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>考えられるSを「1〜10の積」で見る。</li><li>例外82だけを追加する。</li></ul></td>
+          <td>
+            <p><strong>（2）</strong></p>
+            <p>普通に出るSは、a×b（1≦a≦10、1≦b≦10）です。これは「1から10までの数どうしの積」なので、10より大きい素数を因数に持つことはありません。</p>
+            <p>例外は、a＝b＝10 のときの S＝82 です。</p>
+            <div class="formula">82＝2×41</div>
+            <p>41は10より大きい素数です。</p>
+            <p><span class="answer">答え：（2）82</span></p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>S＞70で10の倍数ではないものだけ数える。</li><li>A,Bを入れかえた組も別々に数える。</li></ul></td>
+          <td>
+            <p><strong>（3）</strong></p>
+            <p>普通の場合のS＝a×bで、70より大きく、10の倍数でないものは、</p>
+            <div class="formula">8×9＝72、9×8＝72、9×9＝81</div>
+            <p>さらに例外の</p>
+            <div class="formula">10×10 のとき S＝82</div>
+            <p>も条件に合います。</p>
+            <p>10桁で先頭は必ず1なので、1の個数がa個の数は、残り9けたから a−1 個の1を選ぶ数だけあります。</p>
+            <div class="formula">1の個数がa個の数の個数＝C(9,a−1)</div>
+            <table class="count-table">
+              <thead><tr><th>a</th><th>b</th><th>S</th><th>組の数</th></tr></thead>
+              <tbody>
+                <tr><td>8</td><td>9</td><td>72</td><td>C(9,7)×C(9,8)＝36×9＝324</td></tr>
+                <tr><td>9</td><td>8</td><td>72</td><td>C(9,8)×C(9,7)＝9×36＝324</td></tr>
+                <tr><td>9</td><td>9</td><td>81</td><td>C(9,8)×C(9,8)＝9×9＝81</td></tr>
+                <tr><td>10</td><td>10</td><td>82</td><td>1×1＝1</td></tr>
+              </tbody>
+            </table>
+            <div class="formula">324＋324＋81＋1＝730</div>
+            <p><span class="answer">答え：（3）730個</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">4. 解答解説（別解）</h3>
+    <div class="representation-box">
+      <p><strong>別の表現：</strong>最初から「Sの候補表」を作ります。縦をAの1の個数a、横をBの1の個数bにした10×10表を考えると、普通は中身が a×b です。ただし、右下の10×10だけは100ではなく82です。</p>
+    </div>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>候補を全部並べて、素因数を確認する。</li><li>巨大な数のかけ算を避ける。</li></ul></td>
+          <td>
+            <p>Sとして出る候補は次です。</p>
+            <div class="formula">1, 2, 3, 4, 5, 6, 7, 8, 9, 10,<br>12, 14, 15, 16, 18, 20, 21, 24, 25, 27,<br>28, 30, 32, 35, 36, 40, 42, 45, 48, 49,<br>50, 54, 56, 60, 63, 64, 70, 72, 80, 81, 82, 90</div>
+            <p>このうち、1〜10の積で作られる数は、10より大きい素数を因数にできません。残る特別な候補82だけが、82＝2×41 となります。</p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>条件に合う候補だけを抜き出す。</li><li>個数は組み合わせで数える。</li></ul></td>
+          <td>
+            <p>S＞70で10の倍数ではない候補は、72、81、82です。</p>
+            <ul class="list-tight">
+              <li>72：a,b＝8,9 または 9,8</li>
+              <li>81：a,b＝9,9</li>
+              <li>82：a,b＝10,10 の特別な1組</li>
+            </ul>
+            <div class="formula">C(9,7)C(9,8)+C(9,8)C(9,7)+C(9,8)^2+1＝730</div>
+            <p><span class="answer">答え：82、730個</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">5. つまずきと直し方</h3>
+    <div class="mistake-grid">
+      <div class="mistake-card"><strong>こう止まる</strong><br>10桁の数を普通に筆算しようとして時間を使う。<br><strong>こう直す</strong><br>各位の和だけなので、1の個数に置きかえる。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>S＝a×bをいつでも使ってしまう。<br><strong>こう直す</strong><br>a＝b＝10 のときだけ、中央に10が出る例外を確認する。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>（3）でA,Bの入れかえを1つにまとめてしまう。<br><strong>こう直す</strong><br>問題文に「入れかえただけの組も異なる」とあるので、8,9と9,8を別々に数える。</div>
+    </div>
+
+    <h3 class="section-title">6. この問題で残すメモ</h3>
+    <div class="memo-box">
+      <div><strong>使った力</strong><br>大きな計算を、桁ごとの「1×1の組の数」に変換する力。</div>
+      <div><strong>再利用メモ</strong><br>0/1のかけ算では、繰り上がりがなければ「各位の和＝1の個数の積」。ただし最大個数のときだけ例外を疑う。</div>
+    </div>
+
+    <h3 class="section-title">7. 転移テスト問題と自分で作る問題</h3>
+    <details>
+      <summary>転移テスト問題：7桁版でS＞30の組</summary>
+      <div class="accordion-body">
+        <p>A、Bは7桁の整数で、百万の位は1、それ以外は0か1です。A×Bの各位の数字の和をSとします。Sが30より大きいA、Bの組は何個ありますか。A、Bを入れかえただけの組も異なるものとします。</p>
+        <h4>同じ構造の理由</h4>
+        <ul class="candidate-points"><li>7桁なので1の個数は1〜7個です。</li><li>どの列にも1×1は最大7個しか集まらないので、繰り上がりは起きません。</li></ul>
+        <h4>解答解説</h4>
+        <ol class="work-steps">
+          <li>Aの1の個数をa、Bの1の個数をbとすると、S＝a×b。</li>
+          <li>a,bは1〜7。a×b＞30となるのは、(5,7),(7,5),(6,6),(6,7),(7,6),(7,7)。</li>
+          <li>7桁で1の個数がa個の数は、残り6桁からa−1個の1を選ぶので C(6,a−1)個。</li>
+          <li>C(6,4)C(6,6)+C(6,6)C(6,4)+C(6,5)^2+C(6,5)C(6,6)+C(6,6)C(6,5)+1＝15＋15＋36＋6＋6＋1＝79。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：79個</p>
+      </div>
+    </details>
+    <details>
+      <summary>自分で作る問題：9桁版でS＝56</summary>
+      <div class="accordion-body">
+        <h4>自作問題の例</h4>
+        <p>A、Bは9桁の整数で、億の位は1、それ以外は0か1です。A×Bの各位の数字の和が56になるA、Bの組は何個ありますか。</p>
+        <h4>その解答解説</h4>
+        <ol class="work-steps">
+          <li>9桁なので、1の個数は1〜9個。繰り上がりは起きません。</li>
+          <li>S＝56 となるには、a×b＝56。1〜9の範囲では、(a,b)＝(7,8),(8,7)。</li>
+          <li>9桁で1の個数が7個の数は C(8,6)＝28個、8個の数は C(8,7)＝8個。</li>
+          <li>順序を区別するので、28×8＋8×28＝448。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：448個</p>
+      </div>
+    </details>
+  </article>
+
+  <article class="problem-analysis" id="p3">
+    <h2>3. L字型六角形の面積二等分</h2>
+    <table class="overview-table">
+      <thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead>
+      <tbody><tr>
+        <td>
+          <div class="problem-ocr">3. 図のように、角Eが270°でそれ以外の全ての内角が90°の六角形ABCDEFがあり、辺の長さの間に
+AB＞BC＝CD＞EF＝FA
+の関係があります。点P、Qはそれぞれ辺AB、BC上の点です。
+次のとき、辺DEの長さは何cmですか。
+
+（1）BP＝5cm、BQ＝7cmで、点Pを通って辺BCに平行な直線及び直線AQがそれぞれ六角形の面積を2等分するとき
+
+（2）AP＝7cm、CQ＝5cmで直線CP、AQがそれぞれ六角形の面積を2等分するとき</div>
+          <p class="problem-shot-note">PDF問題文をOCRテキスト化。図は下でテキスト・SVG化。</p>
+        </td>
+        <td>
+          <ul class="theme-list">
+            <li><strong>表向き</strong>：L字型図形の面積二等分</li>
+            <li><strong>実際</strong>：2つの正方形に分け、二等分条件を式にする問題</li>
+          </ul>
+        </td>
+        <td><div class="point-box">BC＝CDをa、EF＝FAをbと置くと、AB＝a＋b、DE＝a−b、面積＝a²＋b²。二等分線で切り取られる長方形・三角形を、全体の半分に等しいと置く。</div></td>
+      </tr></tbody>
+    </table>
+    <div class="source-note">誌面照合メモ：PDFの3ページ目の図では、Aから下へB、Bから右へC、Cから上へD、Dから左へE、Eから上へF、Fから左へAのL字型です。PはAB上、QはBC上にあるため、この配置で式を立てています。</div>
+
+    <h3 class="section-title">1. 問題文の読み方と初見の時の試し方</h3>
+    <table class="reading-table">
+      <tbody>
+        <tr><th>最強条件・不自然条件</th><td>「BC＝CD」と「EF＝FA」が最強条件です。これは、下に一辺aの正方形、左上に一辺bの正方形がある形だと気づく合図です。</td></tr>
+        <tr><th>数字・配置・端の意味</th><td>BP、BQ、AP、CQはすべて端からの長さです。端からの長さは、三角形や長方形の底辺・高さにそのままなりやすいので、面積二等分の式に直しやすいです。</td></tr>
+        <tr><th>条件をどのように翻訳するか</th><td>「直線が面積を2等分する」は、「その直線で切り取られる三角形または長方形の面積が、全体面積の半分」と翻訳します。</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">2. 最初に書く図・表・式</h3>
+    <div class="setup-box">
+      <svg class="shape-svg" viewBox="0 0 360 250" role="img" aria-label="L字型六角形の整理図">
+        <rect x="1" y="1" width="358" height="248" fill="#fff"/>
+        <path d="M70 35 L170 35 L170 105 L285 105 L285 205 L70 205 Z" fill="#f5fbff" stroke="#173b6d" stroke-width="3"/>
+        <line x1="70" y1="105" x2="285" y2="105" stroke="#9bb8d8" stroke-dasharray="5 5"/>
+        <line x1="170" y1="35" x2="170" y2="205" stroke="#9bb8d8" stroke-dasharray="5 5"/>
+        <text x="58" y="32" font-size="15">A</text>
+        <text x="55" y="220" font-size="15">B</text>
+        <text x="292" y="220" font-size="15">C</text>
+        <text x="292" y="106" font-size="15">D</text>
+        <text x="175" y="110" font-size="15">E</text>
+        <text x="176" y="32" font-size="15">F</text>
+        <text x="102" y="28" font-size="13">b</text>
+        <text x="48" y="125" font-size="13">a＋b</text>
+        <text x="188" y="128" font-size="13">DE＝a−b</text>
+        <text x="292" y="160" font-size="13">a</text>
+        <text x="177" y="76" font-size="13">b</text>
+        <text x="170" y="225" font-size="13">BC＝a</text>
+      </svg>
+      <table class="mini-table">
+        <thead><tr><th>置く文字</th><th>意味</th><th>すぐ出ること</th></tr></thead>
+        <tbody>
+          <tr><td>a</td><td>BC＝CD</td><td rowspan="2">AB＝a＋b、DE＝a−b</td></tr>
+          <tr><td>b</td><td>EF＝FA</td></tr>
+          <tr><td>面積</td><td>下の正方形＋左上の正方形</td><td>a²＋b²</td></tr>
+        </tbody>
+      </table>
+      <div class="tool-note">L字を「下のa×a」と「左上のb×b」に分けると、面積が一気に a²＋b² になります。</div>
+    </div>
+
+    <h3 class="section-title">3. 解答解説（本解）</h3>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>BC＝CD＝a、EF＝FA＝b と置く。</li><li>求めたいDEは a−b。</li><li>面積は a²＋b²。</li></ul></td>
+          <td>
+            <p><strong>共通の整理</strong></p>
+            <div class="formula">BC＝CD＝a、EF＝FA＝b</div>
+            <div class="formula">AB＝a＋b、DE＝a−b、面積＝a²＋b²</div>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>水平線は下の長方形を切り取る。</li><li>AQは三角形ABQを切り取る。</li></ul></td>
+          <td>
+            <p><strong>（1）BP＝5、BQ＝7</strong></p>
+            <p>Pを通るBCに平行な直線は、下から高さ5、横aの長方形を切り取ります。これが全体の半分です。</p>
+            <div class="formula">5a＝(a²＋b²)/2　→　a²＋b²＝10a</div>
+            <p>また、直線AQで切り取られる三角形ABQの面積も全体の半分です。</p>
+            <div class="formula">三角形ABQ＝(a＋b)×7÷2</div>
+            <div class="formula">(a＋b)×7÷2＝(a²＋b²)/2　→　7(a＋b)=a²＋b²</div>
+            <p>2つの式の右辺は同じなので、</p>
+            <div class="formula">10a＝7(a＋b)</div>
+            <div class="formula">10a＝7a＋7b　→　3a＝7b　→　b＝3a/7</div>
+            <p>これを a²＋b²＝10a に入れます。</p>
+            <div class="formula">a²＋(3a/7)²＝10a</div>
+            <div class="formula">a²＋9a²/49＝10a　→　58a²/49＝10a</div>
+            <div class="formula">a＝245/29、b＝105/29</div>
+            <p>求めるDEは a−b。</p>
+            <div class="formula">DE＝245/29−105/29＝140/29</div>
+            <p><span class="answer">答え：（1）140/29 cm</span></p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>AP＝7からBPを出す。</li><li>CQ＝5からBQを出す。</li><li>CPとAQが作る三角形を使う。</li></ul></td>
+          <td>
+            <p><strong>（2）AP＝7、CQ＝5</strong></p>
+            <p>AB＝a＋b なので、</p>
+            <div class="formula">BP＝a＋b−7</div>
+            <p>BC＝a、CQ＝5 なので、</p>
+            <div class="formula">BQ＝a−5</div>
+            <p>直線CPで切り取られる三角形BCPが全体の半分です。</p>
+            <div class="formula">a(a＋b−7)÷2＝(a²＋b²)/2</div>
+            <div class="formula">a(a＋b−7)=a²＋b² ……①</div>
+            <p>直線AQで切り取られる三角形ABQも全体の半分です。</p>
+            <div class="formula">(a＋b)(a−5)÷2＝(a²＋b²)/2</div>
+            <div class="formula">(a＋b)(a−5)=a²＋b² ……②</div>
+            <p>①と②の左辺を等しくします。</p>
+            <div class="formula">a(a＋b−7)＝(a＋b)(a−5)</div>
+            <div class="formula">a²＋ab−7a＝a²＋ab−5a−5b</div>
+            <div class="formula">2a＝5b　→　b＝2a/5</div>
+            <p>①に入れます。</p>
+            <div class="formula">a(a＋2a/5−7)=a²＋(2a/5)²</div>
+            <div class="formula">a(7a/5−7)=29a²/25</div>
+            <div class="formula">35a²/25−7a＝29a²/25　→　6a²/25＝7a</div>
+            <div class="formula">a＝175/6、b＝35/3</div>
+            <p>したがって、</p>
+            <div class="formula">DE＝a−b＝175/6−70/6＝105/6＝35/2</div>
+            <p><span class="answer">答え：（2）35/2 cm</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">4. 解答解説（別解）</h3>
+    <div class="representation-box">
+      <p><strong>別の置き方：</strong>求めたい DE を最初から x と置きます。EF＝FA＝b とすると、BC＝CD＝x＋b、AB＝x＋2b、面積＝(x＋b)²＋b² です。求めたい長さxに直接近づけます。</p>
+    </div>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>（1）は2つの二等分式をx,bで書く。</li><li>まずxとbの比を出す。</li></ul></td>
+          <td>
+            <p><strong>（1）</strong></p>
+            <p>水平線による二等分より、全体面積は下の長方形5(x＋b)の2倍です。</p>
+            <div class="formula">面積＝10(x＋b)</div>
+            <p>AQによる二等分より、全体面積は三角形ABQの2倍です。AB＝x＋2b、BQ＝7なので、</p>
+            <div class="formula">面積＝7(x＋2b)</div>
+            <p>よって、</p>
+            <div class="formula">10(x＋b)=7(x＋2b)</div>
+            <div class="formula">10x＋10b＝7x＋14b　→　3x＝4b　→　x＝4b/3</div>
+            <p>また、x＋b＝7b/3 なので、</p>
+            <div class="formula">面積＝(7b/3)²＋b²＝58b²/9</div>
+            <p>これが 10(x＋b)=10×7b/3 に等しいので、</p>
+            <div class="formula">58b²/9＝70b/3　→　b＝105/29</div>
+            <div class="formula">x＝4b/3＝140/29</div>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>（2）も先にx:bを出す。</li><li>三角形BCPとABQを比べる。</li></ul></td>
+          <td>
+            <p><strong>（2）</strong></p>
+            <p>CPによる二等分では、BP＝AB−AP＝x＋2b−7、BC＝x＋b。</p>
+            <div class="formula">面積＝(x＋b)(x＋2b−7)</div>
+            <p>AQによる二等分では、AB＝x＋2b、BQ＝BC−CQ＝x＋b−5。</p>
+            <div class="formula">面積＝(x＋2b)(x＋b−5)</div>
+            <p>等しいので、</p>
+            <div class="formula">(x＋b)(x＋2b−7)=(x＋2b)(x＋b−5)</div>
+            <div class="formula">x²＋3xb＋2b²−7x−7b＝x²＋3xb＋2b²−5x−10b</div>
+            <div class="formula">2x＝3b　→　x＝3b/2</div>
+            <p>すると x＋b＝5b/2、x＋2b＝7b/2。面積は</p>
+            <div class="formula">(5b/2)²＋b²＝29b²/4</div>
+            <p>またCPの式から、</p>
+            <div class="formula">(5b/2)(7b/2−7)=29b²/4</div>
+            <div class="formula">35b²/4−35b/2＝29b²/4　→　6b²/4＝35b/2</div>
+            <div class="formula">b＝35/3、x＝3b/2＝35/2</div>
+            <p><span class="answer">答え：35/2 cm</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">5. つまずきと直し方</h3>
+    <div class="mistake-grid">
+      <div class="mistake-card"><strong>こう止まる</strong><br>ABをaと置いてしまう。<br><strong>こう直す</strong><br>BC＝CD＝a、EF＝FA＝bなら、AB＝a＋b。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>DEをbだと思ってしまう。<br><strong>こう直す</strong><br>横の全体BCはa、左上のFAはbなので、DE＝a−b。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>二等分線の長さを求めようとする。<br><strong>こう直す</strong><br>必要なのは線の長さではなく、切り取られる面積。</div>
+    </div>
+
+    <h3 class="section-title">6. この問題で残すメモ</h3>
+    <div class="memo-box">
+      <div><strong>使った力</strong><br>L字型を、2つの正方形に分ける力。面積二等分を三角形・長方形の面積に翻訳する力。</div>
+      <div><strong>再利用メモ</strong><br>「等しい辺が2組あるL字」は、a×a と b×b に分ける。求めたい差は a−b と見る。</div>
+    </div>
+
+    <h3 class="section-title">7. 転移テスト問題と自分で作る問題</h3>
+    <details>
+      <summary>転移テスト問題：BP＝4、BQ＝6</summary>
+      <div class="accordion-body">
+        <p>同じ形で、BC＝CD＝a、EF＝FA＝bです。BP＝4cm、BQ＝6cmで、Pを通るBCに平行な直線とAQがそれぞれ面積を2等分するとき、DEを求めなさい。</p>
+        <h4>同じ構造の理由</h4>
+        <ul class="candidate-points"><li>水平線は下の長方形を切り取ります。</li><li>AQは三角形ABQを切り取ります。</li><li>面積はa²＋b²、DEはa−bです。</li></ul>
+        <h4>解答解説</h4>
+        <ol class="work-steps">
+          <li>水平線より、4a＝(a²＋b²)/2。したがって a²＋b²＝8a。</li>
+          <li>AQより、6(a＋b)/2＝(a²＋b²)/2。したがって 6(a＋b)=a²＋b²。</li>
+          <li>2つの右辺が同じなので、8a＝6(a＋b)。</li>
+          <li>8a＝6a＋6b → 2a＝6b → a＝3b。</li>
+          <li>a²＋b²＝8a に入れて、9b²＋b²＝24b → 10b²＝24b → b＝12/5。</li>
+          <li>a＝36/5、DE＝a−b＝36/5−12/5＝24/5。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：24/5 cm</p>
+      </div>
+    </details>
+    <details>
+      <summary>自分で作る問題：AP＝5、CQ＝4</summary>
+      <div class="accordion-body">
+        <h4>自作問題の例</h4>
+        <p>同じL字型で、AP＝5cm、CQ＝4cmです。直線CPとAQがそれぞれ面積を2等分するとき、DEを求めなさい。</p>
+        <h4>その解答解説</h4>
+        <ol class="work-steps">
+          <li>BC＝CD＝a、EF＝FA＝b と置く。面積はa²＋b²、DE＝a−b。</li>
+          <li>AP＝5なので、BP＝a＋b−5。CPより a(a＋b−5)=a²＋b²。</li>
+          <li>CQ＝4なので、BQ＝a−4。AQより (a＋b)(a−4)=a²＋b²。</li>
+          <li>2つの左辺を等しくして、a(a＋b−5)=(a＋b)(a−4)。</li>
+          <li>a²＋ab−5a＝a²＋ab−4a−4b → a＝4b。</li>
+          <li>a²＋b²＝17b²。CPの式は a(a＋b−5)=4b(5b−5)=20b²−20b。</li>
+          <li>20b²−20b＝17b² → 3b²＝20b → b＝20/3。</li>
+          <li>a＝80/3、DE＝a−b＝60/3＝20。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：20 cm</p>
+      </div>
+    </details>
+  </article>
+
+  <article class="problem-analysis" id="p4">
+    <h2>4. 輪ゴムのかけ方と交わらない分け方</h2>
+    <table class="overview-table">
+      <thead><tr><th>問題文</th><th>問題のテーマ</th><th>ポイント</th></tr></thead>
+      <tbody><tr>
+        <td>
+          <div class="problem-ocr">4. 釘に1本以上の輪ゴムを掛けるときの場合の数について考えます。輪ゴムを掛けるときは2本以上の釘を選ぶものとし、輪ゴムを掛けない釘があってもよいものとします。また、2本以上の輪ゴムを掛けるとき、輪ゴムどうしは交わったり重なったりしてはいけないものとします。正方形の頂点に並んだ1、2、3、4の4本の釘に輪ゴムを掛ける場合は、図1、図2、図3などの掛け方を含め、全部で13通りの掛け方があります。図4の掛け方は輪ゴムが交わっているので数えません。
+
+このとき、次の問いに答えなさい。
+（1）図5のように正五角形の頂点に並んだ1、2、3、4、5の釘に輪ゴムを掛ける方法は何通りですか。
+
+（2）図6のように正六角形の頂点に並んだ1、2、3、4、5、6の釘に輪ゴムを掛ける方法を考えます。
+（ア）1本の輪ゴムを掛けるとき、掛け方は何通りですか。
+（イ）（ア）の場合も含め、輪ゴムの掛け方は全部で何通りですか。</div>
+          <p class="problem-shot-note">PDF問題文をOCRテキスト化。図の内容は本文内の数え上げ表に置き換え。</p>
+        </td>
+        <td>
+          <ul class="theme-list">
+            <li><strong>表向き</strong>：輪ゴムのかけ方の数え上げ</li>
+            <li><strong>実際</strong>：円周上の点を、交わらないグループに分ける問題</li>
+          </ul>
+        </td>
+        <td><div class="point-box">1本の輪ゴムは「2本以上の釘をまとめた1グループ」。使わない釘は1本だけのグループと考える。交わらない条件は、円周上の順番を守る「非交差の分け方」にする。</div></td>
+      </tr></tbody>
+    </table>
+    <div class="source-note">誌面照合メモ：PDFの4ページ目では、4本の釘で13通り、交わる対角線2本は数えない、と確認例が示されています。この13通りは「交わらない分け方14通りから、何もかけない1通りを除く」と一致します。</div>
+
+    <h3 class="section-title">1. 問題文の読み方と初見の時の試し方</h3>
+    <table class="reading-table">
+      <tbody>
+        <tr><th>最強条件・不自然条件</th><td>「輪ゴムどうしは交わったり重なったりしてはいけない」が最強条件です。単に釘の選び方を数えるだけではなく、複数の輪ゴムを同時に置いたときの交差を消す必要があります。</td></tr>
+        <tr><th>数字・配置・端の意味</th><td>4本の釘で13通りという例は、数え方の確認用です。4本では1本だけの輪ゴムが11通り、2本の輪ゴムが2通りで、合計13通りになります。</td></tr>
+        <tr><th>条件をどのように翻訳するか</th><td>輪ゴム1本を「2個以上の釘のグループ」と見ます。使わない釘は1個だけのグループです。交わらないように、円周上の順番をくずさないグループ分けとして数えます。</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">2. 最初に書く図・表・式</h3>
+    <div class="setup-box">
+      <p>「輪ゴムが何本で、それぞれ何本の釘にかかっているか」をサイズで表します。使わない釘は表に書きません。</p>
+      <table class="count-table">
+        <thead><tr><th>5本の釘</th><th>数え方</th><th>通り数</th></tr></thead>
+        <tbody>
+          <tr><td>1本の輪ゴム</td><td>C(5,2)+C(5,3)+C(5,4)+C(5,5)</td><td>26</td></tr>
+          <tr><td>サイズ(2,2)</td><td>使わない釘5通り × 残り4本の交わらない組み合わせ2通り</td><td>10</td></tr>
+          <tr><td>サイズ(2,3)</td><td>2本の輪ゴムが交わらない分け方</td><td>5</td></tr>
+          <tr><td><strong>合計</strong></td><td></td><td><strong>41</strong></td></tr>
+        </tbody>
+      </table>
+      <table class="count-table">
+        <thead><tr><th>6本の釘</th><th>サイズ</th><th>通り数</th></tr></thead>
+        <tbody>
+          <tr><td>1本の輪ゴム</td><td>(2),(3),(4),(5),(6)</td><td>57</td></tr>
+          <tr><td>2本の輪ゴム</td><td>(2,2),(2,3),(2,4),(3,3)</td><td>30＋30＋6＋3</td></tr>
+          <tr><td>3本の輪ゴム</td><td>(2,2,2)</td><td>5</td></tr>
+        </tbody>
+      </table>
+      <div class="tool-note">サイズ(2,3)は「2本にかけた輪ゴム」と「3本にかけた輪ゴム」の2本という意味です。未使用の釘はサイズに入れません。</div>
+    </div>
+
+    <h3 class="section-title">3. 解答解説（本解）</h3>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>輪ゴムをグループとして見る。</li><li>交差しないサイズ分けで数える。</li></ul></td>
+          <td>
+            <p><strong>基本の見方</strong></p>
+            <p>1本の輪ゴムは、2本以上の釘をまとめるグループです。複数のグループがあるとき、円周上で交わらないものだけ数えます。</p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>五角形は、輪ゴム1本と2本に分ける。</li><li>3本以上の輪ゴムは作れない。</li></ul></td>
+          <td>
+            <p><strong>（1）正五角形</strong></p>
+            <p>まず1本の輪ゴムだけの場合です。2本以上の釘を選べばよいので、</p>
+            <div class="formula">C(5,2)+C(5,3)+C(5,4)+C(5,5)=10＋10＋5＋1＝26</div>
+            <p>次に2本の輪ゴムです。</p>
+            <table class="count-table">
+              <thead><tr><th>サイズ</th><th>数え方</th><th>通り数</th></tr></thead>
+              <tbody>
+                <tr><td>(2,2)</td><td>使わない釘を1本選ぶ：5通り。残り4本の非交差ペア分けは2通り。</td><td>10</td></tr>
+                <tr><td>(2,3)</td><td>2本の輪ゴムが交わらないためには、2本の輪ゴム側が隣り合う形になる。場所は5通り。</td><td>5</td></tr>
+              </tbody>
+            </table>
+            <div class="formula">26＋10＋5＝41</div>
+            <p><span class="answer">答え：（1）41通り</span></p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>1本だけなら交差を考えなくてよい。</li><li>選ぶ釘の個数が2〜6。</li></ul></td>
+          <td>
+            <p><strong>（2）（ア）正六角形で1本だけ</strong></p>
+            <p>1本の輪ゴムをかけるだけなら、2本以上の釘を選べばよいです。</p>
+            <div class="formula">C(6,2)+C(6,3)+C(6,4)+C(6,5)+C(6,6)</div>
+            <div class="formula">15＋20＋15＋6＋1＝57</div>
+            <p><span class="answer">答え：（ア）57通り</span></p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>全部の場合はサイズごとに分類する。</li><li>未使用の釘はサイズに入れない。</li></ul></td>
+          <td>
+            <p><strong>（2）（イ）全部</strong></p>
+            <p>1本の輪ゴムは（ア）で57通り。</p>
+            <table class="count-table">
+              <thead><tr><th>輪ゴムのサイズ</th><th>数え方</th><th>通り数</th></tr></thead>
+              <tbody>
+                <tr><td>(2,2)</td><td>4本の釘を選び、その4本を交わらない2組に分ける：C(6,4)×2</td><td>30</td></tr>
+                <tr><td>(2,3)</td><td>使わない釘を1本選び、残り5本を交わらない(2,3)に分ける：6×5</td><td>30</td></tr>
+                <tr><td>(2,4)</td><td>2本の輪ゴム側は隣り合う釘になる：6通り</td><td>6</td></tr>
+                <tr><td>(3,3)</td><td>3本ずつ連続したまとまりに分ける：3通り</td><td>3</td></tr>
+                <tr><td>(2,2,2)</td><td>6本を交わらない3組のペアにする：5通り</td><td>5</td></tr>
+              </tbody>
+            </table>
+            <div class="formula">57＋30＋30＋6＋3＋5＝131</div>
+            <p><span class="answer">答え：（イ）131通り</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">4. 解答解説（別解）</h3>
+    <div class="representation-box">
+      <p><strong>別の表現：</strong>「輪ゴムをかけない釘」を1個だけのグループとして入れると、問題は「正n角形の頂点を交わらないように分ける数」になります。この数はカタラン数 C<sub>n</sub> で数えられます。最後に「全部1個だけのグループ」、つまり輪ゴムを1本もかけない場合を1つ引きます。</p>
+    </div>
+    <table class="step-table solution-step-table">
+      <thead><tr><th>方針とその理由</th><th>解答解説</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><ul><li>4本の例で確認する。</li><li>公式を使う前に、問題文の13通りと合うか見る。</li></ul></td>
+          <td>
+            <p>交わらない分け方の総数は、</p>
+            <div class="formula">C<sub>n</sub>＝1/(n＋1)×C(2n,n)</div>
+            <p>n＝4では、C<sub>4</sub>＝14。輪ゴムを1本もかけない場合を除くと、14−1＝13。これは問題文の例と合います。</p>
+          </td>
+        </tr>
+        <tr>
+          <td><ul><li>五角形・六角形を一気に出す。</li><li>（ア）は別に1本だけを数える。</li></ul></td>
+          <td>
+            <p>五角形では、</p>
+            <div class="formula">C<sub>5</sub>＝1/6×C(10,5)=42</div>
+            <div class="formula">42−1＝41</div>
+            <p>六角形では、</p>
+            <div class="formula">C<sub>6</sub>＝1/7×C(12,6)=132</div>
+            <div class="formula">132−1＝131</div>
+            <p>また、六角形で1本だけなら、2本以上の釘を選ぶだけなので、</p>
+            <div class="formula">2⁶−1−6＝64−7＝57</div>
+            <p><span class="answer">答え：41通り、57通り、131通り</span></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-title">5. つまずきと直し方</h3>
+    <div class="mistake-grid">
+      <div class="mistake-card"><strong>こう止まる</strong><br>釘を選ぶだけで全部数えたつもりになる。<br><strong>こう直す</strong><br>複数本の輪ゴムでは、交差するものを除く。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>1本の輪ゴムは2本の釘だけと思う。<br><strong>こう直す</strong><br>問題文は「2本以上の釘」なので、3本、4本、5本、6本にかける1本の輪ゴムもある。</div>
+      <div class="mistake-card"><strong>こう止まる</strong><br>何もかけない場合を入れてしまう。<br><strong>こう直す</strong><br>「1本以上の輪ゴム」なので、全部未使用の1通りは除く。</div>
+    </div>
+
+    <h3 class="section-title">6. この問題で残すメモ</h3>
+    <div class="memo-box">
+      <div><strong>使った力</strong><br>図形の数え上げを「グループ分け」に変換する力。交差を条件として分類する力。</div>
+      <div><strong>再利用メモ</strong><br>円周上の点を交わらないように分ける問題は、非交差分割。小さいnではサイズ別表、大きいnではカタラン数で確認できる。</div>
+    </div>
+
+    <h3 class="section-title">7. 転移テスト問題と自分で作る問題</h3>
+    <details>
+      <summary>転移テスト問題：正七角形で全部のかけ方</summary>
+      <div class="accordion-body">
+        <p>正七角形の頂点に並んだ7本の釘に、1本以上の輪ゴムを交わらないようにかけます。輪ゴムをかけない釘があってもよいとき、全部で何通りありますか。</p>
+        <h4>同じ構造の理由</h4>
+        <ul class="candidate-points"><li>輪ゴムを1つのグループ、未使用の釘を1個グループと見ます。</li><li>交わらないグループ分けなので、カタラン数で数えられます。</li></ul>
+        <h4>解答解説</h4>
+        <ol class="work-steps">
+          <li>輪ゴムをかけない釘も1個グループとして含める。</li>
+          <li>7本の釘の交わらない分け方は C<sub>7</sub>。</li>
+          <li>C<sub>7</sub>＝1/8×C(14,7)。C(14,7)=3432 なので、C<sub>7</sub>＝429。</li>
+          <li>ただし、輪ゴムを1本もかけない場合を除くので、429−1＝428。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：428通り</p>
+      </div>
+    </details>
+    <details>
+      <summary>自分で作る問題：正六角形で2本だけ</summary>
+      <div class="accordion-body">
+        <h4>自作問題の例</h4>
+        <p>正六角形の6本の釘に、交わらないようにちょうど2本の輪ゴムをかける方法は何通りですか。</p>
+        <h4>その解答解説</h4>
+        <ol class="work-steps">
+          <li>ちょうど2本なので、サイズは (2,2)、(2,3)、(2,4)、(3,3) の4種類。</li>
+          <li>(2,2)：4本を選んで2組にする。交わらない分け方は2通りなので、C(6,4)×2＝30。</li>
+          <li>(2,3)：使わない釘を1本選ぶ6通り。残り5本の(2,3)の非交差分けは5通り。6×5＝30。</li>
+          <li>(2,4)：2本側が隣り合う必要があり、6通り。</li>
+          <li>(3,3)：3本ずつ連続するまとまりに分けるので、3通り。</li>
+          <li>合計 30＋30＋6＋3＝69。</li>
+        </ol>
+        <p class="transfer-answer"><strong>答え</strong>：69通り</p>
+      </div>
+    </details>
+  </article>
+</main>
+</body>
+</html>
