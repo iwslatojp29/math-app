@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2025年11月号 日々の演習｜完全・超詳解</title><style>
+:root{--ink:#243249;--muted:#66758b;--line:#d8e0ea;--paper:#fff;--bg:#f2f5f9;--navy:#18385f;--blue:#27628f;--blue-soft:#eaf3fb;--gold:#9a6c19;--gold-soft:#fff6dc;--green:#18704b;--green-soft:#e9f6ef;--red:#a23f3f;--red-soft:#fff0ee;--purple:#694d8d;--purple-soft:#f3eef9;--shadow:0 12px 34px rgba(30,50,80,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;line-height:1.9;font-size:16px}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.layout{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1550px;margin:auto;min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;overflow:auto;padding:28px 22px;background:#132d50;color:#fff}.brand{font-weight:800;font-size:23px;line-height:1.35;margin:0}.sub{color:#c5d2e2;font-size:13px;margin:6px 0 20px}.sidebar nav{display:grid;gap:3px}.sidebar nav a{color:#e1e9f3;padding:7px 10px;border-radius:8px;font-size:13px;line-height:1.4}.sidebar nav a:hover{background:rgba(255,255,255,.09);text-decoration:none}.group{margin:17px 10px 5px;color:#94adca;font-size:11px;font-weight:800;letter-spacing:.12em}.side-note{border-top:1px solid rgba(255,255,255,.18);margin-top:20px;padding-top:14px;color:#b8c7d9;font-size:11px}main{min-width:0;padding:42px clamp(20px,4vw,64px) 80px}.hero,.card,.problem-card{max-width:1120px;margin:0 auto 26px;background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.hero{background:linear-gradient(135deg,#17385f,#2e6797);color:#fff;padding:clamp(32px,5vw,64px);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:330px;height:330px;border:50px solid rgba(255,255,255,.055);border-radius:50%;right:-120px;top:-145px}.kicker{font-size:13px;letter-spacing:.18em;font-weight:800;color:#d8e6f5}.hero h1{font-size:clamp(30px,4.7vw,54px);line-height:1.22;margin:10px 0 16px}.hero p{max-width:850px;color:#e7eef7;margin:0}.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.meta span{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);padding:5px 10px;border-radius:999px;font-size:12px}.card{padding:28px clamp(20px,3vw,40px)}.card h2{margin:0 0 12px;font-size:25px;color:var(--navy)}.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.guide-item{border:1px solid var(--line);background:#fafbfd;border-radius:14px;padding:16px}.guide-item strong{display:block;color:var(--navy);margin-bottom:5px}.answer-table-wrap{overflow:auto}.answer-table{border-collapse:collapse;width:100%;min-width:850px;font-size:14px}.answer-table th,.answer-table td{border-bottom:1px solid var(--line);padding:10px 9px;text-align:left;vertical-align:top}.answer-table th{background:#f5f8fb;color:var(--navy)}.answer-table a{font-weight:800}.problem-card{overflow:hidden;scroll-margin-top:18px}.problem-head{display:flex;align-items:center;gap:16px;padding:24px clamp(20px,3vw,40px);background:linear-gradient(90deg,#f7f9fc,#fff);border-bottom:1px solid var(--line)}.number-badge{width:68px;min-width:68px;height:78px;border-radius:13px;background:#17365d;color:#fff;display:grid;place-items:center;align-content:center;box-shadow:0 7px 14px rgba(20,45,77,.18)}.number-badge span{font-size:11px;opacity:.82}.number-badge strong{font-size:31px;line-height:1}.eyebrow{margin:0;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.05em}.problem-head h2{margin:2px 0 0;font-size:clamp(22px,3vw,31px);line-height:1.4;color:var(--navy)}.statement-block{margin:22px clamp(20px,3vw,40px) 0;padding:19px 20px;background:#f7f9fc;border:1px solid var(--line);border-radius:15px}.statement-block h3{margin:0 0 8px;font-size:15px;color:var(--navy)}.statement-block p{margin:5px 0}.problem-list{margin:8px 0;padding-left:1.6em}.problem-list li{margin:5px 0}.answer-box,.focus-box,.pitfall,.takeaway{margin-left:clamp(20px,3vw,40px);margin-right:clamp(20px,3vw,40px)}.answer-box{display:flex;align-items:baseline;gap:14px;margin-top:14px;padding:16px 18px;border-radius:13px;background:var(--gold-soft);border:1px solid #ead59d}.answer-box span{font-size:12px;font-weight:800;color:#806018;letter-spacing:.12em}.answer-box strong{font-size:20px;color:#60450e}.focus-box{margin-top:14px;padding:17px 19px;background:var(--green-soft);border:1px solid #bfe1ce;border-radius:13px}.focus-box strong{color:var(--green)}.focus-box p{margin:4px 0 0}.method{margin:22px clamp(20px,3vw,40px);padding:23px clamp(18px,2.5vw,30px);border-radius:17px;border:1px solid var(--line)}.method h3{margin:0 0 14px;font-size:19px;line-height:1.45}.method h3 span{font-size:10px;letter-spacing:.12em;border-radius:999px;padding:4px 8px;margin-right:7px;vertical-align:2px}.prep-method{background:var(--purple-soft);border-color:#d8cbe8}.prep-method h3{color:var(--purple)}.prep-method h3 span{background:var(--purple);color:#fff}.best-method{background:#fbfdff;border-color:#bdd5e9}.best-method h3{color:#1d527f}.best-method h3 span{background:#1d527f;color:#fff}.official-method{background:#fffdf7;border-color:#e8d8a8}.official-method h3{color:#795813}.official-method h3 span{background:#997021;color:#fff}.check-method{background:#f8fbf9;border-color:#c8dfd1}.check-method h3{color:#256247}.check-method h3 span{background:#256247;color:#fff}.method p{margin:8px 0}.subq{padding:15px 0;border-top:1px dashed #ccd6e2}.subq:first-child{border-top:0;padding-top:0}.subq h4{margin:7px 0 6px;color:#244c75;font-size:16px}.equation{font-family:"Times New Roman","Yu Mincho","Hiragino Mincho ProN",serif;font-size:1.05em;margin:11px 0;padding:11px 15px;border-radius:9px;background:#f3f6f9;border-left:4px solid #6f849d;overflow-wrap:anywhere}.answer-line{margin:12px 0;padding:10px 14px;border-radius:9px;background:#fff6da;border:1px solid #ead697;font-size:1.05em}.logic-list{margin:8px 0;padding-left:1.5em}.logic-list li{margin:6px 0}.sequence{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0}.sequence span{min-width:42px;text-align:center;border:1px solid var(--line);border-radius:7px;padding:4px 7px;background:#fff}.sequence .hit{background:#e8f5ee;border-color:#9dccb4;font-weight:800;color:#165d40}.mini-table{border-collapse:collapse;width:100%;margin:13px 0;font-size:14px}.mini-table th,.mini-table td{border:1px solid var(--line);padding:8px 9px;text-align:center;vertical-align:middle}.mini-table th{background:#f2f5f9;color:var(--navy)}.logic-row{display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;margin:8px 0}.logic-row b{background:#18345a;color:#fff;border-radius:8px;padding:8px;text-align:center}.logic-row span{background:#eef3f8;border-radius:8px;padding:8px 12px}.callout{padding:13px 15px;border-radius:10px;background:#edf4fc;border:1px solid #c8dcef;margin:12px 0}.pitfall{margin-top:0;margin-bottom:14px;padding:15px 17px;background:var(--red-soft);border:1px solid #edc5c2;border-radius:12px}.pitfall strong{color:var(--red)}.pitfall p{margin:4px 0 0}.takeaway{display:flex;gap:12px;align-items:flex-start;margin-bottom:20px;padding:14px 17px;border-radius:12px;background:#eef4fa;border:1px solid #cbd9e8}.takeaway strong{white-space:nowrap;color:var(--navy)}.back{text-align:right;padding:0 clamp(20px,3vw,40px) 23px;font-size:12px}.diagram-svg{display:block;width:min(100%,650px);height:auto;margin:20px auto}.diagram-svg.compact{width:min(100%,580px)}.diagram-caption{text-align:center;color:var(--muted);font-size:12px;margin:7px 0}.visual-pair{max-width:1080px;margin:20px auto;padding:0 clamp(20px,3vw,40px);display:grid;grid-template-columns:1fr 1.2fr;gap:18px;align-items:center}.visual-pair>div{background:#fbfcfe;border:1px solid var(--line);border-radius:16px;padding:15px}.visual-pair h4{margin:0 0 10px;color:var(--navy)}.spiral-grid{border-collapse:collapse;margin:12px auto;font-size:12px}.spiral-grid td{width:42px;height:42px;border:1px solid #aeb9c7;text-align:center;background:#fff;position:relative}.spiral-grid.small td{width:54px;height:48px;font-size:15px}.spiral-grid .off-cell{background:#ffe5e2;color:#8f3030;font-weight:800}.spiral-grid .off-cell small{display:block;font-size:8px;line-height:1}.spiral-grid .center-cell{background:#e7f1fb;font-weight:800}.source-note{max-width:1120px;margin:35px auto 0;color:var(--muted);font-size:12px;text-align:center}@media(max-width:1000px){.layout{display:block}.sidebar{position:relative;height:auto}.sidebar nav{grid-template-columns:repeat(4,minmax(0,1fr))}.group{grid-column:1/-1}.side-note{display:none}main{padding:24px 14px 60px}.guide-grid,.visual-pair{grid-template-columns:1fr}}@media(max-width:650px){body{font-size:15px}.sidebar nav{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{border-radius:18px;padding:28px 22px}.problem-head{align-items:flex-start}.number-badge{width:56px;min-width:56px;height:66px}.number-badge strong{font-size:27px}.method{padding:18px 15px}.answer-box,.takeaway{display:block}.answer-box span,.takeaway strong{display:block;margin-bottom:5px}.logic-row{grid-template-columns:1fr}.mini-table{font-size:12px}.spiral-grid td{width:34px;height:34px;font-size:10px}}@media print{body{background:#fff;font-size:10.5pt}.layout{display:block}.sidebar{display:none}main{padding:0}.hero,.card,.problem-card{box-shadow:none;border:1px solid #bbb}.problem-card{page-break-before:always}.method,.statement-block,.focus-box,.pitfall,.takeaway{break-inside:avoid}.back{display:none}a{color:inherit}.visual-pair{grid-template-columns:1fr 1fr}.answer-table{min-width:0;font-size:8pt}}
+</style></head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+<div class="layout"><aside class="sidebar"><p class="brand">日々の演習<br>完全・超詳解</p><p class="sub">2025年11月号｜整数問題</p><nav><a href="#howto">この解説の見方</a><a href="#answers">答え一覧</a><div class="group">累乗・約数</div><a href="#p04">04 累乗の大小</a><a href="#p05">05 約数の個数</a><a href="#p06">06 条件を満たす整数</a><a href="#p07">07 最大の真の約数</a><div class="group">数列・周期・数え上げ</div><a href="#p10">10 最小素因数の数列</a><a href="#p11">11 各位の和が9</a><a href="#p12">12 ボタンの点灯</a><a href="#p13">13 スイッチと電球</a><a href="#p14">14 末尾の0</a><div class="group">整数パズル</div><a href="#p17">17 唯一の整数</a><a href="#p18">18 5連続整数の積</a><a href="#p19">19 上2桁＋下2桁</a><a href="#p20">20 四捨五入</a><a href="#p21">21 ふるい</a><a href="#p22">22 対角線</a><div class="group">規則・進法・連続和</div><a href="#p25">25 四捨五入操作</a><a href="#p26">26 駒の移動</a><a href="#p27">27 五進法対応</a><a href="#p28">28 連続整数の和</a><a href="#p29">29 正方形除去</a></nav><p class="side-note">各問に「問題文・予備知識・最短解法・書籍解説の読み解き・検算」を収録。外部ファイルを参照しない単体HTMLです。</p></aside>
+<main><section class="hero"><p class="kicker">MIDDLE SCHOOL ENTRANCE EXAMINATION / INTEGER PROBLEMS</p><h1>予備知識がなくても読める<br>日々の演習 完全解答解説</h1><p>問題文をこのHTML内に再構成し、最初にどこを見るか、なぜその式になるか、書籍の短い解説で省略されている論理まで、具体例を入れて順に説明します。</p><div class="meta"><span>全20問</span><span>中学受験算数の範囲</span><span>外部画像・外部CSSなし</span><span>印刷対応</span></div></section>
+<section class="card" id="howto"><h2>この解説の見方</h2><div class="guide-grid"><div class="guide-item"><strong>問題</strong>元の冊子がなくても条件と問いが分かるように、必要な図とともに再構成しています。</div><div class="guide-item"><strong>BEST</strong>計算量が少なく、別問題にも応用しやすい、最も見通しのよい方法です。</div><div class="guide-item"><strong>BOOK</strong>書籍の式や短い説明を1行ずつ言い換え、省かれている理由を補っています。</div></div><p>式の前後には「何を置いたのか」「なぜ候補がそれだけなのか」「最後に何を確認するのか」を必ず書いています。</p></section>
+<section class="card" id="answers"><h2>答え一覧</h2><div class="answer-table-wrap"><table class="answer-table"><thead><tr><th>問題</th><th>答え</th><th>中心となる見方</th></tr></thead><tbody><tr><td><a href="#p04">04</a></td><td>(1) イ・ア・ウ　(2) ウ・ア・エ・イ</td><td>底を2・3にそろえる</td></tr><tr><td><a href="#p05">05</a></td><td>(1) 9　(2) 97　(3) 10個</td><td>約数の個数公式を逆向きに使う</td></tr><tr><td><a href="#p06">06</a></td><td>(1) 105　(2) 120　(3) 4200</td><td>余りの式、約数6個の形</td></tr><tr><td><a href="#p07">07</a></td><td>(1) 17　(2) 143　(3) 39・65・143</td><td>最大真約数×最小素因数</td></tr><tr><td><a href="#p10">10</a></td><td>(1) 15回　(2) 50通り　(3) 20通り</td><td>隣接項の差でxを消す</td></tr><tr><td><a href="#p11">11</a></td><td>(1) 10番目　(2) 7個　(3) 36個　(4) 2025　(5) 3600・8100</td><td>桁の和と平方数</td></tr><tr><td><a href="#p12">12</a></td><td>(1) 4・9　(2) 1981個、縦3・横1・斜め1</td><td>押す回数の奇偶、平方数</td></tr><tr><td><a href="#p13">13</a></td><td>(1) 405・96・482秒　(2) 560秒</td><td>直列=かつ、並列=または</td></tr><tr><td><a href="#p14">14</a></td><td>(1) 505　(2) 30　(3) 26</td><td>素因数5の指数</td></tr><tr><td><a href="#p17">17</a></td><td>A=8、B=9、C=7、D=496</td><td>唯一性から周期≥500</td></tr><tr><td><a href="#p18">18</a></td><td>152</td><td>1〜20の最小公倍数</td></tr><tr><td><a href="#p19">19</a></td><td>(1) 44と45　(2) 2079</td><td>X−Y=99×上2桁</td></tr><tr><td><a href="#p20">20</a></td><td>2921</td><td>丸めた数の下の桁から逆算</td></tr><tr><td><a href="#p21">21</a></td><td>(1) 49　(2) 143・115番目　(3) 2208</td><td>素数pの段階はp²から</td></tr><tr><td><a href="#p22">22</a></td><td>(1) 12　(2) 2030　(3) 5通り</td><td>縦＋横−最大公約数</td></tr><tr><td><a href="#p25">25</a></td><td>(1) 2・3・4・4　(2) 57　(3) 33番目　(4) 52番目</td><td>4個周期と等差数列</td></tr><tr><td><a href="#p26">26</a></td><td>(1) 12　(2) 186　(3) 15個</td><td>平方数で1歩、それ以外2歩</td></tr><tr><td><a href="#p27">27</a></td><td>(1) 93番目　(2) 8000　(3) 84個</td><td>五進法の位取り</td></tr><tr><td><a href="#p28">28</a></td><td>(1) 14+15+16　(2) 9+…+14　(3) 2・4・8・16</td><td>平均×個数、奇数因数</td></tr><tr><td><a href="#p29">29</a></td><td>(1) 15cm　(2) 210cm　(3) 99cm</td><td>ユークリッドの互除法</td></tr></tbody></table></div></section>
+
+    <article class="problem-card" id="p04">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>04</strong></div>
+        <div><p class="eyebrow">問題 p.18／書籍解説 p.28</p><h2>巨大な累乗は、実際に計算せず「底」をそろえる</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>整数 <i>A</i> を <i>B</i> 個かけた数を <b>A[B]</b> と表します。たとえば 2[3]=2×2×2=8 です。</p>
+<ol class="problem-list"><li>(1) 2[31]、8[10]、16[8] を小さい順に並べます。</li><li>(2) 9[22]、28[15]、79[11]、243[9] を小さい順に並べます。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) イ、ア、ウ　　(2) ウ、ア、エ、イ</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>桁数の大きな数を計算する問題ではありません。8と16は2の累乗、9と243は3の累乗です。「同じ底の累乗」に直せば、指数だけを比べられます。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p><b>累乗の累乗</b>では、かける回数どうしをかけます。</p>
+<div class="equation">(2³)¹⁰ ＝ 2を3回かけたまとまりを10個 ＝ 2を30回かける ＝ 2³⁰</div>
+<p>また、同じ正の数を同じ回数だけかけるなら、もとの大小関係は変わりません。たとえば 79&lt;81 なら 79¹¹&lt;81¹¹ です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 8と16を、底が2の形に直す</h4>
+<p>8=2³、16=2⁴ です。したがって、</p>
+<div class="equation">8[10]=(2³)¹⁰=2³⁰<br>2[31]=2³¹<br>16[8]=(2⁴)⁸=2³²</div>
+<p>底が全部2になりました。2をかける回数は 30&lt;31&lt;32 なので、</p>
+<div class="answer-line">8[10] ＜ 2[31] ＜ 16[8]　→　<b>イ、ア、ウ</b></div></div>
+<div class="subq"><h4>(2) まず、ぴったり3の累乗になる2つを比べる</h4>
+<div class="equation">9[22]=(3²)²²=3⁴⁴<br>243[9]=(3⁵)⁹=3⁴⁵</div>
+<p>よって 9[22]&lt;243[9] です。</p>
+<h4>79[11] は 9[22] より小さい</h4>
+<p>79は3の累乗ではありません。しかし、すぐ上に 81=3⁴ があります。</p>
+<div class="equation">79¹¹ ＜ 81¹¹=(3⁴)¹¹=3⁴⁴=9²²</div>
+<h4>28[15] は 243[9] より大きい</h4>
+<p>28のすぐ下に 27=3³ があります。</p>
+<div class="equation">28¹⁵ ＞ 27¹⁵=(3³)¹⁵=3⁴⁵=243⁹</div>
+<p>以上を1本につなぐと、</p>
+<div class="answer-line">79[11] ＜ 9[22] ＜ 243[9] ＜ 28[15]<br>→ <b>ウ、ア、エ、イ</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍も、(1)では 8=2[3]、16=2[4] として底を2に統一しています。ここで書籍の</p>
+<div class="equation">8[10]=(2[3])[10]=2[3×10]</div>
+<p>という1行は、「2を3回かけたものを10回かけるので、合計30回」という意味です。</p>
+<p>(2)では、79と28を無理に正確な3の累乗へ直していません。代わりに、</p>
+<ul class="logic-list"><li>79&lt;81=3⁴ なので、79¹¹&lt;3⁴⁴</li><li>28&gt;27=3³ なので、28¹⁵&gt;3⁴⁵</li></ul>
+<p>と、比較に必要な側だけを押さえています。これが書籍解説のいちばん大切な工夫です。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>(1)の指数は30、31、32と連続しています。(2)は 3⁴⁴ と3⁴⁵の間を基準に、79¹¹が下、28¹⁵が上に来ています。したがって順序に矛盾はありません。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>8¹⁰を80、16⁸を128のように「底×指数」で考えてはいけません。累乗は同じ数を何回もかける計算です。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>大きすぎる累乗は計算しない。底をそろえ、そろわない数は近くの累乗ではさむ。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p05">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>05</strong></div>
+        <div><p class="eyebrow">問題 p.18〜19／書籍解説 p.28</p><h2>約数の個数は「素因数を何個使うか」の組合せ</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>整数 <i>A</i> の正の約数の個数を 【A】 と表します。たとえば6の約数は1、2、3、6なので【6】=4です。</p>
+<ol class="problem-list"><li>(1) 【100】を求めます。</li><li>(2) 100以下で【x】=2となる最大のxを求めます。</li><li>(3) 100以下で【y】=8となるyは何個あるか求めます。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 9　　(2) 97　　(3) 10個</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>約数を1個ずつ書くより、先に素因数分解します。約数は、各素因数を「0個使う、1個使う、…」と選んで作られます。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>たとえば 12=2²×3 です。12の約数を作るとき、</p>
+<ul class="logic-list"><li>2は0個・1個・2個の3通り</li><li>3は0個・1個の2通り</li></ul>
+<p>なので約数は3×2=6個です。一般に、</p>
+<div class="equation">n=pᵃ×qᵇ×… のとき　約数の個数=(a+1)(b+1)…</div>
+<p>「+1」が付くのは、素因数を1個も使わない選び方もあるからです。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 100を素因数分解する</h4>
+<div class="equation">100=2²×5²</div>
+<p>2を使う個数は0・1・2の3通り、5も3通りです。</p>
+<div class="answer-line">【100】=(2+1)(2+1)=3×3=<b>9</b></div></div>
+<div class="subq"><h4>(2) 約数が2個の数とは何か</h4>
+<p>どんな1より大きい数にも、少なくとも1と自分自身があります。それ以外の約数がない数が素数です。したがって【x】=2は「xが素数」と同じ意味です。</p>
+<p>100から下へ調べると、100、99、98は合成数で、97は素数です。</p>
+<div class="answer-line">最大のxは <b>97</b></div></div>
+<div class="subq"><h4>(3) 「約数8個」になる素因数の形を、先に全部出す</h4>
+<p>約数の個数を作る掛け算が8になる分け方は、</p>
+<div class="equation">8　／　4×2　／　2×2×2</div>
+<p>よって数の形は、異なる素数をp、q、rとして、</p>
+<div class="equation">p⁷　／　p³q　／　pqr</div>
+<h4>① p⁷型</h4><p>最小でも2⁷=128なので、100以下にはありません。</p>
+<h4>② p³q型</h4>
+<p>小さい素数から作ると、24、40、56、88、54の5個です。</p>
+<table class="mini-table"><tr><th>形</th><th>数</th></tr><tr><td>2³×3, 2³×5, 2³×7, 2³×11</td><td>24, 40, 56, 88</td></tr><tr><td>3³×2</td><td>54</td></tr></table>
+<p>3³×5=135から先は100を超えます。</p>
+<h4>③ pqr型</h4>
+<p>異なる3素数の積を小さい順に作ると、</p>
+<div class="equation">2×3×5=30、2×3×7=42、2×3×11=66、2×3×13=78、2×5×7=70</div>
+<p>次の2×3×17=102や2×5×11=110は100を超えます。よって5個です。</p>
+<div class="answer-line">5+5=<b>10個</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は「最後に約数の個数を作る掛け算」に注目し、主に</p>
+<div class="equation">2×2×2 と 2×4</div>
+<p>の2種類を調べています。これは上の pqr型とp³q型に対応します。p⁷型は2⁷の時点で100を超えるため、候補がないことを暗黙に除いています。</p>
+<p>書籍に並ぶ</p>
+<div class="equation">2×3×5, 2×3×7, …</div>
+<p>は数を適当に試しているのではなく、pqr型を小さい順に、100を超えるまで漏れなく並べたものです。同様に2×2×2×3などはp³q型です。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>該当する10個は 24、30、40、42、54、56、66、70、78、88 です。たとえば24=2³×3なので約数は(3+1)(1+1)=8個、30=2×3×5なので2³=8個です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>p³qのpとq、pqrのp・q・rは異なる素数です。同じ素数を重ねると指数が変わり、約数の個数も変わります。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>「約数が何個」は、数を探す前に、その個数の掛け算の分け方を作る。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p06">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>06</strong></div>
+        <div><p class="eyebrow">問題 p.19／書籍解説 p.28〜29</p><h2>余り・商・約数の条件を、1つずつ整数に直す</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>A、B、Cは1以上150以下の整数で、次の条件を満たします。</p>
+<ul class="problem-list"><li>Aは奇数で、約数が6個。</li><li>Bを13で割った商は、余りの3倍。</li><li>Cは5の倍数。Cを12で割ると9余り、9で割ると6余る。</li></ul>
+<ol class="problem-list"><li>(1) Cを求めます。</li><li>(2) Bとして考えられる最大の数を求めます。</li><li>(3) A、B、Cの最大公約数が15のとき、最小公倍数として考えられる最大の数を求めます。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 105　　(2) 120　　(3) 4200</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>条件を一度に処理しません。Cは余り、Bは「商と余り」、Aは「約数6個」に分け、C→B→Aの順に確定すると見通しがよくなります。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p><b>割り算の基本形</b>は、</p><div class="equation">割られる数＝割る数×商＋余り</div>
+<p>です。余りは0以上、割る数より小さい整数です。</p>
+<p>また、約数が6個になる形は、6=6または3×2より、p⁵またはp²qです。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) C：12で割って9余る数を並べ、5の倍数だけ残す</h4>
+<p>150以下で12で割って9余る数は、</p>
+<div class="sequence"><span>9</span><span>21</span><span>33</span><span class="hit">45</span><span>57</span><span>69</span><span>81</span><span>93</span><span class="hit">105</span><span>117</span><span>129</span><span>141</span></div>
+<p>このうち5の倍数は45と105です。最後に9で割った余りを調べると、45は余り0、105は余り6です。</p>
+<div class="answer-line">C=<b>105</b></div></div>
+<div class="subq"><h4>(2) B：余りをrと置く</h4>
+<p>Bを13で割った余りをrとすると、商は3rです。</p>
+<div class="equation">B=13×3r+r=40r</div>
+<p>余りrは0〜12ですが、Bは1以上150以下です。40r≤150より r=1、2、3。Bは40、80、120です。</p>
+<div class="answer-line">最大は <b>120</b></div></div>
+<div class="subq"><h4>(3) A：最大公約数15から、Aも15の倍数</h4>
+<p>B=120、C=105で、最大公約数はすでに15です。3数の最大公約数を15にするにはAも15の倍数でなければなりません。</p>
+<p>Aは奇数で約数6個です。15=3×5を含むので、1種類の素数だけからなるp⁵型ではありません。p²q型で、使う素数は3と5です。</p>
+<div class="equation">A=3²×5=45　または　A=3×5²=75</div>
+<p>それぞれの最小公倍数を比べます。</p>
+<table class="mini-table"><tr><th>A</th><th>最小公倍数</th></tr><tr><td>45=3²×5</td><td>2³×3²×5×7=2520</td></tr><tr><td>75=3×5²</td><td>2³×3×5²×7=4200</td></tr></table>
+<div class="answer-line">最大は <b>4200</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍の(1)は、12で割って9余るCが3の倍数であることに先に気づきます。12も9も3の倍数なので、C=12q+9も3の倍数です。さらに5の倍数だからCは15の倍数。15の倍数の中で条件を調べ、45と105に絞っています。</p>
+<p>(2)の書籍の□は余りrです。</p>
+<div class="equation">B÷13＝商3□、余り□　→　B=13×3□+□=40□</div>
+<p>(3)では共通の15を外して、</p>
+<div class="equation">A=15×3 または15×5、B=15×8、C=15×7</div>
+<p>と見ています。A=15×5を選ぶと、残りの5、8、7が互いに余分な素因数を持ち、最小公倍数が15×5×8×7=4200と最大になります。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>A=75、B=120、C=105なら最大公約数は15です。最小公倍数4200は75、120、105のすべてで割り切れ、これより小さい2520では75で割り切れません。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>最大公約数が15とは「どれか1つが15」という意味ではなく、3数すべてが15で割れ、3数共通ではそれ以上大きな約数がないという意味です。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>余りの文は「割る数×商＋余り」に直す。約数の個数は素因数の形に直す。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p07">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>07</strong></div>
+        <div><p class="eyebrow">問題 p.19／書籍解説 p.29</p><h2>最大の真の約数は、最小の素因数で割った数</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>〈n〉を、nを割り切る整数のうち、n自身を除いた最大の数とします。たとえば8の約数は1、2、4、8なので〈8〉=4です。</p>
+<ol class="problem-list"><li>(1) 〈119〉を求めます。</li><li>(2) 〈ア〉=13となるアのうち、2番目に大きい数を求めます。</li><li>(3) 〈イ+26〉=〈イ〉で、〈イ〉≠1となるイをすべて求めます。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 17　　(2) 143　　(3) 39、65、143</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>約数は積が元の数になるペアで並びます。1とnの次のペアは「最小の素因数」と「最大の真の約数」です。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>たとえば60の約数を両端から組にすると、</p>
+<div class="equation">1×60、2×30、3×20、4×15、5×12、6×10</div>
+<p>2は60の最小の素因数、30は最大の真の約数です。したがって一般に、</p>
+<div class="equation">最大の真の約数＝元の数÷最小の素因数</div>
+<p>また、「2番目に小さい約数」は必ず最小の素因数なので、素数です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 119を因数分解する</h4>
+<div class="equation">119=7×17</div>
+<p>最小の素因数は7です。よって最大の真の約数は119÷7=17です。</p>
+<div class="answer-line"><b>17</b></div></div>
+<div class="subq"><h4>(2) 〈ア〉=13なら、ア=13×p</h4>
+<p>pをアの最小の素因数とします。最大の真の約数13とpを掛けると元の数になるので、ア=13pです。pは13以下の素数でなければなりません。</p>
+<div class="equation">p=2,3,5,7,11,13</div>
+<div class="equation">ア=26,39,65,91,143,169</div>
+<p>大きい方から169、143、…なので、2番目に大きいのは143です。</p>
+<div class="answer-line"><b>143</b></div></div>
+<div class="subq"><h4>(3) 共通の最大の真の約数をdとする</h4>
+<p>d=〈イ〉=〈イ+26〉とします。イとイ+26はどちらもdの倍数なので、その差26もdの倍数です。</p>
+<div class="equation">dは26の約数、かつd≠1　→　d=2,13,26</div>
+<h4>d=2</h4><p>最大の真の約数が2の数は4だけです。しかし4+26=30の最大の真の約数は15なので不適です。</p>
+<h4>d=13</h4><p>イ=13p、イ+26=13(p+2)です。pとp+2がそれぞれ最小の素因数になるので、ともに素数で13以下です。</p>
+<div class="equation">(p,p+2)=(3,5),(5,7),(11,13)</div>
+<p>よってイ=39、65、143です。</p>
+<h4>d=26</h4><p>イ=26p、イ+26=26(p+1)。2番目に小さい約数どうしが1違う必要がありますが、連続する素数は2と3だけです。するとイ=52、イ+26=78ですが、78の最小の素因数は2で、最大の真の約数は39です。不適です。</p>
+<div class="answer-line"><b>39、65、143</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は「2番目に小さい約数」を補助記号 [n] で表し、</p>
+<div class="equation">n=〈n〉×[n]</div>
+<p>を使っています。(3)では、</p>
+<div class="equation">[イ+26]−[イ]=26÷〈イ〉</div>
+<p>となるため、〈イ〉が26の約数だと分かります。ここで [n] は必ず素数です。書籍がd=13のときに差が2の素数の組 (3,5)、(5,7)、(11,13) を調べているのは、このためです。</p>
+<p>d=2、26を除く部分も、「2番目に小さい約数が本当にその数の最小素因数になっているか」を確認しています。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>39の最大の真の約数は13、65も13、143も13です。また65+26=91=7×13、143+26=169=13²で、どちらも最大の真の約数は13です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>「dが約数だから候補」と「dが最大の真の約数になる」は別です。候補を出した後、最小の素因数まで確かめます。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>最大側の約数と最小側の約数をペアにすると、元の数に戻る。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p10">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>10</strong></div>
+        <div><p class="eyebrow">問題 p.20／書籍解説 p.30</p><h2>数列の正体を「その数−最小の素因数」と読む</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>1番目の数を1とします。2番目以降は、整数xから「xを割り切る最も小さい素数」を引いた数をx番目の数とします。たとえば7番目は7−7=0、15番目は15−3=12です。</p>
+<ol class="problem-list"><li>(1) 50番目までに0は何回出るか。</li><li>(2) 300番目までで、隣り合う2数が同じになる場所は何通りか。</li><li>(3) 300番目までで、x番目の数−(x+1)番目の数=2となる場所は何通りか。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 15回　　(2) 50通り　　(3) 20通り</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>数列の値そのものより、「xとx+1の最小の素因数がどう違うか」に注目します。隣接項の差を取るとxが消えます。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>xの最小の素因数をpとすると、x番目の数はx−pです。素数xではp=xなので0になります。</p>
+<p>連続するxとx+1では、一方が偶数です。偶数の最小の素因数は必ず2です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 0になるのはxが素数のとき</h4>
+<p>x−最小素因数=0なら、最小素因数=xです。これはxが素数ということです。</p>
+<div class="equation">2,3,5,7,11,13,17,19,23,29,31,37,41,43,47</div>
+<p>50以下の素数は15個です。</p><div class="answer-line"><b>15回</b></div></div>
+<div class="subq"><h4>(2) 隣り合う値が同じ</h4>
+<p>xの最小素因数をp、x+1の最小素因数をqとします。</p>
+<div class="equation">x−p=(x+1)−q　→　q−p=1</div>
+<p>差が1の素数は2と3だけです。したがってxは偶数でp=2、x+1は3の倍数でq=3です。</p>
+<p>つまり x+1は6で割ると3余る数です。</p>
+<div class="equation">x+1=3,9,15,…,297</div>
+<p>6ごとに1個あり、300÷6=50です。</p><div class="answer-line"><b>50通り</b></div></div>
+<div class="subq"><h4>(3) x番目−(x+1)番目=2</h4>
+<div class="equation">(x−p)−((x+1)−q)=2　→　q−p=3</div>
+<p>差が3の素数の組は(2,5)だけです。よってxは偶数、x+1の最小素因数は5です。</p>
+<p>x+1は5の倍数ですが、2や3では割れません。30で割った余りは5または25です。</p>
+<div class="equation">x+1=5,25,35,55,65,85,…,275,295</div>
+<p>30ごとに2個あり、300までに10周期なので2×10=20です。</p><div class="answer-line"><b>20通り</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は(2)で、前後の最小素因数が1違うと整理し、「素数で偶数なのは2だけ」という事実から2と3に限定しています。その後、x+1を6で割ると3余る、と一気に周期6へ変換しています。</p>
+<p>(3)も同じ構造で、最小素因数の差が3なので2と5です。x+1の最小素因数が5になる条件を、</p>
+<div class="equation">30で割ると5余る、または25余る</div>
+<p>と書いています。5の倍数のうち2・3の倍数を除いた結果です。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>(2)の最初の例はx=2です。2番目は0、3番目も0です。(3)の最初はx=4で、4番目は2、5番目は0なので差は2です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>「300番目まで」の隣接2項はx≤299です。ただし今回の周期の最後はx=296、294なので答えに影響しません。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>隣接項の条件は、式を引いてxを消し、最小素因数の差に変える。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p11">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>11</strong></div>
+        <div><p class="eyebrow">問題 p.20〜21／書籍解説 p.30</p><h2>各位の和を固定し、上の桁から場合分けする</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>9の倍数のうち、各位の数字の和が9になる4桁の整数を小さい順に並べます。例は1008、1017、1026、1035、…です。</p>
+<ol class="problem-list"><li>(1) 1107は何番目か。</li><li>(2) 1200以上1300以下は何個あるか。</li><li>(3) 2000以上3000以下は何個あるか。</li><li>(4) 一の位が5である平方数を1つ答える。</li><li>(5) 一の位が0である平方数をすべて答える。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 10番目　　(2) 7個　　(3) 36個　　(4) 2025　　(5) 3600、8100</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>各位の和が9なら自動的に9の倍数です。したがって「9の倍数」の条件を別に調べる必要はなく、桁の数字の和だけを数えます。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>整数を9で割った余りは、各位の和を9で割った余りと同じです。たとえば2052の各位の和は9なので9の倍数です。</p>
+<p>下2桁をabとすると、a+bが決まったときの組は、和が9以下なら0から順に漏れなく並べられます。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 1000台を小さい順に書く</h4>
+<p>千の位が1なので、残り3桁の和は8です。1107までを順に並べると、</p>
+<div class="sequence"><span>1008</span><span>1017</span><span>1026</span><span>1035</span><span>1044</span><span>1053</span><span>1062</span><span>1071</span><span>1080</span><span class="hit">1107</span></div>
+<div class="answer-line"><b>10番目</b></div></div>
+<div class="subq"><h4>(2) 1200〜1299では下2桁の和が6</h4>
+<p>千と百の位の和は1+2=3です。合計9にするには十と一の位の和が6です。</p>
+<div class="equation">06,15,24,33,42,51,60</div>
+<p>7通りです。1300は各位の和が4なので入りません。</p><div class="answer-line"><b>7個</b></div></div>
+<div class="subq"><h4>(3) 上2桁を20、21、…、27に分ける</h4>
+<table class="mini-table"><tr><th>上2桁</th><th>下2桁の和</th><th>個数</th></tr><tr><td>20</td><td>7</td><td>8</td></tr><tr><td>21</td><td>6</td><td>7</td></tr><tr><td>22</td><td>5</td><td>6</td></tr><tr><td>23</td><td>4</td><td>5</td></tr><tr><td>24</td><td>3</td><td>4</td></tr><tr><td>25</td><td>2</td><td>3</td></tr><tr><td>26</td><td>1</td><td>2</td></tr><tr><td>27</td><td>0</td><td>1</td></tr></table>
+<div class="equation">8+7+6+5+4+3+2+1=36</div>
+<div class="answer-line"><b>36個</b></div></div>
+<div class="subq"><h4>(4) 平方数の一の位が5なら、平方根の一の位も5</h4>
+<p>4桁の平方数の平方根は32〜99です。平方数が9の倍数なら平方根は3の倍数です。よって平方根は15の倍数で一の位5、つまり45か75です。</p>
+<div class="equation">45²=2025（各位の和9）<br>75²=5625（各位の和18）</div>
+<div class="answer-line"><b>2025</b></div></div>
+<div class="subq"><h4>(5) 平方数が0で終わるなら平方根は0で終わる</h4>
+<p>候補の平方根は40、50、60、70、80、90です。</p>
+<div class="equation">1600,2500,3600,4900,6400,8100</div>
+<p>各位の和が9なのは3600と8100です。</p><div class="answer-line"><b>3600、8100</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍の(2)(3)は、上2桁を固定して下2桁の和を数えています。たとえば上2桁20なら残りの和は7で、07、16、25、34、43、52、61、70の8個です。</p>
+<p>(4)では、平方根を32〜99に絞り、9の倍数の平方数なら平方根が3の倍数、一の位5なら平方根が5の倍数かつ奇数、と読み替えています。3と5の公倍数で候補45、75だけにする方法です。</p>
+<p>(5)では平方根が10の倍数なので、平方数は100の倍数です。下2桁00を外し、上2桁36または81なら各位の和9となるため3600、8100としています。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>2025÷9=225、3600÷9=400、8100÷9=900で、すべて9の倍数です。各位の和もそれぞれ9です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>「各位の和が9」と「9の倍数」はこの問題では同じ条件です。二重に条件を課して候補を減らしすぎないようにします。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>桁の和の問題は、上の桁を固定し、残りの桁の和を数える。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p12">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>12</strong></div>
+        <div><p class="eyebrow">問題 p.21／書籍解説 p.31</p><h2>ボタンを追わず、「何回押されるか」の奇偶を見る</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>2から2026までの数字が書かれた2025個のボタンがあります。初めはすべて消灯しています。2の倍数のボタン、3の倍数のボタン、…、2026の倍数のボタンを順に押します。ボタンは押すたびに点灯と消灯が入れ替わります。</p>
+<ol class="problem-list"><li>(1) 2〜10を図のように3×3の渦巻きに並べたとき、最後に消灯している数字をすべて求めます。</li><li>(2) 2〜2026を45×45の渦巻きに並べたとき、①点灯しているボタンの個数、②点灯ボタンだけで45個並ぶ縦・横・斜めの列数を求めます。</li></ol>
+<table class="spiral-grid small"><tr><td>6</td><td>5</td><td>4</td></tr><tr><td>7</td><td class="center-cell">2</td><td>3</td></tr><tr><td>8</td><td>9</td><td>10</td></tr></table>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 4、9　　(2) ①1981個　②縦3列、横1列、斜め1列</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>操作を2の倍数から順に追うと非常に長くなります。ボタンnが押されるのは、nの約数k（ただしk≥2）の操作のときです。</p></div>
+      <div class="visual-pair"><div><h4>小さい渦巻きで平方数の位置を見る</h4><table class="spiral-grid" aria-label="2から50までの渦巻き配置。平方数を消灯として表示"><tr><td class="">38</td><td class="">37</td><td class="off-cell">36<small>消灯</small></td><td class="">35</td><td class="">34</td><td class="">33</td><td class="">32</td></tr><tr><td class="">39</td><td class="">18</td><td class="">17</td><td class="off-cell">16<small>消灯</small></td><td class="">15</td><td class="">14</td><td class="">31</td></tr><tr><td class="">40</td><td class="">19</td><td class="">6</td><td class="">5</td><td class="off-cell">4<small>消灯</small></td><td class="">13</td><td class="">30</td></tr><tr><td class="">41</td><td class="">20</td><td class="">7</td><td class="center-cell">2</td><td class="">3</td><td class="">12</td><td class="">29</td></tr><tr><td class="">42</td><td class="">21</td><td class="">8</td><td class="off-cell">9<small>消灯</small></td><td class="">10</td><td class="">11</td><td class="">28</td></tr><tr><td class="">43</td><td class="">22</td><td class="">23</td><td class="">24</td><td class="off-cell">25<small>消灯</small></td><td class="">26</td><td class="">27</td></tr><tr><td class="">44</td><td class="">45</td><td class="">46</td><td class="">47</td><td class="">48</td><td class="off-cell">49<small>消灯</small></td><td class="">50</td></tr></table><p class="diagram-caption">赤いマスは4、9、16、25、36、49。これらだけ最後に消灯します。</p></div><div><svg class="diagram-svg" viewBox="0 0 660 430" role="img" aria-label="45かける45の渦巻きで、消灯する平方数の位置と全点灯の縦横斜めの列を示す模式図">
+      <rect width="100%" height="100%" rx="18" fill="#fbfcfe"/>
+      <rect x="55" y="35" width="360" height="360" fill="#fff" stroke="#26354a" stroke-width="2"/>
+      <rect x="55" y="35" width="16" height="360" fill="#dff4e8"/><rect x="71" y="35" width="16" height="360" fill="#dff4e8"/><rect x="399" y="35" width="16" height="360" fill="#dff4e8"/>
+      <rect x="55" y="207" width="360" height="16" fill="#dff4e8"/>
+      <line x1="55" y1="35" x2="415" y2="395" stroke="#1c8b5a" stroke-width="10" opacity=".28"/>
+      <line x1="72" y1="35" x2="415" y2="378" stroke="#b84040" stroke-width="5" stroke-dasharray="9 8" opacity=".8"/>
+      <line x1="55" y1="52" x2="398" y2="395" stroke="#b84040" stroke-width="5" stroke-dasharray="9 8" opacity=".8"/>
+      <g font-family="sans-serif" fill="#26354a" font-size="15">
+        <text x="455" y="70" font-weight="700" fill="#1c6d4b">全点灯の縦列：3本</text>
+        <text x="455" y="105" font-weight="700" fill="#1c6d4b">全点灯の横列：1本</text>
+        <text x="455" y="140" font-weight="700" fill="#1c6d4b">全点灯の斜め列：1本</text>
+        <text x="455" y="205" fill="#a23b3b">赤い破線上に平方数</text>
+        <text x="455" y="230" fill="#a23b3b">（消灯ボタン）が並ぶ</text>
+        <text x="55" y="420" font-size="12" fill="#657287">緑は平方数を1つも含まない列。模式図なので各マス目は省略しています。</text>
+      </g>
+    </svg></div></div>
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>ボタン12は、2、3、4、6、12の倍数操作で押され、合計5回です。つまり押される回数は、</p>
+<div class="equation">nの約数の個数−1（約数1の操作はないため）</div>
+<p>です。約数はふつう小さい約数と大きい約数がペアになります。平方数だけは、たとえば36の6×6のように中央の1個が余るため、約数の個数が奇数です。</p>
+<div class="callout"><b>結論：</b>平方数nは「奇数−1=偶数回」押されて消灯。それ以外は奇数回押されて点灯します。</div>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 2〜10の平方数だけ探す</h4>
+<p>2〜10の平方数は4と9です。4は2、4の2回、9は3、9の2回押されて消灯します。他は奇数回なので点灯します。</p><div class="answer-line"><b>4、9</b></div></div>
+<div class="subq"><h4>(2)① 消灯する平方数の個数を引く</h4>
+<p>ボタンは2025個です。2〜2026の平方数は2²から45²=2025までで44個あります。</p>
+<div class="equation">2025−44=<b>1981個</b></div></div>
+<div class="subq"><h4>(2)② 平方数の位置を座標で整理する</h4>
+<p>45×45の中心を行0・列0とし、下を正、右を正とします。小さい表から続く渦巻きを調べると、平方数の位置は次の2本の斜め線上に並びます。</p>
+<table class="mini-table"><tr><th>平方数</th><th>行</th><th>列</th><th>行−列</th></tr><tr><td>(2m)²</td><td>−m</td><td>2−m</td><td>−2</td></tr><tr><td>(2m+1)²</td><td>m</td><td>m−1</td><td>1</td></tr></table>
+<p>たとえば4は(−1,1)、16は(−2,0)、36は(−3,−1)。9は(1,0)、25は(2,1)、49は(3,2)です。外側に1周広がるたび、同じ偶奇の平方数は1マスずつ斜めに移るので、この形が45²まで続きます。</p>
+<h4>縦列</h4>
+<p>偶数平方の列は−20〜1、奇数平方の列は0〜21です。合わせると平方数がある列は−20〜21。45列は−22〜22なので、平方数がないのは−22、−21、22の3列です。</p>
+<h4>横列</h4>
+<p>平方数の行は−22〜−1と1〜22です。行0だけに平方数がありません。よって1列です。</p>
+<h4>斜め列</h4>
+<p>45個並ぶ斜めは2本の主対角線です。行=列の対角線には、行−列が0なので平方数はありません。もう一方の行=−列には4の位置(−1,1)があるため不合格です。</p>
+<div class="answer-line">縦 <b>3</b>、横 <b>1</b>、斜め <b>1</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍の最初の一文「消えているのは押される回数が偶数のボタン」は、初めが消灯だからです。0回→消灯、1回→点灯、2回→消灯、と偶数回で元に戻ります。</p>
+<p>次に「押される回数は1以外の約数の個数」とし、「約数を奇数個持つ整数、つまり平方数のボタンが消える」と結論づけています。</p>
+<p>配置の説明では、渦巻きの中で奇数平方・偶数平方に対応する位置が斜めに並ぶことを図示し、その1つ隣に平方数ラベルのボタンが並ぶと見ています。書籍の網目部分は消灯位置です。そこを1つも通らない列を数えると、左端2列と右端1列、中央横1列、右下がり主対角線1列になります。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>2〜10では平方数4、9だけが消灯し、図の縦左列6・7・8、中央横列7・2・3、右下がり対角線6・2・10はいずれも全点灯です。大きい図でも同じ位置関係が層ごとに続きます。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>「平方数だけ点灯」と逆にしやすい点に注意します。押す回数は約数の個数そのものではなく、1を除いた個数です。平方数は約数が奇数個なので、押す回数は偶数回となり消灯します。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>反転操作は順番を追わず、各対象が何回操作されるかの奇偶だけを見る。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p13">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>13</strong></div>
+        <div><p class="eyebrow">問題 p.22／書籍解説 p.31</p><h2>回路を「かつ」「または」に翻訳して周期を数える</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>電球Xの枝にはスイッチA、電球Yの枝にはスイッチBとCが直列にあります。Xの枝とYの枝は並列で、その全体と電球Zが直列です。開始と同時にすべてのスイッチを切り、その後、決められた秒数だけ「切」、次の秒数だけ「入」を周期的に繰り返します。</p>
+<ol class="problem-list"><li>(1) Aは4秒切・1秒入、Bは2秒切・1秒入、Cは6秒切・1秒入。開始から2025秒間にX、Y、Zが点灯する秒数を求めます。</li><li>(2) AとBは同じ、Cだけ5秒切・2秒入に変えます。Zの点灯秒数を求めます。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) X=405秒、Y=96秒、Z=482秒　　(2) Z=560秒</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>回路を先に算数の言葉へ直します。XはAが入ると点灯、YはBとCが両方入ると点灯、ZはXまたはYのどちらかが点灯すると点灯します。</p></div>
+      <svg class="diagram-svg compact" viewBox="0 0 620 300" role="img" aria-label="スイッチAと電球Xの枝、スイッチB・Cと電球Yの枝が並列で、電球Zが全体に直列につながる回路">
+      <rect width="100%" height="100%" rx="18" fill="#fbfcfe"/>
+      <g stroke="#26354a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M60 145 H125 M125 70 V220 M125 70 H520 M125 220 H520 M520 70 V220 M520 145 H560"/>
+        <path d="M60 145 V255 H560 V145"/>
+        <line x1="185" y1="70" x2="235" y2="70"/><line x1="245" y1="54" x2="285" y2="70"/>
+        <circle cx="385" cy="70" r="28"/><path d="M369 54 L401 86 M401 54 L369 86"/>
+        <line x1="175" y1="220" x2="215" y2="220"/><line x1="225" y1="204" x2="260" y2="220"/>
+        <line x1="285" y1="220" x2="325" y2="220"/><line x1="335" y1="204" x2="370" y2="220"/>
+        <circle cx="445" cy="220" r="28"/><path d="M429 204 L461 236 M461 204 L429 236"/>
+        <circle cx="430" cy="255" r="25"/><path d="M416 241 L444 269 M444 241 L416 269"/>
+        <line x1="85" y1="245" x2="85" y2="265"/><line x1="105" y1="238" x2="105" y2="272"/>
+      </g>
+      <g font-size="15" font-family="sans-serif" fill="#26354a" text-anchor="middle">
+        <text x="235" y="42">スイッチA</text><text x="385" y="32">電球X</text>
+        <text x="220" y="192">スイッチB</text><text x="330" y="192">スイッチC</text><text x="445" y="177">電球Y</text>
+        <text x="430" y="295">電球Z</text><text x="95" y="292">電池</text>
+      </g>
+    </svg>
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <div class="logic-row"><b>直列</b><span>全部つながる必要がある → 「かつ」</span></div>
+<div class="logic-row"><b>並列</b><span>どちらか一方がつながればよい → 「または」</span></div>
+<p>1秒目から「切」が始まるので、4秒切・1秒入なら、5、10、15、…秒目が入です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 電球X</h4>
+<p>Aの周期は5秒で、入るのは各周期の5秒目、つまり5の倍数秒です。</p><div class="equation">2025÷5=405</div><div class="answer-line">Xは <b>405秒</b></div>
+<h4>電球Y</h4>
+<p>Bは3の倍数秒、Cは7の倍数秒に入ります。両方が入るのは3と7の最小公倍数21の倍数秒です。</p><div class="equation">2025÷21=96あまり9</div><div class="answer-line">Yは <b>96秒</b></div>
+<h4>電球Z</h4>
+<p>Xの405秒とYの96秒を足すと、両方が点灯した秒を2回数えています。重なりは5と21の最小公倍数105の倍数秒です。</p><div class="equation">2025÷105=19あまり30</div>
+<div class="equation">405+96−19=<b>482秒</b></div></div>
+<div class="subq"><h4>(2) Cは7秒のうち2秒入る</h4>
+<p>Cが入るのは各7秒周期の6秒目と7秒目、つまり「7で割って6余る秒」と「7の倍数秒」です。</p>
+<h4>Yの点灯</h4>
+<p>Bは3の倍数秒です。21秒を1まとまりにすると、両条件を満たすのは6秒目と21秒目の2回です。</p>
+<div class="equation">2025=21×96+9</div>
+<p>96まとまりで192回、最後の9秒にも6秒目が1回あります。</p><div class="equation">Y=2×96+1=193秒</div>
+<h4>XとYの重なり</h4>
+<p>105秒を1まとまりにすると、5の倍数で、かつYが点灯するのは90秒目と105秒目の2回です。</p>
+<div class="equation">2025=105×19+30</div>
+<p>19まとまりで38回。余り30秒には90秒目も105秒目もありません。</p>
+<div class="equation">Z=405+193−38=<b>560秒</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は回路を、X=A、Y=BかつC、Z=XまたはYと一言で整理しています。(1)の405+96−19は「または」の数え上げで、重なりを1回引く包除原理です。</p>
+<p>(2)で書籍がYを96×2+1とするのは、21秒ごとに2回点灯し、最後の余り9秒に6秒目が1回入るからです。</p>
+<p>重なりについて、書籍の「105で割って90余る秒」は、21で割って6余り、かつ5の倍数になる時刻です。90、195、300、…と105秒ごとに現れます。これに105の倍数を加え、合計38回としています。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>(1)は482≤2025、(2)は560≤2025です。(2)でCの点灯時間が増えたためYもZも増えており、方向も自然です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>周期の商だけ数えて終わらず、割り算の余りの区間に追加の点灯があるか確認します。(2)では余り9秒に1回あります。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>回路は論理に翻訳し、「かつ」は最小公倍数、「または」は重なりを引く。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p14">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>14</strong></div>
+        <div><p class="eyebrow">問題 p.22／書籍解説 p.32</p><h2>積の末尾の0は、素因数5の個数を数える</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>記号 [A:B] は、A×(A+1)×…×(A+B−1) の末尾に並ぶ0の個数を表します。</p>
+<ol class="problem-list"><li>(1) [1:2025]を求めます。</li><li>(2) [C:2026−C]=499となるCのうち最大のものを求めます。</li><li>(3) [[D:150−D] : 2026−[D:150−D]]=499となるDのうち最小のものを求めます。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 505　　(2) 30　　(3) 26</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>末尾の0は10=2×5が1組できるごとに1個増えます。連続整数の積には2の方が多いので、足りない5の個数だけ数えます。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>たとえば1×2×…×10には、5から5が1個、10から5が1個あり、5は合計2個です。2は十分多いので末尾の0は2個です。</p>
+<p>25は5²なので、5を2個持ちます。125は5³なので3個持ちます。「5の倍数」「25の倍数」「125の倍数」…を重ねて数えます。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 1から2025の積に含まれる5</h4>
+<div class="equation">⌊2025÷5⌋=405<br>⌊2025÷25⌋=81<br>⌊2025÷125⌋=16<br>⌊2025÷625⌋=3</div>
+<p>最初の405は各5の倍数から最低1個、81は25の倍数が持つ追加の1個、16は125の倍数の追加、3は625の倍数の追加です。</p>
+<div class="equation">405+81+16+3=<b>505</b></div></div>
+<div class="subq"><h4>(2) Cから2025までで499個</h4>
+<p>1〜2025全体には505個あります。したがって、取り除いた1〜C−1の積に5が6個あればよいです。</p>
+<div class="equation">505−499=6</div>
+<p>1〜24には5、10、15、20から4個。25を加えると25が5を2個持つため合計6個になります。26〜29を加えても5は増えず、30で1個増えます。</p>
+<p>よってC−1は25〜29、Cは26〜30です。</p><div class="answer-line">最大は <b>30</b></div></div>
+<div class="subq"><h4>(3) 内側の記号をNと置く</h4>
+<div class="equation">N=[D:150−D]</div>
+<p>外側が499になるには、(2)と同じ理由でNが26〜30であればよいです。</p>
+<p>NはDから149までの積の5の個数です。1〜149全体は、</p>
+<div class="equation">149÷5=29あまり4、29÷5=5あまり4、5÷5=1<br>→ 29+5+1=35個</div>
+<p>したがって、</p><div class="equation">N=35−（1〜D−1に含まれる5の個数）</div>
+<p>Nを30以下にするには、1〜D−1側に少なくとも5個の5が必要です。1〜24は4個、1〜25は6個なので、初めて条件に入るのはD−1=25、すなわちD=26です。</p>
+<div class="answer-line"><b>26</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍の(1)は、2025を5で何度も割り、商405、81、16、3を足しています。これは上の「5の倍数、25の倍数、…」と同じ計算です。</p>
+<p>(2)で書籍が [1:2025]−[1:C−1] とするのは、C〜2025の積が1〜2025の積から1〜C−1の積を除いたものだからです。0の個数も、ここでは5の指数の差として引けます。</p>
+<p>(3)は二重記号をそのまま考えず、内側の値を1つの整数Nとして扱います。書籍の「[1:D−1]が初めて5以上」は、N=35−[1:D−1]を30以下にするための条件です。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>D=26なら、26〜149の積の5の個数は35−6=29です。29は26〜30の範囲なので、外側の値は499になります。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>末尾の0の個数を単純に区間どうしで引けるのは、2が十分多く、5の個数が0の個数を決めているからです。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>0を数えるときは10を数えず、5、25、125、…の倍数を重ねて数える。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p17">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>17</strong></div>
+        <div><p class="eyebrow">問題 p.23／書籍解説 p.32</p><h2>「解が1つだけ」から、周期を500以上にする</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>A、B、Cは1桁の整数、Dは3桁の整数です。1から999までのAの倍数のうち、1を引くとBの倍数、1を足すとCの倍数になる数がDただ1つだけあります。A、B、C、Dを求めます。</p>
+<div class="equation">DはAの倍数、D−1はBの倍数、D+1はCの倍数</div>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>A=8、B=9、C=7、D=496</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>同じ余り条件を満たす数は、A・B・Cの最小公倍数ごとに繰り返します。「999までに1個だけ」なら、その周期がかなり大きいはずです。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>たとえば「2の倍数かつ3で割ると1余る」という条件は、6ごとに同じ形が繰り返されます。複数の割り算条件の周期は最小公倍数です。</p>
+<p>条件は合同式の言葉を使わなくても、</p><div class="equation">DをAで割ると0余り<br>DをBで割ると1余り<br>DをCで割るとC−1余り</div><p>と読めます。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>① 周期Lが499以下なら、解は必ずもう1つある</h4>
+<p>LをA、B、Cの最小公倍数とします。Dが条件を満たせばD+LもD−Lも同じ余り条件を満たします。</p>
+<p>L≤499なら、D≤999−LのときD+Lが999以下です。D&gt;999−LのときはDが500以上なのでD−Lが1以上です。どちらにしても別の解ができます。</p>
+<div class="equation">解が1つだけ → L≥500</div>
+<h4>② 1桁3数で最小公倍数を500以上にする</h4>
+<p>A、B、Cを小さい順に考えます。最小の数が6以下なら、積は最大でも6×9×9=486で、最小公倍数は積以下なので500に届きません。</p>
+<p>したがって3数は7、8、9しかありません。重複すると最小公倍数は高々72なので、3数はちょうど7、8、9です。</p>
+<div class="equation">L=最小公倍数(7,8,9)=504</div>
+<h4>③ 1〜999に1個だけになる解は496〜504</h4>
+<p>1周期504の中の解が495以下なら、504を足した数も999以下です。よって唯一のDは496〜504にあります。</p>
+<p>496〜504の範囲にある7、8、9の倍数を全部書くと、</p>
+<table class="mini-table"><tr><th>割る数</th><th>この範囲の倍数</th></tr><tr><td>7</td><td>497、504</td></tr><tr><td>8</td><td>496、504</td></tr><tr><td>9</td><td>495、504</td></tr></table>
+<p>D−1、D、D+1の3つがそれぞれ9、8、7の倍数になる連続3数は495、496、497だけです。したがって中央の496をDにします。</p>
+<div class="answer-line"><b>A=8、B=9、C=7、D=496</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は、同じ条件を持つ2つの整数の差がA、B、Cすべての公倍数になることから、最小公倍数が500以上としています。「999÷2=499余り1」は、間隔が499以下なら1〜999に少なくとも2個入るという意味です。</p>
+<p>次に、1桁の異なる3数で積が500以上になるのは7×8×9=504だけ、と絞ります。最小公倍数は積以下なので、積すら500未満なら不可能です。</p>
+<p>最後に書籍は504の前後496〜504を調べ、504が7、8、9の公倍数で、8が7と9の間にあることから504−8=496を選んでいます。496、497、495の割り切れ方を確認すれば、A・B・Cの割り当ても決まります。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>496÷8=62、495÷9=55、497÷7=71です。次の同じ条件の数は496+504=1000で範囲外、前は−8で正の3桁ではありません。よって1〜999では1個だけです。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>A、B、Cが7、8、9のどの順かは、最小公倍数だけでは決まりません。D−1、D、D+1の3つを実際に割って割り当てます。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>「ただ1つ」は周期の大きさを制限する強い条件。まず最小公倍数を考える。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p18">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>18</strong></div>
+        <div><p class="eyebrow">問題 p.23／書籍解説 p.32〜33</p><h2>5連続整数の積に、1〜20の素因数を全部集める</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>A以上の5つの連続整数の積をBとします。</p><div class="equation">B=A(A+1)(A+2)(A+3)(A+4)</div>
+<p>Bを1、2、3、…の順に割っていき、20より大きい数まで割り切れるとします。この条件を満たす最小のAを求めます。</p>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>152</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>1から20まで全部で割り切れるとは、1〜20の最小公倍数をBが含むことです。特に大きな素数17と19は、5個の中にその倍数そのものが必要です。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>1〜20の最小公倍数に必要な素因数は、</p>
+<div class="equation">2⁴×3²×5×7×11×13×17×19</div>
+<p>17や19は、5連続の各数が20より小さいとは限らないので、34=2×17や38=2×19のような倍数で入っても構いません。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>① 17の倍数と19の倍数が5個の幅に入る場所を探す</h4>
+<p>5連続整数に両方が入るには、17の倍数と19の倍数の差が4以下でなければなりません。小さい方から近い組を調べると、</p>
+<div class="equation">(17,19)、(34,38)、(133,136)、(152,153)、…</div>
+<p>途中の51と57、68と76などは差が5以上なので、同じ5連続には入りません。</p>
+<h4>② 13の倍数も同じ5個に入るか</h4>
+<ul class="logic-list"><li>17と19を含む5個には、13の倍数がない。</li><li>34〜38にも13の倍数がない。</li><li>133と136を含む候補132〜136または133〜137にも13の倍数がない。</li><li>152と153なら、152〜156に156=12×13が入る。</li></ul>
+<p>したがって最初の候補はA=152です。</p>
+<h4>③ 152〜156が必要な素因数を本当に全部持つか</h4>
+<div class="equation">152=2³×19<br>153=3²×17<br>154=2×7×11<br>155=5×31<br>156=2²×3×13</div>
+<p>2は合計6個、3は3個あり、必要な2⁴、3²を上回ります。5、7、11、13、17、19もすべてあります。</p>
+<div class="answer-line"><b>A=152</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍はまず1〜20の最小公倍数を書き、特に17と19の倍数が5連続の中に必要と見ます。そして差が4以下の17・19の倍数の組を小さい順に並べています。</p>
+<p>最初の3組が不適なのは、近くに13の倍数がないからです。書籍の「2数のどちらとも差が4以下の範囲に13の倍数がない」は、5個の区間に17、19、13を同時に入れられないという意味です。</p>
+<p>152、153の近くには154=11×14、155=5×31、156=13×12があり、残りの大きな素数も一気にそろいます。最後に2と3の個数まで確認して、十分であるとしています。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>152×153×154×155×156は、1〜20の最小公倍数で割り切れます。一方A&lt;152では、17・19を同じ5個に含める候補をすべて調べても13が不足するため不可能です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>17と19が近いだけでは十分ではありません。13、11、7、5と、2・3の必要な個数まで最後に確認します。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>大きな素数ほど入れにくい。まず17・19で場所を絞り、残りを点検する。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p19">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>19</strong></div>
+        <div><p class="eyebrow">問題 p.23／書籍解説 p.33</p><h2>4桁の数を「上2桁a、下2桁b」に分ける</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>4桁の整数を上2桁と下2桁に分け、その和を考えます。たとえば1234なら12+34=46です。</p>
+<ol class="problem-list"><li>(1) 2024から44を引いた1980を2整数の積で表すとき、2数の差が最小になる組を求めます。</li><li>(2) 2100未満で、元の4桁整数が「上2桁と下2桁の和」で割り切れる数のうち、2番目に大きい数を求めます。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 44と45　　(2) 2079</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>積が一定の2数は平方根に近いほど差が小さくなります。(2)では、元の数Xと桁の和Yの差が、上2桁だけで決まります。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>上2桁をa、下2桁をbとすると、4桁の数はX=100a+b、桁の和はY=a+bです。</p>
+<div class="equation">X−Y=99a</div>
+<p>同じ上2桁aの範囲では、この差は一定です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 1980の平方根の近くを見る</h4>
+<p>44²=1936、45²=2025なので、√1980は44と45の間です。積が1980になる因数のうち、最も差が小さくなり得るのはこの近くです。</p>
+<div class="equation">44×45=1980</div>
+<p>実際に割り切れるので、これが最小差です。</p><div class="answer-line"><b>44と45</b></div></div>
+<div class="subq"><h4>(2) まず上2桁が20の数を調べる</h4>
+<p>2100未満で最大の候補は20□□です。a=20なら、</p>
+<div class="equation">X−Y=99×20=1980</div>
+<p>XがYで割り切れることと、1980がYで割り切れることは同じです。なぜならX=1980+Yだからです。</p>
+<p>下2桁bは0〜99なので、Y=20+bは20〜119です。1980の因数の組を平方根の近くから見ると、</p>
+<div class="equation">15×132、18×110、20×99、22×90、…</div>
+<p>16、17、19は1980の約数ではないため、119以下で最も大きい約数は110、2番目は99です。最大のYは110で、X=1980+110=2090。2番目のYは99で、</p>
+<div class="equation">X=1980+99=<b>2079</b></div>
+<p>上2桁が19以下ならX≤1999なので、2079より大きくなりません。</p></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍の(1)は1980を素因数分解し、約数が36個あることから、中央の18番目・19番目の約数が最も近い因数ペアになると考えています。約数を並べると44、45が中央で、積が1980です。</p>
+<p>(2)ではXを1増やすと、同じ上2桁の間はYも1増えるためX−Yが一定、と説明しています。上2桁20のとき1980、上2桁19なら1881です。</p>
+<p>「20+99=119以下で2番目に大きい1980の約数」という書籍の一文は、Yの範囲が20〜119であり、Xが大きい順とYが大きい順が一致するという意味です。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>2079の上2桁と下2桁の和は20+79=99で、2079÷99=21です。最大候補2090も20+90=110で、2090÷110=19です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>下2桁を79と見ず「7+9」としてはいけません。この問題で足すのは上2桁の数20と下2桁の数79です。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>4桁を100a+bと置くと、X−(a+b)=99aが一定になる。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p20">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>20</strong></div>
+        <div><p class="eyebrow">問題 p.24／書籍解説 p.33</p><h2>四捨五入した3数の下の桁から、元の数を逆算する</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>ある4桁の整数Xについて、次の3数を作ります。</p>
+<ul class="problem-list"><li>A：Xの一の位を四捨五入した数（10の位までの概数）</li><li>B：Xの十の位を四捨五入した数（100の位までの概数）</li><li>C：Xの百の位を四捨五入した数（1000の位までの概数）</li></ul>
+<p>X+A+B+C=11741のとき、Xを求めます。</p>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>2921</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>A、B、Cはそれぞれ10、100、1000の倍数です。そのため、合計の一の位や下2桁にはXの情報がそのまま残ります。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>例としてX=2921なら、A=2920、B=2900、C=3000です。</p>
+<p>四捨五入によるずれは、Aで最大5、Bで最大50、Cで最大500です。したがってX+A+B+Cはほぼ4Xです。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>① まずCが3000だと確定する</h4>
+<p>四捨五入のずれの合計は最大555なので、</p>
+<div class="equation">4X−555 ≤ 11741 ≤ 4X+555</div>
+<p>これをXについて見ると2797≤X≤3074です。この範囲の数を1000の位まで四捨五入すると、すべてC=3000です。</p>
+<h4>② 一の位からXの一の位を決める</h4>
+<p>A、B、Cの一の位は0です。和11741の一の位1はXだけから来ます。よってXの一の位は1です。</p>
+<p>一の位1を四捨五入すると切り捨てなので、A=X−1です。</p>
+<div class="equation">X+(X−1)+B+3000=11741<br>2X+B=8742</div>
+<h4>③ 下2桁からXの下2桁を決める</h4>
+<p>Bは100の倍数なので、2Xの下2桁は42です。Xの下2桁は21または71です。</p>
+<ul class="logic-list"><li>下2桁21なら、100の位への四捨五入は切り捨て：B=X−21</li><li>下2桁71なら、切り上げ：B=X+29</li></ul>
+<h4>④ 2つの場合を計算</h4>
+<p>下2桁21：</p><div class="equation">2X+(X−21)=8742 → 3X=8763 → X=2921</div>
+<p>下2桁71：</p><div class="equation">2X+(X+29)=8742 → 3X=8713</div>
+<p>8713は3で割り切れないので不成立です。</p>
+<div class="answer-line"><b>X=2921</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍はA=X−1を先に使い、2X+B+C=11742としています。B、Cの下2桁が00なので、2Xの下2桁が42となり、Xの下2桁を21または71に分けます。</p>
+<p>下2桁21ならB=X−21なので3X+C=11763、下2桁71ならB=X+29なので3X+C=11713です。</p>
+<p>書籍はXが11741÷4≈2935の近くなのでC=3000と見当を付け、2式を調べます。本HTMLでは四捨五入誤差の上限555を使い、C=3000であることを先に厳密に確定しました。書籍の見当は、この範囲計算を頭の中で簡略化したものです。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <div class="equation">2921+2920+2900+3000=11741</div><p>すべての四捨五入も正しく、条件を満たします。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>「一の位を四捨五入」は一の位を0にする、つまり10の位まで丸めることです。一の位だけを丸めて1桁の数にする意味ではありません。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>丸めた数は下の桁が0。合計の一の位・下2桁から元の数を逆算する。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p21">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>21</strong></div>
+        <div><p class="eyebrow">問題 p.24／書籍解説 p.34</p><h2>ふるいで最後に消える数は、次の素数の平方の直前</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>1からある数までの整数を並べ、次の順で消します。最初に1を消し、2を残して2の倍数を小さい順に消し、残った3を残して3の倍数を消し、以後、残った最小の素数を残してその倍数を消します。</p>
+<ol class="problem-list"><li>(1) 1〜50で最後に消す整数を求めます。</li><li>(2) 1〜150で最後に消す整数と、それが最初から何番目に消されるかを求めます。</li><li>(3) 最後に消す整数が2021となるような上端の整数の最大値を求めます。2021=43×47です。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 49　　(2) 143、115番目　　(3) 2208</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>合成数は「最小の素因数」を残す段階で初めて消されます。素数pの段階で新しく消える最小の数はp²です。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>たとえば21=3×7は、2の段階では残り、3の段階で消えます。35=5×7は5の段階で消えます。</p>
+<p>pより小さい素因数を持つpの倍数は、すでに前の段階で消えています。したがってpの段階で初めて残っている倍数はp²、p×次の素数、…です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 50以下で新しく消せる最後の段階</h4>
+<p>7を残す段階では49=7²が残っているので消します。次の素数11では11²=121&gt;50なので、新しく消す数はありません。</p><div class="answer-line"><b>49</b></div></div>
+<div class="subq"><h4>(2) 150以下では11の段階が最後</h4>
+<p>13²=169&gt;150なので、13以降は新しく消す数がありません。11の段階で残っている11の倍数は、</p>
+<div class="equation">121=11²、143=11×13</div>
+<p>小さい順に消すので最後は143です。</p>
+<p>消されずに残るのは150以下の素数です。具体的には、</p>
+<div class="equation">2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,<br>53,59,61,67,71,73,79,83,89,97,<br>101,103,107,109,113,127,131,137,139,149</div>
+<p>全部で35個です。150個のうち残る35個以外は、1も含めてすべて消されます。</p>
+<div class="equation">150−35=<b>115番目</b></div>
+<div class="answer-line">最後は <b>143</b>、消去順は <b>115番目</b></div></div>
+<div class="subq"><h4>(3) 2021の次に「後の段階」で消える候補を探す</h4>
+<p>2021=43×47なので、2021は43を残す段階で消えます。同じ43の段階で次に残っている43の倍数は、次の素数53を使う43×53=2279です。</p>
+<p>43の次の素数47の段階で、最初に新しく消える数は47²=2209です。上端が2209以上なら、2021の後に2209が消されます。</p>
+<p>したがって上端は2208以下でなければなりません。2208までなら、2022〜2208の合成数はすべて43より小さい素因数を持ち、2021より前に消されています。</p>
+<div class="answer-line">最大は <b>2208</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は(1)で、2、3、5、7の段階を具体的に追い、7の段階で49を消した後、11²が範囲外なので終了としています。</p>
+<p>(2)は素数の平方4、9、25、49、121、169、…を見て、13以降の段階では何も消えないと判断します。143を最後に消した時点で、消される数の総数は「全体−素数の個数」です。</p>
+<p>(3)では2021の次の小さい素数が53であることから43×53=2279を確認し、さらに次の段階47で47²=2209が消えることを確認します。小さい方の2209が上限を決めるため、2208です。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>2208を上端にすると2021は含まれ、2209は含まれません。2279も含まれません。よって2021より後に新たに消される数はありません。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>「数として2021より大きい」だけで後に消えるとは限りません。消去の順番は大きさだけでなく、最小の素因数の大きさで決まります。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>素数pの段階で初めて消える最小の数はp²。次の素数の平方が上限を決める。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p22">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>22</strong></div>
+        <div><p class="eyebrow">問題 p.24〜25／書籍解説 p.34〜35</p><h2>対角線が通るマスは「縦＋横−最大公約数」</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>同じ大きさの正方形をすき間なく縦m個、横n個並べて長方形を作り、1本の対角線が内部を通る正方形の個数を数えます。</p>
+<ol class="problem-list"><li>(1) 縦6個、横9個。</li><li>(2) 縦10個、横2025個。</li><li>(3) 縦あ個、横い個で6個を通り、あ&lt;い。組(あ,い)は何通りか。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 12個　　(2) 2030個　　(3) 5通り</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>対角線が縦の格子線や横の格子線を越えるたび、新しい正方形に入ります。ただし格子点を通ると、縦・横を同時に越えるため二重に数えます。</p></div>
+      <svg class="diagram-svg compact" viewBox="0 0 290 222" role="img" aria-label="縦6個、横9個の格子と対角線">
+    <rect width="100%" height="100%" rx="16" fill="#fbfcfe"/>
+    <g stroke="#728196" stroke-width="1"><line x1="10" y1="10" x2="10" y2="190"/><line x1="40" y1="10" x2="40" y2="190"/><line x1="70" y1="10" x2="70" y2="190"/><line x1="100" y1="10" x2="100" y2="190"/><line x1="130" y1="10" x2="130" y2="190"/><line x1="160" y1="10" x2="160" y2="190"/><line x1="190" y1="10" x2="190" y2="190"/><line x1="220" y1="10" x2="220" y2="190"/><line x1="250" y1="10" x2="250" y2="190"/><line x1="280" y1="10" x2="280" y2="190"/><line x1="10" y1="10" x2="280" y2="10"/><line x1="10" y1="40" x2="280" y2="40"/><line x1="10" y1="70" x2="280" y2="70"/><line x1="10" y1="100" x2="280" y2="100"/><line x1="10" y1="130" x2="280" y2="130"/><line x1="10" y1="160" x2="280" y2="160"/><line x1="10" y1="190" x2="280" y2="190"/></g>
+    <line x1="10" y1="10" x2="280" y2="190" stroke="#1d4f7a" stroke-width="3"/>
+    <text x="145.0" y="216" text-anchor="middle" font-size="13" fill="#26354a">縦 6 ＋ 横 9 − 最大公約数 3 ＝ 12 個</text>
+    </svg>
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>縦m、横nで最大公約数が1なら、内部の縦線n−1本、横線m−1本を別々に越えます。最初の1マスを加え、m+n−1個です。</p>
+<p>最大公約数g&gt;1なら、対角線上に内部格子点がg−1個あります。そこで縦線と横線を同時に越えるので、二重分g−1を引きます。</p>
+<div class="equation">1+(n−1)+(m−1)−(g−1)=m+n−g</div>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1)</h4><div class="equation">gcd(6,9)=3<br>6+9−3=<b>12個</b></div></div>
+<div class="subq"><h4>(2)</h4><div class="equation">gcd(10,2025)=5<br>10+2025−5=<b>2030個</b></div></div>
+<div class="subq"><h4>(3) 最大公約数gで縮める</h4>
+<p>あ=gm、い=gnとし、mとnは互いに素、m&lt;nとします。</p>
+<div class="equation">あ+い−g=g(m+n−1)=6</div>
+<p>したがってgは6の約数です。各場合を漏れなく調べます。</p>
+<table class="mini-table"><tr><th>g</th><th>m+n−1</th><th>互いに素でm&lt;nの組</th><th>(あ,い)</th></tr><tr><td>1</td><td>6</td><td>(1,6),(2,5),(3,4)</td><td>(1,6),(2,5),(3,4)</td></tr><tr><td>2</td><td>3</td><td>(1,3)</td><td>(2,6)</td></tr><tr><td>3</td><td>2</td><td>(1,2)</td><td>(3,6)</td></tr><tr><td>6</td><td>1</td><td>(1,1)だけだがm&lt;nでない</td><td>なし</td></tr></table>
+<div class="answer-line">3+1+1=<b>5通り</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は(1)で、最大公約数3を使い、6×9の長方形を2×3の同じ小長方形3個に分けています。2×3の対角線は2+3−1=4マスを通るので4×3=12です。</p>
+<p>(2)も同じで、10×2025を2×405の小長方形5個に分けます。1個で2+405−1=406、5個で2030です。</p>
+<p>(3)の書籍は最大公約数が6の約数になることに注目し、6、3、2、1に場合分けしています。本HTMLのg(m+n−1)=6は、その場合分けを1本の式にまとめたものです。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>(3)の5組を公式に入れると、1+6−1=6、2+5−1=6、3+4−1=6、2+6−2=6、3+6−3=6で、すべて条件を満たします。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>格子点を通ると隣接する4マス全部を通るわけではありません。「内部を通る」マスだけを数え、点に触れるだけのマスは数えません。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>縦横の境界を越える回数を足し、格子点での同時通過を最大公約数で引く。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p25">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>25</strong></div>
+        <div><p class="eyebrow">問題 p.25／書籍解説 p.35</p><h2>4個ずつのまとまりで、同じ形が3ずつ増える</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>整数☆に対し、☆÷4を小数で表し、小数第1位を四捨五入してできた整数を☆から引きます。☆=1、2、3、…の順に操作し、できた整数を並べます。</p>
+<ol class="problem-list"><li>(1) 3〜6番目の数。</li><li>(2) 1〜12番目の合計。</li><li>(3) 初めて25になる番号。</li><li>(4) 1番目から足した合計が初めて1000を超える番号。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 2、3、4、4　　(2) 57　　(3) 33番目　　(4) 52番目</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>☆を4で割った余り0、1、2、3に分けると、四捨五入の仕方が4個周期になります。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>☆=4q+r（r=0,1,2,3）とします。☆÷4=q+r/4です。</p>
+<table class="mini-table"><tr><th>r</th><th>小数部分</th><th>四捨五入</th><th>操作後</th></tr><tr><td>0</td><td>0</td><td>q</td><td>3q</td></tr><tr><td>1</td><td>0.25</td><td>q</td><td>3q+1</td></tr><tr><td>2</td><td>0.5</td><td>q+1</td><td>3q+1</td></tr><tr><td>3</td><td>0.75</td><td>q+1</td><td>3q+2</td></tr></table>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 最初の6個を書く</h4>
+<div class="sequence"><span>1</span><span>1</span><span class="hit">2</span><span class="hit">3</span><span class="hit">4</span><span class="hit">4</span></div>
+<div class="answer-line"><b>2、3、4、4</b></div></div>
+<div class="subq"><h4>(2) 4個ずつの和</h4>
+<p>1〜4番目は1+1+2+3=7。次の4個は各数が3増えるため和は12増えて19。さらに31です。</p>
+<div class="equation">7+19+31=<b>57</b></div></div>
+<div class="subq"><h4>(3) 25=3×8+1</h4>
+<p>4q+1番目と4q+2番目はどちらも3q+1になります。q=8なら25です。</p>
+<div class="equation">4×8+1=33、4×8+2=34</div>
+<div class="answer-line">初めては <b>33番目</b></div></div>
+<div class="subq"><h4>(4) 4個のブロック和を使う</h4>
+<p>第jブロックの和は7、19、31、…で、公差12です。最初のmブロックの和は、</p>
+<div class="equation">m(6m+1)</div>
+<p>12ブロックでは12×73=876、13ブロックでは13×79=1027です。13番目のブロック、49〜52番目の値は37、37、38、39です。</p>
+<div class="equation">876+37=913<br>+37=950<br>+38=988<br>+39=1027</div>
+<div class="answer-line">初めて超えるのは <b>52番目</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は「整数部分を除くと分子が1、2、3、0の4通り」と表現し、4個周期を見抜いています。(2)では、☆が4増えると四捨五入値は1増えるので、操作後の数は3増えると考えています。</p>
+<p>(4)ではブロック和7、19、31、…から1ずつ引いた6、18、30、…を</p>
+<div class="equation">6×(1+3+5+…)</div>
+<p>と変えています。奇数の和が平方数になるので、1000÷6と12²、13²を比べ、13ブロック目で超えると判断します。最後に13ブロック目の途中を確認して52番目としています。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>52÷4=13なので、52番目は52−13=39。1〜51番目の合計988に39を足すと1027で、初めて1000を超えます。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>0.5は小数第1位を四捨五入すると1へ切り上がります。2÷4=0.5を0にしてはいけません。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>割る数が4なら、余り0〜3で場合分けし、4個ブロックの増え方を見る。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p26">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>26</strong></div>
+        <div><p class="eyebrow">問題 p.26／書籍解説 p.36</p><h2>約数が奇数個のマス＝平方数だけ、1マス進む</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>1、2、3、…と並ぶマスの1に駒を置きます。駒のいる数の約数の個数が奇数なら1マス右、偶数なら2マス右へ進みます。</p>
+<ol class="problem-list"><li>(1) 1〜20で駒が置かれたマスはいくつか。</li><li>(2) 初めの1を1回目として、100回目に置かれるマスの数字。</li><li>(3) 101〜200で駒が置かれなかった数字を全部かけた積の末尾の0の個数。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 12マス　　(2) 186　　(3) 15個</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>約数の個数が奇数なのは平方数だけです。したがって平方数からは1進み、それ以外からは2進みます。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>約数はdとn÷dのペアです。平方数だけ√nが自分自身と組になるため、個数が奇数になります。</p>
+<p>たとえば9では1×9、3×3の中央があり約数は1、3、9の3個。10では1×10、2×5で4個です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 実際の道筋</h4>
+<div class="equation">1→2→4→5→7→9→10→12→14→16→17→19→21</div>
+<p>20までに置かれるのは1、2、4、5、7、9、10、12、14、16、17、19の12マスです。</p><div class="answer-line"><b>12マス</b></div></div>
+<div class="subq"><h4>(2) 平方数から次の平方数までの置かれる個数</h4>
+<p>k²から(k+1)²までは差が2k+1です。k²からまず1進み、その後2ずつ進むので、次の平方数までに新しくk+1マス置かれます。</p>
+<p>したがってn²までに置かれる総数は、</p>
+<div class="equation">1+2+3+…+n=n(n+1)÷2</div>
+<p>13²=169までは13×14÷2=91回、14²=196までは105回です。100回目は169の後9回目です。</p>
+<div class="equation">169+1+2×(9−1)=<b>186</b></div></div>
+<div class="subq"><h4>(3) 平方数の間では、片方の奇偶だけを通る</h4>
+<p>100から121の間は101、103、…の奇数を通るので、通らないのは102、104、…、120の偶数です。以後、平方数の偶奇が変わるたび逆になります。</p>
+<ul class="logic-list"><li>100&lt;n&lt;121：通らない偶数</li><li>121&lt;n&lt;144：通らない奇数</li><li>144&lt;n&lt;169：通らない偶数</li><li>169&lt;n&lt;196：通らない奇数</li><li>196&lt;n≤200：通らない偶数</li></ul>
+<p>この中の5の倍数は、</p>
+<div class="equation">110,120,125,135,150,160,175,185,195,200</div>
+<p>含まれる5の個数は順に1,1,3,1,2,1,2,1,1,2で、合計15です。2は十分多いので末尾の0も15個です。</p>
+<div class="answer-line"><b>15個</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍の(2)は、1の後から4まで2マス、4の後から9まで3マス、…と区切り、1+2+…が100に近い場所を探しています。13²の後の9マス目という計算が169+1+2×8です。</p>
+<p>(3)では平方数100、121、144、169、196を境に、駒が偶数マスだけ、奇数マスだけを通る区間を交互に書き出しています。その後、通らない5の倍数だけを拾い、125は5³、150・175・200は5²を含むことまで数えています。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>186は平方数ではないので次は188へ進みます。100回目が196より前にあることも、91&lt;100&lt;105から確認できます。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>駒が置かれない数の「個数」ではなく、その積の末尾の0です。5の倍数だけでなく、25・125の追加の5も数えます。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>平方数を境に、1歩と2歩が切り替わる。平方数までの訪問回数は三角数。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p27">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>27</strong></div>
+        <div><p class="eyebrow">問題 p.26／書籍解説 p.36</p><h2>使える5種類の数字を、五進法の0〜4に置き換える</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>0、2、4、6、8だけを使って正の整数を作り、小さい順に2から並べます。</p>
+<div class="equation">2,4,6,8,20,22,24,26,28,40,…</div>
+<ol class="problem-list"><li>(1) 666は何番目か。</li><li>(2) 500番目の数。</li><li>(3) 500番目までで、数字2をちょうど2個使う数は何個か。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 93番目　　(2) 8000　　(3) 84個</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>使える数字が5種類なので五進法と1対1に対応します。0,2,4,6,8を五進法の0,1,2,3,4と見ます。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <table class="mini-table"><tr><th>この問題の数字</th><td>0</td><td>2</td><td>4</td><td>6</td><td>8</td></tr><tr><th>五進法の数字</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></table>
+<p>五進法の1、2、3、4、10、11、…を上の対応で戻すと、問題の2、4、6、8、20、22、…になります。順番もそのままです。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 666を五進法の333へ</h4>
+<div class="equation">333₅=3×25+3×5+3=93</div>
+<p>五進法の93に対応するので93番目です。</p><div class="answer-line"><b>93番目</b></div></div>
+<div class="subq"><h4>(2) 500を五進法に直す</h4>
+<div class="equation">500=4×125=4000₅</div>
+<p>4を8へ戻すと8000です。</p><div class="answer-line"><b>8000</b></div></div>
+<div class="subq"><h4>(3) 数字2は、五進法では数字1</h4>
+<p>1〜500は五進法で0001₅〜4000₅と4桁にそろえて考えます。先頭の0は数の値に影響しません。</p>
+<h4>先頭が1の場合</h4><p>残り3桁のうち1か所を1にし、他2桁は1以外の4通りです。</p><div class="equation">3×4×4=48</div>
+<h4>先頭が0、2、3の場合</h4><p>先頭は1以外の3通り。残り3桁のうち2か所を1にし、残り1桁は1以外の4通りです。</p><div class="equation">3×3×4=36</div>
+<p>4000₅は1を含みません。</p><div class="equation">48+36=<b>84個</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は(3)を、まず4桁のどの2か所を1にするか6通り、残り2桁を1以外の4通りずつとして6×4×4=96通りと数えます。これは0000₅〜4444₅までの全範囲です。</p>
+<p>しかし500番目は4000₅なので、先頭が4で下3桁に1が2個ある数は範囲外です。その個数は、下3桁から2か所を選ぶ3通り、残り1桁4通りで12通り。</p>
+<div class="equation">96−12=84</div>
+<p>本HTMLの48+36は、最初から範囲内だけを数える同じ方法です。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>666の前後は、五進法332₅、333₅、334₅に対応する664、666、668なので、93番目という対応が順序も保っています。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>十進法の666をそのまま5で割るのではなく、各桁6を対応する五進法の桁3へ置き換えてから値を計算します。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>数字が5種類なら五進法。並び順そのものを位取り記数法に対応させる。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p28">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>28</strong></div>
+        <div><p class="eyebrow">問題 p.27／書籍解説 p.37</p><h2>連続整数の和は「平均×個数」で決める</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>35=5+6+7+8+9のように、整数を1ずつ違う連続する2個以上の正の整数の和で表します。</p>
+<ol class="problem-list"><li>(1) 45を3個の連続整数の和で表す。</li><li>(2) 69を6個の連続整数の和で表す。</li><li>(3) 20以下の偶数で、このような連続整数の和で表せない数をすべて求める。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 14+15+16　　(2) 9+10+11+12+13+14　　(3) 2、4、8、16</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>連続する数の和は「平均×個数」です。個数が奇数なら真ん中の数が平均、偶数なら中央2数の間が平均になります。</p></div>
+      
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>3個の連続整数x−1、x、x+1の和は3xです。6個なら平均は半整数になり、中央2数の平均と一致します。</p>
+<p>例：9〜14の平均は(11+12)÷2=11.5、11.5×6=69です。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 平均は45÷3=15</h4>
+<p>3個の中央を15にします。</p><div class="answer-line"><b>14+15+16</b></div></div>
+<div class="subq"><h4>(2) 平均は69÷6=11.5</h4>
+<p>中央2数は11と12です。左右へ同じ数だけ広げます。</p><div class="answer-line"><b>9+10+11+12+13+14</b></div></div>
+<div class="subq"><h4>(3) 20以下の偶数を具体的に確認</h4>
+<p>2の累乗以外は、次のように表せます。</p>
+<table class="mini-table"><tr><th>数</th><th>連続和</th></tr><tr><td>6</td><td>1+2+3</td></tr><tr><td>10</td><td>1+2+3+4</td></tr><tr><td>12</td><td>3+4+5</td></tr><tr><td>14</td><td>2+3+4+5</td></tr><tr><td>18</td><td>5+6+7</td></tr><tr><td>20</td><td>2+3+4+5+6</td></tr></table>
+<p>残る2、4、8、16はすべて2の累乗です。</p>
+<div class="answer-line"><b>2、4、8、16</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍は(1)(2)も平均を使っています。(2)の「中央の2数が11と12」は、平均23÷2=11.5を挟む2整数という意味です。</p>
+<p>(3)では一般的な性質を使います。奇数個の連続整数なら、和は「奇数個×中央の整数」なので、1以外の奇数の約数を持ちます。偶数個なら、両端から組にすると各組の和は同じ奇数で、和は「組数×奇数」になります。</p>
+<p>したがって連続和で表せる数は、1以外の奇数の約数を持ちます。2の累乗は奇数の約数を持たないので表せません。書籍の答え2、4、8、16はこの性質から出ています。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>2、4、8、16について2個以上の連続正整数を試すと、平均と個数の関係から必ず奇数因数が必要になりますが、これらの約数は2の累乗だけです。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>「1個の整数だけ」も許すとすべての数が表せてしまいます。この問題の「いくつか」は2個以上の連続整数です。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>連続和は平均で作る。表せない数の正体は、奇数因数を持たない2の累乗。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+    <article class="problem-card" id="p29">
+      <header class="problem-head">
+        <div class="number-badge"><span>11月</span><strong>29</strong></div>
+        <div><p class="eyebrow">問題 p.27／書籍解説 p.37</p><h2>正方形を取る操作は、割り算の商と余りそのもの</h2></div>
+      </header>
+      <section class="statement-block">
+        <h3>このHTMLだけで読める問題</h3>
+        <p>縦横が整数cmの長方形から、短い辺を一辺とする正方形を、取れるだけまとめて取り除きます。残った長方形に同じ操作を繰り返します。</p>
+<ol class="problem-list"><li>(1) 555cm×1800cmで、最後に取る正方形の一辺。</li><li>(2) 縦126cm、横は縦より長い長方形が3回目の操作で消え、3回で取った正方形は合計4個。横の長さ。</li><li>(3) 横が共通の3長方形A、B、Cがあり、縦は7、8、9cm、横は500cm以下。Aは2回目、Bは4回目、Cは1回目で消える。横の長さ。</li></ol>
+      </section>
+      <div class="answer-box"><span>答え</span><strong>(1) 15cm　　(2) 210cm　　(3) 99cm</strong></div>
+      <div class="focus-box"><strong>最初に注目するところ</strong><p>1回の操作で取る正方形の個数は「長辺÷短辺の商」、残る長方形の新しい短辺は「余り」です。</p></div>
+      <svg class="diagram-svg compact" viewBox="0 0 570 230" role="img" aria-label="3回の操作で正方形を1個、1個、2個取り除く長方形の逆算図">
+      <rect width="100%" height="100%" rx="18" fill="#fbfcfe"/>
+      <rect x="25" y="25" width="300" height="180" fill="#fff" stroke="#26354a" stroke-width="2.5"/>
+      <rect x="25" y="25" width="180" height="180" fill="#e7eef8" stroke="#26354a" stroke-width="2"/>
+      <rect x="205" y="25" width="120" height="120" fill="#e8f5ee" stroke="#26354a" stroke-width="2"/>
+      <rect x="205" y="145" width="60" height="60" fill="#fff3d8" stroke="#26354a" stroke-width="2"/>
+      <rect x="265" y="145" width="60" height="60" fill="#fff3d8" stroke="#26354a" stroke-width="2"/>
+      <g font-family="sans-serif" text-anchor="middle" fill="#26354a">
+        <text x="115" y="120" font-size="16" font-weight="700">1回目：1個</text>
+        <text x="265" y="90" font-size="15" font-weight="700">2回目：1個</text>
+        <text x="265" y="180" font-size="14" font-weight="700">3回目：2個</text>
+        <text x="440" y="65" font-size="16">最後を1とすると</text>
+        <text x="440" y="105" font-size="18" font-weight="700">2：1 → 3：2 → 5：3</text>
+        <text x="440" y="150" font-size="15">元の 横：縦 ＝ 5：3</text>
+      </g>
+    </svg>
+      <section class="method prep-method">
+        <h3><span>準備</span> 必要な予備知識を、例から確認</h3>
+        <p>たとえば7×3なら7÷3=2あまり1なので、3×3の正方形を2個取り、3×1が残ります。次は3÷1=3で終わります。</p>
+<p>この割り算の繰り返しはユークリッドの互除法です。最後の正方形の一辺は元の2辺の最大公約数になります。</p>
+      </section>
+      <section class="method best-method">
+        <h3><span>BEST</span> 一番直感的で、見通しのよい解き方</h3>
+        <div class="subq"><h4>(1) 割り算を余り0まで続ける</h4>
+<div class="equation">1800÷555=3あまり135<br>555÷135=4あまり15<br>135÷15=9あまり0</div>
+<div class="answer-line">最後の一辺は <b>15cm</b></div></div>
+<div class="subq"><h4>(2) 取った個数の並びを逆に戻す</h4>
+<p>3回で合計4個、各回少なくとも1個です。最後の割り算は大きい辺が小さい辺の2倍以上なので、最後は2個以上。したがって個数は1、1、2です。</p>
+<p>最後の小正方形の辺を1と置いて逆算します。</p>
+<div class="equation">3回目直前：2と1<br>2回目直前：2+1=3 と2 → 3と2<br>1回目直前：3+2=5 と3 → 5と3</div>
+<p>元の横：縦=5：3です。縦126cmが3に当たるので1単位42cm、横は5×42=210cmです。</p>
+<div class="answer-line"><b>210cm</b></div></div>
+<div class="subq"><h4>(3) 操作回数を余り条件に直す</h4>
+<p>先にX≤9の可能性を確認します。Cが1回で終わる候補はX=1、3、9ですが、縦8のBはそれぞれ1回、3回、2回で終わり、4回になりません。よってX&gt;9です。</p>
+<h4>C：縦9で1回終了</h4><p>X&gt;9なので、横Xは9で割り切れます。つまりXは9の倍数です。</p>
+<h4>A：縦7で2回終了</h4><p>1回目の余りrで7を割る2回目に終わります。7は素数なので、0でない約数rは1だけです。</p><div class="equation">Xを7で割ると1余る</div>
+<h4>B：縦8で4回終了</h4><p>Xを8で割った余りを1〜7で調べます。</p>
+<table class="mini-table"><tr><th>余り</th><th>8からの割り算</th><th>全操作回数</th></tr><tr><td>1,2,4</td><td>8で割り切れて次で終了</td><td>2回</td></tr><tr><td>3</td><td>8→3→2→1→0</td><td>4回</td></tr><tr><td>5</td><td>8→5→3→2→1→0</td><td>5回</td></tr><tr><td>6,7</td><td>8→2または1→0</td><td>3回</td></tr></table>
+<p>よってXを8で割ると3余ります。</p>
+<p>9の倍数で8で割ると3余る数は、</p><div class="equation">27,99,171,243,315,387,459</div>
+<p>このうち7で割ると1余る最初の数は99です。7、8、9の最小公倍数504ごとに同じ条件が繰り返されるので、500以下では99だけです。</p>
+<div class="answer-line"><b>99cm</b></div></div>
+      </section>
+      <section class="method official-method">
+        <h3><span>BOOK</span> 書籍の解答・解説を、途中を省かずに読み解く</h3>
+        <p>書籍の(1)は各割り算の商を、1回の操作で取る正方形の個数として読んでいます。最後の余り15が最終正方形の辺です。</p>
+<p>(2)の図は、最後の正方形を1として逆向きに長方形を復元しています。2個並んだ1×1から2×1、そこに2×2を1個戻して3×2、さらに3×3を1個戻して5×3です。</p>
+<p>(3)では、CからXは9の倍数、AからX÷7の余り1、BからX÷8の余り3を導きます。書籍は9の倍数で8余り3の数27、99、171、…を書き、7余り1となる最小の99を選びます。周期504が500を超えるので他にありません。</p>
+      </section>
+      <section class="method check-method">
+        <h3><span>確認</span> 答えが条件に合うか</h3>
+        <p>99÷9=11、99÷7=14あまり1、99÷8=12あまり3です。8と3の互除法は8÷3=2余り2、3÷2=1余り1、2÷1=2で、最初の99÷8を含め4回です。</p>
+      </section>
+      <div class="pitfall"><strong>間違いやすい点</strong><p>最後に残る辺が最大公約数という事実だけでは、操作回数や各回の正方形数は分かりません。商の並びも必要です。</p></div>
+      <div class="takeaway"><strong>この問題の要点</strong><span>正方形除去を「商個取り、余りが残る」と読み替える。逆算では商を逆順に戻す。</span></div>
+      <div class="back"><a href="#answers">答え一覧へ戻る ↑</a></div>
+    </article>
+    
+<p class="source-note">2025年11月号「日々の演習・問題／解答と解説」をもとに、問題条件と書籍解法を再構成し、説明を補いました。</p></main></div></body></html>
