@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中学への算数 2025年11月号 整数(2) P14〜37 完全解説</title>
+<style>
+:root{
+  --ink:#26314a; --paper:#fbfaf6; --line:#d8d2c4;
+  --w1:#8a5a2b; --w2:#1f6e5c; --w3:#274f8f; --w4:#8a2f4f; --w0:#4a4437;
+  --hl:#fff3cf; --note:#eef3fb; --warn:#fdeeee; --idea:#eef7ef;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.95;font-size:16px;}
+.wrap{max-width:880px;margin:0 auto;padding:24px 20px 80px;}
+header.top{border-bottom:3px double var(--ink);padding:26px 0 18px;margin-bottom:8px;}
+header.top .kicker{font-size:13px;letter-spacing:.18em;color:#7a7263;margin-bottom:6px;}
+header.top h1{font-family:"Hiragino Mincho ProN","Noto Serif JP","Yu Mincho",serif;
+  font-size:26px;margin:0 0 8px;line-height:1.5;}
+header.top .sub{font-size:14px;color:#5c5647;}
+h2.part{font-family:"Hiragino Mincho ProN","Noto Serif JP",serif;font-size:22px;
+  margin:60px 0 10px;padding:10px 16px;background:var(--ink);color:#fff;border-radius:6px;}
+h2.prob{display:flex;align-items:center;gap:12px;margin:58px 0 6px;
+  font-family:"Hiragino Mincho ProN","Noto Serif JP",serif;font-size:21px;
+  border-bottom:2px solid currentColor;padding-bottom:8px;}
+h2.prob .num{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  min-width:52px;height:48px;border-radius:8px;color:#fff;line-height:1.15;
+  font-family:"Hiragino Kaku Gothic ProN",sans-serif;}
+h2.prob .num .mo{font-size:10px;letter-spacing:.1em;}
+h2.prob .num .dd{font-size:20px;font-weight:700;}
+h2 .src{margin-left:auto;font-size:13px;font-weight:normal;color:#6b6455;font-family:"Hiragino Kaku Gothic ProN",sans-serif;text-align:right;}
+h3{font-size:17px;margin:30px 0 8px;padding-left:10px;border-left:5px solid var(--ink);}
+.c1 h2.prob{color:var(--w1)} .c1 h2 .num{background:var(--w1)} .c1 h3{border-color:var(--w1)}
+.c2 h2.prob{color:var(--w2)} .c2 h2 .num{background:var(--w2)} .c2 h3{border-color:var(--w2)}
+.c3 h2.prob{color:var(--w3)} .c3 h2 .num{background:var(--w3)} .c3 h3{border-color:var(--w3)}
+.c4 h2.prob{color:var(--w4)} .c4 h2 .num{background:var(--w4)} .c4 h3{border-color:var(--w4)}
+.stmt{background:#fff;border:1.5px solid var(--ink);border-radius:6px;padding:16px 20px;margin:16px 0;}
+.stmt .qhead{font-weight:700;margin-bottom:4px;font-size:14.5px;letter-spacing:.08em;}
+.box{border-radius:6px;padding:13px 17px;margin:14px 0;border:1px solid var(--line);}
+.box .bt{font-weight:700;font-size:14px;letter-spacing:.05em;margin-bottom:5px;}
+.idea{background:var(--idea);border-color:#bcd8bf;}
+.note{background:var(--note);border-color:#c3d2ea;}
+.warn{background:var(--warn);border-color:#eac3c3;}
+.pre{background:var(--hl);border-color:#e3d29a;}
+.mag{background:#f6f1e7;border:1px dashed #b9a97e;}
+.ans{background:#fff;border:2.5px solid var(--ink);border-radius:6px;padding:11px 17px;margin:16px 0;font-weight:700;}
+.ans .al{font-size:13px;letter-spacing:.15em;color:#8a2f2f;display:block;margin-bottom:2px;}
+.formula{text-align:center;margin:12px 0;font-size:16.5px;}
+.frac{display:inline-block;vertical-align:-0.75em;text-align:center;line-height:1.25;margin:0 2px;}
+.frac>span{display:block;padding:0 5px;font-size:0.92em;}
+.frac .den{border-top:1.4px solid var(--ink);}
+table.t{border-collapse:collapse;margin:12px auto;background:#fff;}
+table.t th,table.t td{border:1px solid #a9a390;padding:5px 12px;text-align:center;font-size:14.5px;}
+table.t th{background:#efe9db;font-weight:700;}
+.fig{text-align:center;margin:16px 0;}
+.fig .cap{font-size:13px;color:#5c5647;margin-top:5px;}
+.steps{counter-reset:st;padding-left:0;margin:12px 0;}
+.steps li{list-style:none;position:relative;padding-left:38px;margin:9px 0;}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:2px;
+  width:25px;height:25px;border-radius:50%;background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;}
+.small{font-size:13px;color:#5c5647;}
+.kw{background:var(--hl);padding:0 4px;border-radius:3px;font-weight:700;}
+strong{font-weight:700;}
+.toc{background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px 20px;margin:20px 0;}
+.toc ul{margin:6px 0;padding-left:22px;}
+.reidai h2.prob{color:var(--w0)} .reidai h2 .num{background:var(--w0)} .reidai h3{border-color:var(--w0)}
+footer{margin-top:70px;border-top:1px solid var(--line);padding-top:14px;font-size:13px;color:#6b6455;}
+@media print{ body{font-size:13px} .wrap{max-width:100%} }
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">中学への算数　2025年11月号　テーマ：整数(2)</div>
+  <h1>P14〜37 完全解説　——　要点の整理＋日々の演習 全20題</h1>
+  <div class="sub">要点の整理・例題5題（本誌P14〜17）／日々の演習・問題（P18〜27）／解答解説（P28〜37）——　自力解説＋本誌解説の読み解きつき。全設問の数値は計算機で厳密検証済み。</div>
+</header>
+
+<div class="toc">
+  <strong>構成と使い方</strong>
+  <ul>
+    <li><strong>第1部　要点の整理（P14〜17）</strong>：今月の3本柱「①倍数・約数（周期、判定法、約数の個数）」「②余り」「③小数（有限小数の条件）」を、例題5題とともに整理します。</li>
+    <li><strong>第2部　日々の演習（P18〜37）</strong>：11/04〜11/29の全20題（11/04, 05, 06, 07／10〜14／17〜22／25〜29）。各問「問題の要約 → 💡気づき → 解説 → 答え → 📖本誌解説のポイント」の順です。</li>
+  </ul>
+  <p class="small">問題文は学習用に要点を保って要約しています（数値・条件は原題どおり）。正確な原文は本誌をご参照ください。</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 class="part">第1部　要点の整理（本誌P14〜17）</h2>
+
+<p>今月号の講義パートは「倍数・約数」「余り」「小数」の3テーマ。日々の演習20題のほとんどが、ここで整理される<strong>4つの道具</strong>の組合せでできています。</p>
+
+<div class="box pre"><div class="bt">📚 今月の道具箱（この4つで20題の大半が動く）</div>
+<ol class="steps">
+<li><strong>周期でまとめる</strong>：一定間隔でくり返す現象は、最小公倍数を1周期として「周期あたりの量×周期数＋端数」で数える。端数（あまりの部分）の処理が勝負どころ。</li>
+<li><strong>倍数の判定法</strong>：3・9の倍数は「各位の和」、4の倍数は「下2桁」、2・5は「一の位」。12の倍数＝「3の倍数かつ4の倍数」のように、<strong>互いに素な2条件のかけ算</strong>に分解する。</li>
+<li><strong>約数の個数</strong>：素因数分解して「（各素数の個数＋1）の積」。個数が<strong>奇数になるのは平方数だけ</strong>（約数を両端からペアにすると、真ん中に1個残るのは平方数のときだけ）。</li>
+<li><strong>余りで分類する</strong>：「〜で割った余り」で整数を色分けすると、条件が「余りが□の数」という等間隔の列に翻訳される。有限小数の判定（分母の素因数が2と5だけ）もこの仲間。</li>
+</ol></div>
+
+<section class="reidai">
+<h2 class="prob"><span class="num"><span class="mo">例題</span><span class="dd">1</span></span>周期性：2台のジェットコースター<span class="src">'25 実践女子学園・6回（P14）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>Aには45秒ごとに1人ずつ、Bには75秒（1分15秒）ごとに2人ずつ客が乗る。10時ちょうどに両方の先頭客が同時に乗り始める。（1）10時4分までに乗るのは全部で何人か。（2）83人目が乗る時刻は。</p></div>
+<p><strong>（1）</strong>240秒間で、Aは 240÷45＝5余り15 → スタートの1回を足して6回、つまり6人。Bは 240÷75＝3余り15 → 4回で 2×4＝8人。合計<strong>14人</strong>。<span class="kw">「ちょうど0秒にも乗る」ぶんの＋1</span>を忘れないのが本誌の注意点です。</p>
+<p><strong>（2）</strong>45と75の最小公倍数225秒が1周期。1周期（0秒以上225秒未満）に乗るのは 5＋6＝11人。83÷11＝7余り6 なので、7周期のあと6人目。周期内を書き出すと、0秒（A1人＋B2人＝3人目まで）→45秒（4人目）→75秒（5・6人目）。よって 225×7＋75＝1650秒後＝<strong>10時27分30秒</strong>。</p>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div><p>「1周期に乗る人数」を数えるとき、区間を<strong>「0秒以上225秒未満」と半開きにそろえる</strong>（225秒ちょうどは次の周期に入れる）ことで二重カウントを防いでいます。周期問題の区間管理の基本形です。</p></div>
+</section>
+
+<section class="reidai">
+<h2 class="prob"><span class="num"><span class="mo">例題</span><span class="dd">2</span></span>倍数判定法：5けたの数「67A4B」<span class="src">'25 京都女子・B1（P14〜15）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>5けたの数 67A4B について、（1）3の倍数となるA、Bの組のうち、この数が最大になる組は。（2）12の倍数となるA、Bの組は何通りか。</p></div>
+<p><strong>（1）</strong>3の倍数 ⇔ 各位の和 6＋7＋A＋4＋B＝17＋A＋B が3の倍数。最大にしたいので百の位A＝9から確定させると 26＋B が3の倍数 → B＝1, 4, 7 のうち最大の<strong>B＝7</strong>。答は <strong>A＝9、B＝7</strong>（67947）。</p>
+<p><strong>（2）</strong>12＝3×4 なので「3の倍数<strong>かつ</strong>4の倍数」。4の倍数 ⇔ 下2桁「4B」が4の倍数 ⇔ B＝0, 4, 8。それぞれについて 17＋A＋B が3の倍数になるAを数えると、B＝0で3通り（A=1,4,7）、B＝4で4通り（0,3,6,9）、B＝8で3通り（2,5,8）。合計<strong>10通り</strong>。</p>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div><p>解説末尾の注で「(1)は67949・67948・67947の3つを試しても正解できるが、(2)につながりにくい」と、<strong>判定法で解く価値</strong>（次の設問への接続）に触れています。合成数の倍数条件を互いに素な2条件に割る発想は、日々の演習17（7・8・9）でも主役になります。</p></div>
+</section>
+
+<section class="reidai">
+<h2 class="prob"><span class="num"><span class="mo">例題</span><span class="dd">3</span></span>約数の個数と平方数：2025枚のカード<span class="src">'25 立命館・後期（P15〜16）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>1〜2025のカード（白面が上）に対し、1の倍数、2の倍数、…、2025の倍数のカードを順にすべて裏返す。（1）12のカードは何回裏返されるか。（2）2025のカードは何回か。（3）最後に黒面が上のカードは何枚か。</p></div>
+<p><strong>（1）</strong>12のカードが裏返るのは「□の倍数を裏返す」の□が12の約数のとき。12＝2×2×3 の約数は (2＋1)×(1＋1)＝<strong>6回</strong>。</p>
+<p><strong>（2）</strong>2025＝3×3×3×3×5×5 の約数は (4＋1)×(2＋1)＝<strong>15回</strong>。</p>
+<p><strong>（3）</strong>黒＝奇数回裏返されたカード＝<strong>約数の個数が奇数の数</strong>。約数を小さい順に並べて両端からペア（積が一定）にすると、ぴったり組めるのがふつうで（→偶数個）、真ん中に1個だけ残るのは「同じ数×同じ数」の形、つまり<strong>平方数だけ</strong>。2025＝45×45 なので、2025以下の平方数は 1×1〜45×45 の<strong>45枚</strong>。</p>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div><p>「約数の個数が奇数 ⇔ 平方数」を、(ア)12型（ペアが組み切れる）と(イ)16型（真ん中に4が残る）の対比図で説明しています。この事実は日々の演習12（ボタン）と26（駒）の心臓部として再登場します。<strong>講義→演習の伏線</strong>がはっきりしている月です。</p></div>
+</section>
+
+<section class="reidai">
+<h2 class="prob"><span class="num"><span class="mo">例題</span><span class="dd">4</span></span>余りの積の記号：A◎[B, C]<span class="src">'25 春日部共栄・3回（P16〜17）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>A◎[B, C]＝（AをBで割った余り）×（AをCで割った余り）と定める（A＞B＞C）。（1）101◎[9, 8]。（2）D◎[23, 5]＝40となる最小のD。（3）56◎[E, F]＝25となる組のうちFが最大のもの。</p></div>
+<p><strong>（1）</strong>101÷9＝11余り2、101÷8＝12余り5 → 2×5＝<strong>10</strong>。</p>
+<p><strong>（2）</strong>23で割った余り（0〜22）と5で割った余り（0〜4）の積が40になるのは (20, 2) か (10, 4)。前者：23で割ると20余る数 20, 43, 66, 89, 112, … のうち5で割って2余る最小は112（「3を足すと23でも5でも割り切れる」→ 23×5−3＝112 と一撃でも出せます）。後者：10, 33, 56, <strong>79</strong>, … のうち5で割って4余る最小は79。小さい方の<strong>79</strong>が答。</p>
+<p><strong>（3）</strong>余りの組は (5, 5)、(1, 25)、(25, 1)。（5, 5）なら E, F は 56−5＝51＝3×17 の約数で5より大 → E＝51, F＝17。(1, 25) 型なら 56−25＝31（素数）より F＝31、もう一方は 56−1＝55 の約数で31より大 → E＝55。F最大は後者で <strong>E＝55、F＝31</strong>。</p>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div><p>核心は<span class="kw">「AをBで割ると r 余る ⇔ BはA−rの約数で、Bはrより大きい」</span>という往復翻訳。「余りから割る数を逆算する」この形は、日々の演習06・29でも使います。</p></div>
+</section>
+
+<section class="reidai">
+<h2 class="prob"><span class="num"><span class="mo">例題</span><span class="dd">5</span></span>有限小数の条件<span class="src">'25 江戸川学園取手（P17）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>（1）8つの分数（ア〜ク）のうち、小数に直すと途中で終わる「有限小数」になるものをすべて選ぶ。（2）整数 b を2025で割った数が有限小数になるような b（1以上2025未満）は何個あるか。</p></div>
+<p><strong>（1）</strong>実際に割ってみると、1/4＝0.25 と 3/25＝0.12 の2つだけが止まり、他は 5/27＝0.185185…、8/75＝0.10666… のように同じ並びがくり返す循環小数。答は<strong>イとオ</strong>。理屈：有限小数は10を何回か掛ければ整数になる数なので、約分しきった分数で表すと<span class="kw">分母の素因数は2と5だけ</span>。逆に分母に3や7が残れば必ず循環します。</p>
+<p><strong>（2）</strong>2025＝3⁴×5²（3を4個と5を2個の積）。b/2025 が有限小数 ⇔ 約分で分母から3が全部消える ⇔ <strong>bが81（＝3を4個かけた数）の倍数</strong>。2025÷81＝25 で、b＜2025 だから2025自身を除いて <strong>24個</strong>。</p>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div><p>「有限小数＝整数/（10をいくつか掛けた数）と書ける」→「約分後の分母は2と5の素因数しか持てない」という<strong>条件の導出そのもの</strong>を載せているのが本誌らしいところ。結論の暗記でなく、10＝2×5 に還元して理解させる構成です。</p></div>
+</section>
+
+<!-- ============================================================ -->
+<h2 class="part">第2部　日々の演習（本誌P18〜27問題／P28〜37解説）</h2>
+<p>問題番号は11月の日付です（平日20日ぶん）。難易度は本誌基準でほぼB、11/28のみA。</p>
+
+<!-- ======== 11/04 ======== -->
+<section class="c1">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">04</span></span>累乗の大小比較<span class="src">'25 ジュニア算数オリンピック・ファイナル（P18）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>整数AをB個かけてできる数を A[B] と表す（例：2[3]＝2×2×2＝8）。（1）ア 2[31]、イ 8[10]、ウ 16[8] を小さい順に並べよ。（2）ア 9[22]、イ 28[15]、ウ 79[11]、エ 243[9] を小さい順に並べよ。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：巨大な数は「比べられる形」に直してから</div>
+<p>2[31]は10桁近い数で、計算して比べるのは論外。累乗の比較は<strong>底（かける数）をそろえる</strong>のが第一手です。8も16も「2を何個かかけた数」なので、全部2の世界に翻訳できます。(2)は 9、243 が3の世界に翻訳でき、翻訳できない28と79は<strong>「すぐ上・すぐ下の3の累乗ではさむ」</strong>のが第二手。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>8＝2[3] だから 8[10]＝2[3×10]＝2[30]。16＝2[4] だから 16[8]＝2[32]。「かける2の個数」で比べて 2[30]＜2[31]＜2[32]、つまり<strong>イ＜ア＜ウ</strong>。</p>
+<p><strong>（2）</strong>9＝3[2] より ア＝3[44]。243＝3[5] より エ＝3[45]。よってア＜エ。残る2つをはさみうちにします：</p>
+<div class="formula">イ＝28[15] ＞ 27[15] ＝ 3[45] ＝ エ　　／　　ウ＝79[11] ＜ 81[11] ＝ 3[44] ＝ ア</div>
+<p>28はすぐ下の27（＝3[3]）より大きく、79はすぐ上の81（＝3[4]）より小さい。これで鎖がつながり、ウ＜ア＜エ＜イ。</p>
+<div class="ans"><span class="al">答</span>（1）イ、ア、ウ　（2）ウ、ア、エ、イ</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌は A[B]の記号のまま (2[3])[10]＝2[3×10] のように「累乗の累乗＝個数のかけ算」を明示して処理します。面白さコメントに正答率25.5%とあり、見た目より低い——「翻訳できない28・79をはさむ」二手目が立てられるかが分かれ目だった、と読めます。</p></div>
+</section>
+
+<!-- ======== 11/05 ======== -->
+<section class="c1">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">05</span></span>約数の個数【A】<span class="src">'25 江戸川学園取手・3回（P18〜19）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>整数Aの約数の個数を【A】で表す（例：【6】＝4）。（1）【100】は。（2）100以下で【x】＝2 を満たす最大のx。（3）100以下で【y】＝8 を満たすyは全部で何個か。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：約数の個数は「個数＋1のかけ算」——逆向きに読むのが(3)</div>
+<p>(1)(2)は道具の確認。(3)は逆問題で、「8＝答えになるかけ算の式」を先に分解します。8＝2×2×2、2×4、8×1。それぞれが素因数分解の形（3種の素数を1個ずつ／ある素数3個＋別の素数1個／同じ素数7個）に対応する——<strong>個数の式から数の形を復元する</strong>のがテーマです。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>100＝2×2×5×5 → (2＋1)×(2＋1)＝<strong>9</strong>。</p>
+<p><strong>（2）</strong>約数2個＝素数。100以下の最大の素数は<strong>97</strong>。</p>
+<p><strong>（3）</strong>8の作り方で場合分け：</p>
+<table class="t">
+<tr><th>8の分解</th><th>yの形</th><th>100以下の該当</th><th>個数</th></tr>
+<tr><td>2×2×2</td><td>異なる3素数の積</td><td>30, 42, 66, 70, 78</td><td>5</td></tr>
+<tr><td>2×4</td><td>素数3個×別の素数1個</td><td>24, 40, 54, 56, 88</td><td>5</td></tr>
+<tr><td>8</td><td>同じ素数7個</td><td>最小でも2×…×2＝128＞100</td><td>0</td></tr>
+</table>
+<p class="small">3素数の積：2×3×5＝30、2×3×7＝42、2×3×11＝66、2×5×7＝70、2×3×13＝78（2×5×11＝110超過）。p³q型：8×3＝24、8×5＝40、8×7＝56、8×11＝88、27×2＝54（27×5超過、125超過）。</p>
+<div class="ans"><span class="al">答</span>（1）9　（2）97　（3）10個</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌は(1)から「約数を書き出しても良いが、(3)につながる解法を」と宣言して素因数分解ルートで通します。(3)の場合分けでは「同じ素数7個型は100を超えるから除外」を先に片づけてから2パターンを列挙——<strong>候補の型→上限で足切り→列挙</strong>という約数個数逆問題の標準手順です。</p></div>
+</section>
+
+<!-- ======== 11/06 ======== -->
+<section class="c1">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">06</span></span>3つの整数A・B・Cの推理<span class="src">'25 東京都市大付・3回（P19）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>A、B、Cは1〜150の整数。②Aは奇数で約数6個。③Bを13で割った商は余りの3倍。④Cは5の倍数で、12で割ると9余り、9で割ると6余る。（1）Cは。（2）Bとして考えられる最大は。（3）A、B、Cの最大公約数が15のとき、最小公倍数として考えられる最大は。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：③は「余りを1文字」にすると式が消える</div>
+<p>「商が余りの3倍」→ 余りを□とすれば B＝13×3×□＋□＝<strong>40×□</strong>。余り□は13未満、Bは150以下なので□＝1, 2, 3 と即座に絞れます。④は「12でも9でも割った余りが3の倍数」なのでCは3の倍数、かつ5の倍数 → 15の倍数から絞る。条件を<strong>倍数の言葉に翻訳してから交差させる</strong>問題です。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>Cは15の倍数（上の気づき）。150以下の15の倍数のうち12で割って9余るのは 45 と 105。さらに9で割って6余るのは <strong>C＝105</strong>（45÷9は割り切れる）。</p>
+<p><strong>（2）</strong>B＝40×□（□＝1, 2, 3）→ 40, 80, 120。最大は <strong>B＝120</strong>。</p>
+<p><strong>（3）</strong>最大公約数15 → 3つとも15の倍数。Bは40, 80, 120のうち15の倍数の<strong>120</strong>に確定。C＝105＝15×7。Aは「奇数・約数6個・15の倍数・150以下」：約数6個の形は（素数5個型）か（素数2個×別素数型）で、15＝3×5を含む奇数なら後者で {3, 5} を使い、<strong>A＝3×3×5＝45 または 5×5×3＝75</strong>。15でくくると A＝15×3 か 15×5、B＝15×8、C＝15×7。3・5・7・8はどの2つも互いに素なので、最小公倍数はA＝75のとき最大で</p>
+<div class="formula">15×5×8×7＝<strong>4200</strong></div>
+<div class="ans"><span class="al">答</span>（1）105　（2）120　（3）4200</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>(3)で本誌は「A＝15×3または15×5、B＝15×8、C＝15×7。3, 5, 8, 7 はどの2つも互いに素」とわざわざ<strong>互いに素の確認</strong>を挟みます。最小公倍数＝15×（残りの積）が成り立つのはこの確認があってこそ——lcmの式を機械的に使わない本誌の丁寧さが出た一文です。なお、最大公約数15の確認（45・75どちらでも成立）も忘れずに。</p></div>
+</section>
+
+<!-- ======== 11/07 ======== -->
+<section class="c1">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">07</span></span>記号〈x〉＝最大の真の約数<span class="src">'25 滝（P19）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>〈x〉は、xを割り切る整数のうちx自身を除いた最大のもの（例：〈8〉＝4、〈9〉＝3、〈11〉＝1）。（1）〈119〉。（2）〈ア〉＝13となるアのうち2番目に大きい数。（3）〈イ＋26〉＝〈イ〉で〈イ〉が1でないとき、イをすべて求めよ。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：〈x〉の相棒は「最小の素因数」</div>
+<p>約数は両端からペア（積＝x）になるので、<strong>2番目に大きい約数〈x〉の相棒は2番目に小さい約数</strong>、つまりxの最小の素因数です：x＝〈x〉×（最小素因数）。〈x〉を固定すると、xは「〈x〉×素数」の形で、しかもその素数は〈x〉の最小素因数以下——この在庫管理が(2)(3)を貫きます。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>119＝7×17。約数は 1, 7, 17, 119 なので <strong>〈119〉＝17</strong>。</p>
+<p><strong>（2）</strong>ア＝13×（素数p）で、13×pの最小素因数がpになる必要から p≦13。大きい順に p＝13（ア＝169）、p＝11（ア＝143）。2番目は <strong>143</strong>。</p>
+<p><strong>（3）</strong>イの最小素因数を p、イ＋26の最小素因数を q とすると、イ＝〈イ〉×p、イ＋26＝〈イ〉×q（〈〉の値が共通！）。差をとると</p>
+<div class="formula">26 ＝ 〈イ〉×（q － p）　→　<span class="kw">〈イ〉は26の約数</span>（〈イ〉≠1 なので 2, 13, 26）</div>
+<table class="t">
+<tr><th>〈イ〉</th><th>q−p</th><th>吟味</th><th>結果</th></tr>
+<tr><td>2</td><td>13</td><td>差13の素数ペア→偶奇が違う→p＝2、q＝15。15は素数でない</td><td>×</td></tr>
+<tr><td>13</td><td>2</td><td>差2の素数ペアでp≦13：(3,5)(5,7)(11,13)</td><td>イ＝39, 65, 143</td></tr>
+<tr><td>26</td><td>1</td><td>差1の素数ペア→(2,3)。イ＝52なら イ＋26＝78 の〈78〉＝39≠26</td><td>×</td></tr>
+</table>
+<p class="small">検算：〈39〉＝13, 〈65〉＝13 ○／〈65〉＝13, 〈91〉＝91÷7＝13 ○／〈143〉＝13, 〈169〉＝13 ○。(11,13)の組では イ＋26＝169＝13×13 と平方数になるのが面白いところ。</p>
+<div class="ans"><span class="al">答</span>（1）17　（2）143　（3）イ＝39、65、143</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌は「2番目に小さい約数を[ア]と表す」補助記号を導入し、<span class="kw">ア＝〈ア〉×[ア]、[ア]は必ず素数</span>という骨格を先に立ててから(2)(3)を処理します。(3)の3つの場合分けで、×になる2ケースも「偶数の素数は2だけ」を軸に潰しており、<strong>素数の偶奇（2の特殊性）</strong>が実戦でどう効くかの見本です。</p></div>
+</section>
+
+<!-- ======== 11/10 ======== -->
+<section class="c2">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">10</span></span>最小の素数を引く数列<span class="src">'25 豊島岡女子学園・2回（P20）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>1番目の数は1。2番目以降のn番目の数は「nから、nを割り切る最も小さい素数を引いた数」とする（例：7番目は 7－7＝0、15番目は 15－3＝12）。（1）50番目までに0は何回出てくるか。（2）300番目までに、となり合う数が同じになる場合は何通りか（8番目までなら2番目と3番目の1通り）。（3）300番目までに、n番目の数から(n＋1)番目の数を引いた数が2になる場合は何通りか（8番目までなら4番目と5番目の1通り）。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：数列の正体は「最小の素因数」の観察装置</div>
+<p>n番目の数は「n－（nの最小の素因数）」。だから(1)〜(3)はすべて<strong>最小の素因数のふるまい</strong>に翻訳できます。0になる⇔最小の素因数がn自身⇔<strong>nが素数</strong>。となり合う数が同じ⇔引き算すると、nと(n＋1)が消えて<strong>「最小の素因数が1違い」</strong>。差が2⇔<strong>「最小の素因数が3違い」</strong>。素数どうしの差の話に置きかわった瞬間、「偶数の素数は2だけ」という切り札が効き始めます。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>n番目が0 ⇔ nが素数。50以下の素数は 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47 の<strong>15個</strong>。</p>
+<p><strong>（2）</strong>n番目＝(n＋1)番目 とは、n－（nの最小素因数）＝(n＋1)－（n＋1の最小素因数）、つまり<span class="kw">（n＋1の最小素因数）が（nの最小素因数）より1大きい</span>こと。素数で1違いのペアは偶奇が異なるから、偶数の素数2を含む<strong>（2, 3）しかない</strong>。よって「nの最小素因数が2、n＋1の最小素因数が3」——nが偶数で、n＋1が（2で割れず）3で割れる数。これは<strong>n＋1を6で割った余りが3</strong>、つまりn＋1＝3, 9, 15, …のときで、このときnが偶数であることは自動的に成り立ちます。n＋1が300以下の範囲で 300÷6＝50 より<strong>50通り</strong>。</p>
+<p><strong>（3）</strong>同じ式変形で、（n＋1の最小素因数）－（nの最小素因数）＝2＋1＝3。差が3の素数ペアも偶奇の理由で<strong>（2, 5）しかない</strong>。nが偶数で、n＋1が2でも3でも割れない5の倍数——<strong>n＋1を30で割った余りが5または25</strong>のとき。300÷30＝10周期 × 各2個 ＝ <strong>20通り</strong>。</p>
+<div class="ans"><span class="al">答</span>（1）15回　（2）50通り　（3）20通り</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌の解説もこの筋で、(2)の核心を「前者と後者の偶奇が異なることになりますが、素数のうち偶数は2だけです」と一文で仕留めます。(2)で「6で割った余りが3」に言い換えたとき<strong>「このとき自動的に（nが偶数という）条件が成り立ちます」</strong>と、条件の重複を確認するひと言があるのが丁寧なところ。面白さコメントは「見慣れない条件に戸惑うかもしれませんが…」——設定の見た目に反して、翻訳後は余りの周期の数え上げという定番処理に落ちます。</p></div>
+</section>
+
+<!-- ======== 11/11 ======== -->
+<section class="c2">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">11</span></span>各位の和が9の4けたの数<span class="src">'25 国学院大久我山・2回（P20）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>9の倍数のうち、各位の数の和がちょうど9となる4けたの整数を小さい順に並べる：1008, 1017, 1026, 1035, …（2052や9000は入るが、各位の和が18の1998などは入らない）。（1）1107は何番目か。（2）1200以上1300以下の数は何個か。（3）2000以上3000以下の数は何個か。（4）このうち一の位が5である平方数を答えよ。（5）一の位が0である平方数をすべて答えよ。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：数えるものは「残りの位の和」だけ</div>
+<p>上の方の位を固定すれば、条件は「残りの位の和がいくつか」だけになります。たとえば「12□□」なら □＋□＝9－1－2＝6。<strong>和が決まった2けたの作り方は（和＋1）通り</strong>（06, 15, …, 60 の7通り）——この1個の道具で(1)(2)(3)が全部片づきます。(4)(5)は逆に平方数側から絞る：一の位が5や0の平方数は、もとの数（2回かけた数）が5の倍数や10の倍数と、<strong>かける前の数の条件</strong>に翻訳します。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>「10□□」は □＋□＝8 の9通り（1008〜1080）。次が「11□□」の最初 1107。よって 9＋1＝<strong>10番目</strong>。</p>
+<p><strong>（2）</strong>1300は各位の和4で並ばないから「12□□」だけ。□＋□＝6 の<strong>7個</strong>（1206〜1260）。</p>
+<p><strong>（3）</strong>「20□□」〜「27□□」で下2けたの和は 7, 6, 5, 4, 3, 2, 1, 0。個数は 8＋7＋6＋…＋1＝<strong>36個</strong>（「28□□」「29□□」は和が9を超え、3000は並ばない）。</p>
+<p><strong>（4）</strong>4けたの平方数は 32×32〜99×99。9の倍数の平方数はかける前の数が3の倍数、一の位が5の平方数はかける前の数が「5の倍数かつ奇数」。両方満たす32〜99の数は45と75。45×45＝2025（各位の和9 ○）、75×75＝5625（和18 ×）。答えは<strong>2025</strong>。</p>
+<p><strong>（5）</strong>一の位が0の平方数はかける前が10の倍数で、下2けたは00。上2けたが「各位の和9の平方数」ならよいので 36と81。答えは<strong>3600と8100</strong>。</p>
+<div class="ans"><span class="al">答</span>（1）10番目　（2）7個　（3）36個　（4）2025　（5）3600、8100</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌は(1)を書き出し、(2)(3)を「上2けたを固定して下2けたの和を数える」方針で処理し、(3)は 8＋7＋…＋1＝36個。(4)(5)は<strong>「一の位が5や0の平方数はかなり限定されます」</strong>という導入どおり、かける前の数を 3の倍数∩5の倍数∩奇数（→45, 75）、10の倍数（→下2けた00で上2けたが36か81）と絞り込みます。2025年入試らしく、2025＝45×45 が(4)の答えに顔を出す仕掛けです。</p></div>
+</section>
+
+<!-- ======== 11/12 ======== -->
+<section class="c2">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">12</span></span>2025個のボタン<span class="src">'25 城北・2回（P21）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>2から2026までの数字が書かれたボタンが1個ずつ、合計2025個ある。ボタンは押すたびに光⇔消灯が切り替わる。（1）図Aのように2〜10のボタンを渦巻き状に3×3に並べ、全部消えた状態から「2の倍数のボタンを押す→3の倍数を押す→4の倍数を押す→…→10の倍数を押す」を行う。消えているボタンの数字をすべて答えよ。（2）図Bのように2〜2026のボタンを渦巻き状に45×45に並べ、「2の倍数→3の倍数→…→2026の倍数」を押す。①光っているボタンは全部で何個か。②光っているボタンが45個並ぶ列は、縦にア列、横にイ列、斜めにウ列ある。ア〜ウを答えよ。</p></div>
+<div class="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236 236" style="max-width:240px;width:100%;height:auto;">
+<rect x="96" y="96" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="118.0" y="123.0" font-size="15" text-anchor="middle" fill="#26314a">2</text>
+<rect x="140" y="96" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="162.0" y="123.0" font-size="15" text-anchor="middle" fill="#26314a">3</text>
+<rect x="140" y="52" width="44" height="44" fill="#f3d1a0" stroke="#8a8272"/>
+<text x="162.0" y="79.0" font-size="15" text-anchor="middle" fill="#26314a">4</text>
+<rect x="96" y="52" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="118.0" y="79.0" font-size="15" text-anchor="middle" fill="#26314a">5</text>
+<rect x="52" y="52" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="74.0" y="79.0" font-size="15" text-anchor="middle" fill="#26314a">6</text>
+<rect x="52" y="96" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="74.0" y="123.0" font-size="15" text-anchor="middle" fill="#26314a">7</text>
+<rect x="52" y="140" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="74.0" y="167.0" font-size="15" text-anchor="middle" fill="#26314a">8</text>
+<rect x="96" y="140" width="44" height="44" fill="#f3d1a0" stroke="#8a8272"/>
+<text x="118.0" y="167.0" font-size="15" text-anchor="middle" fill="#26314a">9</text>
+<rect x="140" y="140" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="162.0" y="167.0" font-size="15" text-anchor="middle" fill="#26314a">10</text>
+<rect x="184" y="140" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="206.0" y="167.0" font-size="15" text-anchor="middle" fill="#26314a">11</text>
+<rect x="184" y="96" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="206.0" y="123.0" font-size="15" text-anchor="middle" fill="#26314a">12</text>
+<rect x="184" y="52" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="206.0" y="79.0" font-size="15" text-anchor="middle" fill="#26314a">13</text>
+<rect x="184" y="8" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="206.0" y="35.0" font-size="15" text-anchor="middle" fill="#26314a">14</text>
+<rect x="140" y="8" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="162.0" y="35.0" font-size="15" text-anchor="middle" fill="#26314a">15</text>
+<rect x="96" y="8" width="44" height="44" fill="#f3d1a0" stroke="#8a8272"/>
+<text x="118.0" y="35.0" font-size="15" text-anchor="middle" fill="#26314a">16</text>
+<rect x="52" y="8" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="74.0" y="35.0" font-size="15" text-anchor="middle" fill="#26314a">17</text>
+<rect x="8" y="8" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="30.0" y="35.0" font-size="15" text-anchor="middle" fill="#26314a">18</text>
+<rect x="8" y="52" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="30.0" y="79.0" font-size="15" text-anchor="middle" fill="#26314a">19</text>
+<rect x="8" y="96" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="30.0" y="123.0" font-size="15" text-anchor="middle" fill="#26314a">20</text>
+<rect x="8" y="140" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="30.0" y="167.0" font-size="15" text-anchor="middle" fill="#26314a">21</text>
+<rect x="8" y="184" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="30.0" y="211.0" font-size="15" text-anchor="middle" fill="#26314a">22</text>
+<rect x="52" y="184" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="74.0" y="211.0" font-size="15" text-anchor="middle" fill="#26314a">23</text>
+<rect x="96" y="184" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="118.0" y="211.0" font-size="15" text-anchor="middle" fill="#26314a">24</text>
+<rect x="140" y="184" width="44" height="44" fill="#f3d1a0" stroke="#8a8272"/>
+<text x="162.0" y="211.0" font-size="15" text-anchor="middle" fill="#26314a">25</text>
+<rect x="184" y="184" width="44" height="44" fill="#fff" stroke="#8a8272"/>
+<text x="206.0" y="211.0" font-size="15" text-anchor="middle" fill="#26314a">26</text>
+</svg><div class="cap">ボタンの並べ方（渦巻き）：中央が2、その右が3、以後うずまき状に外へ。<strong>図Aは中央の3×3の部分（2〜10）</strong>、図Bはこれを45×45（2〜2026）まで広げたもの。</div></div>
+<div class="box idea"><div class="bt">💡 気づき：操作を追いかけず、「各ボタンが何回押されるか」を数える</div>
+<p>押す順番は結果に関係ありません。ボタンkが押される回数は「2〜2026のうちkを割り切る数の個数」＝<strong>kの約数の個数から1（約数の1のぶん）を引いた数</strong>。消えている⇔押された回数が偶数⇔約数の個数が奇数⇔<span class="kw">kが平方数</span>。要点の整理・道具③がそのまま主役になる問題です。②は「平方数が渦巻きのどこに並ぶか」という図形の問題に変わります。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>消えているのは平方数のボタン。2〜10では<strong>4と9</strong>。</p>
+<p><strong>（2）①</strong>消えているのは 4, 9, 16, …, 2025（＝2×2〜45×45）の44個。光っているのは 2025－44＝<strong>1981個</strong>。</p>
+<p><strong>②</strong>渦巻きに並べると、平方数のボタンは中央から右下と左上へのびる2本の斜めの帯のすぐ隣に、鎖のように並びます（奇数の平方数の列と偶数の平方数の列）。消えたボタン（下図の茶色）を1個も含まない45個の列を数えると：</p>
+<div class="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 417 417" style="max-width:430px;width:100%;height:auto;">
+<rect x="6" y="6" width="405" height="405" fill="#fffdf6" stroke="#41506b"/>
+<rect x="6" y="6" width="9" height="405" fill="#dcead6"/>
+<rect x="15" y="6" width="9" height="405" fill="#dcead6"/>
+<rect x="402" y="6" width="9" height="405" fill="#dcead6"/>
+<rect x="6" y="204" width="405" height="9" fill="#dcead6"/>
+<rect x="6" y="6" width="9" height="9" fill="#dcead6"/>
+<rect x="15" y="15" width="9" height="9" fill="#dcead6"/>
+<rect x="24" y="24" width="9" height="9" fill="#dcead6"/>
+<rect x="33" y="33" width="9" height="9" fill="#dcead6"/>
+<rect x="42" y="42" width="9" height="9" fill="#dcead6"/>
+<rect x="51" y="51" width="9" height="9" fill="#dcead6"/>
+<rect x="60" y="60" width="9" height="9" fill="#dcead6"/>
+<rect x="69" y="69" width="9" height="9" fill="#dcead6"/>
+<rect x="78" y="78" width="9" height="9" fill="#dcead6"/>
+<rect x="87" y="87" width="9" height="9" fill="#dcead6"/>
+<rect x="96" y="96" width="9" height="9" fill="#dcead6"/>
+<rect x="105" y="105" width="9" height="9" fill="#dcead6"/>
+<rect x="114" y="114" width="9" height="9" fill="#dcead6"/>
+<rect x="123" y="123" width="9" height="9" fill="#dcead6"/>
+<rect x="132" y="132" width="9" height="9" fill="#dcead6"/>
+<rect x="141" y="141" width="9" height="9" fill="#dcead6"/>
+<rect x="150" y="150" width="9" height="9" fill="#dcead6"/>
+<rect x="159" y="159" width="9" height="9" fill="#dcead6"/>
+<rect x="168" y="168" width="9" height="9" fill="#dcead6"/>
+<rect x="177" y="177" width="9" height="9" fill="#dcead6"/>
+<rect x="186" y="186" width="9" height="9" fill="#dcead6"/>
+<rect x="195" y="195" width="9" height="9" fill="#dcead6"/>
+<rect x="204" y="204" width="9" height="9" fill="#dcead6"/>
+<rect x="213" y="213" width="9" height="9" fill="#dcead6"/>
+<rect x="222" y="222" width="9" height="9" fill="#dcead6"/>
+<rect x="231" y="231" width="9" height="9" fill="#dcead6"/>
+<rect x="240" y="240" width="9" height="9" fill="#dcead6"/>
+<rect x="249" y="249" width="9" height="9" fill="#dcead6"/>
+<rect x="258" y="258" width="9" height="9" fill="#dcead6"/>
+<rect x="267" y="267" width="9" height="9" fill="#dcead6"/>
+<rect x="276" y="276" width="9" height="9" fill="#dcead6"/>
+<rect x="285" y="285" width="9" height="9" fill="#dcead6"/>
+<rect x="294" y="294" width="9" height="9" fill="#dcead6"/>
+<rect x="303" y="303" width="9" height="9" fill="#dcead6"/>
+<rect x="312" y="312" width="9" height="9" fill="#dcead6"/>
+<rect x="321" y="321" width="9" height="9" fill="#dcead6"/>
+<rect x="330" y="330" width="9" height="9" fill="#dcead6"/>
+<rect x="339" y="339" width="9" height="9" fill="#dcead6"/>
+<rect x="348" y="348" width="9" height="9" fill="#dcead6"/>
+<rect x="357" y="357" width="9" height="9" fill="#dcead6"/>
+<rect x="366" y="366" width="9" height="9" fill="#dcead6"/>
+<rect x="375" y="375" width="9" height="9" fill="#dcead6"/>
+<rect x="384" y="384" width="9" height="9" fill="#dcead6"/>
+<rect x="393" y="393" width="9" height="9" fill="#dcead6"/>
+<rect x="402" y="402" width="9" height="9" fill="#dcead6"/>
+<rect x="213" y="195" width="9" height="9" fill="#b8622f"/>
+<rect x="204" y="213" width="9" height="9" fill="#b8622f"/>
+<rect x="204" y="186" width="9" height="9" fill="#b8622f"/>
+<rect x="213" y="222" width="9" height="9" fill="#b8622f"/>
+<rect x="195" y="177" width="9" height="9" fill="#b8622f"/>
+<rect x="222" y="231" width="9" height="9" fill="#b8622f"/>
+<rect x="186" y="168" width="9" height="9" fill="#b8622f"/>
+<rect x="231" y="240" width="9" height="9" fill="#b8622f"/>
+<rect x="177" y="159" width="9" height="9" fill="#b8622f"/>
+<rect x="240" y="249" width="9" height="9" fill="#b8622f"/>
+<rect x="168" y="150" width="9" height="9" fill="#b8622f"/>
+<rect x="249" y="258" width="9" height="9" fill="#b8622f"/>
+<rect x="159" y="141" width="9" height="9" fill="#b8622f"/>
+<rect x="258" y="267" width="9" height="9" fill="#b8622f"/>
+<rect x="150" y="132" width="9" height="9" fill="#b8622f"/>
+<rect x="267" y="276" width="9" height="9" fill="#b8622f"/>
+<rect x="141" y="123" width="9" height="9" fill="#b8622f"/>
+<rect x="276" y="285" width="9" height="9" fill="#b8622f"/>
+<rect x="132" y="114" width="9" height="9" fill="#b8622f"/>
+<rect x="285" y="294" width="9" height="9" fill="#b8622f"/>
+<rect x="123" y="105" width="9" height="9" fill="#b8622f"/>
+<rect x="294" y="303" width="9" height="9" fill="#b8622f"/>
+<rect x="114" y="96" width="9" height="9" fill="#b8622f"/>
+<rect x="303" y="312" width="9" height="9" fill="#b8622f"/>
+<rect x="105" y="87" width="9" height="9" fill="#b8622f"/>
+<rect x="312" y="321" width="9" height="9" fill="#b8622f"/>
+<rect x="96" y="78" width="9" height="9" fill="#b8622f"/>
+<rect x="321" y="330" width="9" height="9" fill="#b8622f"/>
+<rect x="87" y="69" width="9" height="9" fill="#b8622f"/>
+<rect x="330" y="339" width="9" height="9" fill="#b8622f"/>
+<rect x="78" y="60" width="9" height="9" fill="#b8622f"/>
+<rect x="339" y="348" width="9" height="9" fill="#b8622f"/>
+<rect x="69" y="51" width="9" height="9" fill="#b8622f"/>
+<rect x="348" y="357" width="9" height="9" fill="#b8622f"/>
+<rect x="60" y="42" width="9" height="9" fill="#b8622f"/>
+<rect x="357" y="366" width="9" height="9" fill="#b8622f"/>
+<rect x="51" y="33" width="9" height="9" fill="#b8622f"/>
+<rect x="366" y="375" width="9" height="9" fill="#b8622f"/>
+<rect x="42" y="24" width="9" height="9" fill="#b8622f"/>
+<rect x="375" y="384" width="9" height="9" fill="#b8622f"/>
+<rect x="33" y="15" width="9" height="9" fill="#b8622f"/>
+<rect x="384" y="393" width="9" height="9" fill="#b8622f"/>
+<rect x="24" y="6" width="9" height="9" fill="#b8622f"/>
+<rect x="393" y="402" width="9" height="9" fill="#b8622f"/>
+<rect x="6" y="6" width="405" height="405" fill="none" stroke="#41506b"/>
+</svg><div class="cap">図B　45×45の渦巻き。茶色＝消えているボタン（平方数）。緑＝消えたボタンを含まない完全な列（縦3列・横1列・斜め1列）。</div></div>
+<table class="t">
+<tr><th>方向</th><th>消えたボタンを含まない列</th><th>本数</th></tr>
+<tr><td>縦</td><td>左端の2列と右端の1列</td><td><strong>3</strong></td></tr>
+<tr><td>横</td><td>中央（2のボタンがある行）の1列</td><td><strong>1</strong></td></tr>
+<tr><td>斜め</td><td>右下がりの対角線のみ（右上がりは平方数の帯とぶつかる）</td><td><strong>1</strong></td></tr>
+</table>
+<div class="ans"><span class="al">答</span>（1）4と9　（2）① 1981個　② ア＝3、イ＝1、ウ＝1</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは<strong>「操作を追いかけるのでなく、それぞれのボタンのオンオフが何回切り替わるか考えます」</strong>——スイッチ系の問題の総本山のような一文です。②では「奇数の平方数番目・偶数の平方数番目のボタンが太線部のように斜めに並び、平方数のボタンはそれらの1つ隣に並ぶ」と、渦巻きの構造（1周ごとに角に奇数・偶数の平方数が来る）から消灯ボタンの配置を導いています。面白さコメントの「典型題を一捻りした問題」の一捻りが、まさにこの②の渦巻き幾何です。</p></div>
+</section>
+
+<!-- ======== 11/13 ======== -->
+<section class="c2">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">13</span></span>スイッチ回路と電球<span class="src">'25 清風・後期チャレンジ選抜（P22）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>右図のような回路がある。スタートの合図とともにすべてのスイッチを同時に切ると、その後それぞれのスイッチは一定の間隔で「切れる→入る」を繰り返す。（1）スイッチAは4秒間切れて1秒間入る、Bは2秒間切れて1秒間入る、Cは6秒間切れて1秒間入るとき、①スタートから2025秒間に電球Xが点灯したのは何秒間か。②電球Yは何秒間か。③電球Zは何秒間か。（2）Aは4秒切れて1秒入る、Bは2秒切れて1秒入る、Cは<strong>5秒間切れて2秒間入る</strong>ものとするとき、電球Zは2025秒間に何秒間点灯したか。</p></div>
+<div class="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 190" style="max-width:470px;width:100%;height:auto;">
+<g stroke="#26314a" stroke-width="2" fill="none">
+<path d="M60 160 L30 160 L30 50 L110 50"/>
+<path d="M110 50 L110 25 L150 25"/>
+<path d="M186 25 L245 25"/>
+<path d="M271 25 L350 25 L350 50"/>
+<path d="M110 50 L110 75 L140 75"/>
+<path d="M176 75 L205 75"/>
+<path d="M241 75 L280 75"/>
+<path d="M306 75 L350 75 L350 50"/>
+<path d="M350 50 L385 50"/>
+<path d="M411 50 L440 50 L440 160 L74 160"/>
+</g>
+<g stroke="#26314a" stroke-width="2" fill="#fff">
+<circle cx="258" cy="25" r="13"/>
+<circle cx="293" cy="75" r="13"/>
+<circle cx="398" cy="50" r="13"/>
+</g>
+<g font-size="14" fill="#26314a" text-anchor="middle" font-weight="700">
+<text x="258" y="30">X</text><text x="293" y="80">Y</text><text x="398" y="55">Z</text>
+</g>
+<g font-size="12.5" fill="#26314a" text-anchor="middle">
+<text x="168" y="12">スイッチA</text><text x="158" y="62">スイッチB</text><text x="223" y="62">スイッチC</text>
+<text x="67" y="150">電源</text>
+</g>
+<g stroke="#26314a" stroke-width="2">
+<line x1="150" y1="25" x2="182" y2="14"/><circle cx="150" cy="25" r="2.5" fill="#26314a"/><circle cx="186" cy="25" r="2.5" fill="#26314a"/>
+<line x1="140" y1="75" x2="172" y2="64"/><circle cx="140" cy="75" r="2.5" fill="#26314a"/><circle cx="176" cy="75" r="2.5" fill="#26314a"/>
+<line x1="205" y1="75" x2="237" y2="64"/><circle cx="205" cy="75" r="2.5" fill="#26314a"/><circle cx="241" cy="75" r="2.5" fill="#26314a"/>
+<line x1="60" y1="150" x2="60" y2="170"/><line x1="74" y1="155" x2="74" y2="165" stroke-width="4"/>
+</g>
+</svg><div class="cap">回路の模式図。電球XはスイッチAの枝に、電球YはスイッチBとCが直列につながった枝にあり、2つの枝は並列。電球Zは合流後の本線にある。</div></div>
+<div class="box idea"><div class="bt">💡 気づき：直列は「かつ」、並列は「または」</div>
+<p>X が点く⇔Aが入っている。Y が点く⇔<strong>BとCの両方</strong>が入っている（直列）。Z が点く⇔<strong>XまたはY</strong>が点いている（並列の合流）。「4秒切れて1秒入る」は周期5で「5の倍数秒に入る」と読めるので、あとは<strong>倍数の個数と、重なり（最小公倍数）の処理</strong>——周期の問題そのものです。</p></div>
+<h3>解説</h3>
+<p><strong>（1）①</strong>Aが入るのは5の倍数秒。2025÷5＝405 より <strong>405秒間</strong>。</p>
+<p><strong>②</strong>Bは3の倍数秒、Cは7の倍数秒に入るから、Yは21の倍数秒に点灯。2025÷21＝96余り9 より <strong>96秒間</strong>。</p>
+<p><strong>③</strong>ZはXまたはY。両方点くのは5と21の最小公倍数105の倍数秒で、2025÷105＝19余り30 より19秒間。よって 405＋96－19＝<strong>482秒間</strong>（重なりを引く）。</p>
+<p><strong>（2）</strong>Cが「5秒切れて2秒入る」になると、Cは<strong>7の倍数秒と、7で割って6余る秒</strong>の2種類で入ります。Y＝B∩Cは「21の倍数秒」と「21で割って6余る秒」：前者96個、後者は 6, 27, …, 2022 の97個で合計193秒間。X∩Yは「105の倍数秒」と「105で割って90余る秒」：19個＋19個＝38秒間。よって 405＋193－38＝<strong>560秒間</strong>。</p>
+<div class="ans"><span class="al">答</span>（1）① 405秒間　② 96秒間　③ 482秒間　（2）560秒間</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは<strong>「直列・並列の構造を『かつ』または『または』で言い換えます」</strong>。(2)では「②の割り算の余り9に注意して 96×2＋1＝193」——余り9の中に「21で割って6余る秒」が1個余分に入る（2022秒）ことを、割り算の余りだけで見抜く書き方です。X∩Yの方は余り30の中に90がない…ではなく、90＋105×18＝1980が範囲内で同数の19個、と対称的に処理されます。面白さコメント「一見すると理科の問題にも見えますが…」のとおり、皮をむけば純粋な周期・倍数の問題です。</p></div>
+</section>
+
+<!-- ======== 11/14 ======== -->
+<section class="c2">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">14</span></span>連続整数の積と末尾の0<span class="src">'25 西大和学園（福岡・広島・岡山会場）（P22）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>1以上の整数Aと2以上の整数Bに対し、記号 [A：B] は A×(A＋1)×(A＋2)×…×(A＋B－1)（AからB個の連続整数の積）を計算したときの<strong>末尾に並ぶ0の個数</strong>を表す（例：4×5×6×7×8×9×10＝604800 なので [4：7]＝2）。（1）[1：2025] を求めよ。（2）[C：2026－C]＝499 となる1以上の整数Cのうち最も大きいものを求めよ。（3）[[あ：150－あ]：2026－[あ：150－あ]]＝499 となる1以上の整数「あ」のうち最も小さいものを求めよ。</p></div>
+<div class="box idea"><div class="bt">💡 気づき①：末尾の0の個数＝ペアにできる（2, 5）の組数＝5の個数</div>
+<p>末尾に0が1個並ぶごとに素因数の2と5が1組ずつ使われます。連続整数の積では2の方が5よりはるかに多いので、<span class="kw">0の個数＝素因数5の個数</span>。1〜nの積なら「5の倍数の個数＋25の倍数の個数＋125の倍数の個数＋…」で数えられます。</p></div>
+<div class="box idea"><div class="bt">💡 気づき②：(2)(3)のからくり——「AからB個」は「1からの積の引き算」</div>
+<p>C×(C＋1)×…×2025 に含まれる5の個数は、「1〜2025の5の個数」から「1〜(C－1)の5の個数」を引いたもの。つまり <span class="kw">[C：2026－C]＝[1：2025]－[1：C－1]</span>。(1)の答えが505なら、(2)は [1：C－1]＝6 の問題に化けます。(3)は同じ仕掛けの<strong>二段重ね</strong>——内側の記号の値が(2)の答えの範囲に入ればよい、と読み替えます。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>1〜2025の素因数5の個数：2025÷5＝405、405÷5＝81、81÷5＝16余り1、16÷5＝3余り1。405＋81＋16＋3＝<strong>505</strong>。</p>
+<p><strong>（2）</strong>[1：C－1]＝505－499＝6 となるC。1〜mの5の個数はmを増やすと 5, 10, 15, 20で1ずつ増えて4になり、<strong>25で一気に2増えて6</strong>になります。以後30で7に。よって 1〜(C－1) の5の個数が6なのは C－1＝25〜29、つまりC＝26〜30。最大は<strong>C＝30</strong>。</p>
+<p><strong>（3）</strong>外側が499になる条件は(2)そのもの：内側の値をKとすると <span class="kw">K＝26〜30ならよい</span>。内側は K＝[あ：150－あ]＝[1：149]－[1：あ－1]。[1：149]＝29＋5＋1＝35 だから、35－[1：あ－1] が26〜30、つまり [1：あ－1] が5〜9であればよい。「あ」を小さくしたいので [1：あ－1] が初めて5以上になる場所を探すと——4の次は25で一気に6に跳ぶので、5になることはなく、<strong>あ－1＝25（値6）が最初</strong>。よって<strong>あ＝26</strong>（このとき K＝35－6＝29 で確かに26〜30の範囲内）。</p>
+<div class="ans"><span class="al">答</span>（1）505　（2）30　（3）26</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌は冒頭で「2と5が1組あるごとに末尾に0が1つ並ぶ。つまり2と5の個数のうち少ない方が[A：B]」と定義から確認し、(1)の後に<strong>注として「2の素因数の個数がこれより多いことも確認できます」</strong>を添えます（当たり前に見えて、答案では一言触れるべき箇所）。(2)は「Cを2から1ずつ増やすと[1：C－1]は5, 10, 15, 20で1ずつ増え、C＝26のとき2増えて合計6」——<strong>25で2段跳びする</strong>ことが最大値C＝30と(3)の「5にはなれない」の両方の鍵です。(3)も「(2)より[あ：150－あ]が26〜30のとき」と、もちろん(2)の結果を利用します。</p></div>
+</section>
+
+<!-- ======== 11/17 ======== -->
+<section class="c3">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">17</span></span>D はただ1つ<span class="src">'25 ジュニア算数オリンピック・ファイナル（P23）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>下の文が正しい文となるように、A, B, C, D にあてはまる数をそれぞれ答えよ。ただしA, B, Cはそれぞれ1桁の整数、Dは3桁の整数。<br>『1から999までのAの倍数で、1を引くとBの倍数となり、1を足すとCの倍数となるのは、<strong>Dだけ</strong>です。』</p></div>
+<div class="box idea"><div class="bt">💡 気づき：「Dだけ」という一言が最強の条件</div>
+<p>3つの割り算条件そのものより、<strong>「1〜999にただ1つ」という一意性</strong>から攻めます。同じ3条件を満たす数が2つあれば、その差はA, B, Cの公倍数（余りの組がそろっているから）。だから999の中に1つしかない⇔<span class="kw">A, B, Cの最小公倍数が500以上</span>。1桁の数3つでそんな大きな最小公倍数を作れる組は、ほとんどありません。</p></div>
+<h3>解説</h3>
+<ol class="steps">
+<li>条件を満たす数が2つあれば差はA, B, Cの公倍数。999÷2＝499余り1 より、一意になるには<strong>最小公倍数が500以上</strong>必要。</li>
+<li>最小公倍数はA×B×C以下ではなく——3数の積以下です。異なる1桁の3整数の積が500以上になるのは <span class="kw">7×8×9＝504 だけ</span>。よって{A, B, C}＝{7, 8, 9}（この3数は互いに素な部分が大きく、最小公倍数もちょうど504）。</li>
+<li>1〜999にただ1つという条件から、Dは 1000－504＝496以上504以下。この9個の中でDは「7, 8, 9のどれかの倍数」でなければならず、その候補は<strong>496, 497, 504</strong>のみ（496＝8×62、497＝7×71、504＝7・8・9の公倍数）。</li>
+<li>D＝496とすると：496は8の倍数（A＝8）、496－1＝495＝9×55（B＝9）、496＋1＝497＝7×71（C＝7）。すべて成立。D＝497, 504は残り2条件を満たす割り当てが作れないので、答えは一組に決まります。</li>
+</ol>
+<div class="ans"><span class="al">答</span>A＝8、B＝9、C＝7、D＝496</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは<strong>「最初に、1〜999までに条件を満たすのが1つだけ、ということに注目します」</strong>。解説では、504がちょうど7, 8, 9の公倍数であること、そして<strong>8が7と9の中間にあること</strong>から「D＝504－8＝496とすれば、Dは8の倍数で、9の倍数より1多く、7の倍数に1足りません」と、対称性で答えを構成します（504－8は9の倍数504－9＋1…ではなく、504±1が9の倍数・7の倍数の隣になる構造）。最後に「496〜504の範囲に7, 8, 9の倍数は496, 497, 504しかないので、他に答えがないことも分かります」と一意性の裏取りまで完結。面白さコメントは「どこから手をつけるか悩んでしまうかもしれません」。</p></div>
+</section>
+
+<!-- ======== 11/18 ======== -->
+<section class="c3">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">18</span></span>連続5整数の積を1, 2, 3, …で割る<span class="src">'25 算数オリンピック・ファイナル（P23）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>1以上の整数Aから連続する5つの整数をかけ合わせた数を B＝A×(A＋1)×(A＋2)×(A＋3)×(A＋4) とする。Bを1から順に、B÷1、B÷2、B÷3、…と、わり切れない数が出てくるまでわり算を続ける。<strong>Bが20より大きい数までわり算を続けられる</strong>とき、考えられる最も小さいAを答えよ。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：「20まで全部で割り切れる」＝「1〜20の最小公倍数の倍数」</div>
+<p>条件は「Bが1〜20のすべてで割り切れる」こと。つまりBは 1〜20の最小公倍数 <span class="kw">16×9×5×7×11×13×17×19</span> の倍数。連続する5整数の中に、16, 9, 5, 7, 11, 13、そして<strong>17と19の倍数が全部そろう</strong>必要があります。一番きついのは17と19——大きい素数から押さえるのが定石です。</p></div>
+<h3>解説</h3>
+<p>連続5整数の幅は4。だから<strong>17の倍数と19の倍数が、差4以内で隣り合う場所</strong>を探します。小さい順に書き出すと</p>
+<div class="formula">(17, 19)、(34, 38)、(133, 136)、(152, 153)、(170, 171)、…</div>
+<p>最初の3組の近く（差4以内に収まる5連続の範囲）には13の倍数がありません。(152, 153)を調べると、すぐそばに 156＝13の倍数、154＝11×14＝<strong>11と7の公倍数</strong>、155＝5の倍数がそろっています。そこでA＝152とすると</p>
+<div class="formula">B＝152×153×154×155×156</div>
+<table class="t">
+<tr><th>因数</th><td>152＝8×19</td><td>153＝9×17</td><td>154＝2×7×11</td><td>155＝5×31</td><td>156＝4×3×13</td></tr>
+</table>
+<p>素因数2は 8×2×4 で2が6個（16の条件◎）、3は 9×3 で3個（9の条件◎）、5, 7, 11, 13, 17, 19 もすべて確保。よって最小のAは<strong>152</strong>です（それ以前の17・19ペアの近くでは13が欠けるため不可）。</p>
+<div class="ans"><span class="al">答</span>A＝152</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは<strong>「20以下の素数を大きい順に調べてみます」</strong>。1〜20の最小公倍数を 2⁴×3²×5×7×11×13×17×19 と素因数分解してから、「差が4以下の17と19の倍数の組」を小さい順に列挙し、初めの3組は「2数のどちらとも差が4以下の範囲に13の倍数がありません」と消していきます。<strong>一番希少な条件（17・19）で候補を数個に絞り、次に希少な13でふるいにかける</strong>——条件の強い順に使う、場合の数でも整数でも通用する絞り込みの型です。面白さコメントは「20まで割り切れるということは…」。</p></div>
+</section>
+
+<!-- ======== 11/19 ======== -->
+<section class="c3">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">19</span></span>上2桁＋下2桁で割り切れる数<span class="src">'25 慶應義塾普通部（P23）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>4桁の整数を上2桁と下2桁に分けて和を考える（例：1234 → 12＋34＝46）。（1）2024から、2024の上2桁と下2桁の和である44をひいた数を、2つの整数の積で表す。2つの整数の差が最も小さいのは、いくつといくつの積か。（2）2025は、2025の上2桁と下2桁の和である45でわり切れる。2100未満の整数で、その整数の上2桁と下2桁の和でわり切れる数のうち、<strong>2番目に大きい整数</strong>はいくつか。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：X から和 Y を引くと「99の倍数」——だから X−Y は上2桁だけで決まる</div>
+<p>X＝（上2桁）×100＋（下2桁）、Y＝（上2桁）＋（下2桁）とすると、X－Y＝（上2桁）×99。<strong>下2桁を動かしてもX－Yは変わりません</strong>。XがYで割り切れるなら、X－YもYで割り切れる——つまり<span class="kw">Yは（上2桁）×99の約数</span>。(1)はその99の倍数 2024－44＝1980 を分解する準備運動です。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>2024－44＝1980＝2×2×3×3×5×11。約数は36個で、差が最小の2整数の積は真ん中のペア。1980＝<strong>44×45</strong>（44と45——2024自身の分割和が顔を出すのが心憎い）。</p>
+<p><strong>（2）</strong>2100未満の4桁で最大級の候補は上2桁が20の数（2000〜2099）。このとき X－Y＝20×99＝1980（2024と同じ！）。XがYで割り切れる⇔<strong>Yが1980の約数</strong>。Yの範囲は20〜20＋99＝119以下。1980の約数で119以下の大きい方から：110（＝1980÷18）、99（＝1980÷20）、90、…。</p>
+<table class="t">
+<tr><th>Y</th><th>X＝1980＋Y</th><th>検算</th></tr>
+<tr><td>110</td><td>2090</td><td>20＋90＝110、2090÷110＝19 ○（最大）</td></tr>
+<tr><td>99</td><td>2079</td><td>20＋79＝99、2079÷99＝21 ○（<strong>2番目</strong>）</td></tr>
+</table>
+<div class="ans"><span class="al">答</span>（1）44と45の積　（2）2079</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは<strong>「和や差が一定のものに注目するという定石に従います」</strong>。(2)の核心は「Xを1増やすとYも1増えるので、Xの上2桁が同じならX－Yの値は一定」という一文で、これが(1)の1980を再登場させます。約数の列挙では「1980÷15＝132、÷18＝110、÷20＝99」と<strong>大きい約数を『1980÷小さい約数』で作る</strong>手つきも実戦的。パズルに見えて、99の倍数の構造（＝2桁ずつ区切る操作の正体）を知っているかを問う問題です。</p></div>
+</section>
+
+<!-- ======== 11/20 ======== -->
+<section class="c3">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">20</span></span>四捨五入した数の和<span class="src">'25 昭和女子大附昭和（P24）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>ある4桁の整数について、一の位を四捨五入したもの、十の位を四捨五入したもの、百の位を四捨五入したものと、もとの4桁の整数をすべて足すと11741になった。もとの4桁の整数を求めよ。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：下の位から1桁ずつ「確定」させていく</div>
+<p>四捨五入した3つの数は、それぞれ一の位・下2桁・下3桁が0。だから合計11741の<strong>一の位1はもとの数Xの一の位そのもの</strong>。1つ確定するたびに式からその数を消していけば、次の位がまた確定する——桁ごとの筆算のような逆算です。</p></div>
+<h3>解説</h3>
+<ol class="steps">
+<li>X＋A＋B＋C＝11741（A：一の位を四捨五入、B：十の位を、C：百の位を四捨五入した数）。A, B, Cの一の位は0なので、<strong>Xの一の位は1</strong>。一の位が1なら切り捨てで A＝X－1。</li>
+<li>代入して X×2＋B＋C＝11742。B, Cの下2桁は00なので、X×2の下2桁は42。<strong>Xの下2桁は21か71</strong>。21なら切り捨てでB＝X－21、71なら切り上げでB＝X＋29。</li>
+<li>代入して X×3＋C＝11742＋21＝11763、または 11742－29＝11713。</li>
+<li>X≒11741÷4≒2935 だから C＝3000。X×3＝8763 か 8713 のうち<strong>3の倍数は8763だけ</strong>。X＝8763÷3＝<strong>2921</strong>。</li>
+</ol>
+<p class="small">検算：2921＋2920＋2900＋3000＝11741 ○（百の位2の四捨五入は切り上げで3000）。</p>
+<div class="ans"><span class="al">答</span>2921</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは「11741が元の数の約4倍なので、<strong>当たりをつけても良いでしょう</strong>」——X≒2935という見積もりを最初に持っておけば、下2桁が21か71かの分岐も、C＝3000の仮置きも安心して進められます。解説は上のとおり一の位→下2桁→3の倍数判定の三段逆算で、最後に「このとき確かにC＝3000になっています」と仮置きの回収も忘れません。面白さコメントは「短時間で処理するのは見た目より難しいかもしれません」——分岐の管理が実は繊細な問題です。</p></div>
+</section>
+
+<!-- ======== 11/21 ======== -->
+<section class="c3">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">21</span></span>エラトステネスのふるい<span class="src">'25 海城・②（P24）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>1からある数まで整数が並んでいる。【規則】①最初に1を消す。②素数2を残して、以降の2の倍数を小さい順に消す。③残った数について、素数3を残して以降の3の倍数を小さい順に消す。④以降も残った数について素数の小さい順に同様の操作を、消せる整数がなくなるまで続ける。（例：1〜25なら、最初に1、次に4, 6, 8, …, 24、次に9, 15, 21、最後に25を消す。）（1）1〜50のとき、最後に消す整数を求めよ。（2）1〜150のとき、最後に消す整数を求めよ。また、その整数は最初から何番目に消すか。（3）最後に消す整数が2021となるのは1〜□のときである。□にあてはまる最も大きい整数を求めよ。ただし2021＝43×47である。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：素数pの番で最初に消えるのはp×p</div>
+<p>pの番が来たとき、pの倍数のうち「pより小さい素数の倍数」はすべて消えています。残っているpの倍数は<strong>p以上の数だけをかけたもの</strong>——最小はp×p。だから「pの番で何か消えるか」は<span class="kw">p×pが範囲内にあるか</span>で判定でき、「最後に消える数」は最大の素数の番の、いちばん大きい生き残りです。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>2, 3, 5の番のあと、7の番で消えるのは49（＝7×7）だけ。11以降は 11×11＝121＞50 で消すものがない。最後は<strong>49</strong>。</p>
+<p><strong>（2）</strong>素数の2乗は 4, 9, 25, 49, 121, 169, …。150以下では11の番まで意味があり、11の番で <strong>121（＝11×11）と 143（＝11×13）</strong>を消して終了。最後は<strong>143</strong>。何番目かは「消される数の総数」：最後に残るのは150以下の素数35個だから、消されるのは 150－35＝<strong>115番目</strong>（1も消される側に含まれることに注意）。</p>
+<p><strong>（3）</strong>2021＝43×47 が消えるのは43の番。これが全体の最後になる条件を2つ：</p>
+<ol class="steps">
+<li>43の番で2021の<strong>あとに</strong>消える数がない——43×53＝2279（47は43の番ではもう消せる相手として残っていない…ではなく、43×47の次に残っている43の倍数は43×53）。よって□＜2279。</li>
+<li>47以降の番で何も消えない——47の番で最初に消えるのは 47×47＝2209。よって□＜2209（53以降は 53×53 がさらに大きいので自動的にOK）。</li>
+</ol>
+<p>2209＜2279 より、□は最大で 2209－1＝<strong>2208</strong>（もちろん2021以上は満たす）。</p>
+<div class="ans"><span class="al">答</span>（1）49　（2）143、115番目　（3）2208</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは「全ての整数を並べて本問の操作を行うことを<strong>エラトステネスのふるい</strong>と言います。素数が小さい順に残ります」。(1)のあとの注で「ある素数を残すとき、消す整数のうち最も小さい数はその素数の2乗」を明示し、(2)(3)の判定基準として使い回します。(3)は「43×53＝2279は並んでいません」「47×47＝2209も並んでいません」の2つの不等式を出し、<strong>2209＜2279 だから答えは2209－1＝2208</strong>——2条件のきつい方で決まる、という締めくくり。□＝2208のとき、43の番では 1849（＝43×43）と2021の2個だけを消してすべてが終わります。</p></div>
+</section>
+
+<!-- ======== 11/22 ======== -->
+<section class="c3">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">22</span></span>対角線が通る正方形<span class="src">'25 昭和学院秀英・2回（P24〜25）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>同じ大きさの正方形をすきまなく並べて長方形を作り、その1本の対角線が何個の正方形の内側を通るかを調べる。例：縦1個×横2個なら2個（図1）、縦2個×横3個なら4個（図2）、縦2個×横4個なら4個（図3）を通る。（1）縦6個×横9個のとき何個を通るか。（2）縦10個×横2025個のとき何個を通るか。（3）縦「あ」個×横「い」個並べたとき6個を通った。（あ, い）の組み合わせは全部で何通りか。ただし「あ」は「い」より小さいとする。</p></div>
+<div class="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 50" style="max-width:84px;height:auto;vertical-align:middle;">
+<rect x="8" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="42" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<line x1="8" y1="8" x2="76" y2="42" stroke="#b3402a" stroke-width="2.4"/>
+</svg>　<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118 84" style="max-width:118px;height:auto;vertical-align:middle;">
+<rect x="8" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="8" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="42" y="42" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="42" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="76" y="42" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="76" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<line x1="8" y1="8" x2="110" y2="76" stroke="#b3402a" stroke-width="2.4"/>
+</svg>　<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152 84" style="max-width:152px;height:auto;vertical-align:middle;">
+<rect x="8" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="8" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="42" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="42" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="76" y="42" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="76" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="110" y="42" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="110" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<line x1="8" y1="8" x2="144" y2="76" stroke="#b3402a" stroke-width="2.4"/>
+</svg><div class="cap">図1（1×2：2個）　図2（2×3：4個）　図3（2×4：4個）。図3では対角線が格子点（正方形の頂点）を通り抜けるたびに、通る枚数が「節約」される。</div></div>
+<div class="box idea"><div class="bt">💡 気づき：格子点を通るたびに1枚の節約——最大公約数のぶんだけ区切れる</div>
+<p>発展演習第3問（渋幕）と同じ道具です。縦▲個×横●個の対角線が通る枚数は<span class="kw">▲＋●－（▲と●の最大公約数）</span>。理由：対角線は途中、▲と●の最大公約数の個数だけの「同じ形の小さい長方形」の対角線をつないだものになり、区切りの格子点ごとに1枚ずつ重複が消えるからです。図2（互いに素：2＋3－1＝4）と図3（2＋4－2＝4）がちょうど公式の実演になっています。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>6と9の最大公約数は3。6＋9－3＝<strong>12個</strong>。（2×3の長方形——図2そのもの——を斜めに3個つないだ形なので、4×3＝12個と数えてもよい。）</p>
+<div class="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 322 220" style="max-width:322px;height:auto;vertical-align:middle;">
+<rect x="8" y="178" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="8" y="144" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="8" y="110" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="8" y="76" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="8" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="8" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="42" y="178" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="42" y="144" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="42" y="110" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="42" y="76" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="42" y="42" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="42" y="8" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="76" y="178" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="76" y="144" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="76" y="110" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="76" y="76" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="76" y="42" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="76" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="110" y="178" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="110" y="144" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="110" y="110" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="110" y="76" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="110" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="110" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="144" y="178" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="144" y="144" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="144" y="110" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="144" y="76" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="144" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="144" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="178" y="178" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="178" y="144" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="178" y="110" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="178" y="76" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="178" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="178" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="212" y="178" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="212" y="144" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="212" y="110" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="212" y="76" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="212" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="212" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="246" y="178" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="246" y="144" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="246" y="110" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="246" y="76" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="246" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="246" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="280" y="178" width="34" height="34" fill="#f3d1a0" stroke="#8a8272"/>
+<rect x="280" y="144" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="280" y="110" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="280" y="76" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="280" y="42" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<rect x="280" y="8" width="34" height="34" fill="#fff" stroke="#8a8272"/>
+<line x1="8" y1="8" x2="314" y2="212" stroke="#b3402a" stroke-width="2.4"/>
+</svg><div class="cap">（1）6×9：対角線は2×3のブロック3個分の対角線のくり返し。4個×3＝12個。</div></div>
+<p><strong>（2）</strong>10と2025の最大公約数は5。10＋2025－5＝<strong>2030個</strong>。（2×405の長方形が5個：(2＋405－1)×5＝406×5＝2030個。）</p>
+<p><strong>（3）</strong>あ＋い－（最大公約数）＝6 を、最大公約数で場合分け。最大公約数は「あ」と「い」の差…ではなく、6を作る式の一部なので<strong>6の約数</strong>だけ調べれば足ります：</p>
+<table class="t">
+<tr><th>最大公約数</th><th>もとになる互いに素な長方形</th><th>（あ, い）</th></tr>
+<tr><td>6</td><td>1×1（通過1個）を6個 → 6×6 は正方形で「あ＜い」に反する</td><td>なし</td></tr>
+<tr><td>3</td><td>通過2個＝1×2 → 3倍して</td><td>(3, 6)</td></tr>
+<tr><td>2</td><td>通過3個＝1×3 → 2倍して</td><td>(2, 6)</td></tr>
+<tr><td>1</td><td>あ＋い＝7（互いに素）</td><td>(1, 6)、(2, 5)、(3, 4)</td></tr>
+</table>
+<div class="ans"><span class="al">答</span>（1）12個　（2）2030個　（3）5通り</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは<strong>「対角線が頂点を通過するまでを区切りとして考えます」</strong>。(1)(2)を「互いに素な小長方形のくり返し」で処理し、注では「対角線は、隣り合う正方形に移動することを繰り返して最短距離で角の正方形から角の正方形まで通過していく」——つまり通過枚数＝1＋（タテ線・ヨコ線を横切る回数）という発展演習第3問と同じ導出を添えます。(3)は「最大公約数は6の約数です。その値で場合分け」と宣言し、各ケースで<strong>「通過□個の正方形でない長方形は1×△しかない」</strong>と互いに素側を先に確定する——公式を逆向きに使う練習として絶好の小問です。</p></div>
+</section>
+
+<!-- ======== 11/25 ======== -->
+<section class="c4">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">25</span></span>x から「x÷4の四捨五入」を引く<span class="src">'25 久留米大附設（P25）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>整数xに次の操作を行う：<strong>x÷4を小数で表し、小数第1位を四捨五入してできた整数を、xから引く</strong>。例：x＝1のとき 1÷4＝0.25→四捨五入で0、1－0＝1。x＝2のとき 2÷4＝0.5→四捨五入で1、2－1＝1。x＝1, 2, 3, …と順にこの操作を行い、できた整数を並べる（1番目は1、2番目は1）。（1）3番目、4番目、5番目、6番目の整数は何か。（2）1番目から12番目までの整数の合計は。（3）初めて25となるのは何番目か。（4）1番目から順に足していくとき、合計が初めて1000をこえるのは何番目まで足したときか。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：xが4増えると「引く数」がちょうど1増える——だから列は周期的に3ずつ増える</div>
+<p>x÷4はxが4増えると1増えるので、四捨五入した値も1増え、列の値は<strong>4項ごとに3増えます</strong>。つまり4項をひとかたまり（1周期）に見ると、各周期は前の周期の「＋3ずつコピー」。最初の周期 1, 1, 2, 3 さえ書けば、あとは全部この構造で押せます。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>x＝3：0.75→1、3－1＝<strong>2</strong>。x＝4：1→1、4－1＝<strong>3</strong>。x＝5：1.25→1、5－1＝<strong>4</strong>。x＝6：1.5→2、6－2＝<strong>4</strong>。</p>
+<p><strong>（2）</strong>列は 1, 1, 2, 3｜4, 4, 5, 6｜7, 7, 8, 9｜… と4個ごとに3ずつ底上げ。周期の和は 7、7＋3×4＝19、19＋12＝31、…（公差12の等差数列）。1〜12番目の合計は 7＋19＋31＝<strong>57</strong>。</p>
+<p><strong>（3）</strong>各周期の中身は「n, n, n＋1, n＋2」の形（xを4で割った余りが1, 2, 3, 0の順）。値25が現れるのは<strong>余り1と余り2の位置</strong>で、初めては x＝4×8＋1＝<strong>33番目</strong>（25×4÷3≒33の見積もりとも合う）。</p>
+<p><strong>（4）</strong>周期ごとの和 7, 19, 31, … の代わりに、1ずつ（各項¼ずつ計1）小さい <span class="kw">6, 18, 30, …＝6×(1＋3＋5＋…)</span> を考えると、かっこの中は<strong>平方数</strong>。6×（平方数）が1000に近づくのは 1000÷6＝166余り4、12×12＝144＜166＜169＝13×13 より13周期目。正確な和は13周期で 6×169＋13＝1027。13周期目の途中では、周期最後の項（39）を足して初めて1013－…——実際、12周期までの和は 6×144＋12＝876 で、13周期目 37, 37, 38, 39 を足すと 913, 950, 988, <strong>1027</strong>。最後の39でようやく1000超え。よって 4×13＝<strong>52番目</strong>。</p>
+<div class="ans"><span class="al">答</span>（1）2、3、4、4　（2）57　（3）33番目　（4）52番目</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは「整数部分を除くと分子は1, 2, 3, 0の4通りなので、<strong>周期的な列ができます</strong>」。(4)の処理が読みどころで、周期和 7＋19＋31＋… を直接足すのではなく、<strong>「代わりに1ずつ小さい和 6＋18＋30＋…＝6×(1＋3＋5＋…) を考えると、かっこ内の和は平方数になります」</strong>という付け替えで 6×13×13＋1×13＝1027 と一撃計算。奇数の和＝平方数という道具を「使える形に自分で整形する」お手本です。最後は「13周期目の最後の39を足して初めて1000を超えたと分かるので、4×13＝52番目」。面白さコメントは「初めて見る設定でしょうが、しっかり読み取ってください」。</p></div>
+</section>
+
+<!-- ======== 11/26 ======== -->
+<section class="c4">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">26</span></span>約数の個数で駒を動かす<span class="src">'25 市川（P26）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>1, 2, 3, …と数字が書かれたマスの列に駒を置き、〈ルール〉にしたがって動かす。①駒のあるマスの数字の<strong>約数の個数が奇数個</strong>のときは1つ右へ、②<strong>偶数個</strong>のときは2つ右へ動かす。（例：12のマスに置くと 12→14→16→17→…と動く。）初めに1のマスに駒を置いて動かし、マスに駒を置いたときを1回目とする。（1）1から20のマスのうち、駒が置かれたマスは何マスか。（2）駒が100回目に置かれたマスの数字を求めよ。（3）101から200のマスのうち、駒が置かれ<strong>なかった</strong>マスの数字をすべてかけたとき、一の位から0が何個連続して並ぶか。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：約数の個数が奇数＝平方数。だから駒は「平方数で歩幅を変える」</div>
+<p>①が起きるのは平方数のマスだけ。平方数のマスに乗ると1歩（＋1）、それ以外は2歩（＋2）。＋2を続けると数字の偶奇は変わらず、<strong>平方数を踏むたびに偶奇が切り替わる</strong>——駒は「次の平方数まで一定の偶奇で2ずつ進む」を繰り返します。しかも平方数は交互に奇数・偶数（1, 4, 9, 16, …）なので、<span class="kw">駒はすべての平方数に必ず着地する</span>のがこの問題の背骨です。</p></div>
+<h3>解説</h3>
+<div class="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 96" style="max-width:100%;height:auto;">
+<rect x="10" y="40" width="42" height="42" fill="#f3d1a0" stroke="#8a8272"/>
+<circle cx="31.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="31.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">1</text>
+<rect x="52" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="73.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="73.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">2</text>
+<rect x="94" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="115.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">3</text>
+<rect x="136" y="40" width="42" height="42" fill="#f3d1a0" stroke="#8a8272"/>
+<circle cx="157.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="157.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">4</text>
+<rect x="178" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="199.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="199.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">5</text>
+<rect x="220" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="241.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">6</text>
+<rect x="262" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="283.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="283.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">7</text>
+<rect x="304" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="325.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">8</text>
+<rect x="346" y="40" width="42" height="42" fill="#f3d1a0" stroke="#8a8272"/>
+<circle cx="367.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="367.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">9</text>
+<rect x="388" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="409.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="409.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">10</text>
+<rect x="430" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="451.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">11</text>
+<rect x="472" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="493.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="493.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">12</text>
+<rect x="514" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="535.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">13</text>
+<rect x="556" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="577.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="577.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">14</text>
+<rect x="598" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="619.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">15</text>
+<rect x="640" y="40" width="42" height="42" fill="#f3d1a0" stroke="#8a8272"/>
+<circle cx="661.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="661.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">16</text>
+<rect x="682" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="703.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="703.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">17</text>
+<rect x="724" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="745.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">18</text>
+<rect x="766" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<circle cx="787.0" cy="61" r="13" fill="none" stroke="#b3402a" stroke-width="2"/>
+<text x="787.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">19</text>
+<rect x="808" y="40" width="42" height="42" fill="#fff" stroke="#8a8272"/>
+<text x="829.0" y="66" font-size="15" text-anchor="middle" fill="#26314a">20</text>
+<path d="M 31.0 38 Q 52.0 26 73.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="73.0,38 69.0,31 75.0,31" fill="#41506b"/>
+<path d="M 73.0 38 Q 115.0 18 157.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="157.0,38 153.0,31 159.0,31" fill="#41506b"/>
+<path d="M 157.0 38 Q 178.0 26 199.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="199.0,38 195.0,31 201.0,31" fill="#41506b"/>
+<path d="M 199.0 38 Q 241.0 18 283.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="283.0,38 279.0,31 285.0,31" fill="#41506b"/>
+<path d="M 283.0 38 Q 325.0 18 367.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="367.0,38 363.0,31 369.0,31" fill="#41506b"/>
+<path d="M 367.0 38 Q 388.0 26 409.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="409.0,38 405.0,31 411.0,31" fill="#41506b"/>
+<path d="M 409.0 38 Q 451.0 18 493.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="493.0,38 489.0,31 495.0,31" fill="#41506b"/>
+<path d="M 493.0 38 Q 535.0 18 577.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="577.0,38 573.0,31 579.0,31" fill="#41506b"/>
+<path d="M 577.0 38 Q 619.0 18 661.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="661.0,38 657.0,31 663.0,31" fill="#41506b"/>
+<path d="M 661.0 38 Q 682.0 26 703.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="703.0,38 699.0,31 705.0,31" fill="#41506b"/>
+<path d="M 703.0 38 Q 745.0 18 787.0 38" fill="none" stroke="#41506b" stroke-width="1.6"/>
+<polygon points="787.0,38 783.0,31 789.0,31" fill="#41506b"/>
+</svg><div class="cap">駒の軌跡（○が着地マス）：1→2→4→5→7→9→10→12→14→16→17→19→…。平方数（1, 4, 9, 16）で歩幅1、それ以外は歩幅2。</div></div>
+<p><strong>（1）</strong>上図のとおり、20までの着地マスは 1, 2, 4, 5, 7, 9, 10, 12, 14, 16, 17, 19 の<strong>12マス</strong>。</p>
+<p><strong>（2）</strong>着地回数を平方数で区切って数えます。1のマス（1回目）のあと、4のマスまでに2マス（2, 4）、4のあと9までに3マス（5, 7, 9）、9のあと16までに4マス、…と、<strong>k×kのあと(k＋1)×(k＋1)までに（k＋1）マス</strong>。1＋2＋3＋…＋13＝91 より、13×13＝169のマスが91回目。100回目はその9マスあと、歩幅2で 169＋1＋2×8＝<strong>186</strong>（169の次は170、以後2ずつ）。</p>
+<p><strong>（3）</strong>駒が踏まないのは「そのとき歩幅2で進んでいる偶奇と逆」の数：100より大きく121未満の<strong>偶数</strong>、121〜144の<strong>奇数</strong>、144〜169の<strong>偶数</strong>、169〜196の<strong>奇数</strong>、196〜200の<strong>偶数</strong>。末尾の0の個数＝素因数5の個数（2は偶数が大量にあるので余ります）。踏まれない5の倍数を拾うと</p>
+<div class="formula">110, 120, <strong>125</strong>, 135, <strong>150</strong>, 160, <strong>175</strong>, 185, 195, <strong>200</strong></div>
+<p>125＝5×5×5が3個、150・175・200が各2個、残り6個が各1個で、5は全部で 3＋2＋2＋2＋6＝15個。よって0は<strong>15個</strong>連続します。</p>
+<div class="ans"><span class="al">答</span>（1）12マス　（2）186　（3）15個</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは「約数を奇数個持つ整数は<strong>平方数だけ</strong>です」。(2)では「奇数の平方数のマスに駒を置くと1つ動かし、マスに書かれた数が偶数になります。以降は偶数のマスを順に動き、<strong>次の平方数（偶数）のマスに駒を置くことになります</strong>」——駒が平方数を絶対に飛び越えない理由（平方数の偶奇が交互だから、いま進んでいる偶奇の列の先に必ず次の平方数がいる）をきちんと言葉にしています。(3)は「偶数だけで（素因数2は）15個以上含まれるので、答えは15個」と、2の側の確認までワンセット。面白さコメント「色んな考え方が要求される1題です」のとおり、平方数・偶奇・素因数の3つが1問に同居します。</p></div>
+</section>
+
+<!-- ======== 11/27 ======== -->
+<section class="c4">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">27</span></span>0, 2, 4, 6, 8 だけの整数<span class="src">'25 神戸女学院（P26）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>0, 2, 4, 6, 8だけを使って整数をつくり、小さい順に2から並べる：2, 4, 6, 8, 20, 22, 24, 26, 28, 40, …。（1）666ははじめから何番目の数か。（2）はじめから500番目の数は何か。（3）はじめから500番目までの数のうち、2をちょうど2つ使ってつくられる整数は全部で何個か。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：全部半分にすると「0〜4だけの数」——これは五進法の目盛り</div>
+<p>使える数字 0, 2, 4, 6, 8 は 0, 1, 2, 3, 4 のちょうど2倍。各位を半分に読み替えると、並びは<strong>五進法で1, 2, 3, …と数えた列そのもの</strong>になります（2↔1、4↔2、6↔3、8↔4）。「何番目？」は五進法→十進法の変換、「500番目は？」は十進法→五進法の変換。要点の整理には出てこないN進法が主役の1題です。</p></div>
+<div class="box pre"><div class="bt">📚 前提知識：五進法</div>
+<p>五進法は「5個たまったら位が上がる」数の書き方。五進法のabcdは a×125＋b×25＋c×5＋d を表します。十進法→五進法は「5で割った余りを下の位から並べる」、五進法→十進法は上の式で展開します。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>666 の各位を半分にすると 333（五進法）。十進法に直して 3×25＋3×5＋3＝75＋15＋3＝<strong>93番目</strong>。</p>
+<p><strong>（2）</strong>500を五進法へ：500÷5＝100余り0、100÷5＝20余り0、20÷5＝4余り0、4÷5＝0余り4 → <span class="kw">4000（五進法）</span>。各位を2倍に戻して<strong>8000</strong>。</p>
+<p><strong>（3）</strong>「2をちょうど2つ」＝五進法側で「1がちょうど2個」。範囲は五進法の0001〜4000。まず3桁以下も0を補って4桁とみなし、<strong>「4桁のうち1が2個」を全部数える</strong>：位の選び方が4×3÷2＝6通り、残る2桁は1以外の4通りずつで 6×4×4＝96個。ただしこの中には千の位が4（＝数字8）のもの——つまり4000を超えて範囲外のもの——が混ざっています。それは「1が下3桁のうち2桁」：3通り×残り1桁4通り＝12個。よって 96－12＝<strong>84個</strong>。</p>
+<div class="ans"><span class="al">答</span>（1）93番目　（2）8000　（3）84個</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌のリードは「0, 2, 4, 6, 8しか使わないので、<strong>五進法を利用します</strong>」と対応表つき。(3)の数え方が読みどころで、「3桁以下の数も0を補って4桁の数と見なす」ことで場合の数を一括処理し、そのあと<strong>「千の位が8で2が丁度2回使われている数が余計に数えられています」</strong>と、はみ出し（8000より大きい8□□□）を引き算します。含めて数えて、あとで引く——数え上げの基本動作がきれいに出る問題です。面白さコメントは「(1)(2)は典型題で、(3)も正解したい問題です」。</p></div>
+</section>
+
+<!-- ======== 11/28 ======== -->
+<section class="c4">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">28</span></span>連続する整数の和で表す<span class="src">'25 女子聖学院・2回（P27）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>整数35は「35＝5＋6＋7＋8＋9」のように1ずつ違う5個の整数の和で表すことができる。22を1ずつ違う4個の整数の和で表すと「22＝4＋5＋6＋7」となる。（1）45を1ずつ違う3個の整数の和で表せ。（2）69を1ずつ違う6個の整数の和で表せ。（3）20までの偶数で、1ずつ違ういくつかの整数の和では表すことができない数をすべて答えよ。</p></div>
+<div class="box idea"><div class="bt">💡 気づき：奇数個なら「真ん中の数×個数」、偶数個なら「中央2数の和×組数」</div>
+<p>連続する整数の和は両端からペアにするのが基本。<strong>奇数個</strong>なら和＝真ん中の数×個数（→和は個数で割り切れる）。<strong>偶数個</strong>なら和＝中央2数の和×（個数÷2）で、中央2数の和は連続2整数の和だから<strong>奇数</strong>（→和は奇数で割り切れる）。つまりどちらの場合も、<span class="kw">連続整数の和で表せる数は1より大きい奇数の約数を持つ</span>——(3)はこの対偶が答えです。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>3個の平均＝真ん中の数は 45÷3＝15。<strong>45＝14＋15＋16</strong>。</p>
+<p><strong>（2）</strong>6個＝中央2数の和×3。中央2数の和は 69÷3＝23＝11＋12。<strong>69＝9＋10＋11＋12＋13＋14</strong>。</p>
+<p><strong>（3）</strong>表せる数は「奇数個で割り切れる」か「中央2数の和（奇数）で割り切れる」——いずれにせよ<strong>1以外の奇数の約数</strong>が必要。20以下の偶数でそれを持たないのは、素因数が2だけの数：<strong>2, 4, 8, 16</strong>。（逆に、奇数の約数を持つ他の偶数はすべて表せます：例 6＝1＋2＋3、10＝1＋2＋3＋4、12＝3＋4＋5、14＝2＋3＋4＋5、18＝5＋6＋7、20＝2＋3＋4＋5＋6。）</p>
+<div class="ans"><span class="al">答</span>（1）14＋15＋16　（2）9＋10＋11＋12＋13＋14　（3）2、4、8、16</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌は(3)で「奇数個の和なら個数（奇数）で割り切れ、偶数個の和なら中央2数の和（奇数）で割り切れる。よって<strong>1以外に奇数の約数を持たない整数——2以外の素因数を持たない整数——は表せません</strong>」と、2の累乗だけが除外される理由を両にらみで示します。さらに注では「一般に、Nの奇数の約数それぞれに対応する形で、Nを連続する整数の和で表す方法が作れることも知られています。よって他の偶数は答えに含まれないことも分かります」——<strong>表せない証明と、表せる保証の両方</strong>に触れる、格の高い解説です。リードの「(3)の注の内容も知っておきましょう」はこの一般論のこと。</p></div>
+</section>
+
+<!-- ======== 11/29 ======== -->
+<section class="c4">
+<h2 class="prob"><span class="num"><span class="mo">11月</span><span class="dd">29</span></span>正方形を切り取る操作<span class="src">'25 六甲学院・B（P27）</span></h2>
+<div class="stmt"><div class="qhead">問題（要約）</div>
+<p>辺の長さが1cmの整数倍である長方形に対し、〈操作〉＝<strong>短い方の辺を1辺とする正方形を、取り除けるだけ取り除く</strong>を考える。例：縦3cm×横7cmは、1回目の操作で3×3の正方形2個が取れて3×1が残り、2回目の操作（1×1を3個）で何もなくなる。（1）縦555cm×横1800cmに対し、何もなくなるまで操作を繰り返すとき、最後の操作で取り除かれる正方形の1辺は何cmか。（2）縦126cmで横が縦より長い長方形が、3回目の操作で何もなくなり、3回の操作で取り除かれた正方形は全部で4個だった。元の横の長さは何cmか。（3）横の長さが等しい3つの長方形A、B、Cがある。縦はA＝7cm、B＝8cm、C＝9cmで、横は500cm以下。操作を繰り返すと、Aは2回目、Bは4回目、Cは1回目の操作で何もなくなった。元の横の長さは何cmか。</p></div>
+<div class="fig"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 128" style="max-width:260px;width:100%;height:auto;">
+<rect x="8" y="8" width="210" height="90" fill="#fff" stroke="#41506b" stroke-width="2"/>
+<rect x="8" y="8" width="90" height="90" fill="#e6eef8" stroke="#41506b"/>
+<rect x="98" y="8" width="90" height="90" fill="#e6eef8" stroke="#41506b"/>
+<rect x="188" y="8" width="30" height="90" fill="#fdeeda" stroke="#41506b"/>
+<text x="53.0" y="58.0" font-size="14" text-anchor="middle" fill="#26314a">3×3</text>
+<text x="143.0" y="58.0" font-size="14" text-anchor="middle" fill="#26314a">3×3</text>
+<text x="113.0" y="116" font-size="13" text-anchor="middle" fill="#5c5647">3×7 → 3×3を2個取り除くと 3×1 が残る</text>
+</svg><div class="cap">例：3×7 → 3×3を2個取ると3×1が残る（＝わり算 7÷3＝2余り1 の図解）。</div></div>
+<div class="box idea"><div class="bt">💡 気づき：この操作は「わり算のくり返し」＝互除法そのもの</div>
+<p>1回の操作は「長い辺÷短い辺＝商（取れる正方形の個数）…余り（残る辺）」。何もなくなるまで続けると、<strong>最後の正方形の1辺は2辺の最大公約数</strong>になります（ユークリッドの互除法）。(2)(3)は逆問題：「操作回数」や「正方形の個数」から、わり算の商と余りの列を復元します。</p></div>
+<h3>解説</h3>
+<p><strong>（1）</strong>1800÷555＝3余り135 → 555÷135＝4余り15 → 135÷15＝9（割り切れて終了）。最後は1辺<strong>15cm</strong>の正方形9個。15はちょうど555と1800の最大公約数です。</p>
+<p><strong>（2）</strong>3回の商の合計が4。最後の操作では必ず2個以上取れる（1個なら正方形が残ってもう1回になる…ではなく、商1は余り＝差が生じて続くため、<strong>割り切れる最終回の商は2以上</strong>）ので、商は順に<strong>1, 1, 2</strong>。最後の正方形の1辺を①として逆算すると：3回目の直前は ①×2＝②と①の長方形、2回目の直前は（②＋①＝）③と②、1回目の直前は（③＋②＝）⑤と③の長方形。③＝126 より ①＝42。横＝⑤＝42×5＝<strong>210cm</strong>。（検算：210×126→126×84→84×42→42×42×2個。商1, 1, 2で計4個 ○）</p>
+<p><strong>（3）</strong>横をXcmとして、縦7, 8, 9それぞれとの互除法の「回数」がXの余りを決めます：</p>
+<table class="t">
+<tr><th>長方形</th><th>条件</th><th>わかること</th></tr>
+<tr><td>C（縦9）</td><td>1回で終了</td><td>Xは<strong>9の倍数</strong></td></tr>
+<tr><td>A（縦7）</td><td>2回で終了</td><td>X÷7の余りが7を割り切る→余りは<strong>1</strong></td></tr>
+<tr><td>B（縦8）</td><td>4回で終了</td><td>X÷8の余りをrとして、8とrの互除法があと3回続く。r＝3：8→3→2→1→終了で計4回 ○。r＝5は5回、r＝6, 7は3回 → 余りは<strong>3</strong></td></tr>
+</table>
+<p>「9の倍数で、8で割ると3余る」最小は27で、以後72ごと…ではなく、9と8の最小公倍数72ごとに 27, 99, 171, …。このうち「7で割ると1余る」最初は<strong>99</strong>。7, 8, 9の最小公倍数は504なので、500以下でこの3条件を満たす数は99だけ。</p>
+<div class="ans"><span class="al">答</span>（1）15cm　（2）210cm　（3）99cm</div>
+<div class="box mag"><div class="bt">📖 本誌のポイント</div>
+<p>本誌は(1)の注で<strong>「最後に切り取る正方形の1辺の長さが、元の長方形の縦横の長さの最大公約数になっています」</strong>と互除法の核心を明示。(2)は「最後は必ず2個以上の正方形を取り除きます。よって1回目と2回目は1個、3回目は2個」と商を確定してから、①→③→⑤の逆算図で210cmへ。(3)は「余りが3のとき8÷3＝2余り2、3÷2＝1余り1、2÷1＝2より操作は4回。余りが5, 6, 7のときも同様に調べると5回、3回、3回」——<strong>候補の余りを全部その場で検証する</strong>誠実な場合分けです。リードにある通り、これは本誌9月号・学コン4番の類題。フィボナッチ数列（1, 1, 2, 3, 5…——(2)の①②③⑤はまさにこれ）が互除法の「最も遅いケース」に現れる、という背景まで見えると一段深く楽しめます。</p></div>
+</section>
+
+<!-- ======== 答え一覧 ======== -->
+<h2 class="part">日々の演習　答え一覧</h2>
+<table class="t" style="width:100%;">
+<tr><th style="width:11em;">11/04（ジュニア算オリ）</th><td style="text-align:left;">（1）イ、ア、ウ　（2）ウ、ア、エ、イ</td></tr>
+<tr><th>11/05（江戸川学園取手）</th><td style="text-align:left;">（1）9　（2）97　（3）10個</td></tr>
+<tr><th>11/06（東京都市大付）</th><td style="text-align:left;">（1）105　（2）120　（3）4200</td></tr>
+<tr><th>11/07（滝）</th><td style="text-align:left;">（1）17　（2）143　（3）39、65、143</td></tr>
+<tr><th>11/10（豊島岡女子学園）</th><td style="text-align:left;">（1）15回　（2）50通り　（3）20通り</td></tr>
+<tr><th>11/11（国学院大久我山）</th><td style="text-align:left;">（1）10番目　（2）7個　（3）36個　（4）2025　（5）3600、8100</td></tr>
+<tr><th>11/12（城北）</th><td style="text-align:left;">（1）4と9　（2）① 1981個　② ア3、イ1、ウ1</td></tr>
+<tr><th>11/13（清風）</th><td style="text-align:left;">（1）① 405秒間　② 96秒間　③ 482秒間　（2）560秒間</td></tr>
+<tr><th>11/14（西大和学園）</th><td style="text-align:left;">（1）505　（2）30　（3）26</td></tr>
+<tr><th>11/17（ジュニア算オリ）</th><td style="text-align:left;">A＝8、B＝9、C＝7、D＝496</td></tr>
+<tr><th>11/18（算数オリンピック）</th><td style="text-align:left;">A＝152</td></tr>
+<tr><th>11/19（慶應義塾普通部）</th><td style="text-align:left;">（1）44と45　（2）2079</td></tr>
+<tr><th>11/20（昭和女子大附昭和）</th><td style="text-align:left;">2921</td></tr>
+<tr><th>11/21（海城）</th><td style="text-align:left;">（1）49　（2）143、115番目　（3）2208</td></tr>
+<tr><th>11/22（昭和学院秀英）</th><td style="text-align:left;">（1）12個　（2）2030個　（3）5通り</td></tr>
+<tr><th>11/25（久留米大附設）</th><td style="text-align:left;">（1）2、3、4、4　（2）57　（3）33番目　（4）52番目</td></tr>
+<tr><th>11/26（市川）</th><td style="text-align:left;">（1）12マス　（2）186　（3）15個</td></tr>
+<tr><th>11/27（神戸女学院）</th><td style="text-align:left;">（1）93番目　（2）8000　（3）84個</td></tr>
+<tr><th>11/28（女子聖学院）</th><td style="text-align:left;">（1）14＋15＋16　（2）9＋10＋11＋12＋13＋14　（3）2、4、8、16</td></tr>
+<tr><th>11/29（六甲学院）</th><td style="text-align:left;">（1）15cm　（2）210cm　（3）99cm</td></tr>
+</table>
+
+<footer>
+出典：中学への算数 2025年11月号　テーマ「整数(2)」——要点の整理（P14〜17）／日々の演習・問題「様々な整数問題に強くなろう」（P18〜27）／解答解説（P28〜37）。本資料は上記の学習用解説として、独自の解答・検証と本誌解説の読み解きをまとめたものです。問題文は要点を保って要約しており、正確な原文は本誌をご参照ください。全設問の数値は計算機による厳密検証済み。
+</footer>
+
+</div>
+</body>
+</html>
