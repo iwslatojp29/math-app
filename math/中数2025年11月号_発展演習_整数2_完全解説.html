@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中学への算数 2025年11月号 発展演習「整数(2)」完全解説</title>
+<style>
+:root{
+  --ink:#26314a; --paper:#fbfaf6; --line:#d8d2c4;
+  --p1:#8a5a2b; --p2:#1f6e5c; --p3:#274f8f; --p4:#8a2f4f;
+  --hl:#fff3cf; --note:#eef3fb; --warn:#fdeeee; --idea:#eef7ef;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.95;font-size:16px;}
+.wrap{max-width:880px;margin:0 auto;padding:24px 20px 80px;}
+header.top{border-bottom:3px double var(--ink);padding:26px 0 18px;margin-bottom:8px;}
+header.top .kicker{font-size:13px;letter-spacing:.18em;color:#7a7263;margin-bottom:6px;}
+header.top h1{font-family:"Hiragino Mincho ProN","Noto Serif JP","Yu Mincho",serif;
+  font-size:27px;margin:0 0 8px;line-height:1.5;}
+header.top .sub{font-size:14px;color:#5c5647;}
+h2.prob{display:flex;align-items:center;gap:12px;margin:64px 0 6px;
+  font-family:"Hiragino Mincho ProN","Noto Serif JP",serif;font-size:23px;
+  border-bottom:2px solid currentColor;padding-bottom:8px;}
+h2.prob .num{display:inline-flex;align-items:center;justify-content:center;
+  min-width:44px;height:44px;border-radius:8px;color:#fff;font-size:22px;
+  font-family:inherit;}
+h2 .src{margin-left:auto;font-size:13px;font-weight:normal;color:#6b6455;font-family:"Hiragino Kaku Gothic ProN",sans-serif;}
+h3{font-size:18px;margin:38px 0 10px;padding-left:10px;border-left:5px solid var(--ink);}
+h4{font-size:16px;margin:26px 0 8px;}
+.p1 h2.prob{color:var(--p1)} .p1 h2 .num{background:var(--p1)} .p1 h3{border-color:var(--p1)}
+.p2 h2.prob{color:var(--p2)} .p2 h2 .num{background:var(--p2)} .p2 h3{border-color:var(--p2)}
+.p3 h2.prob{color:var(--p3)} .p3 h2 .num{background:var(--p3)} .p3 h3{border-color:var(--p3)}
+.p4 h2.prob{color:var(--p4)} .p4 h2 .num{background:var(--p4)} .p4 h3{border-color:var(--p4)}
+.stmt{background:#fff;border:1.5px solid var(--ink);border-radius:6px;padding:18px 22px;margin:18px 0;}
+.stmt .qhead{font-weight:700;margin-bottom:6px;}
+.box{border-radius:6px;padding:14px 18px;margin:16px 0;border:1px solid var(--line);}
+.box .bt{font-weight:700;font-size:14.5px;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.idea{background:var(--idea);border-color:#bcd8bf;}
+.note{background:var(--note);border-color:#c3d2ea;}
+.warn{background:var(--warn);border-color:#eac3c3;}
+.pre{background:var(--hl);border-color:#e3d29a;}
+.mag{background:#f6f1e7;border:1px dashed #b9a97e;}
+.ans{background:#fff;border:2.5px solid var(--ink);border-radius:6px;padding:12px 18px;margin:18px 0;font-weight:700;}
+.ans .al{font-size:13.5px;letter-spacing:.15em;color:#8a2f2f;display:block;margin-bottom:2px;}
+.formula{text-align:center;margin:14px 0;font-size:17px;}
+.frac{display:inline-block;vertical-align:-0.75em;text-align:center;line-height:1.25;margin:0 2px;}
+.frac>span{display:block;padding:0 5px;font-size:0.92em;}
+.frac .den{border-top:1.4px solid var(--ink);}
+.mixed{display:inline-flex;align-items:center;gap:2px;}
+table.t{border-collapse:collapse;margin:14px auto;background:#fff;}
+table.t th,table.t td{border:1px solid #a9a390;padding:6px 13px;text-align:center;font-size:15px;}
+table.t th{background:#efe9db;font-weight:700;}
+.fig{text-align:center;margin:20px 0;}
+.fig .cap{font-size:13.5px;color:#5c5647;margin-top:6px;}
+.steps{counter-reset:st;padding-left:0;margin:14px 0;}
+.steps li{list-style:none;position:relative;padding-left:40px;margin:10px 0;}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:2px;
+  width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;}
+.small{font-size:13.5px;color:#5c5647;}
+.kw{background:var(--hl);padding:0 4px;border-radius:3px;font-weight:700;}
+.sq{display:inline-block;width:1.15em;height:1.15em;border:1.6px solid var(--ink);vertical-align:-0.22em;border-radius:2px;margin:0 1px;background:#fff;}
+strong{font-weight:700;}
+.toc{background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px 20px;margin:20px 0;}
+.toc ul{margin:6px 0;padding-left:22px;}
+footer{margin-top:70px;border-top:1px solid var(--line);padding-top:14px;font-size:13px;color:#6b6455;}
+@media print{ body{font-size:13px} .wrap{max-width:100%} }
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">中学への算数　2025年11月号　テーマ：整数(2)</div>
+  <h1>発展演習（P38〜41）全4題　完全解説</h1>
+  <div class="sub">問題：本誌P38〜41　／　本誌解答解説：P42〜45　——　自力解説＋本誌解説の読み解きつき</div>
+</header>
+
+<div class="toc">
+  <strong>もくじ</strong>
+  <ul>
+    <li>第1問　分数の列と約数（'25 桐朋・2回）…… 約数の個数・約数の総和</li>
+    <li>第2問　連分数のパズル（'25 栄光学園）…… 計算の工夫・振り分けの最適化</li>
+    <li>第3問　タイル切り（'25 渋谷教育学園幕張）…… 対角線が通るマスの数え上げ</li>
+    <li>第4問　増殖するアンパン（'25 海陽）…… 逆算（さかのぼり）と「2倍・3倍の世界」</li>
+  </ul>
+  <p class="small">各問とも「①問題を眺めて気づくこと → ②最初の試行錯誤 → ③きちんと解く → ④本誌（P42〜45）の解説の読み解き」の順に進みます。前提知識が必要な箇所には<span class="kw">前提知識</span>ボックスを置き、そこだけ読めば予備知識ゼロでも読み通せるようにしてあります。</p>
+</div>
+
+<!-- ================= 第1問 ================= -->
+<section class="p1">
+<h2 class="prob"><span class="num">1</span>分数の列と約数<span class="src">'25 桐朋・2回（本誌P38）</span></h2>
+
+<div class="stmt">
+<div class="qhead">問題</div>
+<p>Nを整数とし、次のような異なるN個の分数をつくります。</p>
+<p style="padding-left:1em;">N個の分数を大きい順に並べると、<strong>分母は1からNまで1つずつ大きくなり、分子はNから1まで1つずつ小さくなる。</strong></p>
+<p>これらのN個の分数のうち、整数となる分数の個数を a とします。たとえば、N＝5のとき、5個の分数を大きい順に並べると</p>
+<div class="formula">
+<span class="frac"><span>5</span><span class="den">1</span></span>，
+<span class="frac"><span>4</span><span class="den">2</span></span>，
+<span class="frac"><span>3</span><span class="den">3</span></span>，
+<span class="frac"><span>2</span><span class="den">4</span></span>，
+<span class="frac"><span>1</span><span class="den">5</span></span>
+</div>
+<p>となります。整数となる分数は <span class="frac"><span>5</span><span class="den">1</span></span>，<span class="frac"><span>4</span><span class="den">2</span></span>，<span class="frac"><span>3</span><span class="den">3</span></span> の3個あるので、a＝3となります。</p>
+<p>（1）Nが次の値のとき、aの値を求めなさい。　① N＝15　② N＝44</p>
+<p>（2）a＝5で、N個の分数のうち大きい方から4番目の分数が整数となるようなNの値を、小さい順に4つ書きなさい。</p>
+<p>（3）a＝3で、N個の分数のうち整数となる3つの分数の和が92となるようなNの値を求めなさい。考えられるものをすべて書きなさい。</p>
+</div>
+
+<h3>まず問題を眺める —— どこに気づくか</h3>
+<p>いきなり解こうとせず、例のN＝5の列をじっと見ます。</p>
+<div class="formula">
+<span class="frac"><span>5</span><span class="den">1</span></span>，
+<span class="frac"><span>4</span><span class="den">2</span></span>，
+<span class="frac"><span>3</span><span class="den">3</span></span>，
+<span class="frac"><span>2</span><span class="den">4</span></span>，
+<span class="frac"><span>1</span><span class="den">5</span></span>
+</div>
+<div class="box idea"><div class="bt">💡 気づき①：「分子＋分母」がずっと同じ</div>
+<p>分母が1増えるたびに分子は1減るのだから、<strong>どの分数も「分子＋分母」が一定</strong>です。N＝5なら 5＋1＝4＋2＝3＋3＝…＝6。一般には、どの分数も分子＋分母＝<strong>N＋1</strong>。「1つ増えたら1つ減る」型の列を見たら、まず和が一定であることを疑う——これは整数問題の基本反射です。</p></div>
+<div class="box idea"><div class="bt">💡 気づき②：整数になった場所は「6の約数」の場所</div>
+<p>N＝5で整数になったのは分母が1、2、3のとき。1、2、3はどれも6（＝N＋1）を割り切る数です。逆に分母4、5は6を割り切りません。「もしかして、<strong>分母がN＋1の約数のときだけ整数になる</strong>のでは？」という予想が立ちます。予想が立ったら、小さい例でもう1つ検算します。たとえばN＝7なら分数は 7/1, 6/2, 5/3, 4/4, 3/5, 2/6, 1/7 で、整数は分母1、2、4のとき（7、3、1）。N＋1＝8の約数1、2、4、8のうち8以外——予想どおりです。</p></div>
+
+<h3>予想を確かめる —— なぜ「分母がN＋1の約数」なのか</h3>
+<p>分母を□とすると、その分数は</p>
+<div class="formula">
+<span class="frac"><span>N＋1－□</span><span class="den">□</span></span>
+＝
+<span class="frac"><span>N＋1</span><span class="den">□</span></span> － <span class="frac"><span>□</span><span class="den">□</span></span>
+＝
+<span class="frac"><span>N＋1</span><span class="den">□</span></span> － 1
+</div>
+<p>と書き直せます（分子を「N＋1から□を引いたもの」と見て、分数を2つに分けただけです）。1を引いても整数かどうかは変わらないので、</p>
+<p style="text-align:center;"><span class="kw">分数が整数　⇔　(N＋1)÷□ が割り切れる　⇔　□がN＋1の約数</span></p>
+<p>となります。分母□は1からNまでを動き、N＋1自身にはならないことに注意すると、</p>
+<div class="box note"><div class="bt">✔ この問題の核心</div>
+<p style="text-align:center;font-size:17px;"><strong>a ＝（N＋1の約数の個数）－ 1</strong></p>
+<p class="small">「－1」は、約数のうちN＋1自身だけは分母として現れないためです。</p></div>
+
+<div class="box pre"><div class="bt">📚 前提知識：約数の個数の数え方</div>
+<p>ある整数を素数（1とその数自身でしか割り切れない、2以上の数：2, 3, 5, 7, 11, …）の積に分解したとき（素因数分解）、たとえば 45＝3×3×5 なら、45の約数は「3を0〜2個」「5を0〜1個」使ってつくる数なので、個数は (2＋1)×(1＋1)＝6個（1, 3, 5, 9, 15, 45）。一般に、<strong>同じ素数の個数に1を足して掛け合わせる</strong>と約数の個数になります。16＝2×2×2×2なら 4＋1＝5個（1, 2, 4, 8, 16）です。</p></div>
+
+<h3>（1）を解く</h3>
+<p><strong>① N＝15のとき。</strong>N＋1＝16＝2×2×2×2 の約数は 1, 2, 4, 8, 16 の5個。このうち16は分母に現れないので、</p>
+<div class="formula">a ＝ 5 － 1 ＝ <strong>4</strong></div>
+<p class="small">実際、15/1＝15、14/2＝7、12/4＝3、8/8＝1 の4個が整数です。</p>
+<p><strong>② N＝44のとき。</strong>N＋1＝45＝3×3×5 の約数は (2＋1)×(1＋1)＝6個。よって</p>
+<div class="formula">a ＝ 6 － 1 ＝ <strong>5</strong></div>
+
+<h3>（2）を解く —— 条件を2つの言葉に翻訳する</h3>
+<p>条件は2つあります。1つずつ「N＋1の言葉」に翻訳します。</p>
+<ol class="steps">
+<li><strong>「a＝5」</strong>　→　N＋1の約数はちょうど 5＋1＝<strong>6個</strong>。</li>
+<li><strong>「大きい方から4番目の分数が整数」</strong>　→　4番目の分数は分母が4、つまり <span class="frac"><span>N－3</span><span class="den">4</span></span>。これが整数になるのは、さきほどの核心から<strong>4がN＋1の約数のとき</strong>、つまり<strong>N＋1が4の倍数</strong>のとき。</li>
+</ol>
+<p>つまり「<strong>約数をちょうど6個持つ、4の倍数</strong>」を小さい順に4つ探せばよいことになります。</p>
+<div class="box pre"><div class="bt">📚 前提知識：約数がちょうど6個の数の形</div>
+<p>約数の個数は「（素数の個数＋1）の掛け算」でした。6＝6×1 または 6＝2×3 なので、約数6個の数は、</p>
+<p style="padding-left:1em;">（ア）同じ素数を5個かけた数（例：2×2×2×2×2＝32）<br>
+（イ）ある素数を2個と、別の素数を1個かけた数（例：2×2×3＝12）</p>
+<p>のどちらかの形しかありません。</p></div>
+<p>この形のうち<strong>4の倍数</strong>（＝2を2個以上ふくむ数）を小さい順に拾います。（ア）で4の倍数になるのは 32 だけ。（イ）で4の倍数になるのは「2×2×（3以上の素数）」の形で、</p>
+<div class="formula">4×3＝12,　4×5＝20,　4×7＝28,　4×11＝44, …</div>
+<p class="small">※ 4×素数以外の4の倍数、たとえば 16（＝2が4個で約数5個）、24（＝2×2×2×3で約数8個）、36（＝2×2×3×3で約数9個）、40（約数8個）は約数6個になりません。8＝2×2×2は約数4個でこれも不適。</p>
+<p>小さい順に並べると N＋1 ＝ 12, 20, 28, 32, 44, … 。Nはそれより1小さいので、小さい方から4つは</p>
+<div class="ans"><span class="al">答（2）</span>N ＝ 11，19，27，31</div>
+<p class="small">検算：N＝11のとき列は 11/1, 10/2, 9/3, <strong>8/4</strong>, …。4番目の8/4＝2は確かに整数で、12の約数は6個（1,2,3,4,6,12）なのでa＝5。○</p>
+
+<h3>（3）を解く —— まず「Nはどれくらいか」を見積もる</h3>
+<div class="box idea"><div class="bt">💡 最初の試行錯誤：答えの大きさの見当をつける</div>
+<p>整数になる3つの分数のうち、いちばん大きいのは必ず先頭の <span class="frac"><span>N</span><span class="den">1</span></span>＝N です。3つの和が92なのだから、まず <strong>Nは92より小さい</strong>。一方、残り2つの整数がどんなに大きくても、2番目の整数は「N＋1をその最小の素数の約数で割って1引いた数」なので、だいたいN÷2以下。かりに2番目が約N/2なら N＋N/2＋…≒92 で N≒60、2番目・3番目が小さければ N≒88〜90。つまり<strong>Nは60〜90くらい</strong>と当たりがつきます。「答えはこのあたりに数個あるはず」という感覚を持ってから式を立てると、迷子になりません。</p></div>
+<p>a＝3なので、N＋1の約数はちょうど4個。約数4個の数の形は、4＝4×1 または 2×2 から、</p>
+<p style="padding-left:1em;">（ア）同じ素数▲を3個かけた数（約数は 1, ▲, ▲×▲, ▲×▲×▲）<br>
+（イ）異なる素数▲と●の積（約数は 1, ▲, ●, ▲×●）</p>
+<p>のどちらかです。整数になる3つの分数は、分母が「N＋1の約数のうちN＋1自身を除いた3つ」、つまり小さい順に 1、▲、（3つ目の約数）のときです。ここで核心の式（分数＝(N＋1)÷分母－1）を使って3つの和を書くと：</p>
+<div class="formula">
+（N＋1 － 1）＋（(N＋1)÷▲ － 1）＋（(N＋1)÷(3つ目) － 1）＝ 92
+</div>
+<p>両辺に3を足して「－1」を消すと、</p>
+<div class="formula">
+(N＋1) ＋ (N＋1)÷▲ ＋ (N＋1)÷(3つ目) ＝ 95
+</div>
+<p>ここで大事な観察：<strong>N＋1をその約数で割った答えも、やはりN＋1の約数</strong>です（ペアの相方が出てくるだけ。例：77÷7＝11）。しかも「N＋1自身を▲で割ると3つ目の約数、3つ目で割ると▲」という<strong>ペアの入れかわり</strong>が起きます。（ア）▲を3個かけた形なら、割った結果は ▲×▲ と ▲。（イ）▲×●の形なら、割った結果は ● と ▲。どちらの場合も左辺は「N＋1と、残り2つの約数の和」になり、</p>
+<div class="formula"><span class="kw">（N＋1） ＋ （▲） ＋ （3つ目の約数） ＝ 95</span>　……　つまり<strong>「1以外の約数の総和が95」</strong></div>
+<p><strong>（ア）の形を調べる：</strong>▲＋▲×▲＋▲×▲×▲＝95。▲＝3なら 3＋9＋27＝39、▲＝5なら 5＋25＋125で125だけで超過。▲＝2なら14。ちょうど95になる素数はなく、<strong>この形は不適</strong>。</p>
+<p><strong>（イ）の形を調べる：</strong>▲＋●＋▲×●＝95。ここで受験算数の定番の変形「<strong>1を足すと積の形にまとまる</strong>」を使います。両辺に1を足すと、</p>
+<div class="formula">1＋▲＋●＋▲×● ＝ 96　→　（1＋▲）×（1＋●）＝ 96</div>
+<p class="small">※（1＋▲）×（1＋●）を展開すると 1＋▲＋●＋▲×● に戻ることは、面積図（縦1＋▲、横1＋●の長方形を4つに分ける）で確かめられます。</p>
+<p>▲、●は素数なので 1＋▲、1＋● はどちらも3以上。96を「3以上×3以上」に分ける方法は、</p>
+<table class="t">
+<tr><th>96の分け方</th><th>▲，●</th><th>素数か？</th><th>N＋1＝▲×●</th><th>N</th></tr>
+<tr><td>3×32</td><td>2，31</td><td>○ ○</td><td>62</td><td><strong>61</strong></td></tr>
+<tr><td>4×24</td><td>3，23</td><td>○ ○</td><td>69</td><td><strong>68</strong></td></tr>
+<tr><td>6×16</td><td>5，15</td><td>15は素数でない ×</td><td>—</td><td>—</td></tr>
+<tr><td>8×12</td><td>7，11</td><td>○ ○</td><td>77</td><td><strong>76</strong></td></tr>
+</table>
+<div class="ans"><span class="al">答（3）</span>N ＝ 61，68，76</div>
+<p class="small">検算：N＝61 → 61＋(62÷2－1)＋(62÷31－1)＝61＋30＋1＝92 ○／N＝68 → 68＋22＋2＝92 ○／N＝76 → 76＋10＋6＝92 ○。しかもどれも見積もりの「60〜90」の範囲に収まっています。</p>
+
+<h3>本誌解説（P42〜43）の読み解き</h3>
+<div class="box mag"><div class="bt">📖 本誌のポイント①：「それぞれの分数に1を足す」</div>
+<p>本誌は冒頭のリード文で「それぞれの分数に1を足すと分子はN＋1で一定になりますから、整数となるのは分母がN＋1の約数のときです」と述べています。これは上で示した式変形とまったく同じ内容を、逆向きに言ったものです。<span class="frac"><span>N＋1－□</span><span class="den">□</span></span>＋1＝<span class="frac"><span>N＋1</span><span class="den">□</span></span> となり、<strong>全部の分数の分子がN＋1にそろう</strong>。1を足しても「整数かどうか」は変わらないので、判定が一気に「分母がN＋1を割り切るか」だけの話になります。①では実際に、N＝15の各分数に1を足して分子を16にそろえ、「分母が16の約数の1, 2, 4, 8のとき（16自身は分母にない）」として a＝4 を導いています。</p></div>
+<div class="box mag"><div class="bt">📖 本誌のポイント②：（2）の場合分けの書き方</div>
+<p>本誌は「約数をちょうど6個持つ整数は、6＝2×3に注意して、▲を5個かけた形 または ▲を2個と●を1個かけた形（▲、●は異なる素数）」と整理し、4の倍数という条件から「32」または「●×4（●は3以上の素数）＝12, 20, 28, 44, …」を列挙、32の位置に注意して 11, 19, 27, 31 と結論しています。<strong>「44より32が先」の並べ替えを忘れない</strong>のがこの問題の事務的な落とし穴で、本誌もわざわざ「32に注意して」と念押ししています。</p></div>
+<div class="box mag"><div class="bt">📖 本誌のポイント③：（3）は「約数の総和が96」と一言でまとめる</div>
+<p>本誌の（3）は、3つの分数に1ずつ足して分子をN＋1にそろえた和（＝92＋3＝95）に、さらに <span class="frac"><span>N＋1</span><span class="den">N＋1</span></span>＝1 を加えると<strong>「N＋1の約数の総和」そのもの</strong>になる、という美しい一手を使います。つまり約数の総和＝92＋1×4＝96。あとは、約数4個の数の総和の公式的な事実——▲×●の形なら総和＝(1＋▲)×(1＋●)——から (1＋▲)×(1＋●)＝96 として、3×32、4×24、6×16、8×12 を調べ、6×16だけ「15が素数でないため不適」とし、N＝61, 68, 76 を得ています。私たちの解法と同じ式に、より鮮やかな経路で到達しているわけです。「<strong>足りない分（1×個数）を補って総和の形に持ち込む</strong>」という発想は、約数がらみの和の問題全般で使える汎用テクニックです。</p></div>
+</section>
+
+<!-- ================= 第2問 ================= -->
+<section class="p2">
+<h2 class="prob"><span class="num">2</span>連分数のパズル<span class="src">'25 栄光学園（本誌P39）</span></h2>
+
+<div class="stmt">
+<div class="qhead">問題</div>
+<p>次の式のア、イ、ウに2、3、4を1つずつ入れて計算します。入れ方は6通りあり、すべて違う計算結果になりました。</p>
+<div class="formula" style="font-size:19px;">
+ア ＋ <span class="frac" style="vertical-align:-1.6em;"><span>1</span><span class="den">イ ＋ <span class="frac"><span>1</span><span class="den">ウ</span></span></span></span>
+</div>
+<p>ただし、分母が分数のときは、以下のように整理できます。</p>
+<div class="formula">
+<span class="frac" style="vertical-align:-1.4em;"><span>3</span><span class="den"><span class="frac"><span>4</span><span class="den">5</span></span></span></span>
+＝ 3 × <span class="frac"><span>5</span><span class="den">4</span></span>
+＝ <span class="frac"><span>15</span><span class="den">4</span></span>
+＝ 3<span class="frac"><span>3</span><span class="den">4</span></span>
+</div>
+<p>（1）6通りの計算結果をすべて求めて、小さい順に並べなさい。</p>
+<p>（2）（1）で求めた6つの数の和を計算しなさい。途中式も書きなさい。</p>
+<p>（3）（1）で求めた6つの数を下の式の<span class="sq"></span>に1つずつ入れます。</p>
+<div class="formula"><span class="sq"></span>＋<span class="sq"></span>＋<span class="sq"></span>－<span class="sq"></span>－<span class="sq"></span>－<span class="sq"></span></div>
+<p>計算結果が最も小さくなるのは、6つの数をどのように入れたときですか。その一例を解答欄に書き入れなさい。また、そのときの計算結果を答えなさい。ただし、計算結果が0より大きくなるようにします。</p>
+<p>（4）（1）で求めた6つの数を下の式の<span class="sq"></span>に1つずつ入れます。</p>
+<div class="formula"><span class="sq"></span>×<span class="sq"></span>×<span class="sq"></span>÷<span class="sq"></span>÷<span class="sq"></span>÷<span class="sq"></span></div>
+<p>計算結果が整数になるのは、6つの数をどのように入れたときですか。その一例を解答欄に書き入れなさい。</p>
+</div>
+
+<h3>まず問題を眺める —— どこに気づくか</h3>
+<div class="box idea"><div class="bt">💡 気づき①：全体の大きさは「ア」でほぼ決まる</div>
+<p>イは2以上なので、イ＋1/ウ は2より大きい。だから <span class="frac"><span>1</span><span class="den">イ＋1/ウ</span></span> は <strong>1/2より小さい</strong>。つまり6つの値は「ア＋（1/2未満のおまけ）」の形で、<strong>整数部分がそのままア</strong>になります。だから並べる前から「アが2の2つが最小グループ、アが3の2つが中間、アが4の2つが最大グループ」と骨格が見えます。あとは各グループ内の大小だけ比べればよい——これで（1）の見通しは立ちました。</p></div>
+<div class="box idea"><div class="bt">💡 気づき②：計算は「内側から」</div>
+<p>連分数（分数の中に分数が入った形）は、<strong>いちばん内側の イ＋1/ウ を先に帯分数→仮分数にして、逆数にする</strong>だけの機械的な作業です。1回だけ丁寧にやれば、残り5回は同じ流れです。</p></div>
+
+<h3>（1）を解く —— 6通りを丁寧に計算</h3>
+<p>代表として（ア, イ, ウ）＝（2, 3, 4）を計算します。</p>
+<ol class="steps">
+<li>内側：3 ＋ <span class="frac"><span>1</span><span class="den">4</span></span> ＝ <span class="frac"><span>13</span><span class="den">4</span></span></li>
+<li>逆数：<span class="frac"><span>1</span><span class="den">13/4</span></span> ＝ <span class="frac"><span>4</span><span class="den">13</span></span>（問題文の「整理」のとおり、分母分子をひっくり返す）</li>
+<li>外側：2 ＋ <span class="frac"><span>4</span><span class="den">13</span></span> ＝ 2<span class="frac"><span>4</span><span class="den">13</span></span> ＝ <span class="frac"><span>30</span><span class="den">13</span></span></li>
+</ol>
+<p>同様に6通りすべて計算すると：</p>
+<table class="t">
+<tr><th>（ア, イ, ウ）</th><th>内側 イ＋1/ウ</th><th>逆数</th><th>結果（帯分数）</th><th>仮分数</th></tr>
+<tr><td>(2, 4, 3)</td><td>4と1/3＝13/3</td><td>3/13</td><td>2 3/13</td><td>29/13</td></tr>
+<tr><td>(2, 3, 4)</td><td>3と1/4＝13/4</td><td>4/13</td><td>2 4/13</td><td>30/13</td></tr>
+<tr><td>(3, 4, 2)</td><td>4と1/2＝9/2</td><td>2/9</td><td>3 2/9</td><td>29/9</td></tr>
+<tr><td>(3, 2, 4)</td><td>2と1/4＝9/4</td><td>4/9</td><td>3 4/9</td><td>31/9</td></tr>
+<tr><td>(4, 3, 2)</td><td>3と1/2＝7/2</td><td>2/7</td><td>4 2/7</td><td>30/7</td></tr>
+<tr><td>(4, 2, 3)</td><td>2と1/3＝7/3</td><td>3/7</td><td>4 3/7</td><td>31/7</td></tr>
+</table>
+<div class="ans"><span class="al">答（1）小さい順</span>
+2<span class="frac"><span>3</span><span class="den">13</span></span>，
+2<span class="frac"><span>4</span><span class="den">13</span></span>，
+3<span class="frac"><span>2</span><span class="den">9</span></span>，
+3<span class="frac"><span>4</span><span class="den">9</span></span>，
+4<span class="frac"><span>2</span><span class="den">7</span></span>，
+4<span class="frac"><span>3</span><span class="den">7</span></span>
+　（＝ <span class="frac"><span>29</span><span class="den">13</span></span>，<span class="frac"><span>30</span><span class="den">13</span></span>，<span class="frac"><span>29</span><span class="den">9</span></span>，<span class="frac"><span>31</span><span class="den">9</span></span>，<span class="frac"><span>30</span><span class="den">7</span></span>，<span class="frac"><span>31</span><span class="den">7</span></span>）
+</div>
+<div class="box idea"><div class="bt">💡 気づき③（あとの設問への伏線）：分母と分子に強い規則がある</div>
+<p>仮分数で並べてみると、<strong>分母は 13, 13, 9, 9, 7, 7</strong>（3種類が2個ずつ）、<strong>分子は 29, 30, 31</strong>（3種類が2個ずつ）。偶然にしては出来すぎです。実は分母は「イ×ウ＋1」、分子は「ア×イ×ウ＋ア＋ウ＝24＋ア＋ウ」になっていて、2×3×4＝24が共通だからこうなります（確かめ：(2,3,4)なら分母3×4＋1＝13、分子24＋2＋4＝30）。栄光学園がこの6つの数を選んだ理由はここにあり、（3）（4）はこの規則を使うご褒美問題です。</p></div>
+
+<h3>（2）を解く —— 整数部分と分数部分に分けて足す</h3>
+<p>6個をバラバラに通分するのは損です。<strong>整数部分（2, 3, 4が2個ずつ）と分数部分（分母ごとにペア）に分けて</strong>足します。</p>
+<div class="formula">
+和 ＝ (2＋3＋4)×2 ＋ <span class="frac"><span>3＋4</span><span class="den">13</span></span> ＋ <span class="frac"><span>2＋4</span><span class="den">9</span></span> ＋ <span class="frac"><span>2＋3</span><span class="den">7</span></span>
+＝ 18 ＋ <span class="frac"><span>7</span><span class="den">13</span></span> ＋ <span class="frac"><span>2</span><span class="den">3</span></span> ＋ <span class="frac"><span>5</span><span class="den">7</span></span>
+</div>
+<p>分数部分を分母13, 3, 7の最小公倍数273で通分します。</p>
+<div class="formula">
+<span class="frac"><span>7</span><span class="den">13</span></span>＝<span class="frac"><span>147</span><span class="den">273</span></span>，　
+<span class="frac"><span>2</span><span class="den">3</span></span>＝<span class="frac"><span>182</span><span class="den">273</span></span>，　
+<span class="frac"><span>5</span><span class="den">7</span></span>＝<span class="frac"><span>195</span><span class="den">273</span></span>
+　→　合計 <span class="frac"><span>524</span><span class="den">273</span></span> ＝ 1<span class="frac"><span>251</span><span class="den">273</span></span>
+</div>
+<div class="ans"><span class="al">答（2）</span>18 ＋ 1<span class="frac"><span>251</span><span class="den">273</span></span> ＝ <strong>19<span class="frac"><span>251</span><span class="den">273</span></span></strong></div>
+
+<h3>（3）を解く —— 「3つ足して3つ引く」を均等に</h3>
+<div class="box idea"><div class="bt">💡 最初の試行錯誤：答えの大きさの見当をつける</div>
+<p>足す3つの和をA、引く3つの和をBとすると、求めるのはA－Bの最小の正の値。20通り（3個の選び方）を全部計算するのは大変ですが、まず「答えはどのくらい小さくなりうるか」を考えます。6つの数を分母7, 9, 13の共通の土俵——最小公倍数<strong>819</strong>——に乗せると、すべての値は「819分のいくつ」で表せる。だからA－Bも必ず <strong>819分の整数</strong>。つまり答えの候補は 1/819, 2/819, 3/819, … のどれかで、「1/819か2/819あたりが答えだろう」と予想して探しにいくのが賢い姿勢です。</p></div>
+<p><strong>ステップ1：整数部分をまず打ち消す。</strong>整数部分は2, 3, 4が2個ずつあるので、A側とB側に「2, 3, 4を1つずつ」配れば整数部分の差は0になり、勝負は分数部分だけになります。逆に整数部分が偏ると差は1近くかそれ以上になってしまう（分数部分はどれも1/2未満なので取り返せない）ので、まず均等配分が大前提です。</p>
+<p><strong>ステップ2：ペアの「差」を通分して比べる。</strong>同じ分母のペアの差は</p>
+<table class="t">
+<tr><th>ペア</th><th>差</th><th>819分の～で表すと</th></tr>
+<tr><td>30/13 と 29/13</td><td>1/13</td><td>63</td></tr>
+<tr><td>31/9 と 29/9</td><td>2/9</td><td>182</td></tr>
+<tr><td>31/7 と 30/7</td><td>1/7</td><td>117</td></tr>
+</table>
+<p>各ペアの大きい方をAに入れれば差は「＋その数」、Bに入れれば「－その数」として効きます。つまり求める値は</p>
+<div class="formula">（±63 ±182 ±117）÷ 819　の形（符号は自由に選べる）</div>
+<p><strong>ステップ3：±の組合せを全部調べる（2×2×2＝8通り、符号を全部逆にしたものは絶対値が同じなので実質4通り）。</strong></p>
+<div class="formula">
+63＋182＋117＝362　／　－63＋182＋117＝236　／　63－182＋117＝－2　／　63＋182－117＝128
+</div>
+<p>絶対値が最小なのは「63－182＋117＝－2」つまり符号を逆にした <span class="kw">－63＋182－117＝＋2</span>。よって最小の正の値は <strong>2/819</strong> です。「182（＝2/9）だけをA側に、63と117をB側に振り分ける」——本誌の言葉でいえば「182－(63＋117)＝2 と振り分ける場合が最も均等」ということです。</p>
+<p>具体的な入れ方の一例（Aに 31/9、29/13、30/7、Bに残り）：</p>
+<div class="ans"><span class="al">答（3）一例と値</span>
+3<span class="frac"><span>4</span><span class="den">9</span></span> ＋ 2<span class="frac"><span>3</span><span class="den">13</span></span> ＋ 4<span class="frac"><span>2</span><span class="den">7</span></span> － 2<span class="frac"><span>4</span><span class="den">13</span></span> － 3<span class="frac"><span>2</span><span class="den">9</span></span> － 4<span class="frac"><span>3</span><span class="den">7</span></span> ＝ <strong><span class="frac"><span>2</span><span class="den">819</span></span></strong>
+</div>
+<p class="small">検算：(31/9－29/9)＋(29/13－30/13)＋(30/7－31/7)＝2/9－1/13－1/7＝(182－63－117)/819＝2/819 ○。なお、ぴったり均等（±63±182±117＝0になる組合せ）は存在しないので0にはできず、819分の奇数もつくれない（63, 182, 117の和や差は必ず偶数：奇数が63と117の2個なので）ことから、2/819より小さい正の値がないことも裏づけられます。</p>
+
+<h3>（4）を解く —— 仮分数にして「材料」を観察する</h3>
+<p>掛け算・割り算の問題では帯分数は邪魔なので、<strong>全部仮分数にして分子・分母の「材料」を並べます</strong>。</p>
+<div class="formula">
+<span class="frac"><span>29</span><span class="den">13</span></span>，<span class="frac"><span>30</span><span class="den">13</span></span>，
+<span class="frac"><span>29</span><span class="den">9</span></span>，<span class="frac"><span>31</span><span class="den">9</span></span>，
+<span class="frac"><span>30</span><span class="den">7</span></span>，<span class="frac"><span>31</span><span class="den">7</span></span>
+</div>
+<p>気づき③で見たとおり、<strong>分子は29, 30, 31が2個ずつ、分母は7, 9, 13が2個ずつ</strong>。「×3つ ÷3つ」の計算結果は</p>
+<div class="formula">
+<span class="frac"><span>掛ける3つの分子の積 × 割る3つの分母の積</span><span class="den">掛ける3つの分母の積 × 割る3つの分子の積</span></span>
+</div>
+<p>となります（割り算は逆数の掛け算だから）。そこで、<strong>掛ける3つに「分子29, 30, 31を1つずつ・分母7, 9, 13を1つずつ」が揃うように選べば</strong>、割る3つにも自動的に同じ材料が揃い、分子と分母が完全に打ち消し合って計算結果は1（整数！）になります。たとえば掛ける3つを 30/13, 29/9, 31/7 とすると、割る3つは 29/13, 31/9, 30/7 で、材料はどちらも「29, 30, 31と7, 9, 13」。</p>
+<div class="ans"><span class="al">答（4）一例</span>
+2<span class="frac"><span>4</span><span class="den">13</span></span> × 3<span class="frac"><span>2</span><span class="den">9</span></span> × 4<span class="frac"><span>3</span><span class="den">7</span></span> ÷ 2<span class="frac"><span>3</span><span class="den">13</span></span> ÷ 3<span class="frac"><span>4</span><span class="den">9</span></span> ÷ 4<span class="frac"><span>2</span><span class="den">7</span></span>（計算結果は 1）
+</div>
+<p class="small">検算：(30×29×31)/(13×9×7) ÷ {(29×31×30)/(13×9×7)} ＝ 1 ○。実は整数になる入れ方はこの選び方（と、掛ける組・割る組を入れかえたもの）しかありません——結果が1以外の整数になる組合せは存在しないことも、材料の偏りを考えると納得できます。</p>
+
+<h3>本誌解説（P43〜44）の読み解き</h3>
+<div class="box mag"><div class="bt">📖 本誌のポイント①：（3）のリード文「均等にする」</div>
+<p>本誌はリード文で「全パターン実際に計算するのは大変ですから、『足す3つの数の和と引く3つの数の和をできるだけ均等にする』と考えましょう。分母の最小公倍数である819に通分して考えてみます」と方針を宣言しています。解説本文では、まずA・Bどちらにも 2 3/13、3 2/9、4 2/7 を入れた「完全に等しい状態（A＝B）」を仮に置き、そこから「2つある2台の数の一方を 2 4/13 に置きかえるとAかBの一方が1/13増える。同様に2/9、1/7だけ増える置きかえがある。AとBができるだけ均等に増えるようにする」という<strong>「基準からのずらし」</strong>で説明します。1/13＝63/819、2/9＝182/819、1/7＝117/819 を出し、182－(63＋117)＝2 の振り分けが最も均等、と結論。ずらしの発想は、差の最小化問題（つるかめのずらし、平均からのずらし）と同じ思想で、栄光学園の「最も小さくなる場合を自信を持って正解できますか？」（本誌の面白さコメント）への模範回答になっています。</p></div>
+<div class="box mag"><div class="bt">📖 本誌のポイント②：（4）は「観察」の一言</div>
+<p>リード文は「仮分数で表して、分母と分子に現れる数を観察してみましょう」。解説は、分子に29, 30, 31が2個ずつ・分母に7, 9, 13が2個ずつ現れることを指摘し、「これらの数を、かける3つの数と割る3つの数に1個ずつ振り分けることができれば、計算結果は1となります」として上と同じ例を挙げます。さらに<strong>注</strong>として「分子に3種類の数が2個ずつ現れる性質は、2, 3, 4でない他の3つの数でも成り立ちます（ア、イ、ウの文字のまま式変形すると確認できます）」と一般化に言及。実際、値＝ア＋<span class="frac"><span>ウ</span><span class="den">イ×ウ＋1</span></span>＝<span class="frac"><span>ア×イ×ウ＋ア＋ウ</span><span class="den">イ×ウ＋1</span></span> で、分子の「ア×イ×ウ」は3つの数の積だから並べ方によらず共通、残りは「両端の2数の和」なので3種類×2個ずつになる——という仕組みです。<strong>具体例で見つけた規則の「なぜ」を一段掘る</strong>、中数らしい注です。</p></div>
+</section>
+
+<!-- ================= 第3問 ================= -->
+<section class="p3">
+<h2 class="prob"><span class="num">3</span>タイル切り<span class="src">'25 渋谷教育学園幕張（本誌P40）</span></h2>
+
+<div class="stmt">
+<div class="qhead">問題</div>
+<p>次の各問いに答えなさい。</p>
+<p>（1）縦の長さが5cm、横の長さが12cmの長方形ABCDがあり、1辺の長さが1cmの正方形のタイルを、その内側にすき間なく敷きつめました。</p>
+<p style="padding-left:1em;">① 長方形ABCDを対角線ACで切ったとき、切られていない正方形のタイルは何枚ですか。</p>
+<p style="padding-left:1em;">② 長方形ABCDを対角線AC、DBで切ったとき、切られていない正方形のタイルは何枚ですか。</p>
+<p>（2）縦の長さが7cm、横の長さが21cmの長方形PQRSがあり、1辺の長さが1cmの正方形のタイルを、その内側にすき間なく敷きつめました。また、辺PS上に点Tを、辺QR上に点Uを、PTとRUの長さがどちらも2cmとなるようにとりました。長方形PQRSを4本の直線TQ、SU、TU、SQで切ったとき、切られていない正方形のタイルは何枚ですか。</p>
+<p class="small">※図の配置：（1）はAが左上、Dが右上、Bが左下、Cが右下。（2）はPが左上、Sが右上、Qが左下、Rが右下で、Tは上の辺PS上（Pから2cm）、Uは下の辺QR上（Rから2cm）。</p>
+</div>
+
+<h3>まず問題を眺める —— どこに気づくか</h3>
+<div class="box idea"><div class="bt">💡 気づき①：「切られていない」は引き算で数える</div>
+<p>切られていないタイルを直接数えるのは形がバラバラで大変。<strong>「全部の枚数」－「切られた枚数」</strong>で数えるのが自然です（補集合の発想）。すると問題は「直線が何枚のタイルを通過するか」に置きかわります。</p></div>
+<div class="box idea"><div class="bt">💡 気づき②：直線が通るタイルの枚数には有名な数え方がある</div>
+<p>長方形の対角線が通るマスの数——方眼紙に線を引いたことがあれば、「線がタテ線・ヨコ線を横切るたびに新しいマスに入る」ことに気づけます。まずこの道具を用意しましょう。</p></div>
+
+<div class="box pre"><div class="bt">📚 前提知識：対角線が通過するタイルの枚数</div>
+<p>縦▲cm、横●cmの長方形の対角線を、端から端までたどって歩くと考えます。スタートのタイルが1枚。そのあと<strong>新しいタイルに入るのは「タテの線を横切る瞬間」（●－1回）と「ヨコの線を横切る瞬間」（▲－1回）</strong>です。ただし、タテ線とヨコ線の交点（格子点）をちょうど通り抜けるときは、2つの瞬間が同時に起きて1枚しか増えません。</p>
+<p>▲と●の最大公約数が1のとき、対角線は途中の格子点を一度も通りません（途中で格子点を通るなら、そこまでの縦横の比が▲：●を小さくした比になってしまい、これ以上簡単にできない比であることに反します）。よって通過枚数は</p>
+<div class="formula"><span class="kw">1 ＋（▲－1）＋（●－1）＝ ▲＋●－1（枚）</span>　……（★）</div>
+<p>途中で格子点を通る場合は、通るたびに1枚ずつ重複が消えます。一般には「▲＋●－（▲と●の最大公約数）」枚です。</p></div>
+
+<h3>（1）①を解く</h3>
+<p>5と12の最大公約数は1なので、（★）より対角線ACが通過するタイルは</p>
+<div class="formula">5 ＋ 12 － 1 ＝ 16（枚）</div>
+<div class="fig">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 436 212" style="max-width:436px;width:100%;height:auto;">
+<rect x="26" y="26" width="384" height="160" fill="#ffffff"/>
+<rect x="90.0" y="26.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="218.0" y="90.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="26.0" y="26.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="250.0" y="122.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="314.0" y="154.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="154.0" y="58.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="282.0" y="122.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="378.0" y="154.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="58.0" y="26.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="154.0" y="90.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="90.0" y="58.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="122.0" y="58.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="346.0" y="154.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="250.0" y="90.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="314.0" y="122.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="186.0" y="90.0" width="32" height="32" fill="#f6d9c9"/>
+<g stroke="#b8c0cc" stroke-width="1">
+<line x1="26.0" y1="186.0" x2="26.0" y2="26.0"/>
+<line x1="58.0" y1="186.0" x2="58.0" y2="26.0"/>
+<line x1="90.0" y1="186.0" x2="90.0" y2="26.0"/>
+<line x1="122.0" y1="186.0" x2="122.0" y2="26.0"/>
+<line x1="154.0" y1="186.0" x2="154.0" y2="26.0"/>
+<line x1="186.0" y1="186.0" x2="186.0" y2="26.0"/>
+<line x1="218.0" y1="186.0" x2="218.0" y2="26.0"/>
+<line x1="250.0" y1="186.0" x2="250.0" y2="26.0"/>
+<line x1="282.0" y1="186.0" x2="282.0" y2="26.0"/>
+<line x1="314.0" y1="186.0" x2="314.0" y2="26.0"/>
+<line x1="346.0" y1="186.0" x2="346.0" y2="26.0"/>
+<line x1="378.0" y1="186.0" x2="378.0" y2="26.0"/>
+<line x1="410.0" y1="186.0" x2="410.0" y2="26.0"/>
+<line x1="26.0" y1="186.0" x2="410.0" y2="186.0"/>
+<line x1="26.0" y1="154.0" x2="410.0" y2="154.0"/>
+<line x1="26.0" y1="122.0" x2="410.0" y2="122.0"/>
+<line x1="26.0" y1="90.0" x2="410.0" y2="90.0"/>
+<line x1="26.0" y1="58.0" x2="410.0" y2="58.0"/>
+<line x1="26.0" y1="26.0" x2="410.0" y2="26.0"/>
+</g>
+<rect x="26" y="26" width="384" height="160" fill="none" stroke="#41506b" stroke-width="2"/>
+<line x1="26.0" y1="26.0" x2="410.0" y2="186.0" stroke="#c2452d" stroke-width="2.5"/>
+<text x="11.6" y="14.800000000000011" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">A</text>
+<text x="424.4" y="14.800000000000011" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">D</text>
+<text x="11.6" y="197.2" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">B</text>
+<text x="424.4" y="197.2" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">C</text>
+</svg>
+<div class="cap">図1　対角線ACが通過する16枚（うすい橙色）。タテ線を11回、ヨコ線を4回横切り、同時に横切る場所はない。</div>
+</div>
+<div class="ans"><span class="al">答（1）①</span>5×12 － 16 ＝ <strong>44枚</strong></div>
+
+<h3>（1）②を解く —— 「2本で切る」は重なりに注意</h3>
+<p>対角線DBも同じ形なので16枚を通過します。単純に 60－16－16＝28 としたいところですが、<strong>2本の対角線の両方に切られるタイルを2回引いてしまっている</strong>可能性があります。2本が交わるのは長方形の中心。中心のまわりを拡大して調べます。</p>
+<p>中心は左から6cm、下から2.5cmの点。高さ2.5cmは「下から3段目のタイル（高さ2cm〜3cmの帯）」のちょうど真ん中の高さです。対角線ACがこの帯（高さ1cmぶん）を通る間に、横方向には 12×(1/5)＝2.4cm 進みます。中心の左右に1.2cmずつ、つまり<strong>左から4.8cm〜7.2cmの範囲</strong>で、ACは3段目の帯の中にいます。この範囲がかかるタイルは、3段目の左から5、6、7、8枚目の<strong>4枚</strong>。対角線DBは左右対称なので、同じ帯を右から4.8cm〜7.2cm——左からに直すと同じ4.8cm〜7.2cm——で通り、<strong>同じ4枚</strong>を通ります。</p>
+<div class="fig">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 436 212" style="max-width:436px;width:100%;height:auto;">
+<rect x="26" y="26" width="384" height="160" fill="#ffffff"/>
+<rect x="314.0" y="154.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="90.0" y="26.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="26.0" y="26.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="250.0" y="122.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="154.0" y="58.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="282.0" y="122.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="378.0" y="154.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="58.0" y="26.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="90.0" y="58.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="122.0" y="58.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="346.0" y="154.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="314.0" y="122.0" width="32" height="32" fill="#f6d9c9"/>
+<rect x="90.0" y="122.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="314.0" y="58.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="26.0" y="154.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="122.0" y="122.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="346.0" y="26.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="90.0" y="154.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="250.0" y="58.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="282.0" y="58.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="58.0" y="154.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="154.0" y="122.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="378.0" y="26.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="314.0" y="26.0" width="32" height="32" fill="#d4e2f7"/>
+<rect x="250.0" y="90.0" width="32" height="32" fill="#e9c8ef"/>
+<rect x="218.0" y="90.0" width="32" height="32" fill="#e9c8ef"/>
+<rect x="154.0" y="90.0" width="32" height="32" fill="#e9c8ef"/>
+<rect x="186.0" y="90.0" width="32" height="32" fill="#e9c8ef"/>
+<g stroke="#b8c0cc" stroke-width="1">
+<line x1="26.0" y1="186.0" x2="26.0" y2="26.0"/>
+<line x1="58.0" y1="186.0" x2="58.0" y2="26.0"/>
+<line x1="90.0" y1="186.0" x2="90.0" y2="26.0"/>
+<line x1="122.0" y1="186.0" x2="122.0" y2="26.0"/>
+<line x1="154.0" y1="186.0" x2="154.0" y2="26.0"/>
+<line x1="186.0" y1="186.0" x2="186.0" y2="26.0"/>
+<line x1="218.0" y1="186.0" x2="218.0" y2="26.0"/>
+<line x1="250.0" y1="186.0" x2="250.0" y2="26.0"/>
+<line x1="282.0" y1="186.0" x2="282.0" y2="26.0"/>
+<line x1="314.0" y1="186.0" x2="314.0" y2="26.0"/>
+<line x1="346.0" y1="186.0" x2="346.0" y2="26.0"/>
+<line x1="378.0" y1="186.0" x2="378.0" y2="26.0"/>
+<line x1="410.0" y1="186.0" x2="410.0" y2="26.0"/>
+<line x1="26.0" y1="186.0" x2="410.0" y2="186.0"/>
+<line x1="26.0" y1="154.0" x2="410.0" y2="154.0"/>
+<line x1="26.0" y1="122.0" x2="410.0" y2="122.0"/>
+<line x1="26.0" y1="90.0" x2="410.0" y2="90.0"/>
+<line x1="26.0" y1="58.0" x2="410.0" y2="58.0"/>
+<line x1="26.0" y1="26.0" x2="410.0" y2="26.0"/>
+</g>
+<rect x="26" y="26" width="384" height="160" fill="none" stroke="#41506b" stroke-width="2"/>
+<line x1="26.0" y1="26.0" x2="410.0" y2="186.0" stroke="#c2452d" stroke-width="2.5"/>
+<line x1="410.0" y1="26.0" x2="26.0" y2="186.0" stroke="#2d6cc2" stroke-width="2.5"/>
+<text x="11.6" y="14.800000000000011" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">A</text>
+<text x="424.4" y="14.800000000000011" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">D</text>
+<text x="11.6" y="197.2" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">B</text>
+<text x="424.4" y="197.2" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">C</text>
+</svg>
+<div class="cap">図2　ACのみが切るタイル（橙）、DBのみが切るタイル（青）、両方が切るタイル（紫・中央の4枚）。</div>
+</div>
+<p>したがって、切られたタイルの枚数は（重なりの4枚を二重に数えないように）</p>
+<div class="formula">16 ＋ 16 － 4 ＝ 28（枚）</div>
+<div class="ans"><span class="al">答（1）②</span>60 － 28 ＝ <strong>32枚</strong></div>
+
+<h3>（2）を解く —— 4本の直線を1本ずつ→重なりを丁寧に</h3>
+<p>作戦は同じです。<strong>「各直線が通過する枚数の合計」から「複数の直線に切られたタイルの重複」を引く</strong>。まず1本ずつ数えます。タイル全体は 7×21＝147枚。座標で、Qを左下の角として「右にx cm、上にy cm」で位置を表します（T：左から2cmの上辺上、U：左から19cmの下辺上）。</p>
+<table class="t">
+<tr><th>直線</th><th>結ぶ点</th><th>縦×横の広がり</th><th>最大公約数</th><th>通過枚数</th></tr>
+<tr><td>TQ</td><td>上(2, 7)—下(0, 0)</td><td>7 × 2</td><td>1</td><td>7＋2－1＝<strong>8</strong></td></tr>
+<tr><td>SU</td><td>上(21, 7)—下(19, 0)</td><td>7 × 2</td><td>1</td><td>7＋2－1＝<strong>8</strong></td></tr>
+<tr><td>TU</td><td>上(2, 7)—下(19, 0)</td><td>7 × 17</td><td>1</td><td>7＋17－1＝<strong>23</strong></td></tr>
+<tr><td>SQ</td><td>上(21, 7)—下(0, 0)</td><td>7 × 21</td><td><strong>7</strong></td><td>7＋21－7＝<strong>21</strong></td></tr>
+</table>
+<p class="small">TUの横の広がりは 21－(2＋2)＝17cm。SQは最大公約数が7なので、途中で格子点を6回通ります。「縦1cm×横3cm」の小さな長方形での通過（3枚）が7回くり返される、と見ても 3×7＝21枚。</p>
+<div class="box warn"><div class="bt">⚠ ここからが本番：重なり探し</div>
+<p>4本の直線が交わる・近づく場所の近くでは、<strong>同じタイルが2本以上の直線に切られている</strong>可能性があります。交わる場所は、（あ）Qのまわり（TQとSQが出会う）、（い）Sのまわり（SUとSQが出会う）、（う）中央（TUとSQが交差する）。TやUのまわりでは、出会う直線（TQとTU、SUとTU）が長方形のカド（格子点）で出会ってすぐ離れるため、共有するタイルはありません。</p></div>
+<p><strong>（あ）Qのまわり。</strong>TQとSQはどちらもQ（角の格子点）から出発します。TQは急な線（右に2、上に7）、SQはゆるい線（右に3ごとに上に1）ですが、出発直後はどちらも<strong>左下すみの同じ1枚</strong>の中を通ります。→ 重なり1枚。</p>
+<p><strong>（い）Sのまわり。</strong>SUとSQはどちらもS（右上の角）に集まるので、集まる直前は両方とも<strong>右上すみの同じ1枚</strong>の中を通ります。→ 重なり1枚。<span class="small">（確かめ：最上段の帯（高さ6〜7cm）で、SQは左から18cm〜21cmの3枚を、SUは左から約20.7cm〜21cmの1枚を通ります。共通なのは右上すみの1枚だけです。）</span></p>
+<p><strong>（う）中央。</strong>TUとSQの交点を求めます。SQは「右に3進むごとに上に1」の線で、高さ3.5cmになるのは左から10.5cmの地点。TUは「Tから右に17進む間に7下がる」線で、左から10.5cmの地点の高さは 7－(8.5×7/17)＝7－3.5＝3.5cm。<strong>ぴったり一致：交点は（10.5, 3.5）</strong>、下から4段目の帯（高さ3〜4cm）のど真ん中です。この帯の中でSQは左から9cm〜12cmの3枚（10, 11, 12枚目）を、TUは左から約9.29cm〜約11.71cmの範囲、すなわち同じ3枚（10, 11, 12枚目）を通ります。→ 重なり<strong>3枚</strong>。</p>
+<div class="fig">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 724 276" style="max-width:724px;width:100%;height:auto;">
+<rect x="26" y="26" width="672" height="224" fill="#ffffff"/>
+<rect x="666.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="410.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="474.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="474.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="570.0" y="218.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="122.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="154.0" y="26.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="186.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="634.0" y="218.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="634.0" y="26.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="26.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="634.0" y="122.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="378.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="442.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="58.0" y="26.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="58.0" y="218.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="58.0" y="122.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="538.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="250.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="506.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="218.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="218.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="666.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="154.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="122.0" y="26.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="570.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="634.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="282.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="314.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="26.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="442.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="538.0" y="218.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="58.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="506.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="602.0" y="218.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="218.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="602.0" y="26.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="666.0" y="122.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="410.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="474.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="154.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="186.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="282.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="634.0" y="186.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="26.0" y="122.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="90.0" y="218.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="58.0" y="90.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="90.0" y="26.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="538.0" y="58.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="250.0" y="154.0" width="32" height="32" fill="#efe6d2"/>
+<rect x="666.0" y="26.0" width="32" height="32" fill="#e9c8ef"/>
+<rect x="314.0" y="122.0" width="32" height="32" fill="#e9c8ef"/>
+<rect x="26.0" y="218.0" width="32" height="32" fill="#e9c8ef"/>
+<rect x="378.0" y="122.0" width="32" height="32" fill="#e9c8ef"/>
+<rect x="346.0" y="122.0" width="32" height="32" fill="#e9c8ef"/>
+<g stroke="#b8c0cc" stroke-width="1">
+<line x1="26.0" y1="250.0" x2="26.0" y2="26.0"/>
+<line x1="58.0" y1="250.0" x2="58.0" y2="26.0"/>
+<line x1="90.0" y1="250.0" x2="90.0" y2="26.0"/>
+<line x1="122.0" y1="250.0" x2="122.0" y2="26.0"/>
+<line x1="154.0" y1="250.0" x2="154.0" y2="26.0"/>
+<line x1="186.0" y1="250.0" x2="186.0" y2="26.0"/>
+<line x1="218.0" y1="250.0" x2="218.0" y2="26.0"/>
+<line x1="250.0" y1="250.0" x2="250.0" y2="26.0"/>
+<line x1="282.0" y1="250.0" x2="282.0" y2="26.0"/>
+<line x1="314.0" y1="250.0" x2="314.0" y2="26.0"/>
+<line x1="346.0" y1="250.0" x2="346.0" y2="26.0"/>
+<line x1="378.0" y1="250.0" x2="378.0" y2="26.0"/>
+<line x1="410.0" y1="250.0" x2="410.0" y2="26.0"/>
+<line x1="442.0" y1="250.0" x2="442.0" y2="26.0"/>
+<line x1="474.0" y1="250.0" x2="474.0" y2="26.0"/>
+<line x1="506.0" y1="250.0" x2="506.0" y2="26.0"/>
+<line x1="538.0" y1="250.0" x2="538.0" y2="26.0"/>
+<line x1="570.0" y1="250.0" x2="570.0" y2="26.0"/>
+<line x1="602.0" y1="250.0" x2="602.0" y2="26.0"/>
+<line x1="634.0" y1="250.0" x2="634.0" y2="26.0"/>
+<line x1="666.0" y1="250.0" x2="666.0" y2="26.0"/>
+<line x1="698.0" y1="250.0" x2="698.0" y2="26.0"/>
+<line x1="26.0" y1="250.0" x2="698.0" y2="250.0"/>
+<line x1="26.0" y1="218.0" x2="698.0" y2="218.0"/>
+<line x1="26.0" y1="186.0" x2="698.0" y2="186.0"/>
+<line x1="26.0" y1="154.0" x2="698.0" y2="154.0"/>
+<line x1="26.0" y1="122.0" x2="698.0" y2="122.0"/>
+<line x1="26.0" y1="90.0" x2="698.0" y2="90.0"/>
+<line x1="26.0" y1="58.0" x2="698.0" y2="58.0"/>
+<line x1="26.0" y1="26.0" x2="698.0" y2="26.0"/>
+</g>
+<rect x="26" y="26" width="672" height="224" fill="none" stroke="#41506b" stroke-width="2"/>
+<line x1="90.0" y1="26.0" x2="26.0" y2="250.0" stroke="#c2452d" stroke-width="2.5"/>
+<line x1="698.0" y1="26.0" x2="634.0" y2="250.0" stroke="#0e8a5f" stroke-width="2.5"/>
+<line x1="90.0" y1="26.0" x2="634.0" y2="250.0" stroke="#2d6cc2" stroke-width="2.5"/>
+<line x1="698.0" y1="26.0" x2="26.0" y2="250.0" stroke="#b8860b" stroke-width="2.5"/>
+<text x="11.6" y="14.800000000000011" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">P</text>
+<text x="90.0" y="13.199999999999989" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">T</text>
+<text x="712.4" y="14.800000000000011" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">S</text>
+<text x="11.6" y="261.2" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">Q</text>
+<text x="634.0" y="263.44" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">U</text>
+<text x="712.4" y="261.2" font-size="15" font-weight="600" fill="#2b3446" text-anchor="middle" dominant-baseline="middle">R</text>
+</svg>
+<div class="cap">図3　4本の直線と切られるタイル。ベージュ＝1本に切られるタイル、紫＝2本に切られるタイル（Q付近1枚・S付近1枚・中央3枚）。</div>
+</div>
+<div class="fig">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 332 220" style="max-width:332px;width:100%;height:auto;">
+<rect x="26.0" y="138.0" width="56" height="56" fill="#efe6d2"/>
+<rect x="26.0" y="82.0" width="56" height="56" fill="#ffffff"/>
+<rect x="26.0" y="26.0" width="56" height="56" fill="#efe6d2"/>
+<rect x="82.0" y="138.0" width="56" height="56" fill="#ffffff"/>
+<rect x="82.0" y="82.0" width="56" height="56" fill="#e9c8ef"/>
+<rect x="82.0" y="26.0" width="56" height="56" fill="#efe6d2"/>
+<rect x="138.0" y="138.0" width="56" height="56" fill="#ffffff"/>
+<rect x="138.0" y="82.0" width="56" height="56" fill="#e9c8ef"/>
+<rect x="138.0" y="26.0" width="56" height="56" fill="#ffffff"/>
+<rect x="194.0" y="138.0" width="56" height="56" fill="#efe6d2"/>
+<rect x="194.0" y="82.0" width="56" height="56" fill="#e9c8ef"/>
+<rect x="194.0" y="26.0" width="56" height="56" fill="#ffffff"/>
+<rect x="250.0" y="138.0" width="56" height="56" fill="#efe6d2"/>
+<rect x="250.0" y="82.0" width="56" height="56" fill="#ffffff"/>
+<rect x="250.0" y="26.0" width="56" height="56" fill="#efe6d2"/>
+<line x1="26.0" y1="194.0" x2="26.0" y2="26.0" stroke="#b8c0cc"/>
+<line x1="82.0" y1="194.0" x2="82.0" y2="26.0" stroke="#b8c0cc"/>
+<line x1="138.0" y1="194.0" x2="138.0" y2="26.0" stroke="#b8c0cc"/>
+<line x1="194.0" y1="194.0" x2="194.0" y2="26.0" stroke="#b8c0cc"/>
+<line x1="250.0" y1="194.0" x2="250.0" y2="26.0" stroke="#b8c0cc"/>
+<line x1="306.0" y1="194.0" x2="306.0" y2="26.0" stroke="#b8c0cc"/>
+<line x1="26.0" y1="194.0" x2="306.0" y2="194.0" stroke="#b8c0cc"/>
+<line x1="26.0" y1="138.0" x2="306.0" y2="138.0" stroke="#b8c0cc"/>
+<line x1="26.0" y1="82.0" x2="306.0" y2="82.0" stroke="#b8c0cc"/>
+<line x1="26.0" y1="26.0" x2="306.0" y2="26.0" stroke="#b8c0cc"/>
+<path d="M 26.0 52.4 L 27.4 52.9 L 28.8 53.5 L 30.2 54.1 L 31.6 54.7 L 33.0 55.2 L 34.4 55.8 L 35.8 56.4 L 37.2 57.0 L 38.6 57.5 L 40.0 58.1 L 41.4 58.7 L 42.8 59.3 L 44.2 59.8 L 45.6 60.4 L 47.0 61.0 L 48.4 61.6 L 49.8 62.2 L 51.2 62.7 L 52.6 63.3 L 54.0 63.9 L 55.4 64.5 L 56.8 65.0 L 58.2 65.6 L 59.6 66.2 L 61.0 66.8 L 62.4 67.3 L 63.8 67.9 L 65.2 68.5 L 66.6 69.1 L 68.0 69.6 L 69.4 70.2 L 70.8 70.8 L 72.2 71.4 L 73.6 72.0 L 75.0 72.5 L 76.4 73.1 L 77.8 73.7 L 79.2 74.3 L 80.6 74.8 L 82.0 75.4 L 83.4 76.0 L 84.8 76.6 L 86.2 77.1 L 87.6 77.7 L 89.0 78.3 L 90.4 78.9 L 91.8 79.4 L 93.2 80.0 L 94.6 80.6 L 96.0 81.2 L 97.4 81.8 L 98.8 82.3 L 100.2 82.9 L 101.6 83.5 L 103.0 84.1 L 104.4 84.6 L 105.8 85.2 L 107.2 85.8 L 108.6 86.4 L 110.0 86.9 L 111.4 87.5 L 112.8 88.1 L 114.2 88.7 L 115.6 89.2 L 117.0 89.8 L 118.4 90.4 L 119.8 91.0 L 121.2 91.6 L 122.6 92.1 L 124.0 92.7 L 125.4 93.3 L 126.8 93.9 L 128.2 94.4 L 129.6 95.0 L 131.0 95.6 L 132.4 96.2 L 133.8 96.7 L 135.2 97.3 L 136.6 97.9 L 138.0 98.5 L 139.4 99.0 L 140.8 99.6 L 142.2 100.2 L 143.6 100.8 L 145.0 101.4 L 146.4 101.9 L 147.8 102.5 L 149.2 103.1 L 150.6 103.7 L 152.0 104.2 L 153.4 104.8 L 154.8 105.4 L 156.2 106.0 L 157.6 106.5 L 159.0 107.1 L 160.4 107.7 L 161.8 108.3 L 163.2 108.8 L 164.6 109.4 L 166.0 110.0 L 167.4 110.6 L 168.8 111.2 L 170.2 111.7 L 171.6 112.3 L 173.0 112.9 L 174.4 113.5 L 175.8 114.0 L 177.2 114.6 L 178.6 115.2 L 180.0 115.8 L 181.4 116.3 L 182.8 116.9 L 184.2 117.5 L 185.6 118.1 L 187.0 118.6 L 188.4 119.2 L 189.8 119.8 L 191.2 120.4 L 192.6 121.0 L 194.0 121.5 L 195.4 122.1 L 196.8 122.7 L 198.2 123.3 L 199.6 123.8 L 201.0 124.4 L 202.4 125.0 L 203.8 125.6 L 205.2 126.1 L 206.6 126.7 L 208.0 127.3 L 209.4 127.9 L 210.8 128.4 L 212.2 129.0 L 213.6 129.6 L 215.0 130.2 L 216.4 130.8 L 217.8 131.3 L 219.2 131.9 L 220.6 132.5 L 222.0 133.1 L 223.4 133.6 L 224.8 134.2 L 226.2 134.8 L 227.6 135.4 L 229.0 135.9 L 230.4 136.5 L 231.8 137.1 L 233.2 137.7 L 234.6 138.2 L 236.0 138.8 L 237.4 139.4 L 238.8 140.0 L 240.2 140.6 L 241.6 141.1 L 243.0 141.7 L 244.4 142.3 L 245.8 142.9 L 247.2 143.4 L 248.6 144.0 L 250.0 144.6 L 251.4 145.2 L 252.8 145.7 L 254.2 146.3 L 255.6 146.9 L 257.0 147.5 L 258.4 148.0 L 259.8 148.6 L 261.2 149.2 L 262.6 149.8 L 264.0 150.4 L 265.4 150.9 L 266.8 151.5 L 268.2 152.1 L 269.6 152.7 L 271.0 153.2 L 272.4 153.8 L 273.8 154.4 L 275.2 155.0 L 276.6 155.5 L 278.0 156.1 L 279.4 156.7 L 280.8 157.3 L 282.2 157.8 L 283.6 158.4 L 285.0 159.0 L 286.4 159.6 L 287.8 160.2 L 289.2 160.7 L 290.6 161.3 L 292.0 161.9 L 293.4 162.5 L 294.8 163.0 L 296.2 163.6 L 297.6 164.2 L 299.0 164.8 L 300.4 165.3 L 301.8 165.9 L 303.2 166.5 L 304.6 167.1 L 306.0 167.6" fill="none" stroke="#2d6cc2" stroke-width="3"/>
+<path d="M 26.0 156.7 L 27.4 156.2 L 28.8 155.7 L 30.2 155.3 L 31.6 154.8 L 33.0 154.3 L 34.4 153.9 L 35.8 153.4 L 37.2 152.9 L 38.6 152.5 L 40.0 152.0 L 41.4 151.5 L 42.8 151.1 L 44.2 150.6 L 45.6 150.1 L 47.0 149.7 L 48.4 149.2 L 49.8 148.7 L 51.2 148.3 L 52.6 147.8 L 54.0 147.3 L 55.4 146.9 L 56.8 146.4 L 58.2 145.9 L 59.6 145.5 L 61.0 145.0 L 62.4 144.5 L 63.8 144.1 L 65.2 143.6 L 66.6 143.1 L 68.0 142.7 L 69.4 142.2 L 70.8 141.7 L 72.2 141.3 L 73.6 140.8 L 75.0 140.3 L 76.4 139.9 L 77.8 139.4 L 79.2 138.9 L 80.6 138.5 L 82.0 138.0 L 83.4 137.5 L 84.8 137.1 L 86.2 136.6 L 87.6 136.1 L 89.0 135.7 L 90.4 135.2 L 91.8 134.7 L 93.2 134.3 L 94.6 133.8 L 96.0 133.3 L 97.4 132.9 L 98.8 132.4 L 100.2 131.9 L 101.6 131.5 L 103.0 131.0 L 104.4 130.5 L 105.8 130.1 L 107.2 129.6 L 108.6 129.1 L 110.0 128.7 L 111.4 128.2 L 112.8 127.7 L 114.2 127.3 L 115.6 126.8 L 117.0 126.3 L 118.4 125.9 L 119.8 125.4 L 121.2 124.9 L 122.6 124.5 L 124.0 124.0 L 125.4 123.5 L 126.8 123.1 L 128.2 122.6 L 129.6 122.1 L 131.0 121.7 L 132.4 121.2 L 133.8 120.7 L 135.2 120.3 L 136.6 119.8 L 138.0 119.3 L 139.4 118.9 L 140.8 118.4 L 142.2 117.9 L 143.6 117.5 L 145.0 117.0 L 146.4 116.5 L 147.8 116.1 L 149.2 115.6 L 150.6 115.1 L 152.0 114.7 L 153.4 114.2 L 154.8 113.7 L 156.2 113.3 L 157.6 112.8 L 159.0 112.3 L 160.4 111.9 L 161.8 111.4 L 163.2 110.9 L 164.6 110.5 L 166.0 110.0 L 167.4 109.5 L 168.8 109.1 L 170.2 108.6 L 171.6 108.1 L 173.0 107.7 L 174.4 107.2 L 175.8 106.7 L 177.2 106.3 L 178.6 105.8 L 180.0 105.3 L 181.4 104.9 L 182.8 104.4 L 184.2 103.9 L 185.6 103.5 L 187.0 103.0 L 188.4 102.5 L 189.8 102.1 L 191.2 101.6 L 192.6 101.1 L 194.0 100.7 L 195.4 100.2 L 196.8 99.7 L 198.2 99.3 L 199.6 98.8 L 201.0 98.3 L 202.4 97.9 L 203.8 97.4 L 205.2 96.9 L 206.6 96.5 L 208.0 96.0 L 209.4 95.5 L 210.8 95.1 L 212.2 94.6 L 213.6 94.1 L 215.0 93.7 L 216.4 93.2 L 217.8 92.7 L 219.2 92.3 L 220.6 91.8 L 222.0 91.3 L 223.4 90.9 L 224.8 90.4 L 226.2 89.9 L 227.6 89.5 L 229.0 89.0 L 230.4 88.5 L 231.8 88.1 L 233.2 87.6 L 234.6 87.1 L 236.0 86.7 L 237.4 86.2 L 238.8 85.7 L 240.2 85.3 L 241.6 84.8 L 243.0 84.3 L 244.4 83.9 L 245.8 83.4 L 247.2 82.9 L 248.6 82.5 L 250.0 82.0 L 251.4 81.5 L 252.8 81.1 L 254.2 80.6 L 255.6 80.1 L 257.0 79.7 L 258.4 79.2 L 259.8 78.7 L 261.2 78.3 L 262.6 77.8 L 264.0 77.3 L 265.4 76.9 L 266.8 76.4 L 268.2 75.9 L 269.6 75.5 L 271.0 75.0 L 272.4 74.5 L 273.8 74.1 L 275.2 73.6 L 276.6 73.1 L 278.0 72.7 L 279.4 72.2 L 280.8 71.7 L 282.2 71.3 L 283.6 70.8 L 285.0 70.3 L 286.4 69.9 L 287.8 69.4 L 289.2 68.9 L 290.6 68.5 L 292.0 68.0 L 293.4 67.5 L 294.8 67.1 L 296.2 66.6 L 297.6 66.1 L 299.0 65.7 L 300.4 65.2 L 301.8 64.7 L 303.2 64.3 L 304.6 63.8 L 306.0 63.3" fill="none" stroke="#b8860b" stroke-width="3"/>
+<circle cx="166.0" cy="110.0" r="5" fill="none" stroke="#8b2fa8" stroke-width="2.5"/>
+</svg>
+<div class="cap">図4　中央の拡大。TU（青）とSQ（黄土色）は点(10.5, 3.5)（○印）で交わり、4段目の同じ3枚を通る。</div>
+</div>
+<p>切られたタイルの合計は、のべ枚数から重なり（2本に切られたタイルは2回数えているので1回ぶん引く）を補正して</p>
+<div class="formula">（8＋8＋23＋21）－（1＋1＋3）＝ 60 － 5 ＝ 55（枚）</div>
+<div class="ans"><span class="al">答（2）</span>147 － 55 ＝ <strong>92枚</strong></div>
+
+<h3>本誌解説（P44）の読み解き</h3>
+<div class="box mag"><div class="bt">📖 本誌のポイント①：（★）の公式を①の中で導いて「※」として明示</div>
+<p>本誌は①で「ACを5等分する位置で横の辺と交わり、12等分する位置で縦の辺と交わる。5と12の最大公約数は1なので、交わる位置は（A、C以外）すべて異なる。よって通過するタイルは 1＋(5－1)＋(12－1)＝16枚」と、公式を使うのではなく<strong>その場で導出</strong>しています。そのうえで注として「縦▲cm、横●cmで最大公約数が1のとき、通過枚数は 1＋(▲－1)＋(●－1)＝▲＋●－1枚 …※」と一般化。②以降はこの※を道具として使い回します。導出→一般化→再利用という、道具のつくり方の見本のような構成です。</p></div>
+<div class="box mag"><div class="bt">📖 本誌のポイント②：②の中央4枚を「距離の計算」で特定</div>
+<p>本誌は 12×(2/5)＝4.8cm、12×(3/5)＝7.2cm（辺ABからの距離）という計算で「両方の対角線が通過するタイルは4枚」を示し、44－16＋4＝32枚 と結論します。この式は「①で残った44枚から、DBが切る16枚を引くが、そのうち4枚はすでにACが切っていて44枚の中にいないので足し戻す」という意味で、私たちの 60－(16＋16－4) と同じ計算の別表現です。<strong>4.8と7.2という境目の数値を出す</strong>のがポイントで、目分量で「4枚くらい」と済ませないのが渋幕対策の要です。</p></div>
+<div class="box mag"><div class="bt">📖 本誌のポイント③：（2）は「重なるのは3か所だけ」と先に整理する</div>
+<p>本誌はまず4本それぞれの通過枚数（8、8、23、21。SQは『縦1cm、横3cmのときの様子が7回繰り返される』として3×7＝21枚）を出し、次に「複数の直線が通過するタイルは、図の点線で囲んだ3か所（TやUのまわりでは重ならない）」と<strong>調べるべき場所を先に限定</strong>します。Qのまわり・Sのまわりは各1枚、中央は3枚——ここで本誌は「（交点まわりの横の長さ）が1cmより長く3cmより短いことから、実際に長さを求めなくてもわかります」という粋な省力化を添えています。TUが4段目の帯を横切る幅は 17÷7≒2.43cm で、1cmより長く3cmより短い。だからSQが同じ帯で通る3枚のうち少なくとも2枚とかぶり、かつ交点(10.5, 3.5)が帯の中央（SQの3枚の真ん中のタイルの真上）にあることから3枚と確定——という理屈です。最後は 7×21－(8＋8＋23＋21)＋(1＋1＋3)＝147－60＋5＝92枚。<strong>「引きすぎたら足し戻す」</strong>という包除の型が、②と（2）で二度反復される構成になっています。</p></div>
+</section>
+
+<!-- ================= 第4問 ================= -->
+<section class="p4">
+<h2 class="prob"><span class="num">4</span>増殖するアンパン<span class="src">'25 海陽（本誌P41）</span></h2>
+
+<div class="stmt">
+<div class="qhead">問題</div>
+<p>ある博士が、アンパンに1滴かけると1日後には個数が2倍に増殖するという薬品を発明しました。2倍に増殖したそれぞれのアンパンも同じように増殖を繰り返します。また、増殖した直後にアンパンを1日1個まで食べることができ、食べられたアンパンは増殖しないものとします。今日1個のアンパンに薬品をかけたので、1日後には2個になります。</p>
+<p>（1）アンパンを1つも食べなかったとき、10日後に何個になっていますか。</p>
+<p>（2）2日後から毎日、増殖した直後に1個ずつアンパンを食べ続けたとすると、10日後に増殖して食べた後の段階で何個になっていますか。</p>
+<p>（3）アンパンを4個食べることで、個数を2025個にすることができます。何日後に食べればよいか答えなさい。</p>
+<p>この薬品をジャムパンにかけると、1日後には個数が3倍に増殖するということがわかりました。3倍に増殖したジャムパンもさらに増殖を繰り返します。また、増殖した直後にジャムパンを1日1個まで食べることができ、食べられたジャムパンは増殖しないこととします。今日、1個のジャムパンに薬品をかけました。</p>
+<p>（4）ジャムパンを次の個数にすることができますか。できるなら「○」、できないなら「×」で答えなさい。</p>
+<p style="padding-left:1em;">（ア）239個　（イ）52個　（ウ）67個</p>
+</div>
+
+<h3>まず問題を眺める —— どこに気づくか</h3>
+<div class="box idea"><div class="bt">💡 気づき①：ルールを1行にまとめる</div>
+<p>毎日起きることは「<strong>2倍になる → 0個か1個食べる</strong>」の2段階だけ。つまり、ある日の終わりの個数は<strong>「前日の個数×2」または「前日の個数×2－1」</strong>。この1行に全部つまっています。</p></div>
+<div class="box idea"><div class="bt">💡 気づき②：2025は2048（2を11個かけた数）にとても近い</div>
+<p>食べなければ個数は 2, 4, 8, 16, …, 1024, 2048, … と倍々に増えます。2025はこの列の <strong>2048（11日後）よりわずか23だけ少ない</strong>数。「食べる＝最大値から少し目減りさせる操作」なのだから、（3）は『11日後・目減り23』の線が本命だろう、と最初の1分で見当がつきます。</p></div>
+
+<h3>（1）を解く</h3>
+<p>毎日2倍になるだけなので、10日後は2を10個かけた数です。</p>
+<div class="formula">1 → 2 → 4 → 8 → 16 → 32 → 64 → 128 → 256 → 512 → 1024</div>
+<div class="ans"><span class="al">答（1）</span><strong>1024個</strong></div>
+
+<h3>（2）を解く —— 書き出して規則を見る</h3>
+<p>1日後は2個（まだ食べない）。2日後からは「2倍して1引く」を繰り返します。</p>
+<table class="t">
+<tr><th>日</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+<tr><th>個数</th><td>2</td><td>3</td><td>5</td><td>9</td><td>17</td><td>33</td><td>65</td><td>129</td><td>257</td><td><strong>513</strong></td></tr>
+</table>
+<div class="ans"><span class="al">答（2）</span><strong>513個</strong></div>
+<div class="box note"><div class="bt">✔ 規則のしくみ</div>
+<p>3, 5, 9, 17, …はどれも「<strong>1より1大きい、2の倍々の数＋1</strong>」（2＋1, 4＋1, 8＋1, …）。理由も見えます：「2倍して1引く」を「（1個だけ別枠にしておき）残りが倍々になる」と見ると、最初の2個のうち1個は毎日食べられる分と相殺されてずっと1個のまま、もう1個が倍々に増える——だから n日後は（2をn－1個かけた数）＋1。10日後は 512＋1＝513個です。</p></div>
+
+<h3>（3）を解く —— 2025から逆算（さかのぼり）する</h3>
+<div class="box idea"><div class="bt">💡 試行錯誤の入口：前向きは分かれ道だらけ、後ろ向きは一本道</div>
+<p>前向きに考えると毎日「食べる／食べない」の分かれ道があり、道が多すぎます。ところが<strong>後ろ向き（逆算）だと道は一本</strong>です。鍵は偶奇：2倍した直後の個数は必ず偶数。そこから1個食べれば奇数、食べなければ偶数のまま。つまり、<strong>その日の終わりの個数が奇数なら「食べた」、偶数なら「食べていない」と、偶奇だけでその日の行動が完全に確定</strong>します。分かれ道は消えました。</p></div>
+<p>2025個から1日ずつさかのぼります。「奇数なら食べた（＋1して2で割る）、偶数なら食べていない（2で割るだけ）」：</p>
+<table class="t">
+<tr><th>個数</th><th>偶奇</th><th>その日食べた？</th><th>前日の個数</th></tr>
+<tr><td>2025</td><td>奇数</td><td>食べた</td><td>(2025＋1)÷2＝1013</td></tr>
+<tr><td>1013</td><td>奇数</td><td>食べた</td><td>(1013＋1)÷2＝507</td></tr>
+<tr><td>507</td><td>奇数</td><td>食べた</td><td>(507＋1)÷2＝254</td></tr>
+<tr><td>254</td><td>偶数</td><td>食べていない</td><td>254÷2＝127</td></tr>
+<tr><td>127</td><td>奇数</td><td>食べた</td><td>(127＋1)÷2＝64</td></tr>
+</table>
+<p>ここまでで食べたのは4回。64は 2を6個かけた数 なので、さらに6日さかのぼると最初の1個に戻ります。全体では 6＋5＝11日間。さかのぼった道筋を前から読み直すと、食べたのは「最後の日」「最後から2日目」「最後から3日目」「最後から5日目」、すなわち：</p>
+<div class="ans"><span class="al">答（3）</span><strong>7日後、9日後、10日後、11日後</strong>に食べる（11日後に2025個になる）</div>
+<p class="small">検算（前向き）：6日後64 → 7日後128－1＝127 → 8日後254 → 9日後508－1＝507 → 10日後1014－1＝1013 → 11日後2026－1＝2025 ○</p>
+
+<h3>（4）を解く —— 「3で割った余り」がすべてを決める</h3>
+<p>ジャムパンは「<strong>3倍になる → 0個か1個食べる</strong>」。（3）と同じ発想で、3倍した直後の個数は必ず3の倍数だから、その日の終わりの個数は「3の倍数」（食べない）か「3の倍数－1」（1個食べる）のどちらか。3の倍数－1を3で割ると余り2なので、</p>
+<div class="box note"><div class="bt">✔ 判定のものさし</div>
+<p style="text-align:center;"><strong>1日後以降のジャムパンの個数は、3で割って余り0か余り2の数だけ</strong>。3で割って余り1の数には絶対にならない。</p></div>
+<p><strong>（ア）239個。</strong>239÷3＝79余り2 → 候補。実際にさかのぼって確かめます。余り2なので食べた日：(239＋1)÷3＝80。80÷3＝26余り2 → 食べた日：(80＋1)÷3＝27。27は3×3×3なので、あと3日さかのぼれば最初の1個。前向きに書くと 1→3→9→27→（4日後）81－1＝80→（5日後）240－1＝239。<strong>○</strong></p>
+<p><strong>（イ）52個。</strong>52÷3＝17余り1 → ものさしに引っかかる。<strong>×</strong></p>
+<p><strong>（ウ）67個。</strong>67÷3＝22余り1 → 同じく<strong>×</strong></p>
+<div class="ans"><span class="al">答（4）</span>（ア）○　（イ）×　（ウ）×</div>
+
+<h3>本誌解説（P45）の読み解き</h3>
+<div class="box mag"><div class="bt">📖 本誌のポイント①：リード文——「さかのぼり」と「2進法・3進法」の二本立て</div>
+<p>本誌はリード文で「（3）と（4）は規則性の問題として解く（最終状態からさかのぼる）方法以外に、2進法や3進法に結びつける方法もあります」と宣言し、本文はさかのぼり、[別解]と注で進法の見方を扱います。解法の背骨は上の解説と同じ：「2倍に増殖した時点での個数は必ず偶数なので、残った個数が偶数ならその日は食べておらず、奇数なら食べている」。</p></div>
+<div class="box mag"><div class="bt">📖 本誌のポイント②：（3）の[別解]——「2048との差23を、2の倍々の和で表す」</div>
+<p>本誌の別解はこう考えます。11日間1個も食べなかった場合（2048個）と比べる。<strong>最後の日に食べた1個は1個の目減り。最後から2日目に食べた1個は、もし食べなければ2個に増えていたはずだから2個の目減り。最後から3日目なら4個の目減り…</strong>と、食べる日が1日早いごとに目減りは倍になります。だから目減りの合計 2048－2025＝23 を「1、2、4、8、16、…の中から異なる数を選んだ和」で表せばよい。23＝16＋4＋2＋1、つまり2進法で10111。食べたのは最後から1日目・2日目・3日目・5日目——前から数えて11・10・9・7日後、と一致します。<strong>「操作の影響が倍々で効く」構造はそのまま2進法</strong>だ、という見方は、この種の増殖・借金・セルオートマトン系の問題すべてで通用します。</p></div>
+<div class="box mag"><div class="bt">📖 本誌のポイント③：（4）の注——3進法での言いかえと、おかわりルール</div>
+<p>本誌は（ア）を余り2→(239＋1)÷3＝80→(80＋1)÷3＝27＝3×3×3 とさかのぼって○、（イ）（ウ）は「3で割った余りが1なので×」と即断します。さらに注では（3）の別解と同様に、「239より少し大きい、3の倍々の数243との差4に注目し、差を1、3、9、27、…の異なる数の和で表せるなら○（4＝3＋1なので○）。これは<strong>差を3進法で表したときの各位の数が0または1であること</strong>と言いかえられます」と一般化。最後に「ジャムパンを1日2個まで食べてよいことにすれば、アンパンのように1個以上のどんな個数にもできます」——3進法の各位に0、1、2まで許せば全部の数が書ける、という進法の完全性そのものを、パンの個数の言葉で述べた注で締めています。</p></div>
+</section>
+
+<!-- ================= 答え一覧 ================= -->
+<section>
+<h2 class="prob" style="color:var(--ink);"><span class="num" style="background:var(--ink);">✓</span>答え一覧</h2>
+<table class="t" style="width:100%;">
+<tr><th style="width:9em;">第1問（桐朋）</th><td style="text-align:left;">（1）① a＝4　② a＝5　（2）N＝11, 19, 27, 31　（3）N＝61, 68, 76</td></tr>
+<tr><th>第2問（栄光学園）</th><td style="text-align:left;">（1）2 3/13, 2 4/13, 3 2/9, 3 4/9, 4 2/7, 4 3/7（小さい順）　（2）19 251/273　（3）一例：3 4/9＋2 3/13＋4 2/7－2 4/13－3 2/9－4 3/7、計算結果 2/819　（4）一例：2 4/13×3 2/9×4 3/7÷2 3/13÷3 4/9÷4 2/7（計算結果1）</td></tr>
+<tr><th>第3問（渋幕）</th><td style="text-align:left;">（1）① 44枚　② 32枚　（2）92枚</td></tr>
+<tr><th>第4問（海陽）</th><td style="text-align:left;">（1）1024個　（2）513個　（3）7日後、9日後、10日後、11日後　（4）（ア）○（イ）×（ウ）×</td></tr>
+</table>
+</section>
+
+<footer>
+出典：中学への算数 2025年11月号　発展演習「数の難問で分析力と作業力を磨こう」（問題P38〜41／解答解説P42〜45）。本資料は上記問題の学習用解説として、独自の解答・検証と本誌解説の読み解きをまとめたものです。全設問の数値は計算機による厳密検証済み。
+</footer>
+
+</div>
+</body>
+</html>
