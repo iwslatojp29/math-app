@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>中学受験算数 4題の直感的な解説</title>
+<style>
+:root{--ink:#243247;--muted:#5d6878;--blue:#2d6cdf;--pale:#eef5ff;--gold:#f4b63f;--green:#16846f;--red:#c95757;--line:#d9e0e9;--paper:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f3f5f8;color:var(--ink);font-family:"Hiragino Maru Gothic ProN","Hiragino Maru Gothic Pro","Yu Gothic",Meiryo,sans-serif;line-height:1.9;font-size:16px}
+main{max-width:1040px;margin:0 auto;background:var(--paper);padding:48px 56px 80px;box-shadow:0 0 28px #cdd3dc77}h1{font-size:2rem;line-height:1.45;margin:0 0 10px}h2{margin:2.5em 0 .8em;padding:.3em .65em;border-left:7px solid var(--blue);background:var(--pale);font-size:1.55rem}h3{margin:1.8em 0 .55em;font-size:1.2rem;color:#174e98}h4{margin:1.5em 0 .4em}p{margin:.55em 0}.lead{font-size:1.08rem;color:var(--muted)}.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:25px 0}.nav a{text-decoration:none;color:#174e98;background:#f7faff;border:1px solid #bfd3ef;border-radius:10px;padding:10px;text-align:center;font-weight:700}.answer{border:2px solid var(--blue);background:#f7fbff;border-radius:14px;padding:14px 18px;margin:18px 0;font-size:1.12rem}.answer b{color:#174e98}.intuition{border-left:6px solid var(--gold);background:#fff8e7;padding:12px 18px;margin:18px 0}.key{border-left:6px solid var(--green);background:#edf9f6;padding:12px 18px;margin:18px 0}.warning{border-left:6px solid var(--red);background:#fff1f1;padding:12px 18px;margin:18px 0}.trial{border:1px dashed #9c7b27;background:#fffdf6;border-radius:10px;padding:14px 18px;margin:16px 0}.formula{display:block;text-align:center;font-size:1.08rem;font-weight:700;background:#f7f8fa;border-radius:8px;padding:8px 12px;margin:10px auto;max-width:820px}.cards{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.13em;background:#f4f6f9;padding:4px 8px;border-radius:5px;white-space:nowrap}.frac{display:inline-block;vertical-align:-.35em;text-align:center;line-height:1.05;margin:0 .08em}.frac>span{display:block;padding:0 .16em}.frac .top{border-bottom:1px solid currentColor}table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:.95rem}th,td{border:1px solid #cfd7e2;padding:8px 10px;vertical-align:top}th{background:#eaf2fd;text-align:center}.scroll{overflow-x:auto}ol,ul{padding-left:1.55em}.diagram{margin:20px auto;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:center}.diagram svg{width:100%;max-width:680px;height:auto}.caption{color:var(--muted);font-size:.9rem}.step{counter-increment:steps;position:relative;padding-left:42px;margin:14px 0}.step:before{content:counter(steps);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:1}.steps{counter-reset:steps}.alt{border-top:2px dashed #bdc6d2;margin-top:28px;padding-top:4px}.small{font-size:.9rem}.check{color:#176c5a;font-weight:700}.pagebreak{break-before:page}.scorebar{display:flex;height:32px;border-radius:7px;overflow:hidden;margin:12px 0;color:#fff;text-align:center;font-weight:bold;line-height:32px}.scorebar span:nth-child(1){background:#295fbd}.scorebar span:nth-child(2){background:#3b83cc}.scorebar span:nth-child(3){background:#36a1a1}.scorebar span:nth-child(4){background:#5fad78}.scorebar span:nth-child(5){background:#efb54b}.scorebar span:nth-child(6){background:#e8795e}@media(max-width:700px){main{padding:28px 18px}.nav{grid-template-columns:1fr 1fr}h1{font-size:1.55rem}h2{font-size:1.3rem}table{font-size:.86rem}}@media print{body{background:#fff;font-size:11pt}main{max-width:none;box-shadow:none;padding:12mm}a{color:inherit}.nav{display:none}.pagebreak{break-before:page}.diagram{break-inside:avoid}h2,h3{break-after:avoid}.answer,.intuition,.key,.warning,table{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,'Hiragino Sans',sans-serif;">← コンテンツ一覧へ戻る</a>
+<main>
+<h1>中学受験算数 4題<br>「どう気づくか」から分かる完全解説</h1>
+<p class="lead">答えを出すだけでなく、最初の試行錯誤、見通しの立て方、標準解法、別解までを、小学校算数の範囲だけで丁寧に説明します。</p>
+<div class="nav"><a href="#p1">1. 三角形</a><a href="#p2">2. 追いつき</a><a href="#p3">3. カード</a><a href="#p4">4. 小テスト</a></div>
+
+<section id="p1">
+<h2>1．正三角形の三等分点</h2>
+<div class="answer"><b>答え</b>　(1) <span class="frac"><span class="top">1</span><span>4</span></span>倍　　(2) <span class="frac"><span class="top">2</span><span>7</span></span>倍　　(3) <span class="frac"><span class="top">1</span><span>10</span></span>倍</div>
+<div class="intuition"><b>最初の見通し</b><br>「正三角形」そのものより、<b>各辺が3等分されている</b>ことを使います。そして図を120°回すと、APQ、BRS、CTUが順に重なります。この回転の対称性から、外側の小三角形は6個同じ、中央の部品は3個同じ、と予想できます。</div>
+
+<h3>(1) XYの長さ</h3>
+<p>まず、PQはBCの3等分の1です。ですから、XYがPQの何倍か分かれば終わります。</p>
+<div class="diagram">
+<svg viewBox="0 0 640 480" role="img" aria-label="大問1(1)の補助線図">
+<polygon points="80,420 560,420 320,45" fill="#fbfcfe" stroke="#27364b" stroke-width="3"/>
+<line x1="240" y1="420" x2="320" y2="45" stroke="#3778c8" stroke-width="3"/><line x1="400" y1="420" x2="320" y2="45" stroke="#3778c8" stroke-width="3"/>
+<line x1="80" y1="420" x2="480" y2="170" stroke="#d66a5f" stroke-width="3"/><line x1="560" y1="420" x2="160" y2="170" stroke="#d66a5f" stroke-width="3"/>
+<line x1="160" y1="295" x2="133.3" y2="420" stroke="#16846f" stroke-width="3" stroke-dasharray="7 5"/>
+<line x1="260" y1="326.25" x2="380" y2="326.25" stroke="#f0a52d" stroke-width="5"/>
+<g fill="#243247" font-size="19" font-weight="700"><text x="312" y="34">A</text><text x="57" y="444">B</text><text x="565" y="444">C</text><text x="232" y="446">P</text><text x="394" y="446">Q</text><text x="136" y="304">U</text><text x="122" y="446">V</text><text x="244" y="321">X</text><text x="388" y="321">Y</text></g>
+</svg><p class="caption">Uを通りAPに平行な線UVを引く。オレンジ色がXY。</p></div>
+<div class="steps">
+<p class="step">辺BCを9と考えます。すると、BP＝3、PC＝6です。</p>
+<p class="step">三角形BUVと三角形BAPは同じ形を縮めたものです。BUはBAの3分の1なので、BV＝1、UVはAPの3分の1です。</p>
+<p class="step">三角形CXPと三角形CUVも同じ形です。CP：CV＝6：8＝3：4なので、XP：UV＝3：4。よって、XPはAPの <span class="frac"><span class="top">3</span><span>4</span></span>×<span class="frac"><span class="top">1</span><span>3</span></span>＝<span class="frac"><span class="top">1</span><span>4</span></span> です。</p>
+<p class="step">したがってAXはAPの4分の3。左右対称なのでAYもAQの4分の3です。XとYは同じ高さに並び、XYはPQの4分の3になります。</p>
+</div>
+<span class="formula">XY＝PQ×<span class="frac"><span class="top">3</span><span>4</span></span>＝BC×<span class="frac"><span class="top">1</span><span>3</span></span>×<span class="frac"><span class="top">3</span><span>4</span></span>＝BC×<span class="frac"><span class="top">1</span><span>4</span></span></span>
+<p><b>答え　<span class="frac"><span class="top">1</span><span>4</span></span>倍</b></p>
+<div class="trial"><b>大ざっぱな検算：</b> PQは1辺の3分の1。XYはPQより少し短く見えるので、答えは3分の1より少し小さいはずです。4分の1はこの感覚に合います。</div>
+
+<h3>(2) 3つの三角形すべての外側</h3>
+<p>6本の辺を実際に引くと、どの三角形にも入らない場所は、三つの頂点の近くに2個ずつ、合計6個の同じ小三角形になります。1個だけ求めて6倍すればよい、というのが最初の大きな整理です。</p>
+<div class="diagram">
+<svg viewBox="0 0 640 480" role="img" aria-label="大問1(2)の外側部分">
+<defs><clipPath id="tri"><polygon points="80,420 560,420 320,45"/></clipPath></defs><polygon points="80,420 560,420 320,45" fill="#fbfcfe" stroke="#27364b" stroke-width="3"/>
+<g clip-path="url(#tri)" stroke="#476789" stroke-width="2"><line x1="320" y1="45" x2="240" y2="420"/><line x1="320" y1="45" x2="400" y2="420"/><line x1="80" y1="420" x2="480" y2="170"/><line x1="80" y1="420" x2="400" y2="295"/><line x1="560" y1="420" x2="160" y2="170"/><line x1="560" y1="420" x2="240" y2="295"/></g>
+<g fill="#f4b63f" fill-opacity=".65" stroke="#c78716" stroke-width="2"><polygon points="80,420 240,420 251.4,366.4"/><polygon points="560,420 400,420 388.6,366.4"/><polygon points="80,420 160,295 217.1,312.9"/><polygon points="560,420 480,295 422.9,312.9"/><polygon points="320,45 240,170 285.7,205.7"/><polygon points="320,45 400,170 354.3,205.7"/></g>
+<g fill="#243247" font-size="18" font-weight="700"><text x="312" y="34">A</text><text x="57" y="444">B</text><text x="565" y="444">C</text><text x="232" y="446">P</text><text x="488" y="181">R</text><text x="244" y="362">K</text></g>
+</svg><p class="caption">黄色い三角形が「3つすべての外側」。120°回転の対称性により6個は同じ面積。</p></div>
+<p>下左の1個を三角形BPKとします。KはAPとBRの交点です。</p>
+<ol>
+<li>三角形BPKとCPKは高さが同じで、底辺BP：PC＝1：2。面積を1、2と置くと、三角形BCKは3です。</li>
+<li>RはCAをC側から3等分する点なので、AとCから直線BRまでの高さの比はAR：RC＝2：1です。よって三角形ABKは三角形CBKの2倍、つまり6です。</li>
+<li>三角形ABPは6＋1＝7。BPがBCの3分の1なので、正三角形ABC全体は7×3＝21と考えられます。</li>
+<li>三角形ABK：AKR＝6：8なので、BK：KR＝3：4。Rの高さは全体の高さの3分の1、KはBからRへ7分の3進んだ点です。したがってKの高さは、全体の高さの <span class="frac"><span class="top">1</span><span>3</span></span>×<span class="frac"><span class="top">3</span><span>7</span></span>＝<span class="frac"><span class="top">1</span><span>7</span></span> です。</li>
+</ol>
+<p>三角形BPKは、底辺が全体の3分の1、高さが全体の7分の1なので、面積は全体の21分の1です。</p>
+<span class="formula">外側全部＝<span class="frac"><span class="top">1</span><span>21</span></span>×6＝<span class="frac"><span class="top">2</span><span>7</span></span></span>
+<p><b>答え　<span class="frac"><span class="top">2</span><span>7</span></span>倍</b></p>
+
+<h3>(3) 3つの三角形すべての内側</h3>
+<p>共通部分は中央の六角形です。この六角形を、中央の三角形1個と、その3辺に付く同じ小三角形3個に分けます。</p>
+<div class="diagram">
+<svg viewBox="0 0 640 480" role="img" aria-label="大問1(3)の共通六角形">
+<polygon points="80,420 560,420 320,45" fill="#fbfcfe" stroke="#27364b" stroke-width="3"/><g stroke="#8da1b8" stroke-width="1.8"><line x1="320" y1="45" x2="240" y2="420"/><line x1="320" y1="45" x2="400" y2="420"/><line x1="80" y1="420" x2="480" y2="170"/><line x1="80" y1="420" x2="400" y2="295"/><line x1="560" y1="420" x2="160" y2="170"/><line x1="560" y1="420" x2="240" y2="295"/></g>
+<polygon points="320,345 380,326.25 368,270 320,232.5 272,270 260,326.25" fill="#71cbb6" fill-opacity=".72" stroke="#16846f" stroke-width="3"/>
+<polygon points="320,232.5 260,326.25 380,326.25" fill="#2d6cdf" fill-opacity=".48"/><polygon points="260,326.25 380,326.25 320,345" fill="#f4b63f" fill-opacity=".8"/><line x1="260" y1="326.25" x2="380" y2="326.25" stroke="#27364b" stroke-width="2"/>
+<g fill="#243247" font-size="17" font-weight="700"><text x="312" y="34">A</text><text x="57" y="444">B</text><text x="565" y="444">C</text><text x="246" y="345">X</text><text x="385" y="345">Y</text><text x="309" y="365">D</text><text x="310" y="224">F</text></g>
+</svg><p class="caption">緑の六角形が共通部分。青の中央三角形＋黄色と同じ小三角形3個。</p></div>
+<p>正三角形の高さを「1」として、高さだけを追います。</p>
+<div class="scroll"><table><thead><tr><th>点・線</th><th>底辺BCからの高さ</th><th>理由</th></tr></thead><tbody>
+<tr><td>X、Y</td><td>4分の1</td><td>(1)でAX：XP＝3：1</td></tr>
+<tr><td>D（BRとCUの交点）</td><td>5分の1</td><td>平行なBC：UR＝3：2なので、BD：DR＝3：2</td></tr>
+<tr><td>F（BSとCTの交点）</td><td>2分の1</td><td>平行なBC：TS＝3：1なので、BF：FS＝3：1</td></tr>
+</tbody></table></div>
+<p>XYは全体の辺の4分の1です。</p>
+<ul>
+<li>中央の三角形FXY：底辺は4分の1、高さは <span class="frac"><span class="top">1</span><span>2</span></span>－<span class="frac"><span class="top">1</span><span>4</span></span>＝<span class="frac"><span class="top">1</span><span>4</span></span>。面積は全体の <span class="frac"><span class="top">1</span><span>4</span></span>×<span class="frac"><span class="top">1</span><span>4</span></span>＝<span class="frac"><span class="top">1</span><span>16</span></span>。</li>
+<li>下の小三角形DXY：高さは <span class="frac"><span class="top">1</span><span>4</span></span>－<span class="frac"><span class="top">1</span><span>5</span></span>＝<span class="frac"><span class="top">1</span><span>20</span></span>。面積は全体の <span class="frac"><span class="top">1</span><span>4</span></span>×<span class="frac"><span class="top">1</span><span>20</span></span>＝<span class="frac"><span class="top">1</span><span>80</span></span>。同じものが3個あります。</li>
+</ul>
+<span class="formula"><span class="frac"><span class="top">1</span><span>16</span></span>＋3×<span class="frac"><span class="top">1</span><span>80</span></span>＝<span class="frac"><span class="top">5</span><span>80</span></span>＋<span class="frac"><span class="top">3</span><span>80</span></span>＝<span class="frac"><span class="top">1</span><span>10</span></span></span>
+<p><b>答え　<span class="frac"><span class="top">1</span><span>10</span></span>倍</b></p>
+
+<div class="alt"><h3>大問1の別解：てんびんと「重なりの足し引き」</h3>
+<h4>(1) てんびんでAX：XPを出す</h4>
+<p>線分を1：2に分ける点をつり合わせるには、両端に反対の2：1のおもりを置く、という「てんびん法」を使えます。BP：PC＝1：2なので、Bに2、Cに1のおもりを置きます。またAU：UB＝2：1なので、Aに1、Bに2を置けば同じBのおもりにつながります。</p>
+<p>PにはBとCのおもりを合わせた3、Aには1があります。交点XはAP上をこの反対の比に分けるので、AX：XP＝3：1。同様にAY：YQ＝3：1です。したがってXYはPQの4分の3、全体の辺の4分の1です。</p>
+<h4>(2)(3) 2枚の重なりをまず求める</h4>
+<p>各三角形APQ、BRS、CTUの面積は、底辺が全体の3分の1で高さが同じなので、それぞれ全体の3分の1です。</p>
+<p>K＝APとBRの交点、G＝APとBSの交点、L＝AQとBSの交点とします。てんびん法（または主解法と同じ高さの面積比）で、</p>
+<span class="formula">AK：KP＝6：1、AY：YQ＝3：1、AG：GP＝3：2、AL：LQ＝3：4</span>
+<p>が得られます。APQのうち、上側でBRSからはみ出す三角形AGLは、APQの</p>
+<span class="formula"><span class="frac"><span class="top">3</span><span>5</span></span>×<span class="frac"><span class="top">3</span><span>7</span></span>＝<span class="frac"><span class="top">9</span><span>35</span></span></span>
+<p>です。下側では、三角形AKYがAPQの</p>
+<span class="formula"><span class="frac"><span class="top">6</span><span>7</span></span>×<span class="frac"><span class="top">3</span><span>4</span></span>＝<span class="frac"><span class="top">9</span><span>14</span></span></span>
+<p>なので、その下の四角形PKYQは1－9/14＝5/14です。よってAPQとBRSの重なりは、APQの</p>
+<span class="formula">1－<span class="frac"><span class="top">9</span><span>35</span></span>－<span class="frac"><span class="top">5</span><span>14</span></span>＝<span class="frac"><span class="top">27</span><span>70</span></span></span>
+<p>です。APQが全体の3分の1なので、2枚の重なりは全体の9/70。回転の対称性により、どの2枚でも同じです。</p>
+<p>この2枚の重なりから、第3の三角形の外へ出る小三角形を調べると、左右に同じものが1個ずつあります。片方を三角形KXDとします（DはBRとCUの交点）。AP上ではAX/AP＝3/4、AK/AP＝6/7なので、</p>
+<span class="formula">KX：KA＝（<span class="frac"><span class="top">6</span><span>7</span></span>－<span class="frac"><span class="top">3</span><span>4</span></span>）：<span class="frac"><span class="top">6</span><span>7</span></span>＝<span class="frac"><span class="top">1</span><span>8</span></span></span>
+<p>です。またBR上ではBK/BR＝3/7、BD/BR＝3/5なので、</p>
+<span class="formula">KD：KR＝（<span class="frac"><span class="top">3</span><span>5</span></span>－<span class="frac"><span class="top">3</span><span>7</span></span>）：<span class="frac"><span class="top">4</span><span>7</span></span>＝<span class="frac"><span class="top">3</span><span>10</span></span></span>
+<p>です。三角形ABRは全体の2/3、そのうち三角形KARは底辺がBRの4/7なので、三角形KARは全体の8/21です。Kを同じ頂点として、Kから出る2本の辺がそれぞれ1/8、3/10になると、底辺も高さもその割合で小さくなるため、面積には2つの割合をかけます。よって三角形KXDは、</p>
+<span class="formula"><span class="frac"><span class="top">8</span><span>21</span></span>×<span class="frac"><span class="top">1</span><span>8</span></span>×<span class="frac"><span class="top">3</span><span>10</span></span>＝<span class="frac"><span class="top">1</span><span>70</span></span></span>
+<p>です。したがって3枚全部の重なりは、9/70－1/70－1/70＝1/10となります。</p>
+<h4>外側を足し引きで出す</h4><p>3枚を単純に足すと、2枚重なった所は余分に、3枚重なった所はさらに余分に数えています。そこで3組の2枚重なりを引き、3枚重なりを1回戻します。</p>
+<span class="formula">少なくとも1つに入る部分＝1－3×<span class="frac"><span class="top">9</span><span>70</span></span>＋<span class="frac"><span class="top">1</span><span>10</span></span>＝<span class="frac"><span class="top">5</span><span>7</span></span></span>
+<span class="formula">全部の外側＝1－<span class="frac"><span class="top">5</span><span>7</span></span>＝<span class="frac"><span class="top">2</span><span>7</span></span></span>
+<p class="small">この別解は足し引きが短い反面、「2枚の重なりが9/70」を別に面積比で求める必要があります。最初に解くときは、黄色の小三角形1個を求めて6倍する主解法の方が見通しがよいでしょう。</p></div>
+</section>
+
+<section id="p2" class="pagebreak">
+<h2>2．池の周りと橋で追いつく</h2>
+<div class="answer"><b>答え</b>　(1) ア：<span class="frac"><span class="top">1</span><span>9</span></span>倍、<span class="frac"><span class="top">5</span><span>9</span></span>倍　／　イ：<span class="frac"><span class="top">7</span><span>9</span></span>倍<br>(2) <span class="frac"><span class="top">11</span><span>17</span></span>倍、<span class="frac"><span class="top">15</span><span>17</span></span>倍</div>
+<div class="intuition"><b>最初の一手：</b> 比が1：1：2なので、池の道1周を「4」と置きます。するとAB＝1、BC＝1、道のCA＝2。橋も1周の半分なので2です。驚くことに、太郎のコースも花子のコースも1周の長さは4です。</div>
+<div class="diagram">
+<svg viewBox="0 0 650 350" role="img" aria-label="池のコースを長さ4の帯で表した図"><path d="M110 92 C175 20 450 20 535 95 C610 160 560 290 445 305 C280 328 100 285 85 180 C80 140 88 112 110 92Z" fill="#eaf6fb" stroke="#397a9b" stroke-width="3"/><path d="M340 52 L145 185 L345 300" fill="none" stroke="#d66a5f" stroke-width="5"/><circle cx="340" cy="52" r="6" fill="#243247"/><circle cx="145" cy="185" r="6" fill="#243247"/><circle cx="345" cy="300" r="6" fill="#243247"/><g font-size="20" font-weight="700"><text x="350" y="48">A</text><text x="118" y="183">B</text><text x="355" y="320">C</text></g><g transform="translate(70,320)"><line x1="0" y1="0" x2="500" y2="0" stroke="#243247" stroke-width="3"/><line x1="0" y1="-8" x2="0" y2="8" stroke="#243247"/><line x1="125" y1="-8" x2="125" y2="8" stroke="#243247"/><line x1="250" y1="-8" x2="250" y2="8" stroke="#243247"/><line x1="500" y1="-8" x2="500" y2="8" stroke="#243247"/><text x="-7" y="25">A(0)</text><text x="110" y="25">B(1)</text><text x="235" y="25">C(2)</text><text x="468" y="25">A(4)</text></g></svg>
+<p class="caption">A→B→Cまでは同じ道。C→Aでは太郎は池の外周、花子は橋なので、「1周内の進み具合」が同じでも会わないことがある。</p></div>
+<div class="key"><b>追いつき判定の核</b><br>太郎が花子より4、8、12、…だけ多く進むと、2人の「1周の中での進み具合」はそろいます。その位置がAからCまで（0～2）なら同じ道なので追いつきます。CからAまで（2～4）なら別々の道なので、進み具合がそろっても会いません。</div>
+
+<h3>(1) 太郎が5回目にCを通るとき</h3>
+<p>太郎がCを通る道のりは、2、6、10、14、18。よって5回目は18です。同時に花子もCにいるので、遅い花子の道のりは2、6、10、14のどれかです。</p>
+<div class="scroll"><table><thead><tr><th>花子の道のり</th><th>速さ（太郎の何倍）</th><th>18までに進み具合がそろう太郎の道のり</th><th>判定</th></tr></thead><tbody>
+<tr><td>2</td><td>1/9</td><td>4 1/2、9、13 1/2、18</td><td>9のときB。ア</td></tr>
+<tr><td>6</td><td>1/3</td><td>6、12、18</td><td>Bではない。しかも6で既にCで会う</td></tr>
+<tr><td>10</td><td>5/9</td><td>9、18</td><td>9のときB。ア</td></tr>
+<tr><td>14</td><td>7/9</td><td>18だけ</td><td>このとき初めて。イ</td></tr>
+</tbody></table></div>
+<p>太郎が9進むと、1周4を2周してあと1なのでBです。したがってアは1/9倍と5/9倍、初めて追いつくイは7/9倍です。</p>
+
+<h3>(2) 太郎が9回目にCを通るとき、初めて追いつく</h3>
+<p>9回目のCは、2、6、10、…、34なので、太郎は34進みます。花子がCにいる道のりは2、6、10、14、18、22、26、30。速さの候補は次の8個です。</p>
+<span class="formula">1/17、3/17、5/17、7/17、9/17、11/17、13/17、15/17</span>
+<div class="scroll"><table><thead><tr><th>候補</th><th>最初（または途中）の進み具合がそろう所</th><th>34より前に会うか</th></tr></thead><tbody>
+<tr><td>1/17</td><td>太郎が4 1/4</td><td>0～2の共通の道。会う</td></tr><tr><td>3/17</td><td>4 6/7</td><td>共通の道。会う</td></tr><tr><td>5/17</td><td>5 2/3</td><td>共通の道。会う</td></tr><tr><td>7/17</td><td>6 4/5は別の道だが、次の13 3/5は共通の道</td><td>会う</td></tr><tr><td>9/17</td><td>8 1/2</td><td>共通の道。会う</td></tr><tr><td><b>11/17</b></td><td>11 1/3、22 2/3はどちらも2～4</td><td><b>別の道なので会わない</b></td></tr><tr><td>13/17</td><td>17（4で割ると余り1）</td><td>Bで会う</td></tr><tr><td><b>15/17</b></td><td>34で初めてそろう</td><td><b>それ以前は会わない</b></td></tr>
+</tbody></table></div>
+<p><b>答え　11/17倍、15/17倍</b></p>
+<div class="warning"><b>最大の落とし穴：</b> 11/17倍では、34より前に進み具合が2回そろいます。しかし余りが3 1/3、2 2/3なので、太郎は池の周り、花子は橋にいます。「そろう＝必ず会う」ではありません。</div>
+
+<div class="alt"><h3>大問2の別解：速さの差から調べる</h3>
+<p>太郎の速さを1とします。花子が11/17倍なら速さの差は6/17。1周分の差4がつくまでに太郎が進む道のりは、</p><span class="formula">4÷<span class="frac"><span class="top">6</span><span>17</span></span>＝11<span class="frac"><span class="top">1</span><span>3</span></span></span>
+<p>よって進み具合がそろうのは11 1/3、22 2/3、34。最初の2回は別の道、3回目のCで初めて会います。15/17倍なら差は2/17で、4÷2/17＝34。最初にそろうのがそのまま9回目のCです。</p>
+<p class="trial"><b>直感：</b> 9回目まで追いつかないなら、花子は太郎にかなり近い速さのはず。そこで15/17がまず有力。ただし「別の道ですれ違う」11/17も残る、という二段構えです。</p></div>
+</section>
+
+<section id="p3" class="pagebreak">
+<h2>3．カードを左端へ動かす</h2>
+<div class="answer"><b>答え</b>　(1) ①3回　②3回　　(2) 5回　　(3) 2回：24通り、4回：240通り　　(4) 3083回</div>
+<div class="intuition"><b>最初の発見：</b> 1枚を左端へ動かしても、<b>選ばなかったカードどうしの前後関係は変わりません。</b> そこで、動かすカードを探すより、「最初から正しい順で並んでいて、動かさず残せるカード」を右側から探します。</div>
+<h3>最小回数を一目で数える規則</h3>
+<p>6を残し、次に5が6より左にあるか、次に4が5より左にあるか……と、6から1つずつ小さい数をさかのぼります。途中で順が逆になったら止めます。そこから小さいカードを全部動かすのが最小です。</p>
+<div class="key"><b>なぜこれで最小か：</b> 動かさないカードどうしの順番は、最後まで変わりません。ですから、動かさず残すカードは「4、5、6」のように初めから正しい順でなければなりません。残りの1、2、3は、3→2→1の順で左端へ運べば、最後に1、2、3、4、5、6となります。</div>
+
+<h3>(1) 2つの並び</h3>
+<p>① <span class="cards">4 1 5 2 6 3</span>：4→5→6は正しい順ですが、3は4より右なので止まります。動かすのは1、2、3の3枚。</p>
+<span class="formula"><span class="cards">415263 → 341526 → 234156 → 123456</span></span>
+<p>② <span class="cards">2 1 4 5 3 6</span>：同じく4→5→6は正しい順、3は4より右。よって3回。</p>
+<span class="formula"><span class="cards">214536 → 321456 → 231456 → 123456</span></span>
+
+<h3>(2) 一番多い最小回数</h3>
+<p>6は必ず残せます。残り5枚を5→4→3→2→1の順に左端へ運べば、どんな並びでも5回以内です。また、5が6より右にある並びでは6しか残せないので、本当に5回必要です。</p><p><b>答え　5回</b></p>
+
+<h3>(3) ちょうど2回、ちょうど4回</h3>
+<p><b>数えやすい「○回以下」を先に数え、1つ前を引く</b>のがコツです。</p>
+<div class="scroll"><table><thead><tr><th>条件</th><th>残すカード</th><th>並び方</th></tr></thead><tbody><tr><td>1回以下</td><td>2、3、4、5、6がこの順</td><td>1の場所を選ぶ：6通り</td></tr><tr><td>2回以下</td><td>3、4、5、6がこの順</td><td>1、2の場所を順に選ぶ：6×5＝30通り</td></tr><tr><td>3回以下</td><td>4、5、6がこの順</td><td>6×5×4＝120通り</td></tr><tr><td>4回以下</td><td>5、6がこの順</td><td>6×5×4×3＝360通り</td></tr></tbody></table></div>
+<span class="formula">ちょうど2回＝30－6＝24通り</span><span class="formula">ちょうど4回＝360－120＝240通り</span>
+
+<h3>(4) 720通り全部の最小回数の合計</h3>
+<div class="scroll"><table><thead><tr><th>最小回数</th><th>その回数以下</th><th>ちょうどその回数</th></tr></thead><tbody><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>6</td><td>6－1＝5</td></tr><tr><td>2</td><td>30</td><td>30－6＝24</td></tr><tr><td>3</td><td>120</td><td>120－30＝90</td></tr><tr><td>4</td><td>360</td><td>360－120＝240</td></tr><tr><td>5</td><td>720</td><td>720－360＝360</td></tr></tbody></table></div>
+<div class="scorebar"><span style="flex:1">0</span><span style="flex:5">5</span><span style="flex:24">24</span><span style="flex:90">90</span><span style="flex:240">240</span><span style="flex:360">360</span></div>
+<span class="formula">0×1＋1×5＋2×24＋3×90＋4×240＋5×360＝3083</span><p><b>答え　3083回</b></p>
+
+<div class="alt"><h3>大問3の別解</h3>
+<h4>「小さいカードを消す」見方</h4><p><span class="cards">415263</span>から1、2、3を消すと<span class="cards">456</span>になります。消したカードを大きい方から左端へ戻せばよいので3回です。「何枚消せば、残りが正しい連続した順になるか」を見る方法です。</p>
+<h4>合計を1回分ずつ重ねる</h4><p>4回必要な並びを、1回目・2回目・3回目・4回目に1ずつ数えると考えます。</p><span class="formula">(720－1)＋(720－6)＋(720－30)＋(720－120)＋(720－360)<br>＝719＋714＋690＋600＋360＝3083</span></div>
+</section>
+
+<section id="p4" class="pagebreak">
+<h2>4．4問の小テスト</h2>
+<div class="answer"><b>答え</b>　(1) 0点：3人　　(2) 4点：2人、3点：28人　　(3) 1点：8人　　(4) 2点：14人</div>
+<div class="intuition"><b>最初に「正解者」を「不正解者」に直す：</b><br>第1問から順に、不正解は 30－27＝3人、30－25＝5人、30－22＝8人、30－18＝12人。合計のまちがいは3＋5＋8＋12＝28個です。</div>
+<p>この問題は、同じ子が何問もまちがえてよいので、単に人数を足すだけでは決まりません。「一番多くする」点数の子に、まちがいをできるだけ集めるか、できるだけ分けるかを考えます。</p>
+
+<h3>(1) 0点の人を一番多くする</h3>
+<p>0点の人は4問全部をまちがえます。特に第1問の不正解者は3人しかいないので、0点の人は3人を超えられません。</p><p>実際に、その3人を4問全部不正解にします。まだ必要な不正解は、第2問2人、第3問5人、第4問9人です。残り27人の中から、それぞれ別の2人、5人、9人を選んで各1問だけ不正解にすれば、条件どおり0点を3人作れます。</p><p><b>答え　3人</b></p>
+
+<h3>(2) 4点を最少、3点を最多にする</h3>
+<h4>4点の人を一番少なく</h4><p>4点の人を減らすには、まちがいを同じ人に重ねず、なるべく別々の人へ1個ずつ配ります。まちがいは合計28個なので、満点でない人を作れるのは最大28人。したがって、30－28＝2人はどうしても満点で残ります。</p><p>実際に、第1問をまちがえる3人、第2問の5人、第3問の8人、第4問の12人をすべて別の人にすれば、28人が3点、残り2人が4点になります。</p><p><b>答え　4点は2人</b></p>
+<h4>3点の人を一番多く</h4><p>3点とは、ちょうど1問まちがえた人です。まちがいは合計28個なので、28人に1個ずつ配れば最大28人です。各問の3、5、8、12を別々の人に割り当てると、3＋5＋8＋12＝28人にできます。</p><p><b>答え　3点は28人</b></p>
+
+<h3>(3) 1点の人を一番多くする</h3>
+<p>1点とは3問まちがえた人です。3問まちがえた人は、4問のうちどれか1問だけ正解しています。</p>
+<div class="trial"><b>まず粗く考える：</b> まちがいは28個なので、1人3個ずつなら 28÷3＝9あまり1。だから9人くらいに見えます。しかし、問題ごとのまちがい人数にかたよりがあるので、9人は無理です。</div>
+<p>1点の人は、4問中3問をまちがえます。したがって、第1問と第2問の両方に正解することはできず、<b>必ず第1問か第2問の少なくとも一方をまちがえます。</b></p>
+<p>ところが、第1問をまちがえた人は3人、第2問をまちがえた人は5人しかいません。たとえ重なりを作らず全員を別人にしても、1点の人は3＋5＝8人までです。よって9人は作れません。</p>
+<p>8人なら可能です。例えば、</p>
+<ul><li>第1・第3・第4問をまちがえる人を3人</li><li>第2・第3・第4問をまちがえる人を5人</li><li>さらに別の4人は、第4問だけをまちがえる</li></ul>
+<p>とすれば、最初の8人は全員1点です。不正解者数は順に3、5、8、12人となり、ぴったり条件に合います。</p><p><b>答え　8人</b></p>
+
+<h3>(4) 2点の人を一番多くする</h3>
+<p>2点とは2問まちがえた人です。まちがいは全部で28個なので、1人に2個ずつ使うと、</p><span class="formula">28÷2＝14人</span>
+<p>が上限です。そして本当に14人作れます。例えば、不正解になった問題の組を次のようにします。</p>
+<div class="scroll"><table><thead><tr><th>まちがえる問題の組</th><th>人数</th></tr></thead><tbody><tr><td>第1問・第3問</td><td>2人</td></tr><tr><td>第1問・第4問</td><td>1人</td></tr><tr><td>第2問・第4問</td><td>5人</td></tr><tr><td>第3問・第4問</td><td>6人</td></tr></tbody></table></div>
+<p>各問の不正解は、第1問3人、第2問5人、第3問8人、第4問12人となり、条件どおりです。14人全員がちょうど2問まちがえ、残り16人を全問正解にすれば30人になります。</p><p><b>答え　14人</b></p>
+
+<div class="alt"><h3>大問4の別解：「まちがいカード」を配る</h3>
+<p>第1問カード3枚、第2問カード5枚、第3問カード8枚、第4問カード12枚、合計28枚の「まちがいカード」があると思います。</p>
+<ul><li>0点の子を増やす：1人に4種類を1枚ずつ。最も少ない第1問カードが3枚なので3人。</li><li>3点の子を増やす：1人に1枚ずつ。28枚なので28人。</li><li>2点の子を増やす：1人に異なる2種類を1枚ずつ。28÷2＝14人。</li><li>1点の子を増やす：1人に異なる3種類。枚数だけなら9人候補だが、少ない第1・第2問カードの制限で9人は作れず8人。</li></ul>
+<p class="key"><b>最大・最小問題の鉄則：</b> ①まず合計だけで「これ以上は無理」という上限・下限を出す。②次に、実際の割り振り例を1つ作り、「本当にそこまでできる」と確かめる。この2つがそろって初めて証明になります。</p></div>
+</section>
+
+<hr><p class="check">検算済み：各答えは、本文とは別の数え上げ・場合分けでも一致することを確認しています。</p>
+</main></body></html>
