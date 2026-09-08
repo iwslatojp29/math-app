@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ページ削除 - 理科・社会</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Hiragino Sans", sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+h1 { color: #333; border-bottom: 3px solid #e53935; padding-bottom: 10px; }
+.back-link { display: inline-block; margin-bottom: 20px; color: #1a73e8; text-decoration: none; font-weight: bold; }
+.back-link:hover { text-decoration: underline; }
+#password-screen { background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+#password-screen h2 { color: #555; margin-bottom: 20px; }
+#pw-input { padding: 10px 16px; font-size: 1.1em; border: 2px solid #ddd; border-radius: 8px; width: 200px; margin-right: 8px; }
+#pw-btn { padding: 10px 20px; background: #e53935; color: white; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; }
+#pw-btn:hover { background: #c62828; }
+#pw-error { color: #e53935; margin-top: 12px; font-size: 0.95em; display: none; }
+#main-screen { display: none; }
+.panel { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.panel > label { display: block; font-weight: bold; color: #555; margin-bottom: 8px; }
+.panel input[type=password] { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95em; }
+.hint { font-size: 0.82em; color: #999; margin-top: 6px; line-height: 1.6; }
+.btn { padding: 11px 22px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; font-family: inherit; }
+.btn-blue { background: #2196F3; color: white; }
+.btn-blue:hover { background: #1976D2; }
+.btn-red { background: #e53935; color: white; width: 100%; padding: 14px; }
+.btn-red:hover { background: #c62828; }
+.btn:disabled { background: #bbb; cursor: default; }
+#list-panel { display: none; }
+.list-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.list-head h3 { margin: 0; color: #333; font-size: 1.05em; }
+.link-btn { background: none; border: none; color: #1a73e8; font-size: 0.88em; cursor: pointer; font-family: inherit; padding: 0 4px; text-decoration: underline; }
+.row { display: flex; align-items: flex-start; gap: 10px; padding: 11px 4px; border-bottom: 1px solid #eee; }
+.row:last-of-type { border-bottom: none; }
+.row input { width: 18px; height: 18px; margin-top: 2px; flex: none; cursor: pointer; }
+.row label { cursor: pointer; flex: 1; min-width: 0; }
+.row .title { color: #222; font-weight: bold; font-size: 0.97em; word-break: break-word; }
+.row .file { color: #999; font-size: 0.8em; margin-top: 3px; word-break: break-all; }
+.row .orphan { display: inline-block; margin-left: 6px; padding: 1px 7px; background: #FFF3E0; color: #e65100; border-radius: 10px; font-size: 0.72em; font-weight: bold; vertical-align: 1px; }
+.empty { color: #888; padding: 16px 4px; }
+.warn { background: #FFEBEE; border-left: 4px solid #e53935; padding: 12px 14px; border-radius: 8px; color: #b71c1c; font-size: 0.88em; margin: 16px 0; }
+#status-box { display: none; }
+.status-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; font-size: 0.95em; }
+.status-item:last-child { border-bottom: none; }
+.ok { color: #43a047; } .err { color: #e53935; } .wait { color: #888; }
+</style>
+</head>
+<body>
+<a class="back-link" href="./index.html">← コンテンツ一覧へ戻る</a>
+<h1>ページを削除する</h1>
+
+<div id="password-screen">
+  <h2>🔒 パスワードを入力してください</h2>
+  <input type="password" id="pw-input" placeholder="パスワード" />
+  <button id="pw-btn">確認</button>
+  <div id="pw-error">パスワードが違います</div>
+</div>
+
+<div id="main-screen">
+  <div class="panel">
+    <label>GitHub Personal Access Token</label>
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
+    <div class="hint">
+      必要なスコープ: <code>repo</code> または <code>contents: write</code><br>
+      <a href="https://github.com/settings/tokens/new" target="_blank">トークンを作成する →</a>
+    </div>
+    <button class="btn btn-blue" id="load-btn" style="margin-top:14px;">ページ一覧を読み込む</button>
+  </div>
+
+  <div class="panel" id="list-panel">
+    <div class="list-head">
+      <h3>削除するページを選んでください</h3>
+      <div>
+        <button class="link-btn" id="sel-all">すべて選択</button>
+        <button class="link-btn" id="sel-none">選択解除</button>
+      </div>
+    </div>
+    <div id="rows"></div>
+    <div class="warn">削除するとHTMLファイル本体と一覧の両方から消えます。元に戻せません。</div>
+    <button class="btn btn-red" id="del-btn" disabled>選択したページを削除</button>
+  </div>
+
+  <div class="panel" id="status-box">
+    <h3 style="margin:0 0 12px; color:#333;">処理状況</h3>
+    <div id="status-list"></div>
+  </div>
+</div>
+
+<script>
+const PASSWORD = 'iws';
+const FOLDER = 'science-society';
+const OWNER = 'iwslatojp29';
+const REPO = 'math-app';
+const BRANCH = 'main';
+const SKIP = ['index.html', 'upload.html', 'delete.html'];
+
+function H(t) { return { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github.v3+json' }; }
+function api(p) { return 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + p; }
+function b64d(b) {
+  const bin = atob(b.replace(/\n/g, ''));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
+}
+function b64e(s) {
+  const bytes = new TextEncoder().encode(s);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function token() { return document.getElementById('token-input').value.trim(); }
+
+document.getElementById('pw-btn').addEventListener('click', checkPassword);
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+function checkPassword() {
+  if (document.getElementById('pw-input').value === PASSWORD) {
+    document.getElementById('password-screen').style.display = 'none';
+    document.getElementById('main-screen').style.display = 'block';
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+  }
+}
+
+function removeCardFromHtml(html, name) {
+  const cands = ['./' + encodeURI(name), './' + name, './' + encodeURIComponent(name)];
+  for (const c of cands) {
+    const p = html.indexOf('href="' + c + '"');
+    if (p === -1) continue;
+    let s = html.lastIndexOf('<div class=' + '"card"', p);
+    let e = html.indexOf('</div>', p);
+    if (s === -1 || e === -1) continue;
+    e += 6;
+    while (html.charAt(e) === '\n' || html.charAt(e) === '\r') e++;
+    const ls = html.lastIndexOf('\n', s);
+    if (ls !== -1 && html.slice(ls + 1, s).trim() === '') s = ls + 1;
+    return html.slice(0, s) + html.slice(e);
+  }
+  return null;
+}
+
+function titlesFromIndex(html) {
+  const map = {};
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  doc.querySelectorAll('.card a').forEach(a => {
+    const h = a.getAttribute('href') || '';
+    if (!/^\.\/.+\.html$/i.test(h)) return;
+    let n = h.slice(2);
+    try { n = decodeURIComponent(n); } catch (err) {}
+    if (!map[n]) map[n] = a.textContent.trim();
+  });
+  return map;
+}
+
+let ROWS = [];
+
+document.getElementById('load-btn').addEventListener('click', loadList);
+
+async function loadList() {
+  if (!token()) { alert('GitHub トークンを入力してください'); return; }
+  const btn = document.getElementById('load-btn');
+  btn.disabled = true; btn.textContent = '読み込み中...';
+  try {
+    const r = await fetch(api(FOLDER) + '?ref=' + BRANCH, { headers: H(token()) });
+    if (!r.ok) {
+      const e = await r.json();
+      throw new Error(e.message || r.status);
+    }
+    const files = (await r.json())
+      .filter(f => f.type === 'file' && /\.html$/i.test(f.name) && SKIP.indexOf(f.name) === -1);
+
+    let titles = {};
+    try {
+      const ir = await fetch('./index.html?t=' + Date.now());
+      if (ir.ok) titles = titlesFromIndex(await ir.text());
+    } catch (e) {}
+
+    ROWS = files.map(f => ({ name: f.name, title: titles[f.name] || null, size: f.size }))
+                .sort((a, b) => (a.title || a.name).localeCompare(b.title || b.name, 'ja'));
+    render();
+    document.getElementById('list-panel').style.display = 'block';
+  } catch (e) {
+    alert('一覧の読み込みに失敗しました: ' + e.message);
+  }
+  btn.disabled = false; btn.textContent = 'ページ一覧を再読み込み';
+}
+
+function render() {
+  const box = document.getElementById('rows');
+  if (ROWS.length === 0) {
+    box.innerHTML = '<div class="empty">削除できるページがありません。</div>';
+  } else {
+    box.innerHTML = ROWS.map((r, i) =>
+      '<div class="row">' +
+        '<input type="checkbox" class="pick" id="pick-' + i + '" data-i="' + i + '" />' +
+        '<label for="pick-' + i + '">' +
+          '<div class="title">' + esc(r.title || r.name.replace(/\.html$/i, '')) +
+            (r.title ? '' : '<span class="orphan">一覧に未掲載</span>') + '</div>' +
+          '<div class="file">' + esc(r.name) + ' ・ ' + Math.round(r.size / 1024) + ' KB</div>' +
+        '</label>' +
+      '</div>').join('');
+    box.querySelectorAll('.pick').forEach(c => c.addEventListener('change', updateCount));
+  }
+  updateCount();
+}
+
+function picked() {
+  return Array.prototype.filter.call(document.querySelectorAll('.pick'), c => c.checked)
+    .map(c => ROWS[Number(c.getAttribute('data-i'))]);
+}
+function updateCount() {
+  const n = picked().length;
+  const b = document.getElementById('del-btn');
+  b.disabled = n === 0;
+  b.textContent = n === 0 ? '選択したページを削除' : '選択した ' + n + ' 件を削除';
+}
+
+document.getElementById('sel-all').addEventListener('click', () => {
+  document.querySelectorAll('.pick').forEach(c => { c.checked = true; }); updateCount();
+});
+document.getElementById('sel-none').addEventListener('click', () => {
+  document.querySelectorAll('.pick').forEach(c => { c.checked = false; }); updateCount();
+});
+
+document.getElementById('del-btn').addEventListener('click', doDelete);
+
+async function doDelete() {
+  const targets = picked();
+  if (targets.length === 0) return;
+  const names = targets.map(t => '・' + (t.title || t.name)).join('\n');
+  if (!confirm('次の ' + targets.length + ' 件を削除します。元に戻せません。\n\n' + names)) return;
+
+  const t = token();
+  const btn = document.getElementById('del-btn');
+  btn.disabled = true; btn.textContent = '削除中...';
+  const statusList = document.getElementById('status-list');
+  document.getElementById('status-box').style.display = 'block';
+  statusList.innerHTML = '';
+
+  const deleted = [];
+  for (const item of targets) {
+    const id = 'st-' + Math.random().toString(36).slice(2);
+    statusList.innerHTML += '<div class="status-item" id="' + id + '"><span class="wait">⏳</span><span>' +
+      esc(item.name) + ' を削除中...</span></div>';
+    const el = document.getElementById(id);
+    try {
+      const path = FOLDER + '/' + encodeURIComponent(item.name);
+      const g = await fetch(api(path) + '?ref=' + BRANCH, { headers: H(t) });
+      if (!g.ok) throw new Error('ファイルが見つかりません (' + g.status + ')');
+      const meta = await g.json();
+      const d = await fetch(api(path), {
+        method: 'DELETE',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, H(t)),
+        body: JSON.stringify({ message: 'Delete ' + FOLDER + '/' + item.name, sha: meta.sha, branch: BRANCH })
+      });
+      if (!d.ok) { const e = await d.json(); throw new Error(e.message || d.status); }
+      deleted.push(item.name);
+      el.innerHTML = '<span class="ok">✅</span><span>' + esc(item.name) + ' を削除しました</span>';
+    } catch (e) {
+      el.innerHTML = '<span class="err">❌</span><span>' + esc(item.name) + ' 失敗: ' + esc(String(e.message)) + '</span>';
+    }
+  }
+
+  if (deleted.length > 0) {
+    statusList.innerHTML += '<div class="status-item" id="st-index"><span class="wait">⏳</span><span>index.html を更新中...</span></div>';
+    try {
+      const ir = await fetch(api(FOLDER + '/index.html') + '?ref=' + BRANCH, { headers: H(t) });
+      if (!ir.ok) throw new Error('index.html が読めません (' + ir.status + ')');
+      const idx = await ir.json();
+      let html = b64d(idx.content);
+      let changed = 0;
+      for (const n of deleted) {
+        let next = removeCardFromHtml(html, n);
+        while (next) { html = next; changed++; next = removeCardFromHtml(html, n); }
+      }
+      if (changed === 0) {
+        document.getElementById('st-index').innerHTML =
+          '<span class="ok">✅</span><span>index.html に該当カードはありませんでした</span>';
+      } else {
+        const pr = await fetch(api(FOLDER + '/index.html'), {
+          method: 'PUT',
+          headers: Object.assign({ 'Content-Type': 'application/json' }, H(t)),
+          body: JSON.stringify({
+            message: 'Auto-update index.html (remove ' + deleted.length + ' page(s))',
+            content: b64e(html), sha: idx.sha, branch: BRANCH
+          })
+        });
+        if (!pr.ok) { const e = await pr.json(); throw new Error(e.message || pr.status); }
+        document.getElementById('st-index').innerHTML =
+          '<span class="ok">✅</span><span>一覧から ' + changed + ' 件のカードを削除しました。数分後にページに反映されます。</span>';
+      }
+    } catch (e) {
+      document.getElementById('st-index').innerHTML =
+        '<span class="err">❌</span><span>index.html の更新に失敗: ' + esc(String(e.message)) + '</span>';
+    }
+    ROWS = ROWS.filter(r => deleted.indexOf(r.name) === -1);
+    render();
+  }
+
+  btn.textContent = '選択したページを削除';
+  updateCount();
+}
+</script>
+</body>
+</html>
