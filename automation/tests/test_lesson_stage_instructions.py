@@ -79,6 +79,13 @@ class LessonStageInstructionsTests(unittest.TestCase):
                 self.assertIn("and print output", instructions)
                 self.assertIn("never claim they were verified", instructions)
                 self.assertIn("These later checks have not yet passed", instructions)
+                self.assertIn("actual kind='label' primitives with nonempty text", instructions)
+                self.assertIn("readable fontSize >= 14", instructions)
+                self.assertIn("meaningful x/y positions and a visible color other than 'none'", instructions)
+                self.assertIn("Never substitute transparent or degenerate geometry", instructions)
+                self.assertIn("Legitimate invisible geometry anchors remain allowed", instructions)
+                self.assertIn("make and inspect the actual JSON change", instructions)
+                self.assertIn("claim a repair or a conversion to labels while leaving the data unchanged", instructions)
                 self.assertEqual(payload["input"], [{"role": "user", "content": [
                     {"type": "input_text", "text": PROMPT},
                     {"type": "input_image", "image_url": IMAGES[0], "detail": "high"}]}])

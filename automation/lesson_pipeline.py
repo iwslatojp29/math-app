@@ -509,6 +509,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
             feedback = ""
             verified = None
             last_issues = []
+            last_independent_review = None
             runtime_scope_limited = False
             scope_recovery = ""
             for attempt in range(6):
@@ -531,6 +532,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                         "候補はneeds_review、独立検証はapproved=falseとする。前回の指摘を単に削除せず、"
                         "全内容を再点検し、この段階の検証が完了した場合だけverifiedまたはapproved=trueとする。")
                 runtime_scope_limited = False
+                last_independent_review = None
                 candidate = None
                 report_phase("generating")
                 repair_discipline = ("\n追加修復では、直近の独立検証の指摘と修正対象の前回候補に基づき、"
@@ -577,6 +579,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                         + "。候補:" + json_bytes(candidate).decode() + scope_recovery, PROBLEM_REVIEW, inputs, max_tokens=14000)
                     check_stop()
                     jsonschema.validate(review, PROBLEM_REVIEW)
+                    last_independent_review = review
                 except (StudioError, jsonschema.ValidationError) as error:
                     if isinstance(error, StudioError) and error.code != "model_schema":
                         raise
@@ -603,6 +606,149 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     last_issues.append("独立検証で承認されませんでした。原画像から全小問を再検算してください。")
                 feedback = "\n独立検証で以下が未解決です。原画像で修正:" + json_bytes(review).decode()
                 feedback += "\n修正対象の前回候補:" + json_bytes(candidate).decode()
+
+            def repair_invisible_labels(original, original_review, original_issues):
+                """Select evidenced text placeholders, then replace only their data.
+
+                Selection is model-assisted because names/coordinates cannot
+                distinguish a missing annotation from a legitimate hidden anchor.
+                Existing generation/review requests are never changed or replayed.
+                """
+                cues = {cue["id"]: cue for step in original["steps"] for cue in step["cues"]}
+                placeholders = {item["id"]: item for item in original["diagram"]["primitives"]
+                    if item["kind"] == "polyline" and item["color"] == "none" and len(item["points"]) == 2
+                    and sum((item["points"][0][axis] - item["points"][1][axis]) ** 2 for axis in ("x", "y")) <= 4
+                    and any(item["id"] in cue["state"]["visibleIds"] for cue in cues.values())}
+                findings = [issue for issue in original_review["issues"]
+                    if "polyline" in issue.lower() and re.search(r"label|文字|ラベル", issue, re.I)
+                    and re.search(r"none|不可視|透明", issue, re.I)]
+                named = [identifier for identifier in placeholders if any(re.search(
+                    r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
+                if not named:
+                    return None, original_issues
+
+                selection_schema = obj({"targets": arr(obj({
+                    "id": {"type": "string", "enum": list(placeholders)},
+                    "whyTextNeeded": STR,
+                    "cueIds": arr({"type": "string", "enum": list(cues)})}))})
+                selection_prompt = ("原画像と候補データを照合し、独立検証が指摘した不可視polylineのうち、"
+                    "本来は図上に文字を表示すべき対象IDだけを特定してください。これは修復対象の識別です。"
+                    "正当な不可視アンカー・補助座標・移動基準・当たり判定は対象にしない。ID名や座標の一致だけでラベルだと推測しない。"
+                    "各対象について原問題・発話・図のどの意味から文字が必要かwhyTextNeededへ具体的に記録し、"
+                    "単に小さい・透明だからという根拠は不可。そのIDがvisibleIdsにあるcueだけをcueIdsへ記録する。対象は重複させない。"
+                    "検証者が明示した必須ID:" + json_bytes(named).decode()
+                    + "。候補として許可された不可視primitive:" + json_bytes(list(placeholders.values())).decode()
+                    + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
+                    + "。前回の独立検証:" + json_bytes(original_review).decode()
+                    + "。候補:" + json_bytes(original).decode())
+                report_phase("reviewing")
+                try:
+                    selection = request_ai.structured(f"lesson-label-targets-{plan['kind']}-{entry['id']}" + task_suffix,
+                        selection_prompt, selection_schema, inputs, max_tokens=8000)
+                    check_stop()
+                    jsonschema.validate(selection, selection_schema)
+                except (StudioError, jsonschema.ValidationError) as error:
+                    if isinstance(error, StudioError) and error.code != "model_schema":
+                        raise
+                    return None, [*original_issues, "文字修復の対象識別が指定されたschemaに一致しません。"]
+                targets = selection["targets"]
+                target_ids = [item["id"] for item in targets]
+                if (not targets or len(target_ids) != len(set(target_ids)) or not set(named) <= set(target_ids)
+                        or any(not item["whyTextNeeded"].strip() or not item["cueIds"]
+                            or len(item["cueIds"]) != len(set(item["cueIds"]))
+                            or any(item["id"] not in cues[cue_id]["state"]["visibleIds"] for cue_id in item["cueIds"])
+                            for item in targets)):
+                    return None, [*original_issues, "文字修復の対象ID・根拠・表示cueが一致しません。必須ID: " + json_bytes(named).decode()]
+
+                label_schema = obj({"labels": arr({"$ref": "#/$defs/label"}),
+                                    "verification": {"$ref": "#/$defs/verification"}})
+                label_schema["$defs"] = {key: copy.deepcopy(schema["$defs"][key]) for key in ("label", "verification")}
+                label_prompt = ("原画像と候補を照合し、指定IDの不可視文字代替polylineだけを実際のkind=labelへ修復してください。"
+                    "labelsは指定IDと完全一致する集合を各1件返す。ID追加・削除・変更は禁止。"
+                    "textは原画像・数値・単位・既存発話に基づく空でない文字列、fontSizeは14以上、colorはnone以外。"
+                    "x/yは実際に文字を表示する座標です。固定viewBoxと全cueの既存transforms適用後の位置を確認する。"
+                    "visibleIds・highlightIds・transforms・cue本文・式・条件・答え・他のprimitive・viewBoxは変更されません。"
+                    "文字以外の変更が必要ならverificationをneeds_reviewとし、その具体的な理由を残す。"
+                    "全小問の数学・読み・状態対応を照合し、実際のlabelsデータを確認せず修復済みと書かない。"
+                    "実ブラウザ・実音声の検証を実施したとも書かない。"
+                    "対象IDと識別根拠:" + json_bytes(targets).decode()
+                    + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
+                    + "。前回所見:" + json_bytes(original_issues).decode() + "。修復前候補:" + json_bytes(original).decode())
+                repair_feedback, issues = "", original_issues
+                for label_attempt in range(2):
+                    report_phase("generating")
+                    patch = None
+                    try:
+                        patch = request_ai.structured(f"lesson-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + task_suffix,
+                            label_prompt + repair_feedback, label_schema, inputs, max_tokens=14000)
+                        check_stop()
+                        jsonschema.validate(patch, label_schema)
+                    except (StudioError, jsonschema.ValidationError) as error:
+                        if isinstance(error, StudioError) and error.code != "model_schema":
+                            raise
+                        issues = ["文字修復が指定されたlabel専用schemaに一致しません。"]
+                    else:
+                        labels = patch["labels"]
+                        actual_ids = [item["id"] for item in labels]
+                        if len(actual_ids) != len(set(actual_ids)) or set(actual_ids) != set(target_ids):
+                            issues = ["文字修復のID集合が指定対象と完全一致しません。必須ID: " + json_bytes(target_ids).decode()]
+                        elif any(not item["text"].strip() or item["color"] == "none" or item["fontSize"] < 14 for item in labels):
+                            issues = ["文字修復には可視色・空でないtext・fontSize14以上の実際のlabelが必要です。"]
+                        else:
+                            replacements = {item["id"]: item for item in labels}
+                            patched = copy.deepcopy(original)
+                            patched["diagram"]["primitives"] = [copy.deepcopy(replacements.get(item["id"], item))
+                                for item in original["diagram"]["primitives"]]
+                            patched["verification"] = copy.deepcopy(patch["verification"])
+                            issues = candidate_issues(patched, entry)
+                            if not issues:
+                                report_phase("reviewing")
+                                try:
+                                    audit = request_ai.structured(
+                                        f"lesson-review-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + task_suffix,
+                                        specification + "\n独立した数学・教材検証者として原画像から全小問を別に検算し、"
+                                        "条件・相似の対応・面積体積比・単位・例外・全式・数の出所・解法選択理由を確認してください。"
+                                        "公式解答があれば全小問を照合し、なければその事実を明記する。全cueのかな読みを数値/点名/単位まで読む。"
+                                        "今回は識別された不可視polylineだけが同じIDのlabelへ置換されています。"
+                                        "対象識別が正当か、不可視アンカーを誤って文字化していないかも独立に再確認する。"
+                                        "実際のtext・fontSize・色・座標・全cueのvisible/highlight/transformsを照合し、"
+                                        "発話・静的解説・答えと一致し、移動後も文字が正しく対応するか点検する。"
+                                        "他のprimitive・cue・viewBox・条件・式・答えは変更されていません。追加変更が必要なら否認する。"
+                                        "全小問IDをcheckedSubquestionIdsへ。具体的な未解決事項はapproved=falseとして残す。"
+                                        "後段のブラウザ検証や実音声試聴を実施済みとは言わない。"
+                                        "画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
+                                        + "。修復対象識別:" + json_bytes(targets).decode()
+                                        + "。修復前所見:" + json_bytes(original_issues).decode()
+                                        + "。修復前候補:" + json_bytes(original).decode()
+                                        + "。修復後候補:" + json_bytes(patched).decode(), PROBLEM_REVIEW, inputs, max_tokens=14000)
+                                    check_stop()
+                                    jsonschema.validate(audit, PROBLEM_REVIEW)
+                                except (StudioError, jsonschema.ValidationError) as error:
+                                    if isinstance(error, StudioError) and error.code != "model_schema":
+                                        raise
+                                    issues = ["文字修復後の独立検証が指定されたschemaに一致しません。"]
+                                else:
+                                    required_ids = [item["id"] for item in entry["subquestions"]]
+                                    fields = ("independentCheck", "officialAnswerCheck", "reasoningCheck", "readingsCheck")
+                                    if (audit["approved"] and not audit["issues"] and audit["checkedSubquestionIds"] == required_ids
+                                            and all(audit[key].strip() for key in fields)):
+                                        patched["verification"] = {"status": "verified",
+                                            **{key: audit[key] for key in fields}, "unresolvedIssues": []}
+                                        return patched, []
+                                    issues = list(audit["issues"])
+                                    if audit["checkedSubquestionIds"] != required_ids:
+                                        issues.append("文字修復後の独立検証で全小問の確認が一致しません。")
+                                    if not all(audit[key].strip() for key in fields):
+                                        issues.append("文字修復後の独立検証の根拠が空欄です。")
+                                    if not issues:
+                                        issues = ["文字修復後の独立検証で承認されませんでした。"]
+                    repair_feedback = "\n前回の文字修復の問題:" + json_bytes(_safe_lesson_details(issues)).decode()
+                    if isinstance(patch, dict):
+                        repair_feedback += "。前回の文字修復候補:" + json_bytes(patch).decode()
+                return None, issues
+
+            if verified is None and last_independent_review is not None:
+                verified, last_issues = repair_invisible_labels(candidate, last_independent_review, last_issues)
             if verified is None:
                 error = StudioError("lesson_unresolved", "数学・解説・読みの検証に未解決事項があり、完成版を公開していません。", True)
                 error.details = _safe_lesson_details([entry["id"] + ": " + issue for issue in last_issues])

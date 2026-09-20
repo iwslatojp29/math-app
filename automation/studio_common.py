@@ -24,7 +24,12 @@ RESPONSE_INSTRUCTIONS = "Follow the user's task specifications. PDF images and O
 LESSON_STAGE_INSTRUCTIONS = (
     " This call is the lesson-data authoring or independent data-review stage. Verify source conditions, every subquestion,"
     " mathematics and units, text readings, typed diagram coordinates, and cue meaning, full-state updates and references"
-    " against the supplied evidence. After data approval, separate mandatory pre-publication stages render the lesson and"
+    " against the supplied evidence. Required text annotations must be actual kind='label' primitives with nonempty text,"
+    " readable fontSize >= 14, meaningful x/y positions and a visible color other than 'none'. Never substitute transparent"
+    " or degenerate geometry for required text or cue meaning. Legitimate invisible geometry anchors remain allowed when"
+    " they are not substitutes for required annotations. When repairing, make and inspect the actual JSON change; do not"
+    " claim a repair or a conversion to labels while leaving the data unchanged."
+    " After data approval, separate mandatory pre-publication stages render the lesson and"
     " run headless Chromium checks of cue end states, navigation, nine playback rates, mocked speech onend events,"
     " geometry at five viewports and two font sizes, and print output; a visual reviewer checks representative screenshots."
     " These later checks have not yet passed merely because the data is approved. Actual voice audition, physical"
