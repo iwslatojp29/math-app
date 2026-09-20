@@ -307,6 +307,7 @@ class VisualRepairTests(unittest.TestCase):
                 save.assert_called_once()
                 self.assertEqual(save.call_args.args[5], "application/pdf")
                 generate.assert_called_once()
+                self.assertEqual(generate.call_args.args[3]["bookletIssue"], {"year": 2026, "month": 9})
                 publish.assert_not_called()
                 output = result["outputs"][0]
                 self.assertEqual(output["pdf"], saved_pdf)

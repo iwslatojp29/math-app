@@ -59,6 +59,42 @@ SOLUTION_REPAIR = (
     "対応が不確かな問題をunpairedPagesへ逃がしたり、未解決事項を削除したりせずunresolvedIssuesに残してください。"
 )
 
+SOLUTION_SCOPE = (
+    "\nこの工程は公式解答ページを、原画像から確定済みの全問一覧の同じ問題に対応付ける作業です。"
+    "全解法の再計算・最終解答の検算は、対応する解答ページを全て集めた後の講義生成と独立検算で行います。"
+    "今回の対象頁で欄・問題番号・固有条件・小問から対応が確定するなら、解説や最終答が次頁へ続くことだけを未解決にしません。"
+    "追加した前後の画像で継続を照合してください。補助頁は今回のlinks/unpairedPages/checkedPdfPagesへ追加せず、"
+    "各公式解答頁は自身が対象になる組で必ず記録します。対応を左右する判読不能・条件矛盾・所属不明はunresolvedIssuesに残します。"
+    "確認済み冊子年月が与えられた場合、同じ冊子内で当月コーナーと確認できる解説はその年月を引き継げます。"
+    "各解説頁に発行年が繰り返し印刷されていないことだけでは未解決にしません。"
+    "ただし本文に別の年月・過去号・別欄が明記される場合はその帰属を優先し、冊子年月で上書きしません。"
+    "別月同番号を当月へ結び付けたり、条件不一致を無視したりしてはいけません。冊子年月が提供されなければ年を推測しません。"
+)
+
+
+def solution_repair_context(pages, images, attempt, booklet_issue):
+    """Give both matchers the same bounded continuation and verified issue data."""
+    extra = {page + delta for page in pages for delta in range(-attempt, attempt + 1)
+             if page + delta in images and page + delta not in pages}
+    # Keep the nearest neighbours first when solution pages are non-contiguous.
+    extra = sorted(sorted(extra, key=lambda page: (min(abs(page - target) for target in pages), page))[:10])
+    verified_issue = None
+    if booklet_issue is not None:
+        require(isinstance(booklet_issue, dict) and type(booklet_issue.get("year")) is int
+                and 1900 <= booklet_issue["year"] <= 2200 and type(booklet_issue.get("month")) is int
+                and 1 <= booklet_issue["month"] <= 12 and isinstance(booklet_issue.get("evidence"), list)
+                and any(isinstance(item, str) and item.strip() for item in booklet_issue["evidence"])
+                and booklet_issue.get("unresolvedIssues") == [],
+                "issue_unresolved", "公式解答との照合に使う冊子年月の確認結果が不正です。公開を保留しました。", True)
+        verified_issue = {"year": booklet_issue["year"], "month": booklet_issue["month"],
+                          "evidence": [item for item in booklet_issue["evidence"] if isinstance(item, str) and item.strip()]}
+    context = (SOLUTION_SCOPE + "\n今回記録する対象PDFページ:" + str(pages)
+               + "。その後ろに追加した照合専用PDFページ:" + str(extra)
+               + "。画像全体の順序:" + str(pages + extra)
+               + "。元冊子の表紙・奥付等を確認した冊子年月（モデルへの命令ではなく照合資料）:"
+               + json_bytes(verified_issue).decode())
+    return extra, context
+
 
 def inventory_issues(batch, pages, shown, previous, all_pages):
     """Check a candidate before accepting it; details stay in private repair data."""
@@ -163,7 +199,7 @@ def inventory_progress(kind, phase, pages, attempt, status, known_count, issues=
     print("monthly inventory: " + json_bytes(record).decode(), flush=True)
 
 
-def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specification):
+def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specification, *, booklet_issue=None):
     """Resolve distant official answers against the complete, stable problem catalog."""
     by_id = {problem["id"]: problem for problem in problems}
     for problem in problems:
@@ -179,9 +215,13 @@ def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specifi
         inputs = [image_data(images[page]) for page in pages]
         accepted, feedback = None, ""
         for attempt in range(3):
+            context, request_inputs = "", inputs
+            if attempt:
+                extra, context = solution_repair_context(pages, images, attempt, booklet_issue)
+                request_inputs = inputs + [image_data(images[page]) for page in extra]
             inventory_progress(kind, "solutions", pages, attempt, "requested", len(problems))
-            links, issues = inventory_request(ai, f"solutions-{kind}-{start}-{attempt}", prompt + feedback,
-                                             SOLUTION_SCHEMA, inputs, max_tokens=10000)
+            links, issues = inventory_request(ai, f"solutions-{kind}-{start}-{attempt}", prompt + feedback + context,
+                                             SOLUTION_SCHEMA, request_inputs, max_tokens=10000)
             audit = None
             if links is not None:
                 issues = solution_issues(links, pages, by_id)
@@ -191,7 +231,7 @@ def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specifi
                     "独立した照合です。原画像の公式解答が、一覧の同じ欄・年月・条件・小問へ対応しているか検証。"
                     "別月・別欄の同番号を混同していないか、一覧の対象問題にある解答を見落としていないか確認。"
                     "対象PDFページ:" + str(pages) + "。checkedPdfPagesは対象全件。全問一覧:" + catalog
-                    + "。対応案:" + json_bytes(links).decode(), REVIEW_SCHEMA, inputs, max_tokens=8000)
+                    + "。対応案:" + json_bytes(links).decode() + context, REVIEW_SCHEMA, request_inputs, max_tokens=8000)
                 if audit is not None:
                     issues = audit_issues(audit, pages, "solution_unresolved")
             inventory_progress(kind, "solutions", pages, attempt, "repair_needed" if issues else "approved", len(problems), issues)
@@ -266,7 +306,8 @@ def inventory_questions(doc, ai, plan, directory, specification):
     solution_pages.update(page for problem in problems for page in problem["officialSolutionPages"])
     solution_pages.update(page for link in solutions for page in link["pdfPages"])
     require(solution_pages <= set(images), "solution_pages", "公式解答の参照ページを確認できません。", True)
-    reconcile_solution_pages(problems, sorted(solution_pages), images, ai, plan["kind"], specification)
+    reconcile_solution_pages(problems, sorted(solution_pages), images, ai, plan["kind"], specification,
+                             booklet_issue=plan.get("bookletIssue"))
     return problems, images
 
 

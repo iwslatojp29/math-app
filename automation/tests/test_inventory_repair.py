@@ -395,6 +395,98 @@ class InventoryRepairTests(unittest.TestCase):
             self.inventory(ai)
         self.assertEqual(output.getvalue(), "")
 
+    @staticmethod
+    def booklet_issue():
+        return {"year": 2026, "month": 9, "evidence": ["表紙の2026年9月号", "奥付の同じ号表示"], "unresolvedIssues": []}
+
+    def test_solution_repair_shares_verified_issue_and_next_page_with_independent_review(self):
+        self.add_pages(6)
+        images = {page: lesson_pipeline.page_image(self.doc, page, self.directory) for page in range(1, 7)}
+        first_pages = list(range(1, 6))
+        correct = {"links": [{"problemId": "practice-1", "pdfPages": first_pages, "evidence": "Same month, conditions and subquestions"}],
+                   "unpairedPages": [], "checkedPdfPages": first_pages, "unresolvedIssues": []}
+        pending = copy.deepcopy(correct)
+        pending["unresolvedIssues"] = ["解説に09月と日付はあるが年がない。5ページの解説の末尾が次のページへ続いている。"]
+        last = {"links": [{"problemId": "practice-1", "pdfPages": [6], "evidence": "Continuation of the same official answer"}],
+                "unpairedPages": [], "checkedPdfPages": [6], "unresolvedIssues": []}
+        ai = FixtureAI([pending, correct, self.review(first_pages), last, self.review([6])])
+        problems = [self.problem()]
+        lesson_pipeline.reconcile_solution_pages(problems, list(range(1, 7)), images, ai, "practice", "Fixture specification",
+                                                 booklet_issue=self.booklet_issue())
+        self.assertEqual(problems[0]["officialSolutionPages"], list(range(1, 7)), "The next page is linked by its own batch")
+        self.assertNotIn("元冊子の表紙・奥付", ai.prompt(0), "The initial request must remain cache-compatible")
+        self.assertEqual(len(ai.session_fixture.calls[0]["input"][0]["content"]), 6)
+        for index in (1, 2):
+            content = ai.session_fixture.calls[index]["input"][0]["content"]
+            self.assertEqual([item["image_url"] for item in content[1:]],
+                             [lesson_pipeline.image_data(images[page]) for page in range(1, 7)])
+            self.assertIn('"year":2026,"month":9', content[0]["text"])
+            self.assertIn("今回記録する対象PDFページ:[1, 2, 3, 4, 5]", content[0]["text"])
+            self.assertIn("照合専用PDFページ:[6]", content[0]["text"])
+            self.assertIn("検算は、対応する解答ページを全て集めた後", content[0]["text"])
+        self.assertEqual(ai.tasks[-2:], ["solutions-practice-5-0", "solutions-review-practice-5-0"])
+        lesson_pipeline.reconcile_solution_pages(problems, list(range(1, 7)), images, ai, "practice", "Fixture specification",
+                                                 booklet_issue=self.booklet_issue())
+        self.assertEqual(len(ai.session_fixture.calls), 5, "Issue/context repairs must also reuse their checkpoints")
+
+    def test_solution_context_must_not_expand_checked_or_linked_target_pages(self):
+        self.add_pages(3)
+        images = {page: lesson_pipeline.page_image(self.doc, page, self.directory) for page in (1, 2, 3)}
+        correct = self.solution_candidate()
+        pending = copy.deepcopy(correct)
+        pending["unresolvedIssues"] = ["Need the next page to inspect continuation."]
+        wrong = copy.deepcopy(correct)
+        wrong["checkedPdfPages"] = [1, 2, 3]
+        wrong["links"][0]["pdfPages"] = [1, 3]
+        ai = FixtureAI([pending, wrong, correct, self.review()])
+        problems = [self.problem()]
+        lesson_pipeline.reconcile_solution_pages(problems, [1, 2], images, ai, "practice", "Fixture specification",
+                                                 booklet_issue=self.booklet_issue())
+        self.assertEqual(problems[0]["officialSolutionPages"], [1])
+        self.assertNotIn("solutions-review-practice-0-1", ai.tasks)
+        self.assertEqual(ai.tasks[-1], "solutions-review-practice-0-2")
+        self.assertIn("checkedPdfPagesは[1, 2]", ai.prompt(2))
+        self.assertIn("今回のページ[1, 2]", ai.prompt(2))
+
+    def test_verified_booklet_month_does_not_override_a_conflicting_past_issue_answer(self):
+        correct_shape = self.solution_candidate()
+        reason = "画像の公式解答は2026年7月の別条件。9月冊子でも当月practice-1には対応しない。"
+        ai = FixtureAI([correct_shape, self.review(issues=[reason])] * 3)
+        problems = [self.problem()]
+        with self.assertRaises(StudioError) as caught:
+            lesson_pipeline.reconcile_solution_pages(problems, [1, 2], self.solution_images(), ai, "practice", "Fixture specification",
+                                                     booklet_issue=self.booklet_issue())
+        self.assertEqual(caught.exception.code, "solution_unresolved")
+        self.assertEqual(problems[0]["officialSolutionPages"], [])
+        self.assertIn(reason, caught.exception.details)
+        self.assertIn("冊子年月で上書きしません", ai.prompt(2))
+        self.assertIn(reason, ai.prompt(2))
+
+    def test_solution_context_is_bounded_and_missing_or_unverified_year_is_not_invented(self):
+        pages, images = [10, 20, 30, 40, 50], {page: None for page in range(1, 61)}
+        extra, context = lesson_pipeline.solution_repair_context(pages, images, 2, None)
+        self.assertEqual(len(extra), 10)
+        self.assertEqual(extra, sorted(set(extra)))
+        self.assertTrue(set(extra).isdisjoint(pages))
+        self.assertTrue({9, 11, 49, 51} <= set(extra))
+        self.assertTrue(context.endswith(":null"))
+        self.assertIn("冊子年月が提供されなければ年を推測しません", context)
+        invalid = self.booklet_issue()
+        invalid["unresolvedIssues"] = ["Publication year has not been established."]
+        with self.assertRaises(StudioError) as caught:
+            lesson_pipeline.solution_repair_context(pages, images, 1, invalid)
+        self.assertEqual(caught.exception.code, "issue_unresolved")
+
+    def test_inventory_forwards_confirmed_booklet_metadata_only_to_solution_matching(self):
+        plan = {"kind": "practice", "bookletIssue": self.booklet_issue(), "pages": [
+            {"printedPages": [str(page)], "labels": ["practice_questions"]} for page in (1, 2)]}
+        ai = FixtureAI([self.batch([self.problem()]), self.review()])
+        with patch.object(lesson_pipeline, "reconcile_solution_pages") as reconcile:
+            lesson_pipeline.inventory_questions(self.doc, ai, plan, self.directory, "Fixture specification")
+        self.assertEqual(reconcile.call_args.kwargs, {"booklet_issue": self.booklet_issue()})
+        self.assertNotIn("bookletIssue", ai.prompt(0))
+        self.assertNotIn('"year":2026', ai.prompt(0))
+
 
 if __name__ == "__main__":
     unittest.main()

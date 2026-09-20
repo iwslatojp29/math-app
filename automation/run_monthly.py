@@ -329,7 +329,8 @@ def run_job(studio, job, api_key, temp_root=None):
         with open_pdf(source_path) as original:
             classification, _ = classify_pdf(original, ai, studio, directory, extract_spec)
             studio.checkpoint("classification", classification)
-            plans = plans_from_classification(classification, source["name"])
+            plans = [{**plan, "bookletIssue": classification["issue"]}
+                     for plan in plans_from_classification(classification, source["name"])]
             summary = {"source": {"id": source["id"], "name": source["name"], "sha256": source_sha},
                 "model": job["model"], "year": classification["issue"]["year"], "month": classification["issue"]["month"],
                 "outputs": [], "warnings": ["学力コンテストの解答は、同じ冊子に掲載されたものを収録します（過去号分の場合もあります）。"], "errors": []}
