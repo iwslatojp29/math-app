@@ -1,8 +1,8 @@
-const MAX_BASE64_BYTES = 5 * 1024 * 1024;
+const MAX_CONTENT_BYTES = 10 * 1024 * 1024;
+const MAX_BASE64_BYTES = 4 * Math.ceil(MAX_CONTENT_BYTES / 3);
 const MAX_JSON_BYTES = MAX_BASE64_BYTES + 16 * 1024;
 const ATTEMPTS = 4;
 const encoder = new TextEncoder();
-const decoder = new TextDecoder('utf-8', { fatal: true });
 const protectedFiles = new Set(['index.html', 'upload.html', 'delete.html']);
 
 class SafeError extends Error {
@@ -32,9 +32,11 @@ async function authorized(header, secret) {
 async function readJson(request) {
   if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get('Content-Type') || '')) fail(400, 'invalid_request');
   const length = request.headers.get('Content-Length');
-  if (length && (!/^\d+$/.test(length) || Number(length) > MAX_JSON_BYTES)) fail(400, 'invalid_request');
+  if (length && !/^\d+$/.test(length)) fail(400, 'invalid_request');
+  if (length && Number(length) > MAX_JSON_BYTES) fail(413, 'file_too_large');
   if (!request.body) fail(400, 'invalid_request');
   const reader = request.body.getReader();
+  const decoder = new TextDecoder('utf-8', { fatal: true });
   const chunks = [];
   let total = 0;
   try {
@@ -43,32 +45,55 @@ async function readJson(request) {
       if (done) break;
       total += value.byteLength;
       if (total > MAX_JSON_BYTES) {
-        await reader.cancel();
-        fail(400, 'invalid_request');
+        await reader.cancel().catch(() => {});
+        fail(413, 'file_too_large');
       }
-      chunks.push(value);
+      chunks.push(decoder.decode(value, { stream: true }));
     }
-    const bytes = new Uint8Array(total);
-    let offset = 0;
-    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
-    const value = JSON.parse(decoder.decode(bytes));
+    chunks.push(decoder.decode());
+    const value = JSON.parse(chunks.join(''));
     if (!value || typeof value !== 'object' || Array.isArray(value)) fail(400, 'invalid_request');
     return value;
-  } catch { fail(400, 'invalid_request'); }
+  } catch (error) {
+    if (error instanceof SafeError) throw error;
+    fail(400, 'invalid_request');
+  }
   finally { reader.releaseLock(); }
 }
 
-function decodeBase64(value, status = 400, code = 'invalid_request') {
-  if (typeof value !== 'string' || value.length > MAX_BASE64_BYTES) fail(status, code);
+function decodeBase64(value, status = 400, code = 'invalid_request', returnText = true) {
+  if (typeof value !== 'string') fail(status, code);
+  const tooLarge = () => fail(status === 400 ? 413 : status, status === 400 ? 'file_too_large' : code);
+  if (value.length > MAX_BASE64_BYTES) tooLarge();
   const normalized = value.replace(/[\r\n]/g, '');
-  if (normalized.length % 4 !== 0 || !/^[A-Za-z0-9+/]*={0,2}$/.test(normalized)) fail(status, code);
+  const padding = normalized.endsWith('==') ? 2 : normalized.endsWith('=') ? 1 : 0;
+  if (normalized.length % 4 !== 0 || /[^A-Za-z0-9+/=]/.test(normalized) || normalized.indexOf('=') !== (padding ? normalized.length - padding : -1)) fail(status, code);
+  if (normalized.length / 4 * 3 - padding > MAX_CONTENT_BYTES) tooLarge();
+  // Canonical padding bits are checked before decoding. The final base64 group
+  // can encode either the exact byte limit or one extra byte at the same length.
+  if (padding) {
+    const bits = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.indexOf(normalized.at(-padding - 1));
+    if (bits < 0 || (bits & (padding === 2 ? 15 : 3))) fail(status, code);
+  }
   try {
-    const binary = atob(normalized);
-    // Reject noncanonical padding bits as well as invalid UTF-8.
-    if (normalized.endsWith('=') && btoa(binary.slice(-(normalized.endsWith('==') ? 1 : 2))) !== normalized.slice(-4)) fail(status, code);
-    const bytes = new Uint8Array(binary.length);
-    for (let index = 0; index < binary.length; index++) bytes[index] = binary.charCodeAt(index);
-    return decoder.decode(bytes);
+    const decoder = new TextDecoder('utf-8', { fatal: true });
+    const text = [];
+    // Upload validation needs no decoded HTML string. Bounded chunks avoid
+    // materializing several full-size copies of image-heavy documents.
+    for (let offset = 0; offset < normalized.length; offset += 65536) {
+      const chunk = normalized.slice(offset, offset + 65536);
+      let bytes;
+      if (typeof Uint8Array.fromBase64 === 'function') bytes = Uint8Array.fromBase64(chunk);
+      else {
+        const binary = atob(chunk);
+        bytes = new Uint8Array(binary.length);
+        for (let index = 0; index < binary.length; index++) bytes[index] = binary.charCodeAt(index);
+      }
+      const decoded = decoder.decode(bytes, { stream: true });
+      if (returnText) text.push(decoded);
+    }
+    const final = decoder.decode();
+    return returnText ? text.join('') + final : undefined;
   } catch { fail(status, code); }
 }
 
@@ -89,7 +114,7 @@ function validateInput(body, isCommit) {
   try { encodeURIComponent(filename); } catch { fail(400, 'invalid_request'); }
   if (body.subject !== undefined && body.subject !== '理科' && body.subject !== '社会') fail(400, 'invalid_request');
   if (isCommit) {
-    decodeBase64(body.contentBase64);
+    decodeBase64(body.contentBase64, 400, 'invalid_request', false);
     if (body.commitMessage !== undefined && (typeof body.commitMessage !== 'string' || body.commitMessage.length > 500 || /[\u0000-\u001f\u007f]/.test(body.commitMessage))) fail(400, 'invalid_request');
   }
 }

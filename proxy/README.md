@@ -42,7 +42,7 @@ GitHub Pages /math-app/
 - POST /api/delete: `{folder, filename}`。
 - 許可 Origin での OPTIONS は 204。認証なし・不一致は 401、許可外 Origin は 403。その他のパスとメソッドは 404。
 
-folder は小文字の英数字・ハイフン・アンダースコアの名前で、既存の index.html が必要です。proxy / shared / .github は使えません。filename は .html で終わり、ディレクトリ区切り・..・制御文字を含められません。index.html / upload.html / delete.html は保護対象です。日本語や空白を含む教材名を利用できます。contentBase64 は符号化後 5 MiB 以内です。
+folder は小文字の英数字・ハイフン・アンダースコアの名前で、既存の index.html が必要です。proxy / shared / .github は使えません。filename は .html で終わり、ディレクトリ区切り・..・制御文字を含められません。index.html / upload.html / delete.html は保護対象です。日本語や空白を含む教材名を利用できます。HTML本体はUTF-8で10 MiB（10,485,760バイト）以内です。ブラウザで追加する「一覧へ戻る」リンクもこの容量に含みます。送信時はbase64に符号化するため通信量は約4/3倍になりますが、HTML本体の上限は10 MiBです。ブラウザはリンク挿入後のUTF-8バイト数を確認して超過ファイルの送信を止め、Workerも容量超過時には413を返します。
 
 GitHub のファイルと一覧は別のコミットになります。競合時は新しい SHA を取得して再試行します。通信障害などで一部だけ完了した場合は同じ追加・削除を再実行すると一覧更新を再試行できます。UI は複数ファイルを順番に処理します。
 
