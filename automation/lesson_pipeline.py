@@ -747,8 +747,139 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                         repair_feedback += "。前回の文字修復候補:" + json_bytes(patch).decode()
                 return None, issues
 
+            def repair_primitive_references(original, original_issues):
+                """Repair only enumerated missing primitive references, never cue content."""
+                if (not isinstance(original, dict) or len(original_issues) != 1
+                        or not original_issues[0].startswith("講義の構造: ")):
+                    return None, original_issues
+                cues = [cue for step in original["steps"] for cue in step["cues"]]
+                existing = [item["id"] for item in original["diagram"]["primitives"]]
+                missing = sorted({identifier for cue in cues for identifier in [
+                    *cue["state"]["visibleIds"], *cue["state"]["highlightIds"],
+                    *(item["targetId"] for item in cue["state"]["transforms"])]} - set(existing))
+                # The first semantic error must belong to this precise class;
+                # finding another missing ID elsewhere does not broaden the gate.
+                eligible = any(original_issues[0] == f"講義の構造: {cue['id']}: missing reference {identifier}"
+                    for cue in cues for identifier in missing if identifier in cue["state"]["visibleIds"] + cue["state"]["highlightIds"])
+                eligible = eligible or any(original_issues[0] == f"講義の構造: {cue['id']}: invalid transform"
+                    and any(item["targetId"] in missing for item in cue["state"]["transforms"]) for cue in cues)
+                if not missing or not existing or not eligible:
+                    return None, original_issues
+                reference_schema = obj({
+                    "referenceMappings": arr(obj({"missingId": {"type": "string", "enum": missing},
+                        "existingId": {"type": "string", "enum": existing}, "reason": STR})),
+                    "addedPrimitives": arr({"$ref": "#/$defs/primitive"}),
+                    "verification": {"$ref": "#/$defs/verification"}})
+                reference_schema["$defs"] = copy.deepcopy(schema["$defs"])
+                for alternative in reference_schema["$defs"]["primitive"]["anyOf"]:
+                    name = alternative["$ref"].rsplit("/", 1)[-1]
+                    reference_schema["$defs"][name]["properties"]["id"] = {"type": "string", "enum": missing}
+                reference_prompt = ("原画像と候補を照合し、列挙した欠落primitive IDだけを修復してください。"
+                    "各欠落IDはreferenceMappingsで既存primitiveへの誤記・別名を対応付けるか、"
+                    "addedPrimitivesへ同じ欠落IDの実際に必要なtyped primitiveを追加するか、ちょうど一方で全件覆う。"
+                    "mapping先は修復前に存在するIDだけ。reasonには原画像と発話から同じ対象と確定できる根拠を書く。"
+                    "追加する文字はkind=label、空でないtext、fontSize14以上、可視色と実際の座標で定義し、不可視代用品を使わない。"
+                    "ID名から文字・数値・座標を推測しない。条件・式・答えを変更しない。"
+                    "変更されるのは列挙した欠落IDのvisibleIds/highlightIds/transforms.targetId参照だけで、"
+                    "追加primitiveは元配列の末尾に置かれ前面に描画されます。既存primitive・描画順・viewBox・"
+                    "cue本文・他の参照・transform数値は変更されません。置換後の参照重複やtransform先衝突は許可しません。"
+                    "全cueの可視・強調・移動と全小問の数学・読みを確認する。追加面が既存線や文字を覆わないよう点検する。"
+                    "この限定操作で解決できない場合はverificationをneeds_reviewとして具体的な理由を残す。"
+                    "実ブラウザや実音声を検証済みとは書かない。"
+                    "欠落ID:" + json_bytes(missing).decode() + "。既存ID:" + json_bytes(existing).decode()
+                    + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
+                    + "。構造所見:" + json_bytes(original_issues).decode() + "。修復前候補:" + json_bytes(original).decode())
+                repair_feedback, issues = "", original_issues
+                for reference_attempt in range(2):
+                    report_phase("generating")
+                    patch = None
+                    try:
+                        patch = request_ai.structured(
+                            f"lesson-reference-repair-{plan['kind']}-{entry['id']}-{reference_attempt}" + task_suffix,
+                            reference_prompt + repair_feedback, reference_schema, inputs, max_tokens=14000)
+                        check_stop()
+                        jsonschema.validate(patch, reference_schema)
+                    except (StudioError, jsonschema.ValidationError) as error:
+                        if isinstance(error, StudioError) and error.code != "model_schema":
+                            raise
+                        issues = ["図の参照修復が指定された欠落ID専用schemaに一致しません。"]
+                    else:
+                        mappings, additions = patch["referenceMappings"], patch["addedPrimitives"]
+                        covered = [item["missingId"] for item in mappings] + [item["id"] for item in additions]
+                        if len(covered) != len(set(covered)) or set(covered) != set(missing):
+                            issues = ["図の参照修復は欠落IDを重複なく各1方式で全件覆う必要があります。必須ID: " + json_bytes(missing).decode()]
+                        elif any(not item["reason"].strip() for item in mappings):
+                            issues = ["図の参照対応を原画像で確定した根拠が空欄です。"]
+                        elif any(item["kind"] == "label" and (not item["text"].strip() or item["color"] == "none") for item in additions):
+                            issues = ["追加ラベルには空でないtextと可視色が必要です。"]
+                        else:
+                            aliases = {item["missingId"]: item["existingId"] for item in mappings}
+                            patched = copy.deepcopy(original)
+                            patched["diagram"]["primitives"].extend(copy.deepcopy(additions))
+                            patched["verification"] = copy.deepcopy(patch["verification"])
+                            issues = []
+                            for step in patched["steps"]:
+                                for cue in step["cues"]:
+                                    state = cue["state"]
+                                    for field in ("visibleIds", "highlightIds"):
+                                        state[field] = [aliases.get(identifier, identifier) for identifier in state[field]]
+                                        if len(state[field]) != len(set(state[field])):
+                                            issues.append(cue["id"] + ": 参照修復後の" + field + "が重複します。")
+                                    for transform in state["transforms"]:
+                                        transform["targetId"] = aliases.get(transform["targetId"], transform["targetId"])
+                                    targets = [item["targetId"] for item in state["transforms"]]
+                                    if len(targets) != len(set(targets)):
+                                        issues.append(cue["id"] + ": 参照修復後のtransform対象が重複します。")
+                            if not issues:
+                                issues = candidate_issues(patched, entry)
+                            if not issues:
+                                report_phase("reviewing")
+                                try:
+                                    audit = request_ai.structured(
+                                        f"lesson-review-reference-repair-{plan['kind']}-{entry['id']}-{reference_attempt}" + task_suffix,
+                                        specification + "\n独立した数学・教材検証者として、原画像から全小問を別に検算してください。"
+                                        "条件・相似の対応・面積体積比・単位・例外・全式・数の出所・解法選択理由を確認する。"
+                                        "公式解答があれば全小問を照合し、なければその事実を明記する。全cueのかな読みを数値/点名/単位まで読む。"
+                                        "今回は欠落primitive参照の対応付けと欠落IDの要素追加だけを適用しています。"
+                                        "元画像・元候補・対応理由と修復後を比較し、別の点・船・数値への誤対応がないか独立に確認する。"
+                                        "追加要素の文字・形状・座標・単位と全cueのvisible/highlight/transformsが発話・静的解説・答えに一致するか検査する。"
+                                        "既存primitive・描画順・viewBox・cue本文・式・答え・transform数値は不変です。"
+                                        "追加要素は末尾で前面に描かれます。既存線や文字を覆う、別の編集が必要、具体的な疑義が残る場合はapproved=false。"
+                                        "全小問IDをcheckedSubquestionIdsへ。後段のブラウザ検証や実音声試聴を実施済みとは言わない。"
+                                        "画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
+                                        + "。修復内容:" + json_bytes(patch).decode()
+                                        + "。修復前候補:" + json_bytes(original).decode()
+                                        + "。修復後候補:" + json_bytes(patched).decode(), PROBLEM_REVIEW, inputs, max_tokens=14000)
+                                    check_stop()
+                                    jsonschema.validate(audit, PROBLEM_REVIEW)
+                                except (StudioError, jsonschema.ValidationError) as error:
+                                    if isinstance(error, StudioError) and error.code != "model_schema":
+                                        raise
+                                    issues = ["図の参照修復後の独立検証が指定されたschemaに一致しません。"]
+                                else:
+                                    required_ids = [item["id"] for item in entry["subquestions"]]
+                                    fields = ("independentCheck", "officialAnswerCheck", "reasoningCheck", "readingsCheck")
+                                    if (audit["approved"] and not audit["issues"] and audit["checkedSubquestionIds"] == required_ids
+                                            and all(audit[key].strip() for key in fields)):
+                                        patched["verification"] = {"status": "verified",
+                                            **{key: audit[key] for key in fields}, "unresolvedIssues": []}
+                                        return patched, []
+                                    issues = list(audit["issues"])
+                                    if audit["checkedSubquestionIds"] != required_ids:
+                                        issues.append("図の参照修復後の独立検証で全小問の確認が一致しません。")
+                                    if not all(audit[key].strip() for key in fields):
+                                        issues.append("図の参照修復後の独立検証の根拠が空欄です。")
+                                    if not issues:
+                                        issues = ["図の参照修復後の独立検証で承認されませんでした。"]
+                    repair_feedback = "\n前回の参照修復の問題:" + json_bytes(_safe_lesson_details(issues)).decode()
+                    if isinstance(patch, dict):
+                        repair_feedback += "。前回の参照修復候補:" + json_bytes(patch).decode()
+                return None, [*original_issues, *issues]
+
             if verified is None and last_independent_review is not None:
                 verified, last_issues = repair_invisible_labels(candidate, last_independent_review, last_issues)
+            elif verified is None:
+                verified, last_issues = repair_primitive_references(candidate, last_issues)
             if verified is None:
                 error = StudioError("lesson_unresolved", "数学・解説・読みの検証に未解決事項があり、完成版を公開していません。", True)
                 error.details = _safe_lesson_details([entry["id"] + ": " + issue for issue in last_issues])

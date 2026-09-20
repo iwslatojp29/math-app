@@ -65,13 +65,15 @@ class GenerationRepairTests(unittest.TestCase):
         self.assertEqual(counts, {"candidate": 2, "review": 1})
         self.assertIn("required=title", self.fixture.calls[1][1])
 
-    def test_repeated_missing_reference_exhausts_four_attempts_without_math_review(self):
+    def test_repeated_missing_reference_exhausts_scoped_repair_without_math_review(self):
         def mutate(kind, count, value):
             if kind == "candidate":
                 value["steps"][0]["cues"][0]["state"]["highlightIds"] = ["missing-point"]
         with self.assertRaises(StudioError) as caught:
             self.run_candidates(mutate)
         self.assertEqual(self.counts, {"candidate": 4, "review": 0})
+        self.assertEqual(len(self.requests), 6)
+        self.assertTrue(all(request[0].startswith("lesson-reference-repair-") for request in self.requests[-2:]))
         self.assertEqual(caught.exception.code, "lesson_unresolved")
         self.assertIn("missing reference missing-point", " ".join(caught.exception.details))
         self.assertIn(self.fixture.inventory[0]["id"], caught.exception.details[0])
