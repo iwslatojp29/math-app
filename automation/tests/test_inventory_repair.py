@@ -487,6 +487,89 @@ class InventoryRepairTests(unittest.TestCase):
         self.assertNotIn("bookletIssue", ai.prompt(0))
         self.assertNotIn('"year":2026', ai.prompt(0))
 
+    def advanced_plan(self):
+        return {"kind": "advanced", "bookletIssue": self.booklet_issue(), "pages": [
+            {"printedPages": [str(page + 39)], "labels": ["advanced_questions" if page < 5 else "advanced_solutions"]}
+            for page in range(1, len(self.doc) + 1)]}
+
+    def test_inventory_repair_distinguishes_complete_questions_from_later_official_answer_continuation(self):
+        self.add_pages(8)
+        problems = [self.problem(f"advanced-{n}", [n]) for n in range(1, 5)]
+        problems[2]["pdfPages"] = [3, 4]
+        problems[3]["officialSolutionPages"] = [7, 8]
+        correct = self.batch(problems, range(1, 6))
+        pending = copy.deepcopy(correct)
+        pending["problems"][3]["unresolvedIssues"] = ["本文条件と設問はPDF4で読めるが、公式解説はPDF7下端から未提示のPDF8へ続く。"]
+        pending["unresolvedIssues"] = ["advanced-3の全選択肢はPDF3で完結し、PDF4冒頭の解答欄と難易度は同じ問題の付属情報。新規問題はadvanced-4だけ。"]
+        last = self.batch([], [6, 7, 8], previous=problems)
+        ai = FixtureAI([pending, correct, self.review(range(1, 6)), last, self.review([6, 7, 8])])
+        with patch.object(lesson_pipeline, "reconcile_solution_pages") as reconcile:
+            result, images = lesson_pipeline.inventory_questions(self.doc, ai, self.advanced_plan(), self.directory, "Fixture specification")
+        self.assertEqual(result, problems, "A complete question or its subquestions must not be discarded")
+        self.assertEqual(reconcile.call_args.args[1], [5, 6, 7, 8], "Full official answers still undergo their later matching stage")
+        self.assertEqual(len(ai.session_fixture.calls[0]["input"][0]["content"]), 8)
+        self.assertNotIn("inventory-review-advanced-1-0", ai.tasks)
+        for index in (1, 2):
+            content = ai.session_fixture.calls[index]["input"][0]["content"]
+            self.assertEqual([item["image_url"] for item in content[1:]], [lesson_pipeline.image_data(images[n]) for n in range(1, 9)])
+            self.assertIn(lesson_pipeline.INVENTORY_SCOPE, content[0]["text"])
+            self.assertIn("補助PDFページ[8]", content[0]["text"])
+            self.assertIn("対象PDFページ:[1, 2, 3, 4, 5]", content[0]["text"])
+            self.assertIn('"year":2026,"month":9', content[0]["text"])
+        self.assertIn(pending["unresolvedIssues"][0], ai.prompt(1), "The model must reassess the actual previous note")
+        with patch.object(lesson_pipeline, "reconcile_solution_pages"):
+            repeated, _ = lesson_pipeline.inventory_questions(self.doc, ai, self.advanced_plan(), self.directory, "Fixture specification")
+        self.assertEqual(repeated, problems)
+        self.assertEqual(len(ai.session_fixture.calls), 5)
+
+    def test_expanded_inventory_images_can_supply_actual_question_continuation_but_not_new_start_pages(self):
+        self.add_pages(8)
+        problem = self.problem(pages=(5, 6, 7, 8))
+        batch = self.batch([problem], range(1, 6))
+        last = self.batch([], [6, 7, 8], previous=[problem])
+        ai = FixtureAI([batch, batch, self.review(range(1, 6)), last, self.review([6, 7, 8])])
+        result, _ = self.inventory(ai)
+        self.assertEqual(result[0]["pdfPages"], [5, 6, 7, 8])
+        self.assertNotIn("inventory-review-practice-1-0", ai.tasks)
+        self.assertIn("inventory-review-practice-1-1", ai.tasks)
+        outside_start = self.batch([self.problem(pages=(8,))], range(1, 6))
+        issues = lesson_pipeline.inventory_issues(outside_start, list(range(1, 6)), list(range(1, 9)), [], range(1, 9))
+        self.assertTrue(any(issue["code"] == "inventory_duplicate" for issue in issues), "Expanded context does not expand the registration target")
+
+    def test_real_question_uncertainty_remains_blocking_after_both_context_expansions(self):
+        self.add_pages(10)
+        problem = self.problem("advanced-4", [4])
+        reason = "問題本文の図の角度条件が不鮮明で、選択肢の区別を確定できない。"
+        problem["unresolvedIssues"] = [reason]
+        pending = self.batch([problem], range(1, 6))
+        ai = FixtureAI([pending, pending, pending])
+        with patch.object(lesson_pipeline, "reconcile_solution_pages") as reconcile:
+            with self.assertRaises(StudioError) as caught:
+                lesson_pipeline.inventory_questions(self.doc, ai, self.advanced_plan(), self.directory, "Fixture specification")
+        reconcile.assert_not_called()
+        self.assertEqual(caught.exception.code, "inventory_unresolved")
+        self.assertIn(reason, " ".join(caught.exception.details))
+        self.assertEqual([len(call["input"][0]["content"]) - 1 for call in ai.session_fixture.calls], [7, 8, 9])
+        self.assertTrue(all("review" not in task for task in ai.tasks))
+        for index in (1, 2):
+            self.assertIn(reason, ai.prompt(index))
+            self.assertIn("未解決事項を機械的に削除するのではなく", ai.prompt(index))
+
+    def test_inventory_repair_keeps_explicit_past_issue_conflicts_blocking(self):
+        wrong = self.batch([self.problem("contest-2026-09-1")])
+        reason = "原画像は7月学コン問題の再掲なのに、候補IDが9月の当月問題になっている。"
+        ai = FixtureAI([wrong, self.review(issues=[reason])] * 3)
+        plan = self.advanced_plan()
+        with patch.object(lesson_pipeline, "reconcile_solution_pages") as reconcile:
+            with self.assertRaises(StudioError) as caught:
+                lesson_pipeline.inventory_questions(self.doc, ai, plan, self.directory, "Fixture specification")
+        reconcile.assert_not_called()
+        self.assertEqual(caught.exception.code, "inventory_unresolved")
+        self.assertIn(reason, caught.exception.details)
+        for index in (2, 3, 4, 5):
+            self.assertIn("別年月・過去号・別欄は冊子年月で上書きせず", ai.prompt(index))
+            self.assertIn('"year":2026,"month":9', ai.prompt(index))
+
 
 if __name__ == "__main__":
     unittest.main()
