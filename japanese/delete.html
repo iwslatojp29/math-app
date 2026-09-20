@@ -19,7 +19,6 @@ h1 { color: #333; border-bottom: 3px solid #e53935; padding-bottom: 10px; }
 #main-screen { display: none; }
 .panel { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
 .panel > label { display: block; font-weight: bold; color: #555; margin-bottom: 8px; }
-.panel input[type=password] { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95em; }
 .hint { font-size: 0.82em; color: #999; margin-top: 6px; line-height: 1.6; }
 .btn { padding: 11px 22px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; font-family: inherit; }
 .btn-blue { background: #2196F3; color: white; }
@@ -44,6 +43,15 @@ h1 { color: #333; border-bottom: 3px solid #e53935; padding-bottom: 10px; }
 .status-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; font-size: 0.95em; }
 .status-item:last-child { border-bottom: none; }
 .ok { color: #43a047; } .err { color: #e53935; } .wait { color: #888; }
+.auth-hint { font-size: 0.85em; color: #666; line-height: 1.7; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+#password-screen { margin-bottom: 20px; }
+#pw-btn:disabled { background: #bbb; cursor: default; }
+.status-item > span:last-child { overflow-wrap: anywhere; }
+.manual-area { margin-top: 18px; padding-top: 16px; border-top: 1px solid #eee; }
+.manual-area > label { display: block; font-size: 0.9em; font-weight: bold; color: #555; }
+#manual-filename { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95em; margin: 4px 0 10px; }
+#manual-error { margin-top: 8px; font-size: 0.88em; }
 </style>
 </head>
 <body>
@@ -51,21 +59,18 @@ h1 { color: #333; border-bottom: 3px solid #e53935; padding-bottom: 10px; }
 <h1>ページを削除する</h1>
 
 <div id="password-screen">
-  <h2>🔒 パスワードを入力してください</h2>
-  <input type="password" id="pw-input" placeholder="パスワード" />
-  <button id="pw-btn">確認</button>
-  <div id="pw-error">パスワードが違います</div>
+  <h2>🔒 合言葉を入力してください</h2>
+  <label for="pw-input" class="sr-only">追加・削除用の合言葉</label>
+  <input type="password" id="pw-input" placeholder="合言葉" autocomplete="off" />
+  <button id="pw-btn" type="button">操作を開始</button>
+  <p class="auth-hint">合言葉は追加・削除の実行時に確認されます。このページは合言葉を保存しません。</p>
+  <div id="pw-error" role="alert"></div>
 </div>
 
 <div id="main-screen">
   <div class="panel">
-    <label>GitHub Personal Access Token</label>
-    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
-    <div class="hint">
-      必要なスコープ: <code>repo</code> または <code>contents: write</code><br>
-      <a href="https://github.com/settings/tokens/new" target="_blank">トークンを作成する →</a>
-    </div>
-    <button class="btn btn-blue" id="load-btn" style="margin-top:14px;">ページ一覧を読み込む</button>
+    <p class="hint">公開されているコンテンツ一覧から読み込みます。更新の反映には数分かかることがあります。</p>
+    <button class="btn btn-blue" id="load-btn" type="button">ページ一覧を読み込む</button>
   </div>
 
   <div class="panel" id="list-panel">
@@ -77,230 +82,251 @@ h1 { color: #333; border-bottom: 3px solid #e53935; padding-bottom: 10px; }
       </div>
     </div>
     <div id="rows"></div>
+    <div class="manual-area">
+      <label for="manual-filename">一覧にないファイルを削除する場合（任意）</label>
+      <p class="hint">この科目フォルダにある正確なファイル名を、拡張子 .html を付けて入力してください。</p>
+      <input id="manual-filename" type="text" placeholder="例: 分数の計算.html" autocomplete="off" />
+      <button class="btn btn-blue" id="manual-add" type="button">削除対象に追加</button>
+      <div id="manual-error" class="err" role="alert"></div>
+    </div>
     <div class="warn">削除するとHTMLファイル本体と一覧の両方から消えます。元に戻せません。</div>
     <button class="btn btn-red" id="del-btn" disabled>選択したページを削除</button>
   </div>
 
   <div class="panel" id="status-box">
     <h3 style="margin:0 0 12px; color:#333;">処理状況</h3>
-    <div id="status-list"></div>
+    <div id="status-list" aria-live="polite"></div>
   </div>
 </div>
 
+<!-- API_BASE is configured in ../shared/proxy-client.js. -->
+<script src="../shared/proxy-client.js"></script>
 <script>
-const PASSWORD = 'iws';
 const FOLDER = 'japanese';
-const OWNER = 'iwslatojp29';
-const REPO = 'math-app';
-const BRANCH = 'main';
-const SKIP = ['index.html', 'upload.html', 'delete.html'];
+const passphraseInput = document.getElementById('pw-input');
+let ROWS = [];
+let busy = false;
 
-function H(t) { return { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github.v3+json' }; }
-function api(p) { return 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + p; }
-function b64d(b) {
-  const bin = atob(b.replace(/\n/g, ''));
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new TextDecoder('utf-8').decode(bytes);
-}
-function b64e(s) {
-  const bytes = new TextEncoder().encode(s);
-  let bin = '';
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin);
-}
-function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-function token() { return document.getElementById('token-input').value.trim(); }
+document.getElementById('pw-btn').addEventListener('click', startDelete);
+passphraseInput.addEventListener('keydown', e => { if (e.key === 'Enter') startDelete(); });
+passphraseInput.addEventListener('input', () => {
+  document.getElementById('pw-error').style.display = 'none';
+  updateControls();
+});
 
-document.getElementById('pw-btn').addEventListener('click', checkPassword);
-document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
-function checkPassword() {
-  if (document.getElementById('pw-input').value === PASSWORD) {
-    document.getElementById('password-screen').style.display = 'none';
-    document.getElementById('main-screen').style.display = 'block';
-  } else {
+function startDelete() {
+  if (busy) return;
+  if (!passphraseInput.value) {
+    document.getElementById('pw-error').textContent = '合言葉を入力してください。';
     document.getElementById('pw-error').style.display = 'block';
+    passphraseInput.focus();
+    return;
   }
-}
-
-function removeCardFromHtml(html, name) {
-  const cands = ['./' + encodeURI(name), './' + name, './' + encodeURIComponent(name)];
-  for (const c of cands) {
-    const p = html.indexOf('href="' + c + '"');
-    if (p === -1) continue;
-    let s = html.lastIndexOf('<div class=' + '"card"', p);
-    let e = html.indexOf('</div>', p);
-    if (s === -1 || e === -1) continue;
-    e += 6;
-    while (html.charAt(e) === '\n' || html.charAt(e) === '\r') e++;
-    const ls = html.lastIndexOf('\n', s);
-    if (ls !== -1 && html.slice(ls + 1, s).trim() === '') s = ls + 1;
-    return html.slice(0, s) + html.slice(e);
-  }
-  return null;
+  document.getElementById('main-screen').style.display = 'block';
+  document.getElementById('pw-error').style.display = 'none';
+  updateControls();
 }
 
 function titlesFromIndex(html) {
-  const map = {};
+  const rows = new Map();
   const doc = new DOMParser().parseFromString(html, 'text/html');
-  doc.querySelectorAll('.card a').forEach(a => {
-    const h = a.getAttribute('href') || '';
-    if (!/^\.\/.+\.html$/i.test(h)) return;
-    let n = h.slice(2);
-    try { n = decodeURIComponent(n); } catch (err) {}
-    if (!map[n]) map[n] = a.textContent.trim();
+  const base = new URL('./index.html', location.href);
+  const directory = new URL('./', base).pathname;
+  doc.querySelectorAll('.card a[href]').forEach(anchor => {
+    try {
+      const link = new URL(anchor.getAttribute('href'), base);
+      if (link.origin !== base.origin || !link.pathname.startsWith(directory)) return;
+      const name = decodeURIComponent(link.pathname.slice(directory.length));
+      if (!MathAppProxy.validFilename(name) || rows.has(name)) return;
+      rows.set(name, { name, title: anchor.textContent.trim() || name, manual: false });
+    } catch (error) {
+      // Ignore malformed links; never infer an alternative filename.
+    }
   });
-  return map;
+  return Array.from(rows.values()).sort((a, b) => a.title.localeCompare(b.title, 'ja'));
 }
-
-let ROWS = [];
 
 document.getElementById('load-btn').addEventListener('click', loadList);
 
 async function loadList() {
-  if (!token()) { alert('GitHub トークンを入力してください'); return; }
-  const btn = document.getElementById('load-btn');
-  btn.disabled = true; btn.textContent = '読み込み中...';
+  if (busy) return;
+  busy = true;
+  ROWS = [];
+  render();
+  document.getElementById('list-panel').style.display = 'block';
+  document.getElementById('manual-error').textContent = '';
+  document.getElementById('status-box').style.display = 'none';
+  const button = document.getElementById('load-btn');
+  button.textContent = '読み込み中...';
+  updateControls();
   try {
-    const r = await fetch(api(FOLDER) + '?ref=' + BRANCH, { headers: H(token()) });
-    if (!r.ok) {
-      const e = await r.json();
-      throw new Error(e.message || r.status);
-    }
-    const files = (await r.json())
-      .filter(f => f.type === 'file' && /\.html$/i.test(f.name) && SKIP.indexOf(f.name) === -1);
-
-    let titles = {};
-    try {
-      const ir = await fetch('./index.html?t=' + Date.now());
-      if (ir.ok) titles = titlesFromIndex(await ir.text());
-    } catch (e) {}
-
-    ROWS = files.map(f => ({ name: f.name, title: titles[f.name] || null, size: f.size }))
-                .sort((a, b) => (a.title || a.name).localeCompare(b.title || b.name, 'ja'));
+    const response = await fetch('./index.html?t=' + Date.now(), { cache: 'no-store', credentials: 'omit' });
+    if (!response.ok) throw new Error('list_failed');
+    ROWS = titlesFromIndex(await response.text());
     render();
-    document.getElementById('list-panel').style.display = 'block';
-  } catch (e) {
-    alert('一覧の読み込みに失敗しました: ' + e.message);
+  } catch (error) {
+    const statusList = document.getElementById('status-list');
+    statusList.replaceChildren();
+    const row = document.createElement('div');
+    row.className = 'status-item';
+    setStatus(row, 'err', '一覧を読み込めませんでした。もう一度読み込んでください。');
+    statusList.appendChild(row);
+    document.getElementById('status-box').style.display = 'block';
+  } finally {
+    busy = false;
+    button.textContent = 'ページ一覧を再読み込み';
+    updateControls();
   }
-  btn.disabled = false; btn.textContent = 'ページ一覧を再読み込み';
 }
 
-function render() {
+function render(selectedNames = new Set()) {
   const box = document.getElementById('rows');
+  box.replaceChildren();
   if (ROWS.length === 0) {
-    box.innerHTML = '<div class="empty">削除できるページがありません。</div>';
-  } else {
-    box.innerHTML = ROWS.map((r, i) =>
-      '<div class="row">' +
-        '<input type="checkbox" class="pick" id="pick-' + i + '" data-i="' + i + '" />' +
-        '<label for="pick-' + i + '">' +
-          '<div class="title">' + esc(r.title || r.name.replace(/\.html$/i, '')) +
-            (r.title ? '' : '<span class="orphan">一覧に未掲載</span>') + '</div>' +
-          '<div class="file">' + esc(r.name) + ' ・ ' + Math.round(r.size / 1024) + ' KB</div>' +
-        '</label>' +
-      '</div>').join('');
-    box.querySelectorAll('.pick').forEach(c => c.addEventListener('change', updateCount));
+    const empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.textContent = '一覧に削除できるページがありません。未掲載のファイルは下の欄から指定できます。';
+    box.appendChild(empty);
   }
-  updateCount();
+  ROWS.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'pick';
+    checkbox.id = 'pick-' + index;
+    checkbox.dataset.index = String(index);
+    checkbox.checked = selectedNames.has(item.name);
+    checkbox.addEventListener('change', updateControls);
+    const label = document.createElement('label');
+    label.htmlFor = checkbox.id;
+    const title = document.createElement('div');
+    title.className = 'title';
+    title.textContent = item.title;
+    if (item.manual) {
+      const badge = document.createElement('span');
+      badge.className = 'orphan';
+      badge.textContent = '手動指定';
+      title.appendChild(badge);
+    }
+    const name = document.createElement('div');
+    name.className = 'file';
+    name.textContent = item.name;
+    label.append(title, name);
+    row.append(checkbox, label);
+    box.appendChild(row);
+  });
+  updateControls();
 }
 
 function picked() {
-  return Array.prototype.filter.call(document.querySelectorAll('.pick'), c => c.checked)
-    .map(c => ROWS[Number(c.getAttribute('data-i'))]);
+  return Array.from(document.querySelectorAll('.pick:checked'))
+    .map(checkbox => ROWS[Number(checkbox.dataset.index)]).filter(Boolean);
 }
-function updateCount() {
-  const n = picked().length;
-  const b = document.getElementById('del-btn');
-  b.disabled = n === 0;
-  b.textContent = n === 0 ? '選択したページを削除' : '選択した ' + n + ' 件を削除';
+
+function updateControls() {
+  const count = picked().length;
+  const button = document.getElementById('del-btn');
+  button.disabled = busy || !passphraseInput.value || count === 0;
+  button.textContent = busy ? '処理中...' : count ? '選択した ' + count + ' 件を削除' : '選択したページを削除';
+  ['pw-btn', 'load-btn', 'sel-all', 'sel-none', 'manual-add', 'manual-filename'].forEach(id => {
+    document.getElementById(id).disabled = busy;
+  });
+  document.querySelectorAll('.pick').forEach(checkbox => { checkbox.disabled = busy; });
 }
 
 document.getElementById('sel-all').addEventListener('click', () => {
-  document.querySelectorAll('.pick').forEach(c => { c.checked = true; }); updateCount();
+  if (busy) return;
+  document.querySelectorAll('.pick').forEach(checkbox => { checkbox.checked = true; });
+  updateControls();
 });
 document.getElementById('sel-none').addEventListener('click', () => {
-  document.querySelectorAll('.pick').forEach(c => { c.checked = false; }); updateCount();
+  if (busy) return;
+  document.querySelectorAll('.pick').forEach(checkbox => { checkbox.checked = false; });
+  updateControls();
 });
+
+document.getElementById('manual-add').addEventListener('click', addManualFilename);
+document.getElementById('manual-filename').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); addManualFilename(); }
+});
+
+function addManualFilename() {
+  if (busy) return;
+  const input = document.getElementById('manual-filename');
+  const filename = input.value;
+  const error = document.getElementById('manual-error');
+  if (!MathAppProxy.validFilename(filename)) {
+    error.textContent = '管理用ページを除く .html ファイル名を入力してください。フォルダや「..」は指定できません。';
+    return;
+  }
+  const selected = new Set(picked().map(item => item.name));
+  selected.add(filename);
+  if (!ROWS.some(item => item.name === filename)) {
+    ROWS.push({ name: filename, title: filename.replace(/\.html$/i, ''), manual: true });
+  }
+  error.textContent = '';
+  input.value = '';
+  render(selected);
+}
+
+function setStatus(row, kind, message) {
+  const icon = document.createElement('span');
+  icon.className = kind;
+  icon.textContent = kind === 'ok' ? '✅' : kind === 'err' ? '❌' : '⏳';
+  const label = document.createElement('span');
+  label.textContent = message;
+  row.replaceChildren(icon, label);
+}
 
 document.getElementById('del-btn').addEventListener('click', doDelete);
 
 async function doDelete() {
+  if (busy) return;
   const targets = picked();
-  if (targets.length === 0) return;
-  const names = targets.map(t => '・' + (t.title || t.name)).join('\n');
+  if (!targets.length) return;
+  const passphrase = passphraseInput.value;
+  if (!passphrase) { startDelete(); return; }
+  const names = targets.map(item => '・' + item.title + '（' + item.name + '）').join('\n');
   if (!confirm('次の ' + targets.length + ' 件を削除します。元に戻せません。\n\n' + names)) return;
-
-  const t = token();
-  const btn = document.getElementById('del-btn');
-  btn.disabled = true; btn.textContent = '削除中...';
-  const statusList = document.getElementById('status-list');
+  busy = true;
+  updateControls();
   document.getElementById('status-box').style.display = 'block';
-  statusList.innerHTML = '';
-
-  const deleted = [];
-  for (const item of targets) {
-    const id = 'st-' + Math.random().toString(36).slice(2);
-    statusList.innerHTML += '<div class="status-item" id="' + id + '"><span class="wait">⏳</span><span>' +
-      esc(item.name) + ' を削除中...</span></div>';
-    const el = document.getElementById(id);
-    try {
-      const path = FOLDER + '/' + encodeURIComponent(item.name);
-      const g = await fetch(api(path) + '?ref=' + BRANCH, { headers: H(t) });
-      if (!g.ok) throw new Error('ファイルが見つかりません (' + g.status + ')');
-      const meta = await g.json();
-      const d = await fetch(api(path), {
-        method: 'DELETE',
-        headers: Object.assign({ 'Content-Type': 'application/json' }, H(t)),
-        body: JSON.stringify({ message: 'Delete ' + FOLDER + '/' + item.name, sha: meta.sha, branch: BRANCH })
-      });
-      if (!d.ok) { const e = await d.json(); throw new Error(e.message || d.status); }
-      deleted.push(item.name);
-      el.innerHTML = '<span class="ok">✅</span><span>' + esc(item.name) + ' を削除しました</span>';
-    } catch (e) {
-      el.innerHTML = '<span class="err">❌</span><span>' + esc(item.name) + ' 失敗: ' + esc(String(e.message)) + '</span>';
-    }
-  }
-
-  if (deleted.length > 0) {
-    statusList.innerHTML += '<div class="status-item" id="st-index"><span class="wait">⏳</span><span>index.html を更新中...</span></div>';
-    try {
-      const ir = await fetch(api(FOLDER + '/index.html') + '?ref=' + BRANCH, { headers: H(t) });
-      if (!ir.ok) throw new Error('index.html が読めません (' + ir.status + ')');
-      const idx = await ir.json();
-      let html = b64d(idx.content);
-      let changed = 0;
-      for (const n of deleted) {
-        let next = removeCardFromHtml(html, n);
-        while (next) { html = next; changed++; next = removeCardFromHtml(html, n); }
+  const statusList = document.getElementById('status-list');
+  statusList.replaceChildren();
+  let authenticationFailed = false;
+  try {
+    for (const item of targets) {
+      const row = document.createElement('div');
+      row.className = 'status-item';
+      statusList.appendChild(row);
+      if (authenticationFailed) {
+        setStatus(row, 'err', item.name + ' 未処理: 合言葉を入力し直して再実行してください。');
+        continue;
       }
-      if (changed === 0) {
-        document.getElementById('st-index').innerHTML =
-          '<span class="ok">✅</span><span>index.html に該当カードはありませんでした</span>';
-      } else {
-        const pr = await fetch(api(FOLDER + '/index.html'), {
-          method: 'PUT',
-          headers: Object.assign({ 'Content-Type': 'application/json' }, H(t)),
-          body: JSON.stringify({
-            message: 'Auto-update index.html (remove ' + deleted.length + ' page(s))',
-            content: b64e(html), sha: idx.sha, branch: BRANCH
-          })
-        });
-        if (!pr.ok) { const e = await pr.json(); throw new Error(e.message || pr.status); }
-        document.getElementById('st-index').innerHTML =
-          '<span class="ok">✅</span><span>一覧から ' + changed + ' 件のカードを削除しました。数分後にページに反映されます。</span>';
+      setStatus(row, 'wait', item.name + ' を削除中...');
+      try {
+        await MathAppProxy.deleteFile({ folder: FOLDER, filename: item.name }, passphrase);
+        setStatus(row, 'ok', item.name + ' を削除しました。一覧への反映には数分かかることがあります。');
+        const selected = new Set(picked().map(target => target.name));
+        selected.delete(item.name);
+        ROWS = ROWS.filter(target => target.name !== item.name);
+        render(selected);
+      } catch (error) {
+        setStatus(row, 'err', item.name + ' 失敗: ' + MathAppProxy.errorMessage(error));
+        if (error.status === 401) {
+          authenticationFailed = true;
+          passphraseInput.focus();
+        }
       }
-    } catch (e) {
-      document.getElementById('st-index').innerHTML =
-        '<span class="err">❌</span><span>index.html の更新に失敗: ' + esc(String(e.message)) + '</span>';
     }
-    ROWS = ROWS.filter(r => deleted.indexOf(r.name) === -1);
-    render();
+  } finally {
+    busy = false;
+    updateControls();
   }
-
-  btn.textContent = '選択したページを削除';
-  updateCount();
 }
+
+updateControls();
 </script>
 </body>
 </html>

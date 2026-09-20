@@ -1,0 +1,12 @@
+name = "math-app-proxy"
+main = "src/index.js"
+compatibility_date = "2026-09-20"
+workers_dev = true
+
+account_id = "c80fe779b712b44128d2da4e637814fd"
+
+[vars]
+REPO = "iwslatojp29/math-app"
+BRANCH = "main"
+ALLOWED_ORIGIN = "https://iwslatojp29.github.io"
+LABEL_WITH_EXT = "false"
