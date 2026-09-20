@@ -168,7 +168,7 @@ def extract_pdf(source, plan, output: Path):
             if labels != previous_labels:
                 titles = {"points": "要点の整理", "practice_questions": "日日の演習 問題", "practice_solutions": "日日の演習 解答解説",
                           "advanced_questions": "発展演習 問題", "advanced_solutions": "発展演習 解答解説", "contest_questions": "学力コンテスト 当月問題",
-                          "contest_entry": "学力コンテスト 応募", "contest_solutions": "学力コンテスト 過去号解答", "contest_results": "学力コンテスト 成績発表", "contest_letters": "学力コンテスト 通信"}
+                          "contest_entry": "学力コンテスト 応募", "contest_solutions": "学力コンテスト 解答・解説（同じ冊子に掲載）", "contest_results": "学力コンテスト 成績発表", "contest_letters": "学力コンテスト 通信"}
                 title = "・".join(titles[label] for label in labels if label in titles)
                 if title:
                     toc.append([1, title, len(out)])

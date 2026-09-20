@@ -196,7 +196,7 @@ def run_job(studio, job, api_key, temp_root=None):
             plans = plans_from_classification(classification, source["name"])
             summary = {"source": {"id": source["id"], "name": source["name"], "sha256": source_sha},
                 "model": job["model"], "year": classification["issue"]["year"], "month": classification["issue"]["month"],
-                "outputs": [], "warnings": ["学力コンテストの解答は、同じ冊子に掲載された過去号分を含みます。"], "errors": []}
+                "outputs": [], "warnings": ["学力コンテストの解答は、同じ冊子に掲載されたものを収録します（過去号分の場合もあります）。"], "errors": []}
             prepared = []
             # Finish both source-preserving PDF deliveries before the slower lesson work.
             for plan in plans:

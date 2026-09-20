@@ -89,13 +89,16 @@ class PDFTests(unittest.TestCase):
     def test_direct_page_copy_preserves_pixels_order_bookmarks_and_source(self):
         original_hash = digest_file(self.source_path)
         output = self.directory / "selected.pdf"
-        result = extract_pdf(self.source, self.plan([1, 3]), output)
+        plan = self.plan([1, 3])
+        plan["pages"][1]["labels"] = ["contest_solutions"]
+        result = extract_pdf(self.source, plan, output)
         self.assertEqual(result["pageCount"], 2)
         self.assertTrue(result["allPagesPixelMatched"])
         self.assertEqual([item["sourcePdfPage"] for item in result["pages"]], [1, 3])
         with fitz.open(output) as generated:
             self.assertEqual(len(generated), 2)
             self.assertTrue(generated.get_toc())
+            self.assertEqual(generated.get_toc()[1], [1, "学力コンテスト 解答・解説（同じ冊子に掲載）", 2])
             self.assertIn("page 3", generated[1].get_text())
         self.assertEqual(digest_file(self.source_path), original_hash)
 
