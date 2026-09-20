@@ -1,0 +1,1203 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "1.0"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "pdfName": {
+      "type": "string"
+    },
+    "yearMonth": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "sourceImages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string"
+          },
+          "alt": {
+            "type": "string"
+          },
+          "pdfPage": {
+            "type": "integer"
+          },
+          "printedPage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "assetId",
+          "alt",
+          "pdfPage",
+          "printedPage"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "problems": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/problem"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "problemId": {
+            "type": "string"
+          },
+          "sectionId": {
+            "type": "string"
+          },
+          "pdfPages": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "printedPages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subquestionIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "problemId",
+          "sectionId",
+          "pdfPages",
+          "printedPages",
+          "subquestionIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "coverageChecked": {
+          "type": "boolean"
+        },
+        "mathematicsChecked": {
+          "type": "boolean"
+        },
+        "readingsChecked": {
+          "type": "boolean"
+        },
+        "unresolvedIssues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "coverageChecked",
+        "mathematicsChecked",
+        "readingsChecked",
+        "unresolvedIssues"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "title",
+    "pdfName",
+    "yearMonth",
+    "sections",
+    "sourceImages",
+    "problems",
+    "coverage",
+    "review"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "viewBox": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "additionalProperties": false
+    },
+    "pointXY": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "point": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "point"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "x",
+        "y",
+        "radius",
+        "color"
+      ],
+      "additionalProperties": false
+    },
+    "line": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "line"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "x1": {
+          "type": "number"
+        },
+        "y1": {
+          "type": "number"
+        },
+        "x2": {
+          "type": "number"
+        },
+        "y2": {
+          "type": "number"
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "width": {
+          "type": "number"
+        },
+        "dashed": {
+          "type": "boolean"
+        },
+        "arrow": {
+          "type": "string",
+          "enum": [
+            "none",
+            "start",
+            "end",
+            "both"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "color",
+        "width",
+        "dashed",
+        "arrow"
+      ],
+      "additionalProperties": false
+    },
+    "polyline": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "polyline"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pointXY"
+          }
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "width": {
+          "type": "number"
+        },
+        "dashed": {
+          "type": "boolean"
+        },
+        "arrow": {
+          "type": "string",
+          "enum": [
+            "none",
+            "start",
+            "end",
+            "both"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "points",
+        "color",
+        "width",
+        "dashed",
+        "arrow"
+      ],
+      "additionalProperties": false
+    },
+    "polygon": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "polygon"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pointXY"
+          }
+        },
+        "stroke": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "fill": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "width": {
+          "type": "number"
+        },
+        "dashed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "points",
+        "stroke",
+        "fill",
+        "width",
+        "dashed"
+      ],
+      "additionalProperties": false
+    },
+    "rect": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "rect"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "stroke": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "fill": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "strokeWidth": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "x",
+        "y",
+        "width",
+        "height",
+        "stroke",
+        "fill",
+        "strokeWidth"
+      ],
+      "additionalProperties": false
+    },
+    "circle": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "circle"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "cx": {
+          "type": "number"
+        },
+        "cy": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "stroke": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "fill": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "cx",
+        "cy",
+        "radius",
+        "stroke",
+        "fill",
+        "width"
+      ],
+      "additionalProperties": false
+    },
+    "arc": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "arc"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "cx": {
+          "type": "number"
+        },
+        "cy": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "cx",
+        "cy",
+        "radius",
+        "startAngle",
+        "endAngle",
+        "color",
+        "width"
+      ],
+      "additionalProperties": false
+    },
+    "angle": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "angle"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "rightAngle": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "x",
+        "y",
+        "radius",
+        "startAngle",
+        "endAngle",
+        "rightAngle",
+        "color",
+        "width"
+      ],
+      "additionalProperties": false
+    },
+    "label": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "label"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "text": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "blue",
+            "orange",
+            "green",
+            "red",
+            "purple",
+            "white",
+            "none"
+          ]
+        },
+        "fontSize": {
+          "type": "number"
+        },
+        "anchor": {
+          "type": "string",
+          "enum": [
+            "start",
+            "middle",
+            "end"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "x",
+        "y",
+        "text",
+        "color",
+        "fontSize",
+        "anchor"
+      ],
+      "additionalProperties": false
+    },
+    "primitive": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/point"
+        },
+        {
+          "$ref": "#/$defs/line"
+        },
+        {
+          "$ref": "#/$defs/polyline"
+        },
+        {
+          "$ref": "#/$defs/polygon"
+        },
+        {
+          "$ref": "#/$defs/rect"
+        },
+        {
+          "$ref": "#/$defs/circle"
+        },
+        {
+          "$ref": "#/$defs/arc"
+        },
+        {
+          "$ref": "#/$defs/angle"
+        },
+        {
+          "$ref": "#/$defs/label"
+        }
+      ]
+    },
+    "transform": {
+      "type": "object",
+      "properties": {
+        "targetId": {
+          "type": "string"
+        },
+        "dx": {
+          "type": "number"
+        },
+        "dy": {
+          "type": "number"
+        },
+        "rotation": {
+          "type": "number"
+        },
+        "scale": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "targetId",
+        "dx",
+        "dy",
+        "rotation",
+        "scale"
+      ],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "visibleIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "highlightIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "transforms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/transform"
+          }
+        }
+      },
+      "required": [
+        "visibleIds",
+        "highlightIds",
+        "transforms"
+      ],
+      "additionalProperties": false
+    },
+    "formulaPart": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "text",
+            "fraction",
+            "power"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "numerator": {
+          "type": "string"
+        },
+        "denominator": {
+          "type": "string"
+        },
+        "exponent": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text",
+        "numerator",
+        "denominator",
+        "exponent"
+      ],
+      "additionalProperties": false
+    },
+    "formula": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/formulaPart"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "parts"
+      ],
+      "additionalProperties": false
+    },
+    "fact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "given",
+            "derived",
+            "scale",
+            "example"
+          ]
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "source",
+        "dependencies"
+      ],
+      "additionalProperties": false
+    },
+    "cue": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayText": {
+          "type": "string"
+        },
+        "speechText": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        },
+        "formulaIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "factIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "displayText",
+        "speechText",
+        "state",
+        "formulaIds",
+        "factIds"
+      ],
+      "additionalProperties": false
+    },
+    "step": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "viewBox": {
+          "$ref": "#/$defs/viewBox"
+        },
+        "cues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cue"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "viewBox",
+        "cues"
+      ],
+      "additionalProperties": false
+    },
+    "subquestion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "answerText": {
+          "type": "string"
+        },
+        "answerFormulaId": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "entryCueId": {
+          "type": "string"
+        },
+        "prerequisiteCueIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "answerText",
+        "answerFormulaId",
+        "unit",
+        "entryCueId",
+        "prerequisiteCueIds"
+      ],
+      "additionalProperties": false
+    },
+    "staticBlock": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "formulaIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sceneCueId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "heading",
+        "text",
+        "formulaIds",
+        "sceneCueId"
+      ],
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "needs_review"
+          ]
+        },
+        "independentCheck": {
+          "type": "string"
+        },
+        "officialAnswerCheck": {
+          "type": "string"
+        },
+        "reasoningCheck": {
+          "type": "string"
+        },
+        "readingsCheck": {
+          "type": "string"
+        },
+        "unresolvedIssues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "independentCheck",
+        "officialAnswerCheck",
+        "reasoningCheck",
+        "readingsCheck",
+        "unresolvedIssues"
+      ],
+      "additionalProperties": false
+    },
+    "problem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sectionId": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "sourceImageIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "givens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "goal": {
+          "type": "string"
+        },
+        "opening": {
+          "type": "string"
+        },
+        "facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fact"
+          }
+        },
+        "formulas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/formula"
+          }
+        },
+        "diagram": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "viewBox": {
+              "$ref": "#/$defs/viewBox"
+            },
+            "primitives": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/primitive"
+              }
+            }
+          },
+          "required": [
+            "description",
+            "viewBox",
+            "primitives"
+          ],
+          "additionalProperties": false
+        },
+        "subquestions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/subquestion"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        },
+        "staticExplanation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/staticBlock"
+          }
+        },
+        "verification": {
+          "$ref": "#/$defs/verification"
+        }
+      },
+      "required": [
+        "id",
+        "sectionId",
+        "number",
+        "title",
+        "sourceImageIds",
+        "givens",
+        "goal",
+        "opening",
+        "facts",
+        "formulas",
+        "diagram",
+        "subquestions",
+        "steps",
+        "staticExplanation",
+        "verification"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

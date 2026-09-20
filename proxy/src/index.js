@@ -1,3 +1,6 @@
+import { handleStudio } from './studio.js';
+export { StudioState } from './studio.js';
+
 const MAX_CONTENT_BYTES = 10 * 1024 * 1024;
 const MAX_BASE64_BYTES = 4 * Math.ceil(MAX_CONTENT_BYTES / 3);
 const MAX_JSON_BYTES = MAX_BASE64_BYTES + 16 * 1024;
@@ -320,6 +323,7 @@ async function mutateIndex(github, env, path, initial, body, label, remove) {
 export default {
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
+    if (path === '/studio' || path.startsWith('/studio/') || path.startsWith('/api/studio/')) return handleStudio(request, env);
     const endpoint = path === '/api/commit' || path === '/api/delete';
     const origin = request.headers.get('Origin');
     const allowedOrigin = origin && origin === env.ALLOWED_ORIGIN ? origin : null;
