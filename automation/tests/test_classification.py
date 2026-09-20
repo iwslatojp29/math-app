@@ -325,6 +325,34 @@ class ClassificationTests(unittest.TestCase):
         self.assertIn(2, final_record["contextPdfPages"])
         self.assertEqual(final_record["status"], "approved")
 
+    def test_distant_continuation_uses_verified_printed_mapping_and_article_start(self):
+        classified = [self.page(n, "other" if 50 <= n <= 53 else
+                                "contest_questions" if n % 2 else "contest_solutions") for n in range(1, 79)]
+        for item in classified:
+            item["printedPages"] = [str(item["pdfPage"] + 200)]
+        # Deliberately use nonuniform offsets: printed51->PDF53, printed81->PDF83.
+        classified[52]["printedPages"] = ["51"]
+        classified[52]["boundaryEvidence"] = "長文の演習の解説末尾に（p.81に続く）と明記。"
+        pending = self.classification(range(79, 85))
+        target = pending["pages"][4]
+        target.update(labels=[], printedPages=["81"], boundaryEvidence="p.51のつづきとあるが見出しなし。",
+                      unresolvedIssues=["印刷51ページおよび所属コーナーの見出しを確認する必要。"])
+        context = pdf_pipeline.classification_context_pages(classified, list(range(78, 86)), pending)
+        self.assertIn(50, context)
+        self.assertIn(53, context)
+        self.assertNotIn(51, context, "Do not treat printed51 as PDF51")
+        self.assertLessEqual(len(context), 10)
+        # Even if the model only notes an unknown source, the already-reviewed
+        # source page's forward continuation reference must resolve the link.
+        target.update(boundaryEvidence="本文の続き。", unresolvedIssues=["帰属が不明。"])
+        context = pdf_pipeline.classification_context_pages(classified, list(range(78, 86)), pending)
+        self.assertIn(50, context)
+        self.assertIn(53, context)
+
+    def test_printed_reference_parsing_avoids_years_and_accepts_japanese_notation(self):
+        self.assertEqual(pdf_pipeline.printed_page_references("2026年10月号 p.81、印刷51ページ、誌面40、44頁"),
+                         {81, 51, 40, 44})
+
 
 if __name__ == "__main__":
     unittest.main()

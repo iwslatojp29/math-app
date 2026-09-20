@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import os
+import re
 from pathlib import Path
 
 import pymupdf as fitz
@@ -102,17 +103,42 @@ CLASSIFICATION_SCOPE = (
 )
 
 
-def classification_context_pages(classified, shown):
+def printed_page_references(text):
+    references = re.findall(r"(?:\bp[.．]\s*|(?:印刷|誌面|冊子)(?:の)?(?:ページ)?\s*)(\d{1,3})(?!\d)|(?<!\d)(\d{1,3})\s*(?:ページ|頁)", text, re.I)
+    return {int(first or second) for first, second in references if 0 < int(first or second) <= 500}
+
+
+def classification_context_pages(classified, shown, pending=None):
     """Include recent verified section starts and preceding pages during repair."""
-    starts, previous = [], None
+    starts, previous, section_start = [], None, {}
     for item in classified:
         labels = sorted(item["labels"])
         if labels != previous:
             starts.append(item["pdfPage"])
+        section_start[item["pdfPage"]] = starts[-1]
         previous = labels
+    linked = []
+    if pending:
+        pending_pages = pending["pages"]
+        printed = {int(number) for item in pending_pages for value in item["printedPages"]
+                   for number in re.findall(r"(?<!\d)\d{1,3}(?!\d)", value)}
+        uncertain = [item for item in pending_pages if not item["labels"] or item["unresolvedIssues"]]
+        evidence = "\n".join(pending["unresolvedIssues"] + [text for item in uncertain
+                              for text in [item["headingEvidence"], item["boundaryEvidence"], *item["unresolvedIssues"]]])
+        references = printed_page_references(evidence)
+        for item in classified:
+            source_printed = {int(number) for value in item["printedPages"]
+                              for number in re.findall(r"(?<!\d)\d{1,3}(?!\d)", value)}
+            boundary = item["boundaryEvidence"]
+            # Resolve printed references using verified per-page mappings in both
+            # directions. A continuation may identify its source, or an earlier
+            # page may already say that it continues on the current printed page.
+            if (source_printed & references or
+                    ("続" in boundary and printed_page_references(boundary) & printed)):
+                linked.extend([section_start[item["pdfPage"]], item["pdfPage"]])
     # Section starts can be farther back than the six-page window. Reserve four
     # for them as well as recent pages; do not infer printed-to-PDF offsets.
-    candidates = starts[-4:] + [item["pdfPage"] for item in classified[-6:]]
+    candidates = linked + starts[-4:] + [item["pdfPage"] for item in classified[-6:]]
     anchors = []
     for page in candidates:
         if page not in shown and page not in anchors:
@@ -155,7 +181,7 @@ def classify_pdf(doc, ai, studio, directory, extract_spec):
             # Initial requests retain their original fingerprints. A repair gets
             # extra verified section context, including the heading before a long
             # solution; repeating only adjacent images cannot resolve that gap.
-            anchors = classification_context_pages(classified, shown) if attempt else []
+            anchors = classification_context_pages(classified, shown, result) if attempt else []
             repair_context = ""
             request_inputs = inputs
             if attempt:
