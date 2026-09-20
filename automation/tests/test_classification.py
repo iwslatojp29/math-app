@@ -7,7 +7,7 @@ import os
 import sys
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stdout, redirect_stderr
 from pathlib import Path
 from unittest.mock import patch
 
@@ -270,6 +270,26 @@ class ClassificationTests(unittest.TestCase):
         for operation in (extract, save, lessons, publish):
             operation.assert_not_called()
         self.assertFalse(list(self.directory.glob("math-app-monthly-*")))
+
+    def test_owner_sees_bounded_sanitized_reasons_but_public_logs_do_not(self):
+        error = StudioError("pdf_boundaries_unresolved", "PDF 49〜54ページを確認できません。", True)
+        private_reason = "PDF 49ページ: 続きの参照先を確認できません。"
+        token = "sk-" + "fixtureOnlyNotARealKey123456"
+        error.details = [private_reason, "access_token=" + token, "x" * 2000] + ["reason " + str(i) for i in range(8)]
+        self.studio.job = lambda: {}
+        with patch.object(run_monthly, "StudioClient", return_value=self.studio), \
+                patch.object(run_monthly, "run_job", side_effect=error), \
+                redirect_stderr(io.StringIO()) as logs:
+            self.assertEqual(run_monthly.main(["--job-id", self.studio.job_id]), 1)
+        owner = self.studio.updates[-1]
+        self.assertEqual(owner["status"], "needs_attention")
+        self.assertIn(private_reason, owner["error"])
+        self.assertNotIn(token, owner["error"])
+        self.assertLess(len(owner["error"]), 1800)
+        self.assertNotIn("reason 7", owner["error"])
+        self.assertNotIn(private_reason, logs.getvalue())
+        self.assertNotIn(token, logs.getvalue())
+        self.assertEqual(logs.getvalue().strip(), "monthly runner: pdf_boundaries_unresolved")
 
 
 if __name__ == "__main__":

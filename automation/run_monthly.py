@@ -431,8 +431,10 @@ def main(argv=None):
             return 0
         if studio and error.code != "cancelled":
             try:
+                observations = safe_visual_issues(getattr(error, "details", []), limit=6)
+                owner_message = error.public_message + ("\n" + "\n".join(observations) if observations else "")
                 studio.update(status="needs_attention" if error.attention else "failed", stage="failed",
-                              error=error.public_message, message=error.public_message,
+                              error=owner_message, message=error.public_message,
                               retryable=error.code in RETRYABLE_ERRORS, continuation=error.code == "continue_later")
             except StudioError:
                 pass

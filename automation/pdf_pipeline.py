@@ -158,7 +158,13 @@ def classify_pdf(doc, ai, studio, directory, extract_spec):
                            "visuallyChecked": "画像確認", "unresolvedIssues": "未解決事項", "independentReview": "独立検証"}
             code = issues[0]["code"]
             details = "、".join(field_names[field] for field in fields)
-            raise StudioError(code, f"PDF {pages[0]}〜{pages[-1]}ページの{details}を2回の再確認で確定できませんでした。保存を保留しました。", True)
+            error = StudioError(code, f"PDF {pages[0]}〜{pages[-1]}ページの{details}を2回の再確認で確定できませんでした。保存を保留しました。", True)
+            # The runner sanitizes these observations for the authenticated owner's
+            # status only. Never include model-authored content in diagnostic logs.
+            error.details = [f"PDF {item['pdfPage']}ページ: {issue_text}"
+                             for item in result["pages"] for issue_text in item["unresolvedIssues"]]
+            error.details += result["unresolvedIssues"] + (review["issues"] if review else [])
+            raise error
         classified.extend(approved)
         studio.update(status="running", stage="pdf_review", message="冊子のページと切り出し範囲を確認しています。",
                       progress=round(5 + 20 * min(start + 5, len(doc)) / len(doc), 1))
