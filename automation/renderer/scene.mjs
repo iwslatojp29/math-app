@@ -18,6 +18,16 @@ export function transformValue(transform) {
   return transform ? 'translate(' + transform.dx + ' ' + transform.dy + ') rotate(' + transform.rotation + ') scale(' + transform.scale + ')' : 'translate(0 0) rotate(0) scale(1)';
 }
 
+export function sceneDescription(problem, cue) {
+  // The global production description may discuss later answers. Describe
+  // only the same cue and labels that are currently visible to the learner.
+  const visible = new Set(cue.state.visibleIds);
+  const labels = problem.diagram.primitives
+    .filter(primitive => primitive.kind === 'label' && visible.has(primitive.id))
+    .map(primitive => primitive.text);
+  return [problem.title, cue.displayText, ...(labels.length ? ['図の表示: ' + labels.join('、')] : [])].join('。');
+}
+
 export function renderScene(problem, cue, viewBox, prefix) {
   const visible = new Set(cue.state.visibleIds);
   const highlighted = new Set(cue.state.highlightIds);
@@ -61,5 +71,5 @@ export function renderScene(problem, cue, viewBox, prefix) {
     }
     return '<g id="' + shapeId + '" data-target="' + escapeHtml(primitive.id) + '" class="diagram-target' + (highlighted.has(primitive.id) ? ' focused' : '') + '" transform="' + transformValue(transforms.get(primitive.id)) + '">' + shape + '</g>';
   }).join('');
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + [viewBox.x, viewBox.y, viewBox.width, viewBox.height].join(' ') + '" role="img" aria-labelledby="' + titleId + '" preserveAspectRatio="xMidYMid meet"><title id="' + titleId + '">' + escapeHtml(problem.diagram.description) + '</title><defs><marker id="' + marker + '" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>' + body + '</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + [viewBox.x, viewBox.y, viewBox.width, viewBox.height].join(' ') + '" role="img" aria-labelledby="' + titleId + '" preserveAspectRatio="xMidYMid meet"><title id="' + titleId + '">' + escapeHtml(sceneDescription(problem, cue)) + '</title><defs><marker id="' + marker + '" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>' + body + '</svg>';
 }

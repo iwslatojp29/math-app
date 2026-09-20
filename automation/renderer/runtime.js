@@ -69,7 +69,7 @@
     }));
     $('previous').disabled = playlistPosition <= 0;
     $('next').disabled = playlistPosition >= playlist.length - 1;
-    $('diagram').setAttribute('aria-label', problem.diagram.description + '。' + cue.displayText);
+    $('diagram').setAttribute('aria-label', sceneDescription(problem, cue));
     keepLabelsReadable();
     if (animate && priorState && !reducedMotion.matches) {
       const previousTransforms = new Map(priorState.transforms.map(item => [item.targetId, item]));

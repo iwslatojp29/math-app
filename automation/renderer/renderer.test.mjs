@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { renderLesson, resolveAssets, validateLesson, MAX_HTML_BYTES } from '../render-lesson.mjs';
-import { renderScene, renderFormula } from './scene.mjs';
+import { renderScene, renderFormula, sceneDescription } from './scene.mjs';
 
 const fixtureDirectory = fileURLToPath(new URL('./fixtures/', import.meta.url));
 const fixture = JSON.parse(await readFile(new URL('./fixtures/geometry.json', import.meta.url), 'utf8'));
@@ -92,6 +92,28 @@ test('SVG metadata and primitive IDs occupy separate namespaces', () => {
   assert.equal(ids.length,new Set(ids).size);
   assert(markup.includes('aria-labelledby="static:problem:0:title"'));
   assert(markup.includes('id="static:problem:0:target:title"'));
+});
+
+test('accessible scenes reveal only the current cue and its visible labels', () => {
+  const problem=clone().problems[0], first=problem.steps[0].cues[0];
+  problem.title='面積を求める';
+  problem.diagram.description='制作メモ: 最後に答え4321平方センチメートルを出す';
+  first.displayText='はじめに与えられた長さを確認します';
+  problem.diagram.primitives.push({...problem.diagram.primitives.find(item=>item.kind==='label'),id:'future-result',text:'4321平方センチメートル'});
+  const last=structuredClone(first);
+  last.state.visibleIds.push('future-result');
+  last.displayText='計算して面積を求めました';
+  const initial=sceneDescription(problem,first), final=sceneDescription(problem,last);
+  assert(initial.includes(problem.title));
+  assert(initial.includes(first.displayText));
+  assert(!initial.includes('4321'));
+  assert(!initial.includes('制作メモ'));
+  assert(final.includes('4321平方センチメートル'));
+  assert(!final.includes('制作メモ'));
+  const markup=renderScene(problem,first,problem.steps[0].viewBox,'live-test');
+  assert(!markup.includes('4321'));
+  assert(!markup.includes('制作メモ'));
+  assert(markup.includes('<title id="live-test:title">'+initial+'</title>'));
 });
 
 test('fractions and powers are displayed using built-in markup without a CDN', () => {
