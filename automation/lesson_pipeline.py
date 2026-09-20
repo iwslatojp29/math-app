@@ -509,7 +509,28 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
             feedback = ""
             verified = None
             last_issues = []
-            for attempt in range(4):
+            runtime_scope_limited = False
+            scope_recovery = ""
+            for attempt in range(6):
+                if attempt == 4:
+                    # Existing four requests/cache entries are unchanged. Only
+                    # explicit lack of a runtime in self-verification earns two
+                    # scoped retries; no finding or approval is rewritten here.
+                    if not runtime_scope_limited:
+                        break
+                    scope_recovery = ("\n【検証段階の範囲】今回は原画像と構造化講義データを検証する段階です。"
+                        "原問題の条件・全小問・独立検算・公式解答との照合・単位・かな読みの文字列・"
+                        "図の座標とcueの意味対応・完全状態・参照IDを具体的に点検してください。"
+                        "後段の公開前検証で、生成HTMLを実ブラウザで開き、全cueの終状態・途中移動時の状態復元・"
+                        "操作・画面幅と文字サイズ別の寸法・印刷・模擬音声終了イベントと図の進行を検査し、"
+                        "代表cueのスクリーンショットの可読性も独立に検査します。"
+                        "この段階でブラウザや音声再生環境がないという理由だけを数学・教材データの未解決事項にしない。"
+                        "後段検証を実施済みとは書かない。実音声の試聴、実機、アニメーションの中間フレームや"
+                        "実時間同期を検証したとも書かない。実際に行った文字・数値・状態の照合だけを具体的に記録する。"
+                        "原画像が読めない、条件・数学・図・読み・cue対応・参照に具体的な疑義がある場合は必ず残し、"
+                        "候補はneeds_review、独立検証はapproved=falseとする。前回の指摘を単に削除せず、"
+                        "全内容を再点検し、この段階の検証が完了した場合だけverifiedまたはapproved=trueとする。")
+                runtime_scope_limited = False
                 candidate = None
                 report_phase("generating")
                 repair_discipline = ("\n追加修復では、直近の独立検証の指摘と修正対象の前回候補に基づき、"
@@ -524,7 +545,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     + json_bytes(_safe_lesson_details(last_issues)).decode() if attempt >= 2 else "")
                 try:
                     candidate = request_ai.structured(f"lesson-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
-                        prompt + feedback + repair_discipline, problem_schema, inputs, max_tokens=28000)
+                        prompt + feedback + repair_discipline + scope_recovery, problem_schema, inputs, max_tokens=28000)
                 except StudioError as error:
                     if error.code != "model_schema":
                         raise
@@ -532,6 +553,11 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 else:
                     check_stop()
                     last_issues = candidate_issues(candidate, entry)
+                    if last_issues and last_issues[0] == "候補自身の数学・読みの検証が未解決です。":
+                        runtime_scope_limited = any(re.search(
+                            r"(?:ブラウザ(?:ー)?(?:実行)?|音声(?:再生|合成|試聴)|実音声(?:再生|試聴)?)"
+                            r"(?:環境|ツール|機能)(?:が|は)?(?:ない|なく|未提供|未搭載|利用できない|使用できない)",
+                            issue) for issue in candidate["verification"]["unresolvedIssues"])
                 if last_issues:
                     last_issues = _safe_lesson_details(last_issues)
                     feedback = ("\n前回候補の構造・検証に以下の問題がありました。原問題の条件と全小問を保持して修正してください。"
@@ -548,7 +574,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     "全cueのかな読みを数値/点名/単位まで読む。公式解答が掲載されていれば全小問を照合し、なければその事実を明記。"
                     "実音声を試聴したとは言わない。全小問IDをcheckedSubquestionIdsへ。未解決ならapproved=false。"
                     "画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
-                        + "。候補:" + json_bytes(candidate).decode(), PROBLEM_REVIEW, inputs, max_tokens=14000)
+                        + "。候補:" + json_bytes(candidate).decode() + scope_recovery, PROBLEM_REVIEW, inputs, max_tokens=14000)
                     check_stop()
                     jsonschema.validate(review, PROBLEM_REVIEW)
                 except (StudioError, jsonschema.ValidationError) as error:

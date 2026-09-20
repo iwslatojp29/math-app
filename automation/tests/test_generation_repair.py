@@ -9,6 +9,12 @@ import lesson_pipeline
 from studio_common import StudioError, json_bytes
 
 
+RUNTIME_LIMITATIONS = [
+    "ブラウザ実行環境がないため、実描画、画面幅別のラベル重なり、操作、途中移動時の状態復元は実機能として未検証。座標と完全状態の文字上の照合のみ実施した。",
+    "音声再生環境がないため、実音声の試聴、速度変更、終了イベントと図の同期は未検証。speechTextと表示文の意味・読みの文字点検は実施した。",
+]
+
+
 class GenerationRepairTests(unittest.TestCase):
     def setUp(self):
         self.fixture = fixtures.LessonVisualRegenerationTests()
@@ -118,6 +124,81 @@ class GenerationRepairTests(unittest.TestCase):
         self.assertIn("点Aの対応", caught.exception.details[0])
         self.assertNotIn("sk-testsecret123", str(caught.exception.details))
         self.assertIn("[redacted]", caught.exception.details[0])
+        # All four generation AND review bodies frozen before scope recovery:
+        # keys, prompts, schemas, images/content/order and output budgets.
+        self.assertEqual([hashlib.sha256(json_bytes(request)).hexdigest() for request in self.requests], [
+            "3e6861205ca8a5b84a8e9f08781dedcea7b3beb245a70fb6dd9e747f6accd469",
+            "9e18395922303c5aa7377f79a8c706d24c9f774ccb34ed7a8825a2d75ee0c9a8",
+            "8d5d13428ab98c8f8ad24fefb65cdd31cf8d1d6bb1d6c44d29fead50069d8b96",
+            "da156a0a26d77e1076e693e6de5f4a37c2f762b812573d18a51fd57b3d6060d4",
+            "a2c270ba1fba9c8cb13f451aeb391c66de29138e95acaa74ce1b316cb833bdbf",
+            "a23efd9a466ee1c5b5d9b2dbacdab6c4ab32a65df878073a6b5b0bf6be5152e5",
+            "ffeb1e8f34ee8567b9bba2fdf8bffc6114ab221b9051b86a392f3cc39837fc5b",
+            "3ce8c8dff2b748c19ddf833d9f1a7167e864580bb8d249217f5edca66c12ed95",
+        ])
+
+    def test_late_runtime_scope_recovery_preserves_first_four_requests_and_requires_review(self):
+        def mutate(kind, count, value):
+            if kind == "candidate" and count <= 4:
+                value["verification"]["status"] = "needs_review"
+                value["verification"]["unresolvedIssues"] = list(RUNTIME_LIMITATIONS)
+
+        (lesson, _), counts = self.run_candidates(mutate)
+        self.assertEqual(counts, {"candidate": 5, "review": 1})
+        self.assertEqual([hashlib.sha256(json_bytes(request)).hexdigest() for request in self.requests[:4]], [
+            "3e6861205ca8a5b84a8e9f08781dedcea7b3beb245a70fb6dd9e747f6accd469",
+            "d530a7e0438be3f396501063e33d88687e0ae98e365e2d400922adb822114faf",
+            "26241ed035eb596ebd5f815cbd8bfb4e4b809b76ec5c9ceb60f9f6e58963c703",
+            "026367be91ffffecbacb9c0a13a17a680d2eb1f2abbc31911776c821dd738505",
+        ])
+        self.assertTrue(self.requests[4][0].endswith("-4"))
+        self.assertIn("修正対象の前回候補", self.requests[4][1])
+        for issue in RUNTIME_LIMITATIONS:
+            self.assertIn(issue, self.requests[4][1])
+        for request in self.requests[4:]:
+            for scope in ("【検証段階の範囲】", "模擬音声終了イベント", "代表cue", "実施済みとは書かない",
+                          "原画像が読めない", "候補はneeds_review", "独立検証はapproved=false"):
+                self.assertIn(scope, request[1])
+        self.assertTrue(self.requests[5][0].startswith("lesson-review-"))
+        repaired = lesson["problems"][0]
+        for field in ("givens", "goal", "subquestions", "steps", "diagram"):
+            self.assertEqual(repaired[field], self.fixture.fixture["problems"][0][field])
+        self.assertEqual(repaired["verification"]["status"], "verified")
+
+    def test_scope_recovery_exhausts_two_extra_candidates_without_clearing_runtime_findings(self):
+        def mutate(kind, count, value):
+            if kind == "candidate":
+                value["verification"]["status"] = "needs_review"
+                value["verification"]["unresolvedIssues"] = list(RUNTIME_LIMITATIONS)
+        with self.assertRaises(StudioError) as caught:
+            self.run_candidates(mutate)
+        self.assertEqual(self.counts, {"candidate": 6, "review": 0})
+        self.assertEqual(caught.exception.code, "lesson_unresolved")
+        for issue in RUNTIME_LIMITATIONS:
+            self.assertIn(issue, " ".join(caught.exception.details))
+
+    def test_scope_recovery_does_not_override_later_mathematical_uncertainty(self):
+        def mutate(kind, count, value):
+            if kind == "candidate" and count <= 4:
+                value["verification"]["status"] = "needs_review"
+                value["verification"]["unresolvedIssues"] = list(RUNTIME_LIMITATIONS)
+            elif kind == "review":
+                value["approved"] = False
+                value["issues"] = ["原画像の長さが読めず、対応する辺と面積を確定できません。"]
+        with self.assertRaises(StudioError) as caught:
+            self.run_candidates(mutate)
+        self.assertEqual(self.counts, {"candidate": 6, "review": 2})
+        self.assertIn("原画像の長さが読めず", " ".join(caught.exception.details))
+        self.assertIn("修正対象の前回候補", self.requests[6][1])
+
+    def test_concrete_browser_defect_does_not_trigger_scope_recovery(self):
+        def mutate(kind, count, value):
+            if kind == "candidate":
+                value["verification"]["status"] = "needs_review"
+                value["verification"]["unresolvedIssues"] = ["ブラウザで図の点Aが欠ける座標になっています。"]
+        with self.assertRaises(StudioError):
+            self.run_candidates(mutate)
+        self.assertEqual(self.counts, {"candidate": 4, "review": 0})
 
     def test_third_candidate_repairs_cues_without_changing_first_two_cached_requests(self):
         issue = "points-5-cue-readに複数の視覚的論点が混在しています。cueを分割し、参照と発話数を合わせてください。"
