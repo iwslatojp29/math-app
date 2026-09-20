@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import re
+import threading
 import time
 from pathlib import Path
 from urllib.parse import quote, urlparse
@@ -65,16 +66,18 @@ class StudioClient:
         self.base = base_url.rstrip("/") + "/api/studio/runner"
         self.token, self.job_id = token, job_id
         self.session = session or requests.Session()
+        self._session_lock = threading.Lock()
         # Leave time for status persistence before the Actions job's 350 minute limit.
         self.deadline = time.monotonic() + 300 * 60
 
     def request(self, method, path, value=None, missing=False):
         for attempt in range(4):
             try:
-                response = self.session.request(method, self.base + path,
-                    headers={"Authorization": "Bearer " + self.token, "Content-Type": "application/json",
-                             **({"X-Studio-Run-Id": os.environ["GITHUB_RUN_ID"]} if os.environ.get("GITHUB_RUN_ID") else {})},
-                    data=json_bytes(value) if value is not None else None, timeout=(15, 90))
+                with self._session_lock:
+                    response = self.session.request(method, self.base + path,
+                        headers={"Authorization": "Bearer " + self.token, "Content-Type": "application/json",
+                                 **({"X-Studio-Run-Id": os.environ["GITHUB_RUN_ID"]} if os.environ.get("GITHUB_RUN_ID") else {})},
+                        data=json_bytes(value) if value is not None else None, timeout=(15, 90))
             except requests.RequestException:
                 if attempt < 3:
                     time.sleep(2 ** attempt)
@@ -300,6 +303,33 @@ def response_diagnostic(response, budget):
     return {"status": status, "reason": reason, "maxOutputTokens": budget, "usage": counts}
 
 
+class _WorkerStudioClient:
+    """Share the runner lease and checkpoints without publishing worker progress."""
+    def __init__(self, parent, stop_event):
+        self.parent, self.stop_event = parent, stop_event
+
+    @property
+    def job_id(self):
+        return self.parent.job_id
+
+    @property
+    def deadline(self):
+        return self.parent.deadline
+
+    def ensure_active(self):
+        require(not self.stop_event.is_set(), "peer_cancelled", "並行処理の終了を待っています。")
+        self.parent.ensure_active()
+        require(not self.stop_event.is_set(), "peer_cancelled", "並行処理の終了を待っています。")
+
+    def checkpoint(self, key, value=...):
+        # A response already issued must remain resumable even if a peer stops.
+        return self.parent.checkpoint(key, value)
+
+    def update(self, **changes):
+        # Only the dispatching thread may write the shared job status.
+        return None
+
+
 class ResponsesClient:
     def __init__(self, api_key, model, studio: StudioClient, session=None, sleeper=time.sleep,
                  max_output_tokens_limit=28000):
@@ -307,15 +337,38 @@ class ResponsesClient:
                 "model_config", "生成モデルのAPI設定を確認してください。", True)
         self.key, self.model, self.studio = api_key, model, studio
         self.session, self.sleeper = session or requests.Session(), sleeper
+        self._session_lock = threading.Lock()
+        self._stop_event = None
         require(type(max_output_tokens_limit) is int and max_output_tokens_limit >= 28000,
                 "model_config", "選択したモデルの出力上限を確認できません。", True)
         self.output_limit = max_output_tokens_limit
 
+    def for_worker(self, stop_event):
+        """Keep request/cache identity while isolating each worker's HTTP session."""
+        def sleeper(seconds):
+            # Polling passes ten seconds; Event.wait also wakes immediately on stop.
+            require(not stop_event.wait(seconds), "peer_cancelled", "並行処理の終了を待っています。")
+
+        worker = ResponsesClient(self.key, self.model, _WorkerStudioClient(self.studio, stop_event),
+            session=requests.Session(), sleeper=sleeper, max_output_tokens_limit=self.output_limit)
+        worker._stop_event = stop_event
+        return worker
+
+    def close(self):
+        with self._session_lock:
+            self.session.close()
+
+    def _ensure_not_stopped(self):
+        require(self._stop_event is None or not self._stop_event.is_set(),
+                "peer_cancelled", "並行処理の終了を待っています。")
+
     def _request(self, method, suffix, payload=None):
         try:
-            response = self.session.request(method, "https://api.openai.com/v1/responses" + suffix,
-                headers={"Authorization": "Bearer " + self.key, "Content-Type": "application/json"},
-                data=json_bytes(payload) if payload else None, timeout=(20, 180))
+            with self._session_lock:
+                self._ensure_not_stopped()
+                response = self.session.request(method, "https://api.openai.com/v1/responses" + suffix,
+                    headers={"Authorization": "Bearer " + self.key, "Content-Type": "application/json"},
+                    data=json_bytes(payload) if payload else None, timeout=(20, 180))
         except requests.RequestException:
             raise StudioError("model_connection", "生成サービスとの通信が中断しました。保存済みの進捗から再開できます。") from None
         require(response.status_code not in (408, 429, 500, 502, 503, 504),
@@ -327,6 +380,7 @@ class ResponsesClient:
             raise StudioError("model_response", "生成サービスの応答を確認できません。") from None
 
     def structured(self, task_key, prompt, schema, images=(), max_tokens=20000):
+        self._ensure_not_stopped()
         fingerprint = key_for("ai", [task_key, self.model, prompt, schema,
             [hashlib.sha256(image.encode()).hexdigest() for image in images]])
         checkpoint = self.studio.checkpoint(fingerprint) or {}

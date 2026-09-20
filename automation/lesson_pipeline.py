@@ -360,6 +360,10 @@ def validate_problem_coverage(problem, inventory):
 
 def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_month, schema_path,
                     *, generation_context=None, previous_lesson=None, visual_feedback=None, repair_cycle=0):
+    from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+    from queue import Empty, SimpleQueue
+    from threading import Event, Lock
+
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
     problem_schema = copy.deepcopy(schema["$defs"]["problem"])
     problem_schema["$defs"] = copy.deepcopy(schema["$defs"])
@@ -426,16 +430,59 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
         else:
             require(not previous_lesson and not visual_feedback, "visual_repair_context",
                     "表示修正の再開状態を確認できません。", True)
-        problems = []
+        identifiers = [entry["id"] for entry in inventory]
+        require(len(identifiers) == len(set(identifiers)), "lesson_coverage",
+                "全問一覧の問題IDが重複しています。重複した生成を行わず公開を保留しました。", True)
+        problem_results = [None] * len(inventory)
+        work_indexes = []
         for index, entry in enumerate(inventory):
             if repair_cycle and entry["id"] not in visual_feedback:
-                # A visual defect in one problem must not discard/recharge the
-                # independently approved candidates for every other problem.
                 retained = copy.deepcopy(previous[entry["id"]])
                 validate_problem_coverage(retained, entry)
                 jsonschema.validate(retained, problem_schema)
-                problems.append(retained)
-                continue
+                problem_results[index] = retained
+            else:
+                work_indexes.append(index)
+
+        # The parent is the sole progress writer. Workers only send phase
+        # events; failures stop dispatch immediately and preserve their cause.
+        stop_event, failure_lock = Event(), Lock()
+        first_error, phases = [], {}
+        phase_events, last_progress = SimpleQueue(), None
+
+        def fail(error):
+            with failure_lock:
+                if not first_error:
+                    first_error.append(error)
+                stop_event.set()
+
+        def check_stop():
+            if stop_event.is_set():
+                raise StudioError("peer_cancelled", "同じ生成処理の停止に合わせて処理を中断しました。")
+
+        def publish_progress():
+            nonlocal last_progress
+            if stop_event.is_set():
+                return
+            while True:
+                try:
+                    index, phase = phase_events.get_nowait()
+                except Empty:
+                    break
+                if problem_results[index] is None:
+                    phases[index] = phase
+            completed = sum(item is not None for item in problem_results)
+            generating = sum(phase == "generating" for phase in phases.values())
+            reviewing = sum(phase == "reviewing" for phase in phases.values())
+            progress = (completed, generating, reviewing)
+            if progress != last_progress:
+                studio.update(status="running", stage="lesson_generation",
+                    message=f"全{len(inventory)}問のうち{completed}問の講義と検算が完了しました（生成中{generating}問・検算中{reviewing}問）。",
+                    progress=round(35 + 45 * completed / len(inventory), 1))
+                last_progress = progress
+
+        def generate_one(index, request_ai, report_phase):
+            entry = inventory[index]
             image_pages = sorted(set(entry["pdfPages"] + entry["officialSolutionPages"]))
             inputs = [image_data(images[page]) for page in image_pages]
             prompt = (specification + "\n\n対象一覧の次の1大問だけを全小問分完成させてください。"
@@ -464,17 +511,16 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
             last_issues = []
             for attempt in range(2):
                 candidate = None
-                studio.update(status="running", stage="lesson_generation",
-                              message=f"全{len(inventory)}問のうち{index + 1}問目の講義を生成しています。",
-                              progress=round(35 + 45 * index / len(inventory), 1))
+                report_phase("generating")
                 try:
-                    candidate = ai.structured(f"lesson-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
+                    candidate = request_ai.structured(f"lesson-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
                         prompt + feedback, problem_schema, inputs, max_tokens=28000)
                 except StudioError as error:
                     if error.code != "model_schema":
                         raise
                     last_issues = ["候補が指定されたJSON schemaに一致しません。全必須項目と型を確認してください。"]
                 else:
+                    check_stop()
                     last_issues = candidate_issues(candidate, entry)
                 if last_issues:
                     last_issues = _safe_lesson_details(last_issues)
@@ -483,11 +529,9 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     if isinstance(candidate, dict):
                         feedback += "\n修正対象の前回候補:" + json_bytes(candidate).decode()
                     continue
-                studio.update(status="running", stage="lesson_generation",
-                              message=f"全{len(inventory)}問のうち{index + 1}問目の講義を独立に検算しています。",
-                              progress=round(35 + 45 * index / len(inventory), 1))
+                report_phase("reviewing")
                 try:
-                    review = ai.structured(f"lesson-review-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
+                    review = request_ai.structured(f"lesson-review-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
                     specification + "\n独立した数学・教材検証者として、原画像から全小問を別に検算し、以下の候補を点検。"
                     "重要な条件、相似の条件と対応、面積体積比、単位、例外、全式、数の出所、解法選択理由を確認。"
                     "原図の見た目を根拠にしない。図の点名・primitive座標・与件と導出値・発話state・静的解説・答えを照合。"
@@ -495,6 +539,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     "実音声を試聴したとは言わない。全小問IDをcheckedSubquestionIdsへ。未解決ならapproved=false。"
                     "画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                         + "。候補:" + json_bytes(candidate).decode(), PROBLEM_REVIEW, inputs, max_tokens=14000)
+                    check_stop()
                     jsonschema.validate(review, PROBLEM_REVIEW)
                 except (StudioError, jsonschema.ValidationError) as error:
                     if isinstance(error, StudioError) and error.code != "model_schema":
@@ -526,10 +571,80 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 error = StudioError("lesson_unresolved", "数学・解説・読みの検証に未解決事項があり、完成版を公開していません。", True)
                 error.details = _safe_lesson_details([entry["id"] + ": " + issue for issue in last_issues])
                 raise error
-            problems.append(verified)
-            studio.update(status="running", stage="lesson_generation",
-                          message=f"全{len(inventory)}問のうち{index + 1}問目までの講義と検算が完了しました。",
-                          progress=round(35 + 45 * (index + 1) / len(inventory), 1))
+            return verified
+
+        # A client must explicitly implement the worker interface. Legacy
+        # callers and lightweight test fakes stay serial; dynamic Mock attrs
+        # must not accidentally opt into provider concurrency.
+        worker_factory = getattr(type(ai), "for_worker", None)
+        if not callable(worker_factory):
+            for index in work_indexes:
+                studio.ensure_active()
+
+                def serial_phase(phase):
+                    phases[index] = phase
+                    publish_progress()
+
+                problem_results[index] = generate_one(index, ai, serial_phase)
+                phases.pop(index, None)
+                publish_progress()
+        else:
+            def run_worker(index):
+                try:
+                    check_stop()
+                    worker_ai = ai.for_worker(stop_event)
+                    try:
+                        def report_phase(phase):
+                            check_stop()
+                            phase_events.put((index, phase))
+                        return generate_one(index, worker_ai, report_phase)
+                    finally:
+                        try:
+                            worker_ai.close()
+                        except Exception:
+                            # Session cleanup must never replace the original
+                            # generation/verification failure or its checkpoint.
+                            pass
+                except BaseException as error:
+                    fail(error)
+                    raise
+
+            executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="lesson")
+            pending, next_work = {}, 0
+            try:
+                while next_work < len(work_indexes) or pending:
+                    while next_work < len(work_indexes) and len(pending) < 2 and not stop_event.is_set():
+                        studio.ensure_active()
+                        if stop_event.is_set():
+                            break
+                        index = work_indexes[next_work]
+                        next_work += 1
+                        phases[index] = "generating"
+                        pending[executor.submit(run_worker, index)] = index
+                    if stop_event.is_set():
+                        break
+                    publish_progress()
+                    done, _ = wait(pending, timeout=0.25, return_when=FIRST_COMPLETED)
+                    if stop_event.is_set():
+                        break
+                    for future in sorted(done, key=lambda item: pending[item]):
+                        index = pending.pop(future)
+                        problem_results[index] = future.result()
+                        phases.pop(index, None)
+                    publish_progress()
+            except BaseException as error:
+                fail(error)
+            finally:
+                if first_error:
+                    stop_event.set()
+                    for future in pending:
+                        future.cancel()
+                # Do not let the parent mark a job failed or remove its private
+                # directory while a peer is saving a received response ID.
+                executor.shutdown(wait=True, cancel_futures=True)
+            if first_error:
+                raise first_error[0]
+        problems = problem_results
     sections = []
     for item in inventory:
         if not any(section["id"] == item["sectionId"] for section in sections):
