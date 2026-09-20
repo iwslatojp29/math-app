@@ -258,22 +258,80 @@ test('valid newlines in base64 are normalized; incorrect UTF-8, padding, JSON, a
   assert.equal(backend.files.get('math/valid.html').text, 'a');
 });
 
-test('5 MiB encoded-content cap and streamed JSON cap are enforced', async () => {
+test('10 MiB decoded-content limit and streamed JSON limit return 413 without upstream writes', async () => {
   const backend = mockGithub();
-  assert.equal((await send({ ...commitBody(), contentBase64: 'A'.repeat(5 * 1024 * 1024 + 4) })).status, 400);
-  assert.equal((await send(commitBody(), '/api/commit', { headers: { 'Content-Length': String(6 * 1024 * 1024) } })).status, 400);
+  const maxBytes = 10 * 1024 * 1024;
+  const maxBase64 = 4 * Math.ceil(maxBytes / 3);
+  const oversize = [
+    { ...commitBody(), contentBase64: 'A'.repeat(maxBase64 + 4) },
+    // One byte over the decoded limit has the same encoded length as the limit.
+    { ...commitBody(), contentBase64: Buffer.alloc(maxBytes + 1, 97).toString('base64') },
+  ];
+  assert.equal(oversize[1].contentBase64.length, maxBase64);
+  for (const body of oversize) {
+    const result = await send(body);
+    assert.equal(result.status, 413);
+    assert.deepEqual(result.body, { ok: false, error: 'file_too_large' });
+  }
+  const declaredLarge = await send(commitBody(), '/api/commit', { headers: { 'Content-Length': String(maxBase64 + 16 * 1024 + 1) } });
+  assert.equal(declaredLarge.status, 413);
+  assert.equal(declaredLarge.body.error, 'file_too_large');
   let cancelled = false;
   const stream = new ReadableStream({
     pull(controller) { controller.enqueue(new Uint8Array(1024 * 1024).fill(32)); },
     cancel() { cancelled = true; },
   });
   const streamed = new Request('https://worker.example/api/commit', { method: 'POST', headers: { Origin: env.ALLOWED_ORIGIN, Authorization: `Bearer ${env.UPLOAD_SECRET}`, 'Content-Type': 'application/json' }, body: stream, duplex: 'half' });
-  assert.equal((await worker.fetch(streamed, env)).status, 400);
+  const streamResponse = await worker.fetch(streamed, env);
+  assert.equal(streamResponse.status, 413);
+  assert.deepEqual(await streamResponse.json(), { ok: false, error: 'file_too_large' });
   assert.equal(cancelled, true);
   assert.equal(backend.calls.length, 0);
-  const maxContent = b64('a'.repeat(5 * 1024 * 1024 * 3 / 4));
-  assert.equal(maxContent.length, 5 * 1024 * 1024);
+  const maxContent = Buffer.alloc(maxBytes, 97).toString('base64');
+  assert.equal(maxContent.length, maxBase64);
   assert.equal((await send({ ...commitBody('maximum.html'), contentBase64: maxContent })).status, 200);
+  assert.equal(Buffer.byteLength(backend.files.get('math/maximum.html').text), maxBytes);
+});
+
+test('large Japanese image-heavy HTML can be created, updated and deleted with metadata-only GitHub reads', async () => {
+  const filename = '2026年8月号_図形と比_講義アニメーション.html';
+  const source = process.env.MATH_APP_UPLOAD_TEST_FILE
+    ? await readFile(process.env.MATH_APP_UPLOAD_TEST_FILE)
+    : Buffer.from('<!doctype html><body>図形と比の講義<img src="data:image/png;base64,' + 'A'.repeat(8_701_000) + '"></body>');
+  assert.ok(source.length > 8 * 1024 * 1024 && source.length < 10 * 1024 * 1024);
+  const path = `math/${filename}`;
+  let metadataReads = 0;
+  const backend = mockGithub(undefined, (call, store) => {
+    if (call.method === 'GET' && call.path === path && store.files.has(path)) {
+      metadataReads++;
+      return Response.json({ type: 'file', sha: store.files.get(path).sha, encoding: 'none', content: '' });
+    }
+  });
+  const body = { folder: 'math', filename, contentBase64: source.toString('base64') };
+  const created = await send(body);
+  assert.equal(created.status, 200);
+  assert.equal(created.body.label, '2026年8月号_図形と比_講義アニメーション');
+  assert.ok(Buffer.from(backend.files.get(path).text, 'utf8').equals(source));
+  const updated = await send(body);
+  assert.equal(updated.status, 200);
+  assert.equal(updated.body.indexUpdated, false);
+  assert.equal((await send({ folder: 'math', filename }, '/api/delete')).status, 200);
+  assert.equal(metadataReads, 2);
+  assert.equal(backend.files.has(path), false);
+  assert.equal(backend.files.get('math/index.html').text, simpleIndex);
+});
+
+test('chunked content validation handles multibyte UTF-8 across boundaries and rejects truncated UTF-8 before writes', async () => {
+  const backend = mockGithub();
+  // The Japanese code point starts one byte before the base64 chunk boundary.
+  const text = 'a'.repeat(49151) + '講義🙂' + 'b'.repeat(49152);
+  assert.equal((await send({ ...commitBody('utf8-chunks.html'), contentBase64: b64(text) })).status, 200);
+  assert.equal(backend.files.get('math/utf8-chunks.html').text, text);
+  const calls = backend.calls.length;
+  const truncated = Buffer.concat([Buffer.alloc(49151, 97), Buffer.from([0xe8, 0xac])]).toString('base64');
+  const invalid = await send({ ...commitBody('invalid-utf8.html'), contentBase64: truncated });
+  assert.equal(invalid.status, 400);
+  assert.equal(backend.calls.length, calls);
 });
 
 test('missing or malformed index aborts before changing content', async () => {

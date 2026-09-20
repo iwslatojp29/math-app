@@ -68,6 +68,7 @@ h1 { color: #333; border-bottom: 3px solid #2196F3; padding-bottom: 10px; }
     <p style="font-size:0.85em; color:#999; margin-top:8px;">または クリックして選択</p>
   </div>
   <input type="file" id="file-input" accept=".html" multiple />
+  <p class="auth-hint">HTMLは1ファイル10 MiBまでです（UTF-8で保存した容量。「一覧へ戻る」リンクの追加分を含みます）。</p>
 
   <div id="status-box">
     <h3 style="margin:0 0 12px; color:#333;">処理状況</h3>
@@ -143,9 +144,12 @@ function injectBackLink(html) {
 
 function utf8ToBase64(str) {
   const bytes = new TextEncoder().encode(str);
-  let bin = '';
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin);
+  MathAppProxy.assertHtmlSize(bytes.length);
+  const chunks = [];
+  for (let i = 0; i < bytes.length; i += 8192) {
+    chunks.push(String.fromCharCode(...bytes.subarray(i, i + 8192)));
+  }
+  return btoa(chunks.join(''));
 }
 
 function setStatus(row, kind, message) {
