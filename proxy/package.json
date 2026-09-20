@@ -1,0 +1,13 @@
+{
+  "name": "math-app-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "engines": { "node": ">=22.12.0" },
+  "devDependencies": { "wrangler": "4.135.0" }
+}
