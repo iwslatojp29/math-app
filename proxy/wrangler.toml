@@ -10,3 +10,13 @@ REPO = "iwslatojp29/math-app"
 BRANCH = "main"
 ALLOWED_ORIGIN = "https://iwslatojp29.github.io"
 LABEL_WITH_EXT = "false"
+STUDIO_OWNER_EMAIL = "tomoatsu.iwasa@axcuria.com"
+STUDIO_ORIGIN = "https://math-app-proxy.iwslatojp29.workers.dev"
+
+[[durable_objects.bindings]]
+name = "STUDIO"
+class_name = "StudioState"
+
+[[migrations]]
+tag = "studio-v1"
+new_sqlite_classes = ["StudioState"]

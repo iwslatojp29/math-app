@@ -5,3 +5,6 @@
 node_modules/
 .wrangler/
 *.log
+__pycache__/
+*.pyc
+.venv/

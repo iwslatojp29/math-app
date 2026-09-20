@@ -1,0 +1,1012 @@
+{
+  "schemaVersion": "1.0",
+  "title": "算数講義 — 共通の高さ",
+  "pdfName": "geometry-fixture.pdf",
+  "yearMonth": "検証用サンプル",
+  "sections": [
+    {
+      "id": "points",
+      "title": "要点"
+    },
+    {
+      "id": "practice",
+      "title": "演習"
+    }
+  ],
+  "sourceImages": [
+    {
+      "id": "original-1",
+      "assetId": "geometry-original",
+      "alt": "共通の高さを使う三角形の面積の問題",
+      "pdfPage": 1,
+      "printedPage": "1"
+    }
+  ],
+  "problems": [
+    {
+      "id": "points-5",
+      "sectionId": "points",
+      "number": "5",
+      "title": "底辺と高さで面積を比べる",
+      "sourceImageIds": [
+        "original-1"
+      ],
+      "givens": [
+        "B、D、Cはこの順に一直線上にある。",
+        "BDは2cm、DCは4cm、Aから直線BCまでの高さは4cm。"
+      ],
+      "goal": "(1) ABDとADCの面積比、(2) ADCの面積を求めましょう。",
+      "opening": "面積を比べるには、高さが同じになる三角形を探します。底辺が同じ直線上なら、共通の頂点からの高さを使えます。",
+      "facts": [
+        {
+          "id": "given-base",
+          "text": "B、D、Cは一直線上。BD=2cm、DC=4cm。",
+          "source": "given",
+          "dependencies": []
+        },
+        {
+          "id": "given-height",
+          "text": "Aから直線BCまでの高さは4cm。",
+          "source": "given",
+          "dependencies": []
+        },
+        {
+          "id": "shared-height",
+          "text": "ABDとADCはAから同じ直線BCへの高さが共通。",
+          "source": "derived",
+          "dependencies": [
+            "given-base"
+          ]
+        },
+        {
+          "id": "ratio-result",
+          "text": "ABDとADCの面積比は1：2。",
+          "source": "derived",
+          "dependencies": [
+            "given-base",
+            "shared-height"
+          ]
+        },
+        {
+          "id": "area-result",
+          "text": "ADCの面積は8cm²。",
+          "source": "derived",
+          "dependencies": [
+            "given-base",
+            "given-height"
+          ]
+        }
+      ],
+      "formulas": [
+        {
+          "id": "ratio",
+          "description": "2対4を同じ数2で割ると1対2です。",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "2 : 4 = 1 : 2",
+              "numerator": "",
+              "denominator": "",
+              "exponent": ""
+            }
+          ]
+        },
+        {
+          "id": "area",
+          "description": "4かける4わる2は8平方センチメートルです。",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "4 × 4 ÷ 2 = 8 cm²",
+              "numerator": "",
+              "denominator": "",
+              "exponent": ""
+            }
+          ]
+        },
+        {
+          "id": "whole",
+          "description": "2たす4で6。6かける4わる2は12平方センチメートルです。",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "(2 + 4) × 4 ÷ 2 = 12 cm²",
+              "numerator": "",
+              "denominator": "",
+              "exponent": ""
+            }
+          ]
+        }
+      ],
+      "diagram": {
+        "description": "頂点Aから、一直線に並ぶB、D、Cへ辺を結んだ図。BDは2cm、DCは4cm。AからBCへ垂線を下ろすと高さは4cm。",
+        "viewBox": {
+          "x": 0,
+          "y": 0,
+          "width": 500,
+          "height": 370
+        },
+        "primitives": [
+          {
+            "kind": "polygon",
+            "id": "abd-area",
+            "points": [
+              {
+                "x": 150,
+                "y": 50
+              },
+              {
+                "x": 60,
+                "y": 280
+              },
+              {
+                "x": 190,
+                "y": 280
+              }
+            ],
+            "stroke": "blue",
+            "fill": "white",
+            "width": 2,
+            "dashed": false
+          },
+          {
+            "kind": "polygon",
+            "id": "adc-area",
+            "points": [
+              {
+                "x": 150,
+                "y": 50
+              },
+              {
+                "x": 190,
+                "y": 280
+              },
+              {
+                "x": 450,
+                "y": 280
+              }
+            ],
+            "stroke": "orange",
+            "fill": "white",
+            "width": 2,
+            "dashed": false
+          },
+          {
+            "kind": "line",
+            "id": "ab",
+            "x1": 150,
+            "y1": 50,
+            "x2": 60,
+            "y2": 280,
+            "color": "ink",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "ac",
+            "x1": 150,
+            "y1": 50,
+            "x2": 450,
+            "y2": 280,
+            "color": "ink",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "bd",
+            "x1": 60,
+            "y1": 280,
+            "x2": 190,
+            "y2": 280,
+            "color": "blue",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "dc",
+            "x1": 190,
+            "y1": 280,
+            "x2": 450,
+            "y2": 280,
+            "color": "orange",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "ad",
+            "x1": 150,
+            "y1": 50,
+            "x2": 190,
+            "y2": 280,
+            "color": "ink",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "height",
+            "x1": 150,
+            "y1": 50,
+            "x2": 150,
+            "y2": 280,
+            "color": "green",
+            "width": 2.5,
+            "dashed": true,
+            "arrow": "none"
+          },
+          {
+            "kind": "angle",
+            "id": "right",
+            "x": 150,
+            "y": 280,
+            "radius": 14,
+            "startAngle": -90,
+            "endAngle": 0,
+            "rightAngle": true,
+            "color": "green",
+            "width": 2
+          },
+          {
+            "kind": "label",
+            "id": "a",
+            "x": 150,
+            "y": 25,
+            "text": "A",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "b",
+            "x": 47,
+            "y": 305,
+            "text": "B",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "d",
+            "x": 190,
+            "y": 305,
+            "text": "D",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "c",
+            "x": 458,
+            "y": 305,
+            "text": "C",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "bd-value",
+            "x": 120,
+            "y": 332,
+            "text": "2 cm",
+            "color": "blue",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "dc-value",
+            "x": 315,
+            "y": 332,
+            "text": "4 cm",
+            "color": "orange",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "height-value",
+            "x": 65,
+            "y": 155,
+            "text": "4 cm",
+            "color": "green",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "adc-answer",
+            "x": 265,
+            "y": 204,
+            "text": "8 cm²",
+            "color": "orange",
+            "fontSize": 21,
+            "anchor": "middle"
+          }
+        ]
+      },
+      "subquestions": [
+        {
+          "id": "ratio-question",
+          "label": "(1)",
+          "answerText": "1：2",
+          "answerFormulaId": "ratio",
+          "unit": "",
+          "entryCueId": "look-1",
+          "prerequisiteCueIds": []
+        },
+        {
+          "id": "area-question",
+          "label": "(2)",
+          "answerText": "8",
+          "answerFormulaId": "area",
+          "unit": "cm²",
+          "entryCueId": "area-1",
+          "prerequisiteCueIds": [
+            "common-1"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "id": "look",
+          "title": "同じ高さを探す",
+          "viewBox": {
+            "x": 0,
+            "y": 0,
+            "width": 500,
+            "height": 370
+          },
+          "cues": [
+            {
+              "id": "look-1",
+              "displayText": "面積比を求めたいので、高さをそろえられる三角形を比べます。まず、BDとDCが同じ直線上にあることに注目します。",
+              "speechText": "めんせきひを もとめたいので、たかさを そろえられる さんかくけいを くらべます。まず、ビーディーと ディーシーが おなじ ちょくせんじょうに あることに ちゅうもくします。",
+              "state": {
+                "visibleIds": [
+                  "ab",
+                  "ac",
+                  "bd",
+                  "dc",
+                  "ad",
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                  "bd-value",
+                  "dc-value"
+                ],
+                "highlightIds": [
+                  "bd",
+                  "dc"
+                ],
+                "transforms": []
+              },
+              "formulaIds": [],
+              "factIds": [
+                "given-base",
+                "given-height"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "common",
+          "title": "高さが共通の理由",
+          "viewBox": {
+            "x": 0,
+            "y": 0,
+            "width": 500,
+            "height": 370
+          },
+          "cues": [
+            {
+              "id": "common-1",
+              "displayText": "三角形ABDとADCは、頂点Aが共通です。底辺BDとDCが同じ直線上にあるため、Aからの高さも共通です。",
+              "speechText": "さんかくけい エービーディーと エーディーシーは、ちょうてん エーが きょうつうです。ていへん ビーディーと ディーシーが おなじ ちょくせんじょうに あるため、エーからの たかさも きょうつうです。",
+              "state": {
+                "visibleIds": [
+                  "ab",
+                  "ac",
+                  "bd",
+                  "dc",
+                  "ad",
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                  "bd-value",
+                  "dc-value",
+                  "height",
+                  "right",
+                  "height-value"
+                ],
+                "highlightIds": [
+                  "height",
+                  "right"
+                ],
+                "transforms": []
+              },
+              "formulaIds": [],
+              "factIds": [
+                "given-base",
+                "given-height",
+                "shared-height"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ratio-step",
+          "title": "底辺比から面積比へ",
+          "viewBox": {
+            "x": 0,
+            "y": 0,
+            "width": 500,
+            "height": 370
+          },
+          "cues": [
+            {
+              "id": "ratio-1",
+              "displayText": "高さが同じ三角形の面積比は、底辺の比です。BD：DCは2：4なので、ABDとADCの面積比は1：2です。",
+              "speechText": "たかさが おなじ さんかくけいの めんせきひは、ていへんの ひです。ビーディー たい ディーシーは、に たい よんなので、エービーディーと エーディーシーの めんせきひは、いち たい にです。",
+              "state": {
+                "visibleIds": [
+                  "ab",
+                  "ac",
+                  "bd",
+                  "dc",
+                  "ad",
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                  "bd-value",
+                  "dc-value",
+                  "height",
+                  "right",
+                  "height-value",
+                  "abd-area",
+                  "adc-area"
+                ],
+                "highlightIds": [
+                  "bd",
+                  "dc"
+                ],
+                "transforms": []
+              },
+              "formulaIds": [
+                "ratio"
+              ],
+              "factIds": [
+                "given-base",
+                "given-height",
+                "shared-height",
+                "ratio-result"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "area-step",
+          "title": "ADCの面積を求める",
+          "viewBox": {
+            "x": 0,
+            "y": 0,
+            "width": 500,
+            "height": 370
+          },
+          "cues": [
+            {
+              "id": "area-1",
+              "displayText": "ADCの底辺DCは4cm、高さも4cmです。三角形の面積は底辺×高さ÷2なので、求める面積は8cm²です。",
+              "speechText": "エーディーシーの ていへん ディーシーは よんセンチメートル、たかさも よんセンチメートルです。さんかくけいの めんせきは、ていへん かける たかさ わる になので、もとめる めんせきは、はちへいほうセンチメートルです。",
+              "state": {
+                "visibleIds": [
+                  "ab",
+                  "ac",
+                  "bd",
+                  "dc",
+                  "ad",
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                  "bd-value",
+                  "dc-value",
+                  "height",
+                  "right",
+                  "height-value",
+                  "adc-area",
+                  "adc-answer"
+                ],
+                "highlightIds": [
+                  "dc",
+                  "height",
+                  "adc-answer"
+                ],
+                "transforms": []
+              },
+              "formulaIds": [
+                "area"
+              ],
+              "factIds": [
+                "given-base",
+                "given-height",
+                "shared-height",
+                "area-result"
+              ]
+            }
+          ]
+        }
+      ],
+      "staticExplanation": [
+        {
+          "heading": "共通の高さを見つける",
+          "text": "底辺BDとDCは同じ直線上にあり、頂点Aは共通なので、高さが共通です。したがって面積比はBD：DC=2：4=1：2です。",
+          "formulaIds": [
+            "ratio"
+          ],
+          "sceneCueId": "ratio-1"
+        },
+        {
+          "heading": "底辺と高さから面積へ",
+          "text": "ADCの底辺DCは4cm、高さはAからBCまでの4cmなので、面積は4×4÷2=8cm²です。",
+          "formulaIds": [
+            "area"
+          ],
+          "sceneCueId": "area-1"
+        }
+      ],
+      "verification": {
+        "status": "verified",
+        "independentCheck": "底辺2、高さ4の三角形は4cm²、底辺4、高さ4は8cm²。4：8=1：2。全体12cm²から小三角形4cm²を引いても8cm²。",
+        "officialAnswerCheck": "このフィクスチャは独自作成した問題。公式解答はないため独立検算した。",
+        "reasoningCheck": "B、D、Cの共線は与件。共通頂点から同一直線への距離を高さとして面積公式を適用。図の見た目は根拠にしていない。",
+        "readingsCheck": "全4発話の点名、面積比、乗除、cmとcm²の読みを照合。実音声の試聴は別工程。",
+        "unresolvedIssues": []
+      }
+    },
+    {
+      "id": "practice-5",
+      "sectionId": "practice",
+      "number": "5",
+      "title": "全体の面積",
+      "sourceImageIds": [
+        "original-1"
+      ],
+      "givens": [
+        "B、D、Cはこの順に一直線上にある。",
+        "BDは2cm、DCは4cm、Aから直線BCまでの高さは4cm。"
+      ],
+      "goal": "三角形ABCの面積を求めましょう。",
+      "opening": "全体の底辺BCはBDとDCを合わせた長さです。高さは与えられた4cmを使います。",
+      "facts": [
+        {
+          "id": "given-base",
+          "text": "B、D、Cは一直線上。BD=2cm、DC=4cm。",
+          "source": "given",
+          "dependencies": []
+        },
+        {
+          "id": "given-height",
+          "text": "Aから直線BCまでの高さは4cm。",
+          "source": "given",
+          "dependencies": []
+        },
+        {
+          "id": "shared-height",
+          "text": "ABDとADCはAから同じ直線BCへの高さが共通。",
+          "source": "derived",
+          "dependencies": [
+            "given-base"
+          ]
+        },
+        {
+          "id": "ratio-result",
+          "text": "ABDとADCの面積比は1：2。",
+          "source": "derived",
+          "dependencies": [
+            "given-base",
+            "shared-height"
+          ]
+        },
+        {
+          "id": "area-result",
+          "text": "ADCの面積は8cm²。",
+          "source": "derived",
+          "dependencies": [
+            "given-base",
+            "given-height"
+          ]
+        }
+      ],
+      "formulas": [
+        {
+          "id": "ratio",
+          "description": "2対4を同じ数2で割ると1対2です。",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "2 : 4 = 1 : 2",
+              "numerator": "",
+              "denominator": "",
+              "exponent": ""
+            }
+          ]
+        },
+        {
+          "id": "area",
+          "description": "4かける4わる2は8平方センチメートルです。",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "4 × 4 ÷ 2 = 8 cm²",
+              "numerator": "",
+              "denominator": "",
+              "exponent": ""
+            }
+          ]
+        },
+        {
+          "id": "whole",
+          "description": "2たす4で6。6かける4わる2は12平方センチメートルです。",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "(2 + 4) × 4 ÷ 2 = 12 cm²",
+              "numerator": "",
+              "denominator": "",
+              "exponent": ""
+            }
+          ]
+        }
+      ],
+      "diagram": {
+        "description": "頂点Aから、一直線に並ぶB、D、Cへ辺を結んだ図。BDは2cm、DCは4cm。AからBCへ垂線を下ろすと高さは4cm。",
+        "viewBox": {
+          "x": 0,
+          "y": 0,
+          "width": 500,
+          "height": 370
+        },
+        "primitives": [
+          {
+            "kind": "polygon",
+            "id": "abd-area",
+            "points": [
+              {
+                "x": 150,
+                "y": 50
+              },
+              {
+                "x": 60,
+                "y": 280
+              },
+              {
+                "x": 190,
+                "y": 280
+              }
+            ],
+            "stroke": "blue",
+            "fill": "white",
+            "width": 2,
+            "dashed": false
+          },
+          {
+            "kind": "polygon",
+            "id": "adc-area",
+            "points": [
+              {
+                "x": 150,
+                "y": 50
+              },
+              {
+                "x": 190,
+                "y": 280
+              },
+              {
+                "x": 450,
+                "y": 280
+              }
+            ],
+            "stroke": "orange",
+            "fill": "white",
+            "width": 2,
+            "dashed": false
+          },
+          {
+            "kind": "line",
+            "id": "ab",
+            "x1": 150,
+            "y1": 50,
+            "x2": 60,
+            "y2": 280,
+            "color": "ink",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "ac",
+            "x1": 150,
+            "y1": 50,
+            "x2": 450,
+            "y2": 280,
+            "color": "ink",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "bd",
+            "x1": 60,
+            "y1": 280,
+            "x2": 190,
+            "y2": 280,
+            "color": "blue",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "dc",
+            "x1": 190,
+            "y1": 280,
+            "x2": 450,
+            "y2": 280,
+            "color": "orange",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "ad",
+            "x1": 150,
+            "y1": 50,
+            "x2": 190,
+            "y2": 280,
+            "color": "ink",
+            "width": 2.5,
+            "dashed": false,
+            "arrow": "none"
+          },
+          {
+            "kind": "line",
+            "id": "height",
+            "x1": 150,
+            "y1": 50,
+            "x2": 150,
+            "y2": 280,
+            "color": "green",
+            "width": 2.5,
+            "dashed": true,
+            "arrow": "none"
+          },
+          {
+            "kind": "angle",
+            "id": "right",
+            "x": 150,
+            "y": 280,
+            "radius": 14,
+            "startAngle": -90,
+            "endAngle": 0,
+            "rightAngle": true,
+            "color": "green",
+            "width": 2
+          },
+          {
+            "kind": "label",
+            "id": "a",
+            "x": 150,
+            "y": 25,
+            "text": "A",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "b",
+            "x": 47,
+            "y": 305,
+            "text": "B",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "d",
+            "x": 190,
+            "y": 305,
+            "text": "D",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "c",
+            "x": 458,
+            "y": 305,
+            "text": "C",
+            "color": "ink",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "bd-value",
+            "x": 120,
+            "y": 332,
+            "text": "2 cm",
+            "color": "blue",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "dc-value",
+            "x": 315,
+            "y": 332,
+            "text": "4 cm",
+            "color": "orange",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "height-value",
+            "x": 65,
+            "y": 155,
+            "text": "4 cm",
+            "color": "green",
+            "fontSize": 21,
+            "anchor": "middle"
+          },
+          {
+            "kind": "label",
+            "id": "adc-answer",
+            "x": 265,
+            "y": 204,
+            "text": "8 cm²",
+            "color": "orange",
+            "fontSize": 21,
+            "anchor": "middle"
+          }
+        ]
+      },
+      "subquestions": [
+        {
+          "id": "whole-question",
+          "label": "答え",
+          "answerText": "12",
+          "answerFormulaId": "whole",
+          "unit": "cm²",
+          "entryCueId": "whole-1",
+          "prerequisiteCueIds": []
+        }
+      ],
+      "steps": [
+        {
+          "id": "whole-step",
+          "title": "底辺を合わせる",
+          "viewBox": {
+            "x": 0,
+            "y": 0,
+            "width": 500,
+            "height": 370
+          },
+          "cues": [
+            {
+              "id": "whole-1",
+              "displayText": "底辺BCは2cmと4cmを合わせて6cmです。高さは4cmなので、三角形ABCの面積は6×4÷2で12cm²です。",
+              "speechText": "ていへん ビーシーは、にセンチメートルと よんセンチメートルを あわせて、ろくセンチメートルです。たかさは よんセンチメートルなので、さんかくけい エービーシーの めんせきは、ろく かける よん わる にで、じゅうにへいほうセンチメートルです。",
+              "state": {
+                "visibleIds": [
+                  "ab",
+                  "ac",
+                  "bd",
+                  "dc",
+                  "ad",
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                  "bd-value",
+                  "dc-value",
+                  "height",
+                  "right",
+                  "height-value"
+                ],
+                "highlightIds": [
+                  "bd",
+                  "dc",
+                  "height"
+                ],
+                "transforms": []
+              },
+              "formulaIds": [
+                "whole"
+              ],
+              "factIds": [
+                "given-base",
+                "given-height"
+              ]
+            }
+          ]
+        }
+      ],
+      "staticExplanation": [
+        {
+          "heading": "全体の底辺を使う",
+          "text": "BC=BD+DC=2+4=6cm。高さは4cmなので、ABCの面積は6×4÷2=12cm²です。",
+          "formulaIds": [
+            "whole"
+          ],
+          "sceneCueId": "whole-1"
+        }
+      ],
+      "verification": {
+        "status": "verified",
+        "independentCheck": "底辺2、高さ4の三角形は4cm²、底辺4、高さ4は8cm²。4：8=1：2。全体12cm²から小三角形4cm²を引いても8cm²。",
+        "officialAnswerCheck": "このフィクスチャは独自作成した問題。公式解答はないため独立検算した。",
+        "reasoningCheck": "B、D、Cの共線は与件。共通頂点から同一直線への距離を高さとして面積公式を適用。図の見た目は根拠にしていない。",
+        "readingsCheck": "全4発話の点名、面積比、乗除、cmとcm²の読みを照合。実音声の試聴は別工程。",
+        "unresolvedIssues": []
+      }
+    }
+  ],
+  "coverage": [
+    {
+      "problemId": "points-5",
+      "sectionId": "points",
+      "pdfPages": [
+        1
+      ],
+      "printedPages": [
+        "1"
+      ],
+      "subquestionIds": [
+        "ratio-question",
+        "area-question"
+      ]
+    },
+    {
+      "problemId": "practice-5",
+      "sectionId": "practice",
+      "pdfPages": [
+        1
+      ],
+      "printedPages": [
+        "1"
+      ],
+      "subquestionIds": [
+        "whole-question"
+      ]
+    }
+  ],
+  "review": {
+    "coverageChecked": true,
+    "mathematicsChecked": true,
+    "readingsChecked": true,
+    "unresolvedIssues": []
+  }
+}

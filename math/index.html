@@ -62,11 +62,21 @@
     .upload-btn:hover {
       background: #1976D2;
     }
+    .update-panel { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; border: 1px solid #dbe3dc; padding: 16px 18px; border-radius: 12px; margin: 18px 0 24px; }
+    .update-panel p { margin: 0; font-size: 14px; color: #53645c; }
+    .update-btn { display: inline-block; flex: none; background: #17644e; color: white; font-weight: bold; border-radius: 9px; padding: 12px 23px; text-decoration: none; }
+    .update-btn:hover { background: #104f3c; }
+    .update-btn:focus-visible { outline: 3px solid #e4a349; outline-offset: 4px; }
+    @media (max-width: 430px) { .update-panel { gap: 10px; padding: 14px; } .update-panel p { font-size: 12px; } }
   </style>
 </head>
 <body>
   <a class="back-link" href="../">← トップへ戻る</a>
   <h1>中学への算数</h1>
+  <div class="update-panel">
+    <p>月間号を選んで、解説教材を作成します。</p>
+    <a class="update-btn" href="https://math-app-proxy.iwslatojp29.workers.dev/studio">更新</a>
+  </div>
   <h2>2026年5月号</h2>
 
   <div class="card">
