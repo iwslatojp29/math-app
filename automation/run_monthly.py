@@ -359,6 +359,9 @@ def run_job(studio, job, api_key, temp_root=None):
                     if error.code in RETRYABLE_ERRORS or error.code in ("cancelled", "runner_conflict"):
                         raise
                     output["error"] = {"code": error.code, "message": error.public_message}
+                    details = [detail[:700] for detail in safe_visual_issues(getattr(error, "details", []), limit=12)]
+                    if details:
+                        output["error"]["details"] = details
                     summary["errors"].append({"kind": plan["kind"], "code": error.code, "message": error.public_message})
                     studio.checkpoint("result", summary)
             for plan, output, part, pdf_path in prepared:
@@ -388,8 +391,9 @@ def run_job(studio, job, api_key, temp_root=None):
                     if error.code in RETRYABLE_ERRORS or error.code in ("cancelled", "runner_conflict"):
                         raise
                     output["error"] = {"code": error.code, "message": error.public_message}
-                    if isinstance(error, VisualQAError):
-                        output["error"]["details"] = error.details
+                    details = [detail[:700] for detail in safe_visual_issues(getattr(error, "details", []), limit=12)]
+                    if details:
+                        output["error"]["details"] = details
                     summary["errors"].append({"kind": plan["kind"], "code": error.code, "message": error.public_message})
                     studio.checkpoint("result", summary)
             if summary["errors"]:

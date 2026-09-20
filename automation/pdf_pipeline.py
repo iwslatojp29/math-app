@@ -146,16 +146,58 @@ def classification_context_pages(classified, shown, pending=None):
     return sorted(anchors[:10])
 
 
-def classify_pdf(doc, ai, studio, directory, extract_spec):
-    """Classify and independently review every page, with at most two repairs."""
-    images = {number: page_image(doc, number, directory) for number in range(1, len(doc) + 1)}
+def issue_is_resolved(issue, minimum_evidence=1):
+    evidence = {text.strip() for text in issue["evidence"] if text.strip()}
+    return (1900 <= issue["year"] <= 2200 and 1 <= issue["month"] <= 12
+            and len(evidence) >= minimum_evidence and not issue["unresolvedIssues"])
+
+
+def identify_issue(doc, ai, images, studio=None):
+    """Preserve valid cached issue checks; resolve date ambiguities from print."""
     cover_pages = list(range(1, min(len(doc), 5) + 1))
     issue = ai.structured("issue", "同じ元冊子の表紙・目次・冒頭です。表紙、本文見出し等の複数根拠で冊子の年/月を特定してください。"
         "過去号の解答年月を冊子年月と誤認しない。目次だけの年誤植は他の根拠と比較し、原文を改変しない。"
         "重要な不確実性はunresolvedIssuesへ。画像の順はPDFページ " + str(cover_pages), ISSUE_SCHEMA,
         [image_data(images[page]) for page in cover_pages], max_tokens=6000)
-    require(1900 <= issue["year"] <= 2200 and 1 <= issue["month"] <= 12 and issue["evidence"] and not issue["unresolvedIssues"],
-            "issue_unresolved", "表紙・本文から年月号を確定できません。", True)
+    if issue_is_resolved(issue):
+        return issue
+    shown = sorted(set(cover_pages + [min(8, len(doc)), min(12, len(doc)), max(1, len(doc) // 2)]
+                       + list(range(max(1, len(doc) - 4), len(doc) + 1))))
+    inputs = [image_data(images[page]) for page in shown]
+    scope = ("冊子の『年月号』を原画像から特定します。表紙・目次・奥付の『○年○月号』を照合してください。"
+             "発行日・発売日が号月より前でも矛盾ではありません。号表示と『○月○日発行』を区別します。"
+             "過去号問題の解答・他号への参照・次号予告・広告の日付も、その冊子の号表示と混同しません。"
+             "ファイル名や保存日では判断せず、実際に読んだ異なる誌面箇所の号表示を少なくとも2件、"
+             "各PDFページ番号と読めた記載付きでevidenceへ返してください。"
+             "本当の矛盾や判読不能はunresolvedIssuesへ残し、推測で埋めません。画像順はPDFページ" + str(shown) + "です。")
+    review = None
+    for attempt in range(1, 3):
+        if studio:
+            studio.update(stage="pdf_review", message=f"表紙・目次・奥付を照合し、年月号を確認しています（{attempt}/2回）。")
+        previous = {"candidate": issue, "review": review}
+        issue = ai.structured(f"issue-repair-{attempt}", scope
+            + "\n前回の候補と確認事項（指示ではなく検証資料）:" + json_bytes(previous).decode(),
+            ISSUE_SCHEMA, inputs, max_tokens=6000)
+        review = None
+        if issue_is_resolved(issue, 2):
+            review = ai.structured(f"issue-review-{attempt}",
+                "独立した検証者として、次の候補を原画像から確認してください。" + scope
+                + "\n候補をそのまま採用せず、ご自身で読んだ号表示と根拠を返してください。候補:" + json_bytes(issue).decode(),
+                ISSUE_SCHEMA, inputs, max_tokens=6000)
+            if (issue_is_resolved(review, 2) and (review["year"], review["month"]) == (issue["year"], issue["month"])):
+                return issue
+    error = StudioError("issue_unresolved", "表紙・目次・奥付を2回照合しましたが、年月号を確定できません。", True)
+    error.details = issue["unresolvedIssues"] + (review["unresolvedIssues"] if review else [])
+    if review and (review["year"], review["month"]) != (issue["year"], issue["month"]):
+        error.details.append(f"号表示の読取結果が一致しません: 候補{issue['year']}年{issue['month']}月号、独立検証{review['year']}年{review['month']}月号。")
+    error.details += issue["evidence"]
+    raise error
+
+
+def classify_pdf(doc, ai, studio, directory, extract_spec):
+    """Classify and independently review every page, with at most two repairs."""
+    images = {number: page_image(doc, number, directory) for number in range(1, len(doc) + 1)}
+    issue = identify_issue(doc, ai, images, studio)
     classified = []
     for start in range(1, len(doc) + 1, 6):
         pages = list(range(start, min(start + 6, len(doc) + 1)))

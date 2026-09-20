@@ -1,0 +1,266 @@
+"""Bounded inventory/answer repair with real private images and cached responses."""
+import copy
+import io
+import json
+import sys
+import tempfile
+import unittest
+from contextlib import redirect_stdout, redirect_stderr
+from pathlib import Path
+
+import pymupdf as fitz
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import lesson_pipeline
+from studio_common import ResponsesClient, StudioError
+
+
+class MemoryStudio:
+    def __init__(self):
+        self.values, self.job_id = {}, "inventory-fixture"
+
+    def checkpoint(self, key, value=...):
+        if value is ...:
+            return copy.deepcopy(self.values.get(key))
+        self.values[key] = copy.deepcopy(value)
+
+    def ensure_active(self):
+        pass
+
+
+class ScriptedSession:
+    def __init__(self, responses):
+        self.responses, self.calls = list(responses), []
+
+    def request(self, method, url, **kwargs):
+        if method != "POST" or url != "https://api.openai.com/v1/responses":
+            raise AssertionError("Unexpected operation; network is unavailable")
+        self.calls.append(json.loads(kwargs["data"]))
+        if not self.responses:
+            raise AssertionError("Unexpected extra generation")
+        result = self.responses.pop(0)
+        value = {"id": f"resp_inventory_fixture_{len(self.calls)}", "status": "completed", "output": [
+            {"type": "message", "content": [{"type": "output_text", "text": json.dumps(result)}]}]}
+        class Response:
+            ok, status_code = True, 200
+            def json(self):
+                return value
+        return Response()
+
+
+class FixtureAI(ResponsesClient):
+    def __init__(self, responses):
+        self.session_fixture, self.tasks = ScriptedSession(responses), []
+        super().__init__("fake-fixture-key", "fixture-model", MemoryStudio(), self.session_fixture)
+
+    def structured(self, task, *args, **kwargs):
+        self.tasks.append(task)
+        return super().structured(task, *args, **kwargs)
+
+    def prompt(self, index):
+        return self.session_fixture.calls[index]["input"][0]["content"][0]["text"]
+
+
+class InventoryRepairTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.directory = Path(temporary.name)
+        self.doc = fitz.open()
+        self.addCleanup(self.doc.close)
+        self.add_pages(2)
+
+    def add_pages(self, total):
+        while len(self.doc) < total:
+            self.doc.new_page(width=240, height=160).insert_text((15, 30), f"Synthetic question page {len(self.doc)}")
+
+    @staticmethod
+    def problem(identifier="practice-1", pages=(1,)):
+        return {"id": identifier, "sectionId": "practice", "sectionTitle": "日日の演習", "number": "1",
+                "title": "Synthetic addition", "pdfPages": list(pages), "printedPages": [str(page) for page in pages],
+                "subquestions": [{"id": identifier + "-main", "label": "1", "conditions": ["3 + 4"], "goal": "Find the sum"}],
+                "officialSolutionPages": [], "unresolvedIssues": []}
+
+    @staticmethod
+    def batch(problems, pages=(1, 2), previous=()):
+        return {"problems": copy.deepcopy(problems), "solutionLinks": [], "coverage": [
+            {"pdfPage": page, "questionIds": [problem["id"] for problem in [*previous, *problems] if page in problem["pdfPages"]],
+             "noQuestionReason": "本文の問題はなく解答または説明だけ。" if not any(page in problem["pdfPages"] for problem in [*previous, *problems]) else ""}
+            for page in pages], "unresolvedIssues": []}
+
+    @staticmethod
+    def review(pages=(1, 2), issues=()):
+        return {"approved": not issues, "checkedPdfPages": list(pages), "issues": list(issues)}
+
+    def inventory(self, ai):
+        plan = {"kind": "practice", "pages": [
+            {"printedPages": [str(page)], "labels": ["practice_questions"]} for page in range(1, len(self.doc) + 1)]}
+        return lesson_pipeline.inventory_questions(self.doc, ai, plan, self.directory, "Fixture specification")
+
+    def test_duplicate_candidate_is_repaired_and_cached_attempts_are_reused(self):
+        correct = self.batch([self.problem()])
+        duplicate = self.batch([self.problem(), self.problem()])
+        ai = FixtureAI([duplicate, correct, self.review()])
+        problems, _ = self.inventory(ai)
+        self.assertEqual([problem["id"] for problem in problems], ["practice-1"])
+        expected = ["inventory-practice-1-0", "inventory-practice-1-1", "inventory-review-practice-1-1"]
+        self.assertEqual(ai.tasks, expected, "Invalid structure must be repaired before independent review")
+        self.assertIn("前回の候補:", ai.prompt(1))
+        self.assertIn("問題ID practice-1", ai.prompt(1))
+        self.assertIn("重複", ai.prompt(1))
+        repeated, _ = self.inventory(ai)
+        self.assertEqual(repeated, problems)
+        self.assertEqual(ai.tasks, expected * 2)
+        self.assertEqual(len(ai.session_fixture.calls), 3, "Resume must reuse even the invalid cached first candidate")
+
+    def test_page_outside_pdf_is_repaired_with_exact_bad_reference(self):
+        correct = self.batch([self.problem()])
+        invalid = copy.deepcopy(correct)
+        invalid["problems"][0]["pdfPages"] = [1, 99]
+        invalid["problems"][0]["officialSolutionPages"] = [100]
+        ai = FixtureAI([invalid, correct, self.review()])
+        result, _ = self.inventory(ai)
+        self.assertEqual(result[0]["pdfPages"], [1])
+        self.assertIn("pdfPages=[1, 99]", ai.prompt(1))
+        self.assertIn("officialSolutionPages=[100]", ai.prompt(1))
+
+    def test_coverage_omission_unknown_id_and_missing_no_question_reason_get_repaired(self):
+        correct = self.batch([self.problem()])
+        for kind in ("missing_page", "unknown_id", "missing_reason"):
+            with self.subTest(kind=kind):
+                invalid = copy.deepcopy(correct)
+                if kind == "missing_page":
+                    invalid["coverage"].pop()
+                elif kind == "unknown_id":
+                    invalid["coverage"][0]["questionIds"] = ["ghost-1"]
+                else:
+                    invalid["coverage"][1]["noQuestionReason"] = " \t　"
+                ai = FixtureAI([invalid, correct, self.review()])
+                result, _ = self.inventory(ai)
+                self.assertEqual(len(result), 1)
+                self.assertEqual(ai.tasks[-1], "inventory-review-practice-1-1")
+                self.assertIn("inventory_coverage", ai.prompt(1))
+
+    def test_neighbour_continuation_uses_existing_id_without_registering_problem_twice(self):
+        self.add_pages(6)
+        problem = self.problem(pages=(5, 6))
+        first = self.batch([problem], range(1, 6))
+        duplicate = self.batch([problem], [6])
+        fixed = self.batch([], [6], previous=[problem])
+        ai = FixtureAI([first, self.review(range(1, 6)), duplicate, fixed, self.review([6])])
+        result, _ = self.inventory(ai)
+        self.assertEqual(result, [problem])
+        self.assertIn("inventory-practice-6-1", ai.tasks)
+        self.assertNotIn("inventory-review-practice-6-0", ai.tasks)
+        self.assertIn("今回problemsへ返すのは開始ページ", ai.prompt(3))
+        self.assertIn("既に確定した問題", ai.prompt(4))
+        self.assertIn('"pdfPages":[5,6]', ai.prompt(4))
+
+    def test_subquestion_duplicate_is_fixed_before_accepting_inventory(self):
+        correct = self.batch([self.problem()])
+        invalid = copy.deepcopy(correct)
+        invalid["problems"][0]["subquestions"] *= 2
+        ai = FixtureAI([invalid, correct, self.review()])
+        result, _ = self.inventory(ai)
+        self.assertEqual(len(result[0]["subquestions"]), 1)
+        self.assertIn("subquestions", ai.prompt(1))
+
+    def test_real_unresolved_conditions_remain_blocking_and_private_after_two_repairs(self):
+        reason = "PRIVATE: 原画像の三角形の辺長条件が矛盾しており確定できない。"
+        invalid = self.batch([self.problem()])
+        invalid["problems"][0]["unresolvedIssues"] = [reason]
+        ai = FixtureAI([invalid, invalid, invalid])
+        with redirect_stdout(io.StringIO()) as out, redirect_stderr(io.StringIO()) as err:
+            with self.assertRaises(StudioError) as caught:
+                self.inventory(ai)
+        self.assertEqual(ai.tasks, [f"inventory-practice-1-{attempt}" for attempt in range(3)])
+        self.assertEqual(caught.exception.code, "inventory_unresolved")
+        self.assertTrue(caught.exception.attention)
+        self.assertIn(reason, " ".join(caught.exception.details))
+        self.assertNotIn(reason, caught.exception.public_message + str(caught.exception) + out.getvalue() + err.getvalue())
+        for index in (1, 2):
+            self.assertIn(reason, ai.prompt(index))
+            self.assertIn("真の未解決事項を削除して通してはいけません", ai.prompt(index))
+        with self.assertRaises(StudioError):
+            self.inventory(ai)
+        self.assertEqual(len(ai.session_fixture.calls), 3, "An interrupted/manual retry cannot reset the repair bound")
+
+    def test_independent_audit_failure_includes_previous_candidate_and_precise_feedback(self):
+        correct = self.batch([self.problem()])
+        wrong = copy.deepcopy(correct)
+        wrong["problems"][0]["subquestions"][0]["goal"] = "Wrong original goal"
+        reason = "The candidate goal differs from the question image."
+        ai = FixtureAI([wrong, self.review(issues=[reason]), correct, self.review()])
+        result, _ = self.inventory(ai)
+        self.assertEqual(result[0]["subquestions"][0]["goal"], "Find the sum")
+        self.assertIn("Wrong original goal", ai.prompt(2))
+        self.assertIn(reason, ai.prompt(2))
+        self.assertIn("独立検証:", ai.prompt(2))
+
+    def test_incomplete_independent_audit_is_repaired_even_when_marked_approved(self):
+        correct = self.batch([self.problem()])
+        ai = FixtureAI([correct, self.review([1]), correct, self.review()])
+        self.inventory(ai)
+        self.assertIn("独立検証checkedPdfPages=[1]", ai.prompt(2))
+        self.assertEqual(ai.tasks[-1], "inventory-review-practice-1-1")
+
+    def solution_images(self):
+        return {page: lesson_pipeline.page_image(self.doc, page, self.directory) for page in (1, 2)}
+
+    @staticmethod
+    def solution_candidate():
+        return {"links": [{"problemId": "practice-1", "pdfPages": [1], "evidence": "Same section, issue and condition"}],
+                "unpairedPages": [{"pdfPage": 2, "reason": "Past-issue official answer; no problem text is present in this PDF"}],
+                "checkedPdfPages": [1, 2], "unresolvedIssues": []}
+
+    def solutions(self, problems, ai):
+        return lesson_pipeline.reconcile_solution_pages(problems, [1, 2], self.solution_images(), ai, "practice", "Fixture specification")
+
+    def test_solution_structure_repairs_unknown_id_outside_page_and_coverage_before_review(self):
+        correct = self.solution_candidate()
+        wrong = copy.deepcopy(correct)
+        wrong["links"][0].update(problemId="ghost-1", pdfPages=[99])
+        wrong["checkedPdfPages"] = [1]
+        problems = [self.problem()]
+        ai = FixtureAI([wrong, correct, self.review()])
+        self.solutions(problems, ai)
+        self.assertEqual(problems[0]["officialSolutionPages"], [1])
+        self.assertEqual(ai.tasks, ["solutions-practice-0-0", "solutions-practice-0-1", "solutions-review-practice-0-1"])
+        self.assertIn("ghost-1", ai.prompt(1))
+        self.assertIn("99", ai.prompt(1))
+        self.assertIn("前回の対応案:", ai.prompt(1))
+        self.solutions(problems, ai)
+        self.assertEqual(len(ai.session_fixture.calls), 3)
+
+    def test_uncertain_solution_cannot_be_silently_marked_unpaired(self):
+        reason = "PRIVATE: same-number answer has an unreadable issue date; correspondence is unknown."
+        wrong = self.solution_candidate()
+        wrong["unresolvedIssues"] = [reason]
+        ai = FixtureAI([wrong, wrong, wrong])
+        problems = [self.problem()]
+        with redirect_stdout(io.StringIO()) as out, redirect_stderr(io.StringIO()) as err:
+            with self.assertRaises(StudioError) as caught:
+                self.solutions(problems, ai)
+        self.assertEqual(caught.exception.code, "solution_unresolved")
+        self.assertEqual(problems[0]["officialSolutionPages"], [])
+        self.assertIn(reason, caught.exception.details)
+        self.assertNotIn(reason, caught.exception.public_message + out.getvalue() + err.getvalue())
+        self.assertEqual(len(ai.tasks), 3)
+        self.assertTrue(all(not key.startswith("solutions-review") for key in ai.tasks))
+        self.assertIn("unpairedPagesへ逃がしたり", ai.prompt(1))
+
+    def test_solution_audit_rejection_rechecks_the_actual_previous_link(self):
+        correct = self.solution_candidate()
+        wrong = copy.deepcopy(correct)
+        wrong["links"][0]["evidence"] = "Unreliable same printed number"
+        reason = "Verify month and conditions, not only the number."
+        ai = FixtureAI([wrong, self.review(issues=[reason]), correct, self.review()])
+        problems = [self.problem()]
+        self.solutions(problems, ai)
+        self.assertIn("Unreliable same printed number", ai.prompt(2))
+        self.assertIn(reason, ai.prompt(2))
+        self.assertEqual(problems[0]["officialSolutionPages"], [1])
+
+
+if __name__ == "__main__":
+    unittest.main()
