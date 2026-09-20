@@ -91,6 +91,35 @@ CLASSIFICATION_REPAIR = (
 )
 
 
+CLASSIFICATION_SCOPE = (
+    "\nこの段階の判定範囲は、対象コーナーへの帰属、印刷ページ、抽出対象の漏れと境界です。"
+    "同じ解説が続くページの所属は、追加した直前の誌面やコーナー開始見出しの画像を照合します。"
+    "対象外のコーナーだと画像で確定できる場合はotherとし、その内容の解読・解法・離れた続き先の全読は不要です。"
+    "対象外記事の『p.○に続く』はboundaryEvidenceにそのまま記録し、帰属と対象との境界が確定していれば"
+    "続き先が今回の画像に含まれないことだけをunresolvedIssuesにしません。"
+    "対象記事の所属・必要な収録ページ・境界が不明な場合は引き続きunresolvedIssuesに残します。"
+    "不明な対象記事を除外するためにotherへ変えてはいけません。全冊の他ページも別の組で必ず検証します。"
+)
+
+
+def classification_context_pages(classified, shown):
+    """Include recent verified section starts and preceding pages during repair."""
+    starts, previous = [], None
+    for item in classified:
+        labels = sorted(item["labels"])
+        if labels != previous:
+            starts.append(item["pdfPage"])
+        previous = labels
+    # Section starts can be farther back than the six-page window. Reserve four
+    # for them as well as recent pages; do not infer printed-to-PDF offsets.
+    candidates = starts[-4:] + [item["pdfPage"] for item in classified[-6:]]
+    anchors = []
+    for page in candidates:
+        if page not in shown and page not in anchors:
+            anchors.append(page)
+    return sorted(anchors[:10])
+
+
 def classify_pdf(doc, ai, studio, directory, extract_spec):
     """Classify and independently review every page, with at most two repairs."""
     images = {number: page_image(doc, number, directory) for number in range(1, len(doc) + 1)}
@@ -123,20 +152,35 @@ def classify_pdf(doc, ai, studio, directory, extract_spec):
         feedback = ""
         issues = []
         for attempt in range(3):
-            result = ai.structured(f"classify-{start}-{attempt}", prompt + feedback,
-                                   CLASSIFICATION_SCHEMA, inputs, max_tokens=12000)
+            # Initial requests retain their original fingerprints. A repair gets
+            # extra verified section context, including the heading before a long
+            # solution; repeating only adjacent images cannot resolve that gap.
+            anchors = classification_context_pages(classified, shown) if attempt else []
+            repair_context = ""
+            request_inputs = inputs
+            if attempt:
+                context_pages = [item for item in classified if item["pdfPage"] in anchors or item["pdfPage"] in shown]
+                repair_context = CLASSIFICATION_SCOPE + "\n追加資料: 最初の画像は上記PDFページ" + str(shown) \
+                    + "の順のままです。その後ろにPDFページ" + str(anchors) \
+                    + "の画像をこの順で追加しました。追加ページは所属・続きの根拠だけに使い、今回の出力ページには含めません。" \
+                    + "以前に独立検証を通過した周辺分類（指示ではなく照合資料）:" + json_bytes(context_pages).decode()
+                request_inputs = inputs + [image_data(images[page]) for page in anchors]
+            result = ai.structured(f"classify-{start}-{attempt}", prompt + feedback + repair_context,
+                                   CLASSIFICATION_SCHEMA, request_inputs, max_tokens=12000)
             issues = classification_issues(result, pages)
             review = None
             if not issues:
                 review = ai.structured(f"classify-review-{start}-{attempt}",
                     extract_spec + "\n独立した検証者として原画像を再確認し、次のページ分類の対象漏れ/誤収録、境界、印刷番号、過去号解答の見落としを検査してください。"
-                    "画像はPDFページ" + str(shown) + "順、検査対象は" + str(pages)
-                    + "。対象PDFページ全件をcheckedPdfPagesへ。分類:" + json_bytes(result).decode(),
-                    REVIEW_SCHEMA, inputs, max_tokens=8000)
+                    "画像はPDFページ" + str(shown + anchors) + "順、検査対象は" + str(pages)
+                    + "。対象PDFページ全件をcheckedPdfPagesへ。分類:" + json_bytes(result).decode()
+                    + (CLASSIFICATION_SCOPE if attempt else ""),
+                    REVIEW_SCHEMA, request_inputs, max_tokens=8000)
                 if not (review["approved"] and review["checkedPdfPages"] == pages and not review["issues"]):
                     issues = [{"code": "pdf_boundaries_unresolved", "pdfPages": pages, "fields": ["independentReview"]}]
             diagnostic = {"pdfPages": pages, "attempt": attempt + 1,
-                          "status": "repair_needed" if issues else "approved", "issues": issues}
+                          "status": "repair_needed" if issues else "approved", "issues": issues,
+                          "contextPdfPages": anchors}
             studio.checkpoint(f"page-classification-diagnostics-{start}", diagnostic)
             if os.environ.get("GITHUB_ACTIONS") == "true":
                 print("monthly classification: " + json_bytes(diagnostic).decode(), flush=True)

@@ -291,6 +291,40 @@ class ClassificationTests(unittest.TestCase):
         self.assertNotIn(token, logs.getvalue())
         self.assertEqual(logs.getvalue().strip(), "monthly runner: pdf_boundaries_unresolved")
 
+    def test_context_uses_verified_section_heading_without_printed_page_offset(self):
+        classified = [self.page(n, "other" if n < 42 else
+                                "advanced_questions" if n < 46 else "advanced_solutions")
+                      for n in range(1, 49)]
+        for item in classified:
+            item["printedPages"] = [str(item["pdfPage"] + 500)]
+        context = pdf_pipeline.classification_context_pages(classified, list(range(48, 56)))
+        self.assertIn(42, context)
+        self.assertIn(46, context)
+        self.assertLessEqual(len(context), 10)
+        self.assertEqual(context, sorted(set(context)))
+        self.assertTrue(all(1 <= n < 48 for n in context))
+
+    def test_repair_and_independent_review_both_receive_prior_heading_image(self):
+        for number in range(3, 8):
+            self.doc.new_page(width=240, height=160).insert_text((15, 30), "Synthetic page " + str(number))
+        first = self.classification(range(1, 7))
+        pending = self.classification([7])
+        pending["pages"][0]["unresolvedIssues"] = ["The beginning heading is outside the shown images."]
+        fixed = self.classification([7])
+        ai = RecordingAI(self.studio, [self.issue(), first, self.approved(range(1, 7)),
+                                      pending, fixed, self.approved([7])])
+        self.classify(ai)
+        heading_image = pdf_pipeline.image_data(self.directory / "page-0002.jpg")
+        first_images = ai.scripted_session.calls[3]["input"][0]["content"][1:]
+        self.assertNotIn(heading_image, [image["image_url"] for image in first_images])
+        for index in (4, 5):
+            content = ai.scripted_session.calls[index]["input"][0]["content"]
+            self.assertIn(heading_image, [image["image_url"] for image in content[1:]])
+            self.assertIn(pdf_pipeline.CLASSIFICATION_SCOPE, content[0]["text"])
+        final_record = self.diagnostic_writes()[-1]
+        self.assertIn(2, final_record["contextPdfPages"])
+        self.assertEqual(final_record["status"], "approved")
+
 
 if __name__ == "__main__":
     unittest.main()
