@@ -19,7 +19,7 @@ from lesson_pipeline import reconcile_solution_pages, render_lesson, validate_pr
 from pdf_pipeline import extract_pdf, obj, plans_from_classification, same_pdf_visual_content, verify_extracted
 from run_monthly import main, run_job, save_verified, validate_job
 from studio_common import (ADVANCED_FOLDER, PRACTICE_FOLDER, SOURCE_FOLDER, DriveClient, ResponsesClient,
-                           StudioClient, StudioError, digest_file)
+                           StudioClient, StudioError, digest_file, key_for, response_diagnostic)
 
 
 class FakeResponse:
@@ -160,6 +160,18 @@ class PDFTests(unittest.TestCase):
 
 
 class APITests(unittest.TestCase):
+    @staticmethod
+    def completed(response_id="resp_complete"):
+        return FakeResponse({"id": response_id, "status": "completed", "output": [
+            {"content": [{"type": "output_text", "text": '{"ok":true}'}]}]})
+
+    @staticmethod
+    def token_limited(response_id, budget):
+        return FakeResponse({"id": response_id, "status": "incomplete", "max_output_tokens": budget,
+            "incomplete_details": {"reason": "max_output_tokens"}, "output": [],
+            "usage": {"input_tokens": 123, "output_tokens": budget, "total_tokens": budget + 123,
+                      "output_tokens_details": {"reasoning_tokens": budget - 100}}})
+
     def test_background_request_checkpoints_id_then_polls_and_reuses_result(self):
         studio = MemoryStudio()
         session = FakeSession([
@@ -192,13 +204,129 @@ class APITests(unittest.TestCase):
         studio = MemoryStudio()
         session = FakeSession([
             FakeResponse({"id": "resp_failed", "status": "failed"}),
+            FakeResponse({"id": "resp_failed", "status": "failed"}),
             FakeResponse({"id": "resp_success", "status": "completed", "output": [{"content": [{"type": "output_text", "text": '{"ok":true}'}]}]}),
         ])
         client = ResponsesClient("fake-fixture-key", "model", studio, session)
         with self.assertRaises(StudioError):
             client.structured("case", "prompt", obj({"ok": {"type": "boolean"}}))
         self.assertEqual(client.structured("case", "prompt", obj({"ok": {"type": "boolean"}})), {"ok": True})
-        self.assertEqual([call[0] for call in session.calls], ["POST", "POST"])
+        self.assertEqual([call[0] for call in session.calls], ["POST", "GET", "POST"])
+
+    def test_token_limit_retries_with_reasoning_space_and_reuses_successful_result(self):
+        studio = MemoryStudio()
+        session = FakeSession([self.token_limited("resp_small", 25000), self.completed()])
+        client = ResponsesClient("fake", "model", studio, session, max_output_tokens_limit=128000)
+        schema = obj({"ok": {"type": "boolean"}})
+        self.assertEqual(client.structured("lesson-review-case", "prompt", schema, max_tokens=8000), {"ok": True})
+        self.assertEqual([json.loads(call[2]["data"])["max_output_tokens"] for call in session.calls], [25000, 50000])
+        state = next(iter(studio.values.values()))
+        self.assertEqual(state["budgetIncreases"], 1)
+        self.assertEqual(state["diagnostics"][0]["reason"], "max_output_tokens")
+        self.assertEqual(state["diagnostics"][0]["usage"]["reasoning_tokens"], 24900)
+        self.assertEqual(client.structured("lesson-review-case", "prompt", schema, max_tokens=8000), {"ok": True})
+        self.assertEqual(len(session.calls), 2)
+
+    def test_adaptive_budget_is_bounded_and_manual_resume_does_not_reset_exhaustion(self):
+        studio = MemoryStudio()
+        session = FakeSession([self.token_limited("resp_a", 28000), self.token_limited("resp_b", 56000),
+                               self.token_limited("resp_c", 112000)])
+        client = ResponsesClient("fake", "model", studio, session, max_output_tokens_limit=128000)
+        for _ in range(2):
+            with self.assertRaises(StudioError) as caught:
+                client.structured("case", "prompt", obj({"ok": {"type": "boolean"}}), max_tokens=28000)
+            self.assertEqual(caught.exception.code, "model_token_limit")
+            self.assertTrue(caught.exception.attention)
+        self.assertEqual([json.loads(call[2]["data"])["max_output_tokens"] for call in session.calls], [28000, 56000, 112000])
+        self.assertEqual(next(iter(studio.values.values()))["budgetIncreases"], 2)
+        self.assertTrue(next(iter(studio.values.values()))["tokenBudgetExhausted"])
+
+    def test_adaptive_budget_never_exceeds_verified_model_capacity(self):
+        studio = MemoryStudio()
+        session = FakeSession([self.token_limited("resp_a", 28000), self.token_limited("resp_b", 48000)])
+        with self.assertRaises(StudioError) as caught:
+            ResponsesClient("fake", "model", studio, session, max_output_tokens_limit=48000).structured(
+                "case", "prompt", obj({"ok": {"type": "boolean"}}), max_tokens=28000)
+        self.assertEqual(caught.exception.code, "model_token_limit")
+        self.assertEqual([json.loads(call[2]["data"])["max_output_tokens"] for call in session.calls], [28000, 48000])
+
+    def test_legacy_previous_response_is_retrieved_for_actual_failure_diagnosis(self):
+        studio = MemoryStudio()
+        schema = obj({"ok": {"type": "boolean"}})
+        fingerprint = key_for("ai", ["case", "model", "prompt", schema, []])
+        studio.values[fingerprint] = {"previousResponseId": "resp_legacy", "terminalStatus": "incomplete"}
+        session = FakeSession([self.token_limited("resp_legacy", 28000), self.completed()])
+        result = ResponsesClient("fake", "model", studio, session, max_output_tokens_limit=128000).structured(
+            "case", "prompt", schema, max_tokens=28000)
+        self.assertEqual(result, {"ok": True})
+        self.assertEqual([call[0] for call in session.calls], ["GET", "POST"])
+        self.assertEqual(json.loads(session.calls[1][2]["data"])["max_output_tokens"], 56000)
+        self.assertEqual(studio.values[fingerprint]["diagnostics"][0]["usage"]["output_tokens"], 28000)
+
+    def test_rollover_before_budget_retry_preserves_the_planned_budget(self):
+        studio = MemoryStudio()
+        def ensure_active():
+            studio.active_checks += 1
+            if studio.active_checks == 2:
+                raise StudioError("continue_later", "roll over")
+        studio.ensure_active = ensure_active
+        session = FakeSession([self.token_limited("resp_small", 28000)])
+        schema = obj({"ok": {"type": "boolean"}})
+        with self.assertRaises(StudioError):
+            ResponsesClient("fake", "model", studio, session, max_output_tokens_limit=128000).structured(
+                "case", "prompt", schema, max_tokens=28000)
+        state = next(iter(studio.values.values()))
+        self.assertTrue(state["budgetRetryPending"])
+        self.assertEqual(state["budgetIncreases"], 1)
+        studio.ensure_active = lambda: None
+        resumed = FakeSession([self.completed()])
+        ResponsesClient("fake", "model", studio, resumed, max_output_tokens_limit=128000).structured(
+            "case", "prompt", schema, max_tokens=28000)
+        self.assertEqual([call[0] for call in resumed.calls], ["POST"])
+        self.assertEqual(json.loads(resumed.calls[0][2]["data"])["max_output_tokens"], 56000)
+        self.assertEqual(next(iter(studio.values.values()))["budgetIncreases"], 1)
+
+    def test_rollover_during_budget_retry_resumes_the_same_response_id(self):
+        studio = MemoryStudio()
+        def ensure_active():
+            studio.active_checks += 1
+            if studio.active_checks == 3:
+                raise StudioError("continue_later", "roll over")
+        studio.ensure_active = ensure_active
+        session = FakeSession([self.token_limited("resp_small", 28000),
+                               FakeResponse({"id": "resp_large", "status": "queued"})])
+        schema = obj({"ok": {"type": "boolean"}})
+        with self.assertRaises(StudioError):
+            ResponsesClient("fake", "model", studio, session, sleeper=lambda _: None,
+                            max_output_tokens_limit=128000).structured("case", "prompt", schema, max_tokens=28000)
+        state = next(iter(studio.values.values()))
+        self.assertEqual(state["responseId"], "resp_large")
+        self.assertEqual(state["budgetIncreases"], 1)
+        studio.ensure_active = lambda: None
+        resumed = FakeSession([self.completed("resp_large")])
+        ResponsesClient("fake", "model", studio, resumed, max_output_tokens_limit=128000).structured(
+            "case", "prompt", schema, max_tokens=28000)
+        self.assertEqual([call[0] for call in resumed.calls], ["GET"])
+        self.assertTrue(resumed.calls[0][1].endswith("/resp_large"))
+
+    def test_diagnostics_reject_arbitrary_provider_text_and_invalid_usage(self):
+        secret = "untrusted-private-provider-text"
+        diagnostic = response_diagnostic({"status": "incomplete", "incomplete_details": {"reason": secret},
+            "error": {"message": secret}, "output": [{"text": secret}], "usage": {"input_tokens": secret,
+            "output_tokens": True, "total_tokens": -1, "output_tokens_details": {"reasoning_tokens": 50}, "other": secret}}, 28000)
+        self.assertEqual(diagnostic, {"status": "incomplete", "reason": "unknown", "maxOutputTokens": 28000,
+                                      "usage": {"reasoning_tokens": 50}})
+        self.assertNotIn(secret, json.dumps(diagnostic))
+
+    def test_content_filter_incomplete_is_not_retried_as_a_token_limit(self):
+        studio = MemoryStudio()
+        session = FakeSession([FakeResponse({"id": "resp_filtered", "status": "incomplete",
+                                           "incomplete_details": {"reason": "content_filter"}})])
+        with self.assertRaises(StudioError) as caught:
+            ResponsesClient("fake", "model", studio, session, max_output_tokens_limit=128000).structured(
+                "case", "prompt", obj({"ok": {"type": "boolean"}}))
+        self.assertEqual(caught.exception.code, "model_filtered")
+        self.assertEqual(len(session.calls), 1)
 
     def test_provider_errors_never_expose_private_response_or_key(self):
         secret = "deliberately-fake-private-value"
@@ -241,7 +369,7 @@ class APITests(unittest.TestCase):
         with self.assertRaises(StudioError) as caught:
             client.structured("case", "prompt", obj({"ok": {"type": "boolean"}}))
         self.assertEqual(caught.exception.code, "continue_later")
-        self.assertEqual(next(iter(studio.values.values())), {"responseId": "resp_still_running"})
+        self.assertEqual(next(iter(studio.values.values()))["responseId"], "resp_still_running")
 
     def test_ensure_active_checks_lease_and_budget(self):
         session = FakeSession([FakeResponse({"job": {"status": "running", "runId": "123"}})])
@@ -354,7 +482,7 @@ class IntegrationTests(unittest.TestCase):
         events, saved = [], {}
 
         class FixtureAI:
-            def __init__(self, *_args): pass
+            def __init__(self, *_args, **_kwargs): pass
             def structured(self, key, prompt, schema, images=(), max_tokens=None):
                 if key == "issue":
                     value = {"year": 2026, "month": 9, "evidence": ["Synthetic fixture"], "unresolvedIssues": []}

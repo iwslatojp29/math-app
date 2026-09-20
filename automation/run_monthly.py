@@ -174,7 +174,8 @@ def run_job(studio, job, api_key, temp_root=None):
     run_id = os.environ.get("GITHUB_RUN_ID")
     studio.update(status="running", stage="download", message="選択した月間号PDFを確認しています。", progress=1,
                   **({"runId": run_id} if run_id else {}))
-    drive, ai = DriveClient(studio), ResponsesClient(api_key, job["model"], studio)
+    drive, ai = DriveClient(studio), ResponsesClient(api_key, job["model"], studio,
+        max_output_tokens_limit=job.get("modelMaxOutputTokens") or 28000)
     check_source(drive, source)
     extract_spec = (ROOT / "specs" / "extract-pdf.md").read_text(encoding="utf-8")
     lesson_spec = (ROOT / "specs" / "animation-html.md").read_text(encoding="utf-8")

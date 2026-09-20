@@ -3,7 +3,8 @@ const MODEL_DOCS = 'https://developers.openai.com/api/docs/models/';
 const MODELS_URL = 'https://api.openai.com/v1/models';
 const MAX_BODY_CHARS = 1024 * 1024;
 const MAX_CANDIDATES = 32;
-// Must cover the largest max_output_tokens request in lesson_pipeline.py.
+// Minimum usable lesson budget; runners bound adaptive requests by the
+// verified maxOutputTokens returned for each model.
 const MIN_LESSON_OUTPUT_TOKENS = 28000;
 const SPECIALIZED = /(?:^|-)(?:audio|realtime|image|embedding|transcribe|tts|search|codex|cyber|chat|oss|moderation|daybreak|deep)(?:-|$)/i;
 
