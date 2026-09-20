@@ -33,7 +33,7 @@ async function fixture() {
   const storage = new MemoryStorage();
   const state = new StudioState({ storage }, { ...ENV });
   state.access = { accessToken: 'fake-google-access', expires: Date.now() + 3600000 };
-  await storage.put('catalog', CATALOG);
+  await storage.put('catalog-v2', CATALOG);
   const cookie = await seal({ email: ENV.STUDIO_OWNER_EMAIL, csrf: CSRF, expires: Date.now() + 3600000 }, ENV.STUDIO_SECRET, 'session');
   return { state, storage, cookie };
 }
@@ -194,7 +194,7 @@ test('concurrent identical job creation dispatches once and forbids arbitrary Dr
 
 test('auto refuses unverified latest while explicit available selection works; unknown models fail', async () => {
   const { state, storage, cookie } = await fixture();
-  await storage.put('catalog', { ...CATALOG, latestVerified: false });
+  await storage.put('catalog-v2', { ...CATALOG, latestVerified: false });
   const mock = cloud();
   await withFetch(mock.fetch, async () => {
     for (const model of ['auto', 'gpt-imaginary']) {
@@ -438,7 +438,7 @@ test('reconcile follows the claimed runner when a rejected duplicate finishes fi
 
 test('auto job creation dispatches a future verified model instead of a fixed fallback', async () => {
   const { state, storage, cookie } = await fixture();
-  await storage.put('catalog', { ...CATALOG, defaultModel: 'gpt-7-nova', models: [{ id: 'gpt-7-nova', label: 'Future official flagship' }] });
+  await storage.put('catalog-v2', { ...CATALOG, defaultModel: 'gpt-7-nova', models: [{ id: 'gpt-7-nova', label: 'Future official flagship' }] });
   const mock = cloud();
   await withFetch(mock.fetch, async () => {
     const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'auto' } }));
