@@ -1,5 +1,6 @@
 """Bounded visual repair orchestration, without model or browser calls."""
 import copy
+import io
 import json
 import sys
 import tempfile
@@ -273,6 +274,60 @@ class VisualRepairTests(unittest.TestCase):
         self.assertNotIn("sk-testsecret123", json.dumps(result))
         self.assertEqual(self.studio.updates[-1]["status"], "needs_attention")
         self.assertFalse(self.studio.updates[-1]["retryable"])
+
+    def test_generic_lesson_errors_keep_bounded_private_diagnostics_and_saved_pdf(self):
+        source = {"id": "fixture-source", "name": "2026年9月号.pdf"}
+        job = {"id": self.studio.job_id, "model": "fixture-model", "specVersion": "test-v1",
+               "status": "queued", "folders": {"practice": "fixture-pdf-folder", "html": "fixture-html-folder"}}
+        plan = {**self.plan, "pages": [{"pdfPage": 1}], "missing": []}
+        saved_pdf = {"id": "saved-pdf", "name": plan["name"]}
+        drive = Mock()
+        drive.download.side_effect = lambda _identifier, target: target.write_bytes(b"source-pdf-fixture")
+        for code in ("inventory_unresolved", "lesson_unresolved"):
+            with self.subTest(code=code):
+                failure = StudioError(code, "全問の検証に未解決事項があります。", True)
+                issue = "problem-2: 対応する点Aが不足しています。\x00 sk-testsecret123"
+                failure.details = [issue, issue, None, {"not": "text"}, " ",
+                    "Bearer fake-access-value", "https://example.invalid/item?token=fake-signed-value",
+                    "長い指摘: " + "あ" * 1700, *[f"追加の指摘 {index}" for index in range(20)]]
+                stdout, stderr = io.StringIO(), io.StringIO()
+                with patch.object(run_monthly, "validate_job", return_value=source), \
+                        patch.object(run_monthly, "check_source"), \
+                        patch.object(run_monthly, "DriveClient", return_value=drive), \
+                        patch.object(run_monthly, "ResponsesClient", return_value=Mock()), \
+                        patch.object(run_monthly, "open_pdf", return_value=nullcontext(object())), \
+                        patch.object(run_monthly, "classify_pdf", return_value=({"issue": {"year": 2026, "month": 9}}, None)), \
+                        patch.object(run_monthly, "plans_from_classification", return_value=[plan]), \
+                        patch.object(run_monthly, "extract_pdf", return_value={"pageCount": 1, "allPagesPixelMatched": True}), \
+                        patch.object(run_monthly, "save_verified", return_value=saved_pdf) as save, \
+                        patch.object(run_monthly, "generate_verified_lesson", side_effect=failure) as generate, \
+                        patch.object(run_monthly, "publish_and_verify") as publish, \
+                        patch("sys.stdout", stdout), patch("sys.stderr", stderr):
+                    result = run_monthly.run_job(self.studio, job, "fixture-unused-key", self.directory)
+                save.assert_called_once()
+                self.assertEqual(save.call_args.args[5], "application/pdf")
+                generate.assert_called_once()
+                publish.assert_not_called()
+                output = result["outputs"][0]
+                self.assertEqual(output["pdf"], saved_pdf)
+                self.assertTrue(output["pdfVerification"]["allPagesPixelMatched"])
+                self.assertTrue({"html", "htmlVerification", "published"}.isdisjoint(output))
+                self.assertEqual(output["error"]["code"], code)
+                details = output["error"]["details"]
+                self.assertEqual(len(details), 12)
+                self.assertTrue(all(isinstance(detail, str) and len(detail) <= 700 for detail in details))
+                self.assertEqual(details[0], "problem-2: 対応する点Aが不足しています。 [redacted]")
+                self.assertEqual(details[1:3], ["[redacted]", "[redacted URL]"])
+                self.assertEqual(len(details[3]), 700)
+                self.assertEqual(self.studio.values["result"]["outputs"][0]["error"]["details"], details)
+                self.assertEqual(self.studio.updates[-1]["result"]["outputs"][0]["error"]["details"], details)
+                serialized = json.dumps([result, self.studio.values, self.studio.updates])
+                for secret in ("sk-testsecret123", "fake-access-value", "fake-signed-value"):
+                    self.assertNotIn(secret, serialized)
+                self.assertNotIn("details", result["errors"][0])
+                self.assertEqual(stdout.getvalue() + stderr.getvalue(), "")
+                self.assertEqual(self.studio.updates[-1]["status"], "needs_attention")
+                self.assertFalse(self.studio.updates[-1]["retryable"])
 
 
 if __name__ == "__main__":
