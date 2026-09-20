@@ -186,9 +186,15 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
             feedback = ""
             verified = None
             for attempt in range(2):
+                studio.update(status="running", stage="lesson_generation",
+                              message=f"全{len(inventory)}問のうち{index + 1}問目の講義を生成しています。",
+                              progress=round(35 + 45 * index / len(inventory), 1))
                 candidate = ai.structured(f"lesson-{plan['kind']}-{entry['id']}-{attempt}",
                     prompt + feedback, problem_schema, inputs, max_tokens=28000)
                 validate_problem_coverage(candidate, entry)
+                studio.update(status="running", stage="lesson_generation",
+                              message=f"全{len(inventory)}問のうち{index + 1}問目の講義を独立に検算しています。",
+                              progress=round(35 + 45 * index / len(inventory), 1))
                 review = ai.structured(f"lesson-review-{plan['kind']}-{entry['id']}-{attempt}",
                     specification + "\n独立した数学・教材検証者として、原画像から全小問を別に検算し、以下の候補を点検。"
                     "重要な条件、相似の条件と対応、面積体積比、単位、例外、全式、数の出所、解法選択理由を確認。"
@@ -207,7 +213,8 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 feedback = "\n独立検証で以下が未解決です。原画像で修正:" + json_bytes(review).decode()
             require(verified is not None, "lesson_unresolved", "数学・解説・読みの検証に未解決事項があり、完成版を公開していません。", True)
             problems.append(verified)
-            studio.update(status="running", stage="lesson_generation", message="全問題の講義と検算を進めています。",
+            studio.update(status="running", stage="lesson_generation",
+                          message=f"全{len(inventory)}問のうち{index + 1}問目までの講義と検算が完了しました。",
                           progress=round(35 + 45 * (index + 1) / len(inventory), 1))
     sections = []
     for item in inventory:

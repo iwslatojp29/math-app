@@ -232,6 +232,7 @@ def run_job(studio, job, api_key, temp_root=None):
                     lesson, assets = generate_lesson(pdf_path, ai, studio, plan, part, lesson_spec,
                         f"{summary['year']}年{summary['month']}月号", ROOT / "lesson.schema.json")
                     html = render_lesson(lesson, assets, part, ROOT)
+                    studio.update(stage="validating", message="講義HTMLの表示・音声操作・印刷を検証しています。", progress=85)
                     output["htmlVerification"] = browser_and_visual_qa(html, part, ai, studio)
                     html_name = plan["name"][:-4] + "_講義アニメーション.html"
                     check_source(drive, source)
