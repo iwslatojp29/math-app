@@ -509,12 +509,22 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
             feedback = ""
             verified = None
             last_issues = []
-            for attempt in range(2):
+            for attempt in range(4):
                 candidate = None
                 report_phase("generating")
+                repair_discipline = ("\n追加修復では、直近の独立検証の指摘と修正対象の前回候補に基づき、"
+                    "問題のある箇所だけを最小限修正してください。全問題条件・全小問・数学的根拠・正しい答えを保持する。"
+                    "一つのcueに離れた複数の視覚的論点・出来事が混在するという指摘は、一つの視覚的論点ごとのcueへ分割する。"
+                    "各cueのdisplayTextとspeechTextを対応させ、その論点に必要な対象だけをhighlightIdsで強調する。"
+                    "visibleIds・factIdsはその時点の完全状態を保つ。分割後の順序とIDを確定し、entryCueId・"
+                    "prerequisiteCueIds・sceneCueId等の全参照を新しいcue構成と照合する。"
+                    "検証文に発話数・cue数・小問数などを書く場合、実際の配列を数え直して一致させる。"
+                    "指摘の文言だけを消したり、正しい部分を不要に作り直したり、内容を省略して承認を得ようとしない。"
+                    "未解決ならverificationをneeds_reviewとして具体的に残す。直近の指摘:"
+                    + json_bytes(_safe_lesson_details(last_issues)).decode() if attempt >= 2 else "")
                 try:
                     candidate = request_ai.structured(f"lesson-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
-                        prompt + feedback, problem_schema, inputs, max_tokens=28000)
+                        prompt + feedback + repair_discipline, problem_schema, inputs, max_tokens=28000)
                 except StudioError as error:
                     if error.code != "model_schema":
                         raise

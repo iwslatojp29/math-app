@@ -88,7 +88,7 @@ class LessonVisualRegenerationTests(unittest.TestCase):
             with self.assertRaises(StudioError) as caught:
                 self.generate(previous_lesson=original, visual_feedback=self.feedback(), repair_cycle=1)
         self.assertEqual(caught.exception.code, "lesson_unresolved")
-        self.assertEqual(len(self.calls[initial_calls:]), 4)
+        self.assertEqual(len(self.calls[initial_calls:]), 8)
 
 
 if __name__ == "__main__":
