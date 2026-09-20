@@ -15,7 +15,7 @@ const ENV = {
 };
 const CSRF = 'fake-csrf-token';
 const SOURCE = { id: 'source-pdf', name: '2026年9月号.pdf', mimeType: 'application/pdf', md5Checksum: 'source-checksum', modifiedTime: '2026-09-01T00:00:00Z', parents: [FOLDERS.source] };
-const CATALOG = { defaultModel: 'gpt-6-astra', latestVerified: true, checkedAt: new Date().toISOString(), verifiedAt: new Date().toISOString(), models: [{ id: 'gpt-6-astra', label: 'GPT-6 Astra' }, { id: 'gpt-5.6-sol', label: 'GPT-5.6 Sol' }] };
+const CATALOG = { defaultModel: 'gpt-6-astra', latestVerified: true, checkedAt: new Date().toISOString(), verifiedAt: new Date().toISOString(), models: [{ id: 'gpt-6-astra', label: 'GPT-6 Astra', maxOutputTokens: 128000 }, { id: 'gpt-5.6-sol', label: 'GPT-5.6 Sol', maxOutputTokens: 64000 }] };
 const clone = value => value === undefined ? undefined : structuredClone(value);
 class MemoryStorage {
   values = new Map();
@@ -438,7 +438,7 @@ test('reconcile follows the claimed runner when a rejected duplicate finishes fi
 
 test('auto job creation dispatches a future verified model instead of a fixed fallback', async () => {
   const { state, storage, cookie } = await fixture();
-  await storage.put('catalog-v2', { ...CATALOG, defaultModel: 'gpt-7-nova', models: [{ id: 'gpt-7-nova', label: 'Future official flagship' }] });
+  await storage.put('catalog-v2', { ...CATALOG, defaultModel: 'gpt-7-nova', models: [{ id: 'gpt-7-nova', label: 'Future official flagship', maxOutputTokens: 192000 }] });
   const mock = cloud();
   await withFetch(mock.fetch, async () => {
     const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'auto' } }));
@@ -446,6 +446,72 @@ test('auto job creation dispatches a future verified model instead of a fixed fa
     assert.equal((await response.json()).job.model, 'gpt-7-nova');
     assert.equal(mock.calls.filter(call => call.url.pathname.endsWith('/dispatches')).length, 1);
   });
+});
+
+test('new jobs copy the selected verified output capacity and ignore browser-supplied limits', async () => {
+  const { state, cookie } = await fixture();
+  const mock = cloud();
+  await withFetch(mock.fetch, async () => {
+    const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'gpt-5.6-sol', modelMaxOutputTokens: 999999 } }));
+    assert.equal(response.status, 200);
+    const created = (await response.json()).job;
+    const saved = await state.job(created.id);
+    assert.equal(saved.model, 'gpt-5.6-sol');
+    assert.equal(saved.modelMaxOutputTokens, 64000);
+    const runner = await state.fetch(request('/api/studio/runner/jobs/' + created.id, { runner: true }));
+    assert.equal((await runner.json()).job.modelMaxOutputTokens, 64000);
+  });
+});
+
+test('legacy runner jobs acquire only their own verified model capacity without switching models', async () => {
+  for (const model of ['gpt-5.6-sol', 'gpt-unknown']) {
+    const { state } = await fixture();
+    await state.saveJob(job({ model, runId: '42' }));
+    await withFetch(() => { throw new Error('Current capability cache should avoid provider calls'); }, async () => {
+      const response = await state.fetch(request('/api/studio/runner/jobs/job-test', { runner: true }));
+      assert.equal(response.status, 200);
+      const current = (await response.json()).job;
+      assert.equal(current.model, model);
+      assert.equal(current.modelMaxOutputTokens, model === 'gpt-5.6-sol' ? 64000 : undefined);
+    });
+  }
+});
+
+test('legacy catalog entries refresh capacity even while their old timestamp is still fresh', async () => {
+  const { state, storage } = await fixture();
+  await storage.put('catalog-v2', { ...CATALOG, models: CATALOG.models.map(({ id, label }) => ({ id, label })) });
+  const calls = [];
+  await withFetch(async input => {
+    const url = String(input); calls.push(url);
+    if (url === 'https://api.openai.com/v1/models') return Response.json({ data: [{ id: 'gpt-6-astra' }] });
+    if (url.endsWith('/models.md')) return new Response('Use [GPT Astra](/api/docs/models/gpt-6-astra), our flagship model for reasoning.');
+    assert(url.endsWith('/gpt-6-astra.md'));
+    return new Response('Model ID: `gpt-6-astra`\n- Input modalities: text, image\n- Output modalities: text\n- 128,000 max output tokens\n- structured_outputs\n| Responses | `v1/responses` | Supported |\n');
+  }, async () => {
+    const value = await state.catalog();
+    assert.equal(value.models[0].maxOutputTokens, 128000);
+    assert.equal(value.latestVerified, true);
+    assert.equal((await storage.get('catalog-v2')).models[0].maxOutputTokens, 128000);
+    assert.equal(calls.length, 3);
+    await state.catalog();
+    assert.equal(calls.length, 3, 'capacity-aware cache should be reused normally');
+  });
+});
+
+test('legacy capacity lookup cannot overwrite or hide a concurrent cancellation', async () => {
+  const { state } = await fixture();
+  await state.saveJob(job({ runId: '42' }));
+  let requested, finish;
+  const started = new Promise(resolve => { requested = resolve; });
+  state.catalog = () => { requested(); return new Promise(resolve => { finish = resolve; }); };
+  const response = state.fetch(request('/api/studio/runner/jobs/job-test', { runner: true }));
+  await started;
+  await state.saveJob({ ...await state.job('job-test'), status: 'cancelled' });
+  finish(CATALOG);
+  const current = (await (await response).json()).job;
+  assert.equal(current.status, 'cancelled');
+  assert.equal(current.modelMaxOutputTokens, 128000);
+  assert.equal((await state.job('job-test')).status, 'cancelled');
 });
 
 const ago = milliseconds => new Date(Date.now() - milliseconds).toISOString();

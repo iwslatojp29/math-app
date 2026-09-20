@@ -42,7 +42,11 @@ function parseCatalog(markdown) {
   return { entries, latestId };
 }
 
-function supportsPdfResponses(markdown, id) {
+export function validOutputTokens(value) {
+  return Number.isSafeInteger(value) && value >= MIN_LESSON_OUTPUT_TOKENS;
+}
+
+function pdfResponsesCapacity(markdown, id) {
   const declared = markdown.match(/^Model ID:\s*`([^`]+)`\s*$/m)?.[1];
   const input = markdown.match(/^- Input modalities:\s*([^\r\n]+)$/m)?.[1].trim().toLowerCase().split(/\s*,\s*/);
   const output = markdown.match(/^- Output modalities:\s*([^\r\n]+)$/m)?.[1].trim().toLowerCase();
@@ -51,8 +55,8 @@ function supportsPdfResponses(markdown, id) {
   return declared === id && input?.includes('text') && input.includes('image') &&
     input.every(value => value === 'text' || value === 'image') && output === 'text' &&
     /^- structured_outputs[ \t]*$/m.test(markdown) &&
-    Number.isSafeInteger(maxOutputTokens) && maxOutputTokens >= MIN_LESSON_OUTPUT_TOKENS &&
-    /^\|\s*Responses\s*\|\s*`v1\/responses`\s*\|\s*Supported\s*\|\s*$/m.test(markdown);
+    validOutputTokens(maxOutputTokens) &&
+    /^\|\s*Responses\s*\|\s*`v1\/responses`\s*\|\s*Supported\s*\|\s*$/m.test(markdown) ? maxOutputTokens : null;
 }
 
 async function readText(fetchImpl, url, options, deadline, stage) {
@@ -91,10 +95,10 @@ function cachedResult(previous, available, checkedAt, reason) {
   const verifiedAt = timestamp(previous?.verifiedAt) || (previous?.latestVerified ? timestamp(previous.checkedAt) : null);
   const seen = new Set();
   const models = verifiedAt && Array.isArray(previous?.models) ? previous.models.filter(model => {
-    if (!genericId(model?.id) || !available.has(model.id) || seen.has(model.id)) return false;
+    if (!genericId(model?.id) || !available.has(model.id) || seen.has(model.id) || !validOutputTokens(model.maxOutputTokens)) return false;
     seen.add(model.id);
     return true;
-  }).map(({ id }) => ({ id, label: id })) : [];
+  }).map(({ id, maxOutputTokens }) => ({ id, label: id, maxOutputTokens })) : [];
   return {
     defaultModel: models.some(model => model.id === previous?.defaultModel) ? previous.defaultModel : null,
     latestVerified: false,
@@ -146,7 +150,7 @@ export async function fetchCatalog({ apiKey, fetchImpl = fetch, previous = null,
   const candidates = entries.filter(model => available.has(model.id));
   const ordered = [...candidates.filter(model => model.id === latestId), ...candidates.filter(model => model.id !== latestId)];
   const bounded = ordered.slice(0, MAX_CANDIDATES);
-  const valid = new Set();
+  const valid = new Map();
   let next = 0;
   let incomplete = ordered.length > bounded.length;
   const failures = new Set();
@@ -156,7 +160,8 @@ export async function fetchCatalog({ apiKey, fetchImpl = fetch, previous = null,
       const model = bounded[next++];
       try {
         const markdown = await readText(fetchImpl, `${MODEL_DOCS}${model.id}.md`, { headers: { Accept: 'text/markdown' } }, deadline, 'model_docs');
-        if (supportsPdfResponses(markdown, model.id)) valid.add(model.id);
+        const maxOutputTokens = pdfResponsesCapacity(markdown, model.id);
+        if (maxOutputTokens !== null) valid.set(model.id, maxOutputTokens);
         else if (model.id === latestId) failures.add('model_docs_unsupported');
       } catch (error) {
         failures.add(diagnosticReason(error, 'model_docs_invalid_response'));
@@ -164,7 +169,7 @@ export async function fetchCatalog({ apiKey, fetchImpl = fetch, previous = null,
       }
     }
   }));
-  const models = bounded.filter(model => valid.has(model.id));
+  const models = bounded.filter(model => valid.has(model.id)).map(model => ({ ...model, maxOutputTokens: valid.get(model.id) }));
   const latestVerified = Boolean(latestId && valid.has(latestId));
   const result = {
     defaultModel: latestVerified ? latestId : null,

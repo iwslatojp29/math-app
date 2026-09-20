@@ -1,4 +1,4 @@
-import { fetchCatalog } from './studio-models.js';
+import { fetchCatalog, validOutputTokens } from './studio-models.js';
 import { studioPage } from './studio-ui.js';
 import { updateIndex } from './index.js';
 
@@ -214,7 +214,10 @@ export class StudioState {
   }
   async catalog() {
     const previous = await this.storage.get('catalog-v2');
-    if (previous && Date.now() - Date.parse(previous.checkedAt) < (previous.latestVerified ? 3600000 : 30000)) return previous;
+    // Refresh older catalog-v2 entries once so capacity is always grounded in
+    // the same capability document that made a model selectable.
+    const capacityKnown = Array.isArray(previous?.models) && previous.models.every(model => validOutputTokens(model.maxOutputTokens));
+    if (previous && capacityKnown && Date.now() - Date.parse(previous.checkedAt) < (previous.latestVerified ? 3600000 : 30000)) return previous;
     if (this.catalogPromise) return this.catalogPromise;
     this.catalogPromise = fetchCatalog({ apiKey: this.env.OPENAI_API_KEY, previous }).then(async catalog => { await this.storage.put('catalog-v2', catalog); return catalog; });
     try { return await this.catalogPromise; } finally { this.catalogPromise = null; }
@@ -265,12 +268,13 @@ export class StudioState {
     if (!source) fail(404, 'not_found');
     const catalog = await this.catalog();
     const model = !body.model || body.model === 'auto' ? (catalog.latestVerified ? catalog.defaultModel : null) : body.model;
-    if (!model || !catalog.models.some(candidate => candidate.id === model)) fail(409, 'latest_unavailable');
+    const selectedModel = catalog.models.find(candidate => candidate.id === model && validOutputTokens(candidate.maxOutputTokens));
+    if (!model || !selectedModel) fail(409, 'latest_unavailable');
     const fingerprint = await digest(JSON.stringify([source.id, source.md5Checksum || source.modifiedTime, model, SPEC_VERSION]));
     const jobs = await this.jobs(), duplicate = jobs.find(job => job.fingerprint === fingerprint && job.status !== 'cancelled');
     if (duplicate) return duplicate;
     if (jobs.some(job => !TERMINAL.has(job.status))) fail(409, 'busy');
-    const job = { id: crypto.randomUUID(), fileId: source.id, fileName: source.name, source, model, folders: FOLDERS, specVersion: SPEC_VERSION, fingerprint, status: 'queued', stage: 'queued', progress: 0, message: 'クラウド処理の開始を待っています。', createdAt: now(), updatedAt: now(), runId: null, result: null, error: null };
+    const job = { id: crypto.randomUUID(), fileId: source.id, fileName: source.name, source, model, modelMaxOutputTokens: selectedModel.maxOutputTokens, folders: FOLDERS, specVersion: SPEC_VERSION, fingerprint, status: 'queued', stage: 'queued', progress: 0, message: 'クラウド処理の開始を待っています。', createdAt: now(), updatedAt: now(), runId: null, result: null, error: null };
     await this.saveJob(job); await this.dispatch(job); return job;
   }
   async github(path, method = 'GET', body, allow = []) {
@@ -310,7 +314,18 @@ export class StudioState {
     const match = /^\/api\/studio\/runner\/jobs\/([a-zA-Z0-9-]+)(?:\/(publish|checkpoints)(?:\/([a-zA-Z0-9_.-]{1,180}))?)?$/.exec(path);
     if (!match) fail(404, 'not_found');
     const job = await this.job(match[1]);
-    if (!match[2] && method === 'GET') return result({ job });
+    if (!match[2] && method === 'GET') {
+      if (!validOutputTokens(job.modelMaxOutputTokens)) {
+        const catalog = await this.catalog();
+        const selectedModel = catalog.models.find(candidate => candidate.id === job.model && validOutputTokens(candidate.maxOutputTokens));
+        // Enrich the response without writing a stale job snapshot over a
+        // cancellation or progress update received during catalog refresh.
+        const current = await this.job(job.id);
+        if (selectedModel && current.model === job.model) return result({ job: { ...current, modelMaxOutputTokens: selectedModel.maxOutputTokens } });
+        return result({ job: current });
+      }
+      return result({ job });
+    }
     if (job.status === 'cancelled') fail(409, 'cancelled');
     const runId = request.headers.get('X-Studio-Run-Id');
     if (!runId || !/^\d+$/.test(runId)) fail(409, 'runner_conflict');

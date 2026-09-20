@@ -48,6 +48,7 @@ test('resolves the live official recommendation and validates selectable models'
   assert.equal(result.latestVerified, true);
   assert.equal(result.verifiedAt, result.checkedAt);
   assert.deepEqual(result.models.map(model => model.id), ['gpt-6-astra', 'gpt-5.6-sol']);
+  assert.deepEqual(result.models.map(model => model.maxOutputTokens), [128000, 128000]);
   assert.equal(upstream.calls.find(call => call.url === API).options.headers.Authorization, `Bearer ${KEY}`);
   assert.equal(JSON.stringify(result).includes(KEY), false);
 });
@@ -93,6 +94,7 @@ test('requires explicit structured outputs and enough output tokens for a lesson
   } });
   const result = await fetchCatalog({ apiKey: KEY, fetchImpl: upstream.fetchImpl });
   assert.deepEqual(result.models.map(model => model.id), ['gpt-6-astra', 'gpt-5.1']);
+  assert.deepEqual(result.models.map(model => model.maxOutputTokens), [128000, 28000]);
   assert.equal(result.defaultModel, 'gpt-6-astra');
   assert.equal(result.latestVerified, true);
 });
@@ -122,15 +124,27 @@ test('changed recommendation markup does not invent latest from ordering', async
 
 test('failed official fetch uses timestamped cache intersected with live availability', async () => {
   const previous = { defaultModel: 'gpt-6-astra', latestVerified: true, checkedAt: '2026-09-01T00:00:00.000Z',
-    models: [{ id: 'gpt-6-astra', label: 'Latest confirmed' }, { id: 'gpt-5.6-sol', label: 'Sol' }] };
+    models: [{ id: 'gpt-6-astra', label: 'Latest confirmed', maxOutputTokens: 128000 }, { id: 'gpt-5.6-sol', label: 'Sol', maxOutputTokens: 64000 }] };
   const upstream = mock({ docsStatus: 503, ids: ['gpt-6-astra'] });
   const result = await fetchCatalog({ apiKey: KEY, previous, fetchImpl: upstream.fetchImpl });
   assert.equal(result.defaultModel, 'gpt-6-astra');
   assert.equal(result.latestVerified, false);
   assert.equal(result.verifiedAt, previous.checkedAt);
-  assert.deepEqual(result.models, [{ id: 'gpt-6-astra', label: 'gpt-6-astra' }]);
+  assert.deepEqual(result.models, [{ id: 'gpt-6-astra', label: 'gpt-6-astra', maxOutputTokens: 128000 }]);
   assert.match(result.warning, /前回/);
   assert.equal(result.diagnosticReason, 'catalog_http_503');
+});
+
+test('unverified output capacities are never reused from an older cache on documentation failure', async () => {
+  for (const maxOutputTokens of [undefined, '128000', 27999, 128000.5, Number.MAX_SAFE_INTEGER + 1]) {
+    const previous = { defaultModel: 'gpt-6-astra', latestVerified: true, checkedAt: '2026-09-01T00:00:00.000Z',
+      models: [{ id: 'gpt-6-astra', maxOutputTokens }] };
+    const upstream = mock({ docsStatus: 503 });
+    const result = await fetchCatalog({ apiKey: KEY, previous, fetchImpl: upstream.fetchImpl });
+    assert.deepEqual(result.models, []);
+    assert.equal(result.defaultModel, null);
+    assert.equal(result.latestVerified, false);
+  }
 });
 
 test('API failure never reuses stale availability or returns upstream errors', async () => {
