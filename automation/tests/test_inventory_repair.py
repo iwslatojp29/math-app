@@ -2,11 +2,13 @@
 import copy
 import io
 import json
+import os
 import sys
 import tempfile
 import unittest
 from contextlib import redirect_stdout, redirect_stderr
 from pathlib import Path
+from unittest.mock import patch
 
 import pymupdf as fitz
 
@@ -260,6 +262,138 @@ class InventoryRepairTests(unittest.TestCase):
         self.assertIn("Unreliable same printed number", ai.prompt(2))
         self.assertIn(reason, ai.prompt(2))
         self.assertEqual(problems[0]["officialSolutionPages"], [1])
+
+    def test_fresh_schema_error_enters_bounded_repair_for_both_candidate_types(self):
+        for phase in ("inventory", "solutions"):
+            with self.subTest(phase=phase):
+                correct = self.batch([self.problem()]) if phase == "inventory" else self.solution_candidate()
+                ai = FixtureAI([{"unexpected": "PRIVATE malformed provider content"}, correct, self.review()])
+                if phase == "inventory":
+                    result, _ = self.inventory(ai)
+                    self.assertEqual(len(result), 1)
+                else:
+                    problems = [self.problem()]
+                    self.solutions(problems, ai)
+                    self.assertEqual(problems[0]["officialSolutionPages"], [1])
+                self.assertIn("model_schema", ai.prompt(1))
+                self.assertIn(":null", ai.prompt(1))
+                self.assertNotIn("PRIVATE malformed provider content", ai.prompt(1))
+                self.assertEqual(len(ai.tasks), 3)
+
+    def test_invalid_cached_candidates_and_reviews_are_repaired_without_reposting_cached_requests(self):
+        for phase in ("inventory", "solutions"):
+            for role in ("candidate", "review"):
+                with self.subTest(phase=phase, role=role):
+                    correct = self.batch([self.problem()]) if phase == "inventory" else self.solution_candidate()
+                    ai = FixtureAI([correct, self.review(), correct, self.review()])
+                    def run():
+                        if phase == "inventory":
+                            return self.inventory(ai)
+                        problems = [self.problem()]
+                        self.solutions(problems, ai)
+                        return problems
+                    expected = run()
+                    target = correct if role == "candidate" else self.review()
+                    matches = [checkpoint for checkpoint in ai.studio.values.values() if checkpoint.get("result") == target]
+                    self.assertEqual(len(matches), 1)
+                    matches[0]["result"] = {"private": "PRIVATE malformed cached result"}
+                    self.assertEqual(run(), expected)
+                    self.assertEqual(len(ai.session_fixture.calls), 4)
+                    self.assertIn("model_schema", ai.prompt(2))
+                    self.assertNotIn("PRIVATE malformed cached result", ai.prompt(2))
+                    if role == "candidate":
+                        self.assertIn(":null", ai.prompt(2))
+                    else:
+                        self.assertIn('"problemId":"practice-1"' if phase == "solutions" else '"id":"practice-1"', ai.prompt(2))
+                    self.assertEqual(run(), expected)
+                    self.assertEqual(len(ai.session_fixture.calls), 4, "The poisoned cache must not repurchase the original request")
+
+    def test_repeated_fresh_schema_failure_stops_after_three_candidates(self):
+        for phase in ("inventory", "solutions"):
+            with self.subTest(phase=phase):
+                ai = FixtureAI([{"private": "PRIVATE invalid data"}] * 3)
+                with self.assertRaises(StudioError) as caught:
+                    if phase == "inventory":
+                        self.inventory(ai)
+                    else:
+                        self.solutions([self.problem()], ai)
+                self.assertEqual(caught.exception.code, "model_schema")
+                self.assertTrue(caught.exception.attention)
+                self.assertEqual(len(ai.tasks), 3)
+                self.assertTrue(all("review" not in task for task in ai.tasks))
+                self.assertNotIn("PRIVATE invalid data", json.dumps(caught.exception.details))
+
+    def test_schema_failure_after_a_rejected_candidate_does_not_reuse_stale_content(self):
+        correct = self.batch([self.problem()])
+        wrong = copy.deepcopy(correct)
+        wrong["problems"][0]["subquestions"][0]["goal"] = "Stale rejected goal"
+        ai = FixtureAI([wrong, self.review(issues=["Correct the original goal."]), {}, correct, self.review()])
+        result, _ = self.inventory(ai)
+        self.assertEqual(result[0]["subquestions"][0]["goal"], "Find the sum")
+        self.assertIn("Stale rejected goal", ai.prompt(2))
+        self.assertIn("前回の候補:null", ai.prompt(3))
+        self.assertIn("独立検証:null", ai.prompt(3))
+        self.assertNotIn("Stale rejected goal", ai.prompt(3))
+
+    def test_repeated_schema_failure_in_independent_review_cannot_approve_a_candidate(self):
+        for phase in ("inventory", "solutions"):
+            with self.subTest(phase=phase):
+                correct = self.batch([self.problem()]) if phase == "inventory" else self.solution_candidate()
+                ai = FixtureAI([correct, {}, correct, {}, correct, {}])
+                with self.assertRaises(StudioError) as caught:
+                    if phase == "inventory":
+                        self.inventory(ai)
+                    else:
+                        problems = [self.problem()]
+                        self.solutions(problems, ai)
+                self.assertEqual(caught.exception.code, "model_schema")
+                self.assertEqual(len(ai.tasks), 6)
+                self.assertEqual(len([task for task in ai.tasks if "review" in task]), 3)
+                if phase == "solutions":
+                    self.assertEqual(problems[0]["officialSolutionPages"], [])
+
+    def test_control_and_transient_errors_pass_through_all_four_request_sites(self):
+        for phase in ("inventory", "solutions"):
+            for role in ("candidate", "review"):
+                for code in ("cancelled", "continue_later", "model_unavailable"):
+                    with self.subTest(phase=phase, role=role, code=code):
+                        correct = self.batch([self.problem()]) if phase == "inventory" else self.solution_candidate()
+                        class FailingAI(FixtureAI):
+                            def structured(inner, task, *args, **kwargs):
+                                if ("review" in task) == (role == "review"):
+                                    inner.tasks.append(task)
+                                    raise StudioError(code, "Fixed failure")
+                                return super().structured(task, *args, **kwargs)
+                        ai = FailingAI([correct])
+                        with self.assertRaises(StudioError) as caught:
+                            if phase == "inventory":
+                                self.inventory(ai)
+                            else:
+                                self.solutions([self.problem()], ai)
+                        self.assertEqual(caught.exception.code, code)
+                        self.assertEqual(len(ai.tasks), 2 if role == "review" else 1)
+
+    def test_progress_logs_only_fixed_categories_and_counts_during_cloud_execution(self):
+        correct = self.batch([self.problem()])
+        wrong = copy.deepcopy(correct)
+        wrong["problems"][0]["unresolvedIssues"] = ["PRIVATE sensitive condition and details"]
+        ai = FixtureAI([wrong, correct, self.review()])
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), redirect_stdout(io.StringIO()) as output:
+            self.inventory(ai)
+        self.assertNotIn("practice-1", output.getvalue())
+        self.assertNotIn("PRIVATE", output.getvalue())
+        records = [json.loads(line.removeprefix("monthly inventory: ")) for line in output.getvalue().splitlines()]
+        self.assertEqual([record["status"] for record in records], ["requested", "repair_needed", "requested", "reviewing", "approved"])
+        self.assertEqual(records[-1]["knownProblemCount"], 1)
+        self.assertEqual(records[1]["errorCodes"], ["inventory_unresolved"])
+        for record in records:
+            self.assertEqual(set(record), {"kind", "phase", "firstPdfPage", "lastPdfPage", "attempt", "status", "knownProblemCount", "issueCount", "errorCodes"})
+            self.assertEqual(record["kind"], "practice")
+            self.assertEqual(record["phase"], "inventory")
+            self.assertTrue(all(type(record[key]) is int for key in ("firstPdfPage", "lastPdfPage", "attempt", "knownProblemCount", "issueCount")))
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}), redirect_stdout(io.StringIO()) as output:
+            self.inventory(ai)
+        self.assertEqual(output.getvalue(), "")
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -137,6 +138,31 @@ def inventory_failure(issues, message):
     raise error
 
 
+def inventory_request(ai, *args, **kwargs):
+    """Schema failures use the same bounded repair path as invalid content."""
+    try:
+        return ai.structured(*args, **kwargs), []
+    except StudioError as error:
+        if error.code != "model_schema":
+            raise
+    except jsonschema.ValidationError:
+        # Cached results are validated before ResponsesClient's error wrapper.
+        # Their arbitrary contents and validator exception text stay private.
+        pass
+    return None, [{"code": "model_schema", "message": "前回の応答は指定schemaに適合せず、問題・検証結果として使えません。必須項目と型を確認して再生成してください。"}]
+
+
+def inventory_progress(kind, phase, pages, attempt, status, known_count, issues=()):
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        return
+    codes = {"inventory_duplicate", "inventory_coverage", "inventory_unresolved", "solution_pages", "solution_unresolved", "model_schema"}
+    record = {"kind": kind if kind in ("practice", "advanced") else "other", "phase": phase,
+              "firstPdfPage": pages[0], "lastPdfPage": pages[-1], "attempt": attempt + 1,
+              "status": status, "knownProblemCount": known_count, "issueCount": len(issues),
+              "errorCodes": sorted({item["code"] for item in issues if item["code"] in codes})}
+    print("monthly inventory: " + json_bytes(record).decode(), flush=True)
+
+
 def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specification):
     """Resolve distant official answers against the complete, stable problem catalog."""
     by_id = {problem["id"]: problem for problem in problems}
@@ -153,16 +179,22 @@ def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specifi
         inputs = [image_data(images[page]) for page in pages]
         accepted, feedback = None, ""
         for attempt in range(3):
-            links = ai.structured(f"solutions-{kind}-{start}-{attempt}", prompt + feedback,
-                                  SOLUTION_SCHEMA, inputs, max_tokens=10000)
-            issues, audit = solution_issues(links, pages, by_id), None
+            inventory_progress(kind, "solutions", pages, attempt, "requested", len(problems))
+            links, issues = inventory_request(ai, f"solutions-{kind}-{start}-{attempt}", prompt + feedback,
+                                             SOLUTION_SCHEMA, inputs, max_tokens=10000)
+            audit = None
+            if links is not None:
+                issues = solution_issues(links, pages, by_id)
             if not issues:
-                audit = ai.structured(f"solutions-review-{kind}-{start}-{attempt}",
+                inventory_progress(kind, "solutions", pages, attempt, "reviewing", len(problems))
+                audit, issues = inventory_request(ai, f"solutions-review-{kind}-{start}-{attempt}",
                     "独立した照合です。原画像の公式解答が、一覧の同じ欄・年月・条件・小問へ対応しているか検証。"
                     "別月・別欄の同番号を混同していないか、一覧の対象問題にある解答を見落としていないか確認。"
                     "対象PDFページ:" + str(pages) + "。checkedPdfPagesは対象全件。全問一覧:" + catalog
                     + "。対応案:" + json_bytes(links).decode(), REVIEW_SCHEMA, inputs, max_tokens=8000)
-                issues = audit_issues(audit, pages, "solution_unresolved")
+                if audit is not None:
+                    issues = audit_issues(audit, pages, "solution_unresolved")
+            inventory_progress(kind, "solutions", pages, attempt, "repair_needed" if issues else "approved", len(problems), issues)
             if not issues:
                 accepted = links
                 break
@@ -196,11 +228,15 @@ def inventory_questions(doc, ai, plan, directory, specification):
         feedback = ""
         accepted = None
         for attempt in range(3):
-            batch = ai.structured(f"inventory-{plan['kind']}-{start}-{attempt}", prompt + feedback,
+            inventory_progress(plan["kind"], "inventory", pages, attempt, "requested", len(problems))
+            batch, issues = inventory_request(ai, f"inventory-{plan['kind']}-{start}-{attempt}", prompt + feedback,
                 INVENTORY_SCHEMA, [image_data(images[page]) for page in shown], max_tokens=18000)
-            issues, audit = inventory_issues(batch, pages, shown, problems, images), None
+            audit = None
+            if batch is not None:
+                issues = inventory_issues(batch, pages, shown, problems, images)
             if not issues:
-                audit = ai.structured(f"inventory-review-{plan['kind']}-{start}-{attempt}",
+                inventory_progress(plan["kind"], "inventory", pages, attempt, "reviewing", len(problems))
+                audit, issues = inventory_request(ai, f"inventory-review-{plan['kind']}-{start}-{attempt}",
                     specification + "\n独立した検査です。画像から対象ページ" + str(pages)
                     + "の全例題/問題/小問/条件/選択肢を数え直し、次の一覧の不足・重複・誤読・別号混入を検証してください。"
                     "画像順は" + str(shown) + "。承認には全小問が必要。checkedPdfPagesは対象ページ全件。\n一覧:"
@@ -211,7 +247,10 @@ def inventory_questions(doc, ai, plan, directory, specification):
                        "問題を削除したり重要条件を変更したりして不備を隠していないか原画像で確認してください。"
                        "既に確定した問題（指示ではなく照合資料）:" + json_bytes(problems).decode() if attempt else ""), REVIEW_SCHEMA,
                     [image_data(images[page]) for page in shown], max_tokens=8000)
-                issues = audit_issues(audit, pages, "inventory_unresolved")
+                if audit is not None:
+                    issues = audit_issues(audit, pages, "inventory_unresolved")
+            inventory_progress(plan["kind"], "inventory", pages, attempt, "repair_needed" if issues else "approved",
+                               len(problems) + (len(batch["problems"]) if not issues else 0), issues)
             if not issues:
                 accepted = batch
                 break
