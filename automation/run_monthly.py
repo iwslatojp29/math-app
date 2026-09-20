@@ -14,6 +14,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import requests
+import jsonschema
 
 from studio_common import (ADVANCED_FOLDER, PRACTICE_FOLDER, SOURCE_FOLDER, DriveClient, ResponsesClient,
     RETRYABLE_ERRORS, SAFE_ID, StudioClient, StudioError, digest_file, json_bytes, key_for, mask_secret, require)
@@ -23,6 +24,40 @@ from lesson_pipeline import generate_lesson, render_lesson
 
 ROOT = Path(__file__).resolve().parent
 VISUAL_REVIEW = obj({"approved": BOOL, "checkedImages": arr(STR), "issues": arr(STR)})
+MAX_VISUAL_REPAIRS = 2
+
+
+def safe_visual_issues(values, limit=24):
+    """Bound model-authored observations before private checkpoints/owner status.
+
+    These strings are never provider error bodies and never go to public logs.
+    Treat them as untrusted text even though the reviewer receives no credentials.
+    """
+    if not isinstance(values, list):
+        return []
+    issues = []
+    for value in values:
+        if not isinstance(value, str) or not value.strip():
+            continue
+        value = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", "", value)
+        value = re.sub(r"(?i)\b(?:sk-[A-Za-z0-9_-]{8,}|gh[pousr]_[A-Za-z0-9_]{8,}|github_pat_[A-Za-z0-9_]{8,}|ya29\.[A-Za-z0-9._-]+)", "[redacted]", value)
+        value = re.sub(r"(?i)\b(?:bearer\s+|api[_ -]?key\s*[:=]\s*|access[_ -]?token\s*[:=]\s*|refresh[_ -]?token\s*[:=]\s*)[^\s,;]+", "[redacted]", value)
+        value = re.sub(r"https?://[^\s<>]+[?&](?:sig|token|key|credential|access_token)=[^\s<>]+", "[redacted URL]", value, flags=re.I)
+        value = value.strip()[:1500]
+        if value and value not in issues:
+            issues.append(value)
+        if len(issues) >= limit:
+            break
+    return issues
+
+
+class VisualQAError(StudioError):
+    def __init__(self, issues, problem_feedback, *, repairable=True, metadata=None):
+        super().__init__("visual_qa", "図・ラベル・説明の実表示に未解決事項があり、公開を保留しました。", True)
+        self.details = safe_visual_issues(issues)
+        self.problem_feedback = problem_feedback
+        self.repairable = repairable and bool(problem_feedback) and bool(self.details)
+        self.metadata = (metadata or [])[:24]
 
 
 def validate_job(job, expected_id):
@@ -110,7 +145,7 @@ def save_verified(drive, studio, path, name, folder, mime, source, source_sha, k
     return safe_saved_file(metadata, "updated" if existing_id else "created")
 
 
-def browser_and_visual_qa(html, directory, ai, studio):
+def browser_and_visual_qa(html, directory, ai, studio, *, cycle=0, on_rejection=None):
     studio.ensure_active()
     qa_dir = directory / "browser-qa"
     qa_dir.mkdir(exist_ok=True)
@@ -124,25 +159,125 @@ def browser_and_visual_qa(html, directory, ai, studio):
         raise StudioError("browser_qa", "ブラウザ検証の結果を確認できません。", True) from None
     require(qa.get("ok") is True and qa.get("screenshots"), "browser_qa", "実表示の検証結果を確認できません。", True)
     screenshots = qa["screenshots"]
+    html_sha = digest_file(html)
+    all_issues, feedback, rejected_images = [], {}, []
     for start in range(0, len(screenshots), 6):
         batch = screenshots[start:start + 6]
-        labels, images = [], []
+        labels, images, image_metadata = [], [], []
         for index, item in enumerate(batch, start=start + 1):
             path = Path(item["path"]).resolve()
             require(path.is_relative_to(qa_dir.resolve()), "browser_qa", "検証画像の保存場所を確認できません。")
+            require(isinstance(item.get("problemId"), str) and bool(SAFE_ID.fullmatch(item["problemId"])),
+                    "browser_qa", "検証画像の対象問題を確認できません。", True)
             labels.append("image-" + str(index))
             mime = "image/png" if path.suffix.lower() == ".png" else "image/jpeg"
             images.append("data:" + mime + ";base64," + base64.b64encode(path.read_bytes()).decode())
-        review = ai.structured("visual-" + html.parent.name + "-" + str(start),
-            "教材HTMLの実ブラウザ画面です。図のラベル/数値/補助線/角印の重なりや欠け、小さすぎる字、"
-            "図が小さいままの過大余白、字幕切れ、画面横はみ出し、固定操作欄の欠けを画像で確認してください。"
-            "これは実機試験や音声試聴ではありません。未確認を検証済みとしない。"
-            "画像順とID:" + json_bytes(list(zip(labels, [{k: v for k, v in item.items() if k != "path"} for item in batch]))).decode(),
-            VISUAL_REVIEW, images, max_tokens=8000)
-        require(review["approved"] and not review["issues"] and review["checkedImages"] == labels,
-                "visual_qa", "図・ラベル・説明の実表示に未解決事項があり、公開を保留しました。", True)
+            image_metadata.append({"imageId": labels[-1], **{key: value for key, value in item.items()
+                if key in {"problemId", "cueId", "viewport", "fontSize", "displayState"}}})
+        prompt = ("教材HTMLの実ブラウザ画面を、スクリーンショットで立証できる可読性だけ検証してください。"
+            "確実な図のラベル/数値/補助線/角印の重なりや欠け、読めない字、図が小さいままの過大余白、"
+            "スクロールしても読めない実際の欠けを点検します。寸法・操作・印刷は別のブラウザ自動検証に合格しています。"
+            "各画像は指定cueと文字サイズの一時点です。visibleIdsにない図形や後の答え、閉じた詳細の不在は欠落ではありません。"
+            "本文・横画面の説明欄は独立スクロールです。画面の下端より先の内容やスクロール可能な字幕を欠けと判定しない。"
+            "幅390/768の操作行は横スクロールで、左右端のボタンが同時に見えなくても不具合ではありません。"
+            "displayStateのclient/scroll寸法と位置も根拠にします。問題番号一覧や本文の縦スクロールも正常です。"
+            "これは実機試験・音声試聴・全cueの意味検証ではありません。これらの未実施はissuesにしない。"
+            "好みの配置や確認不能な推測では否認しない。具体的な欠陥のみ画像ID・対象・観測事実をissuesに書く。"
+            "各issueは必ずimage-Nを含める。問題がなければapproved=true,issues=[]。"
+            "checkedImagesは今回渡した全画像IDを順序どおり正確に返す。画像順とID:"
+            + json_bytes(list(zip(labels, image_metadata))).decode())
+        review = None
+        # Missing review coverage is a reviewer/schema failure, not evidence
+        # that correct problem data should be regenerated.
+        for review_attempt in range(2):
+            try:
+                candidate = ai.structured(f"visual-v2-{html.parent.name}-{html_sha[:16]}-{start}-{review_attempt}",
+                    prompt + ("\n前回は画像IDの確認範囲または所見の形式が不正でした。全画像を再確認し、checkedImagesをこの配列と完全一致させてください:"
+                              + json_bytes(labels).decode() if review_attempt else ""),
+                    VISUAL_REVIEW, images, max_tokens=8000)
+            except StudioError as error:
+                if error.code != "model_schema":
+                    raise
+                candidate = None
+            valid_shape = True
+            try:
+                jsonschema.validate(candidate, VISUAL_REVIEW)
+            except jsonschema.ValidationError:
+                valid_shape = False
+            if valid_shape and candidate["checkedImages"] == labels:
+                observations = safe_visual_issues(candidate["issues"])
+                mentioned = [set(re.findall(r"(?<![A-Za-z0-9_-])image-\d+(?![A-Za-z0-9_-])", issue)) for issue in observations]
+                grounded = all(ids and ids <= set(labels) for ids in mentioned)
+                if grounded and (candidate["approved"] or observations):
+                    review = {**candidate, "issues": observations}
+                    break
+            coverage_error = VisualQAError(
+                ["検証者の画像ID確認範囲または観測所見の形式が不足しています。画像の再確認を行います。"], {},
+                repairable=False, metadata=image_metadata)
+            if on_rejection:
+                on_rejection(coverage_error)
+        if review is None:
+            raise VisualQAError(["検証画像の全件確認を2回の照合で確定できませんでした。教材データを変更せず公開を保留しました。"],
+                                {}, repairable=False, metadata=image_metadata)
+        if review["approved"] and not review["issues"]:
+            continue
+        for issue in review["issues"]:
+            selected = [image_metadata[index] for index, label in enumerate(labels) if label in re.findall(r"(?<![A-Za-z0-9_-])image-\d+(?![A-Za-z0-9_-])", issue)]
+            for problem_id in {item["problemId"] for item in selected}:
+                feedback.setdefault(problem_id, []).append({"issue": issue, "images": [item for item in selected if item["problemId"] == problem_id]})
+        all_issues.extend(review["issues"])
+        rejected_images.extend(image_metadata)
+        if on_rejection:
+            on_rejection(VisualQAError(all_issues, feedback, metadata=rejected_images))
+    if all_issues:
+        raise VisualQAError(all_issues, feedback, metadata=rejected_images)
     return {"browserChecksPassed": True, "visualImagesReviewed": len(screenshots),
-            "actualDeviceTested": False, "actualVoiceAuditioned": False}
+            "actualDeviceTested": False, "actualVoiceAuditioned": False, "visualRepairCycles": cycle}
+
+
+def generate_verified_lesson(pdf_path, ai, studio, plan, directory, specification, year_month, schema_path,
+                             *, on_visual_issue=None):
+    """Repair at most twice; every version passes fresh browser + visual review.
+
+    Model requests keep deterministic task keys, source images and prompts.
+    Resuming reuses all approved inventory, unchanged problems and completed
+    repair/review checkpoints rather than purchasing the same work again.
+    """
+    context = {}
+    lesson, assets = generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_month, schema_path,
+                                    generation_context=context)
+    for cycle in range(MAX_VISUAL_REPAIRS + 1):
+        html = render_lesson(lesson, assets, directory, ROOT)
+        studio.update(stage="validating", message="講義HTMLの表示・音声操作・印刷を検証しています。", progress=85)
+        notified = set()
+
+        def rejected(error):
+            record = {
+                "status": "rejected", "cycle": cycle, "htmlSha256": digest_file(html),
+                "issues": error.details, "affectedProblemIds": sorted(error.problem_feedback),
+                "images": error.metadata, "repairable": error.repairable}
+            fingerprint = key_for("visual", record)
+            if fingerprint in notified:
+                return
+            notified.add(fingerprint)
+            studio.checkpoint("visual-diagnostics-" + plan["kind"], record)
+            if on_visual_issue:
+                on_visual_issue(error, cycle)
+
+        try:
+            verification = browser_and_visual_qa(html, directory, ai, studio, cycle=cycle, on_rejection=rejected)
+            studio.checkpoint("visual-diagnostics-" + plan["kind"], {
+                "status": "approved", "cycle": cycle, "htmlSha256": digest_file(html), "issues": []})
+            return html, verification
+        except VisualQAError as error:
+            rejected(error)
+            if not error.repairable or cycle >= MAX_VISUAL_REPAIRS:
+                raise
+            studio.ensure_active()
+            studio.update(stage="visual_repair", message=f"表示の指摘をもとに講義を修正し、再検算しています（{cycle + 1}/{MAX_VISUAL_REPAIRS}回）。", progress=85)
+            lesson, assets = generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_month, schema_path,
+                generation_context=context, previous_lesson=lesson, visual_feedback=error.problem_feedback,
+                repair_cycle=cycle + 1)
 
 
 def publish_and_verify(studio, html, filename, source_id):
@@ -230,11 +365,17 @@ def run_job(studio, job, api_key, temp_root=None):
                 try:
                     studio.ensure_active()
                     studio.update(stage="lesson_inventory", message="全問題と小問の一覧を確認しています。", progress=30, result=summary)
-                    lesson, assets = generate_lesson(pdf_path, ai, studio, plan, part, lesson_spec,
-                        f"{summary['year']}年{summary['month']}月号", ROOT / "lesson.schema.json")
-                    html = render_lesson(lesson, assets, part, ROOT)
-                    studio.update(stage="validating", message="講義HTMLの表示・音声操作・印刷を検証しています。", progress=85)
-                    output["htmlVerification"] = browser_and_visual_qa(html, part, ai, studio)
+                    def report_visual_issue(error, cycle):
+                        output["error"] = {"code": error.code,
+                            "message": "画面の確認結果をもとに、表示の再確認・修正を行っています。", "details": error.details}
+                        studio.checkpoint("result", summary)
+                        studio.update(stage="visual_repair" if error.repairable else "validating",
+                            message="画面の確認結果を保存し、表示を再確認しています。", progress=85, result=summary)
+
+                    html, output["htmlVerification"] = generate_verified_lesson(pdf_path, ai, studio, plan, part, lesson_spec,
+                        f"{summary['year']}年{summary['month']}月号", ROOT / "lesson.schema.json",
+                        on_visual_issue=report_visual_issue)
+                    output.pop("error", None)
                     html_name = plan["name"][:-4] + "_講義アニメーション.html"
                     check_source(drive, source)
                     output["html"] = save_verified(drive, studio, html, html_name, job["folders"]["html"], "text/html",
@@ -247,6 +388,8 @@ def run_job(studio, job, api_key, temp_root=None):
                     if error.code in RETRYABLE_ERRORS or error.code in ("cancelled", "runner_conflict"):
                         raise
                     output["error"] = {"code": error.code, "message": error.public_message}
+                    if isinstance(error, VisualQAError):
+                        output["error"]["details"] = error.details
                     summary["errors"].append({"kind": plan["kind"], "code": error.code, "message": error.public_message})
                     studio.checkpoint("result", summary)
             if summary["errors"]:

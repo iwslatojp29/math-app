@@ -204,6 +204,12 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
           if (html) links.append(html);
           if (links.childNodes.length) section.append(links);
           if (outputError) section.append(node('p', 'job-error', outputError));
+          const errorDetails = (Array.isArray(output.error?.details) ? output.error.details : []).slice(0, 8).map(detail => clean(detail).trim().slice(0, 600)).filter(Boolean);
+          if (errorDetails.length) {
+            const details = node('ul', 'summary');
+            for (const detail of errorDetails) details.append(node('li', '', detail));
+            section.append(details);
+          }
           for (const missing of Array.isArray(output.missing) ? output.missing : []) if (text(missing)) section.append(node('p', 'fine', clean(missing)));
           card.append(section);
         }

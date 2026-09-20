@@ -164,7 +164,21 @@ export async function verifyLesson({ htmlPath, outputDirectory }) {
             if (cue.id === representative.id) {
               const screenshotPath = resolve(output, problem.id + '-' + viewport.width + '-' + fontSize + '.png');
               await page.screenshot({ path:screenshotPath, fullPage:true });
-              screenshots.push({ path:screenshotPath, problemId:problem.id, cueId:cue.id, viewport, fontSize });
+              const displayState = await page.evaluate(() => {
+                const regions = {};
+                for (const [name, selector] of Object.entries({ toolbar:'.toolbar', content:'.content-pane', narration:'.narration' })) {
+                  const element = document.querySelector(selector), style = getComputedStyle(element);
+                  regions[name] = { scrollLeft:element.scrollLeft, scrollTop:element.scrollTop,
+                    clientWidth:element.clientWidth, scrollWidth:element.scrollWidth,
+                    clientHeight:element.clientHeight, scrollHeight:element.scrollHeight,
+                    overflowX:style.overflowX, overflowY:style.overflowY };
+                }
+                return { capture:'viewport-with-independent-scroll-regions', regions,
+                  caption:document.getElementById('caption').textContent,
+                  visibleIds:Array.from(document.querySelectorAll('#diagram [data-target]'), item=>item.dataset.target),
+                  highlightIds:Array.from(document.querySelectorAll('#diagram .focused'), item=>item.dataset.target) };
+              });
+              screenshots.push({ path:screenshotPath, problemId:problem.id, cueId:cue.id, viewport, fontSize, displayState });
             }
             if (index + 1 < cues.length) await page.locator('#next').click();
           }

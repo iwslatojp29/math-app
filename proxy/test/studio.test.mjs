@@ -713,6 +713,37 @@ test('studio renders real pipeline outputs, partial errors, warnings and safe li
   assert.match(history.textContent, /もう一度試す/);
 });
 
+test('studio renders bounded review details as text and redacts credential patterns', async () => {
+  const details = ['image-1: <img src=x onerror=alert(1)> ラベルが重なっています。 sk-example12345 Bearer private-value',
+    '長'.repeat(900), ...Array.from({ length: 7 }, (_, index) => '指摘-' + index)];
+  const { elements } = await uiFixture({ jobs: [job({ status: 'needs_attention', result: {
+    outputs: [{ kind: 'practice', error: { message: '図の確認が必要です。', details } },
+      { kind: 'advanced', error: { message: '既存のエラー', details: 'invalid-array' } }],
+  } })] });
+  const history = elements.get('jobs');
+  const items = history.descendants().filter(element => element.tagName === 'li');
+  assert.equal(items.length, 8);
+  assert.equal(items[1].textContent.length, 600);
+  assert.match(items[0].textContent, /<img src=x onerror=alert\(1\)>/);
+  assert.match(items[0].textContent, /\[非表示\]/);
+  assert(!history.descendants().some(element => element.tagName === 'img'));
+  assert(!history.textContent.includes('sk-example12345'));
+  assert(!history.textContent.includes('private-value'));
+  assert(!history.textContent.includes('指摘-6'));
+  assert(!history.textContent.includes('invalid-array'));
+  assert.match(history.textContent, /図の確認が必要です。/);
+  assert.match(history.textContent, /既存のエラー/);
+});
+
+test('studio ignores blank and non-string review details', async () => {
+  const { elements } = await uiFixture({ jobs: [job({ result: {
+    outputs: [{ error: { message: '確認してください。', details: [null, {}, 42, '  ', 'image-2: 数値が欠けています。'] } }],
+  } })] });
+  const items = elements.get('jobs').descendants().filter(element => element.tagName === 'li');
+  assert.equal(items.length, 1);
+  assert.equal(items[0].textContent, 'image-2: 数値が欠けています。');
+});
+
 test('studio shows Japanese progress and prevents concurrent issue selection', async () => {
   const ui = await uiFixture({ files: [SOURCE, { ...SOURCE, id: 'other', name: '2026年8月号.pdf' }], jobs: [job({ stage: 'lesson_generation' })] });
   assert.match(ui.elements.get('jobs').textContent, /全問題の講義と検算を進めています/);
