@@ -68,10 +68,19 @@
     .update-btn:hover { background: #104f3c; }
     .update-btn:focus-visible { outline: 3px solid #e4a349; outline-offset: 4px; }
     @media (max-width: 430px) { .update-panel { gap: 10px; padding: 14px; } .update-panel p { font-size: 12px; } }
+    .content-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; margin: 0 0 24px; background: #e8f2ff; border: 1px solid #c6ddf7; border-radius: 12px; }
+    .content-tabs a { min-width: 0; padding: 12px 8px; border-radius: 8px; color: #185fa6; text-align: center; text-decoration: none; font-weight: bold; line-height: 1.4; }
+    .content-tabs a:hover { background: #d8eaff; }
+    .content-tabs a[aria-current="page"] { background: #1976D2; color: white; }
+    .content-tabs a:focus-visible { outline: 3px solid #e4a349; outline-offset: 2px; }
   </style>
 </head>
 <body>
   <a class="back-link" href="../">← トップへ戻る</a>
+  <nav class="content-tabs" aria-label="算数の教材を切り替える">
+    <a href="../math/index.html" aria-current="page">中学への算数</a>
+    <a href="../sapix/index.html">Sapix</a>
+  </nav>
   <h1>中学への算数</h1>
   <div class="update-panel">
     <p>月間号を選んで、解説教材を作成します。</p>
@@ -129,9 +138,6 @@
 
   <div class="card">
     <a href="./5月号 日日の演習 問題29ｰ2.html">電車の運賃問題｜センスよく解く</a>
-  </div>
-  <div class="card">
-    <a href="./SAPIX算数_5月マンスリー対策_解答解説_偏差値75類題_記録つき改訂版.html">SAPIX算数 5月マンスリー対策 改訂版</a>
   </div>
   <div class="card">
     <a href="./2026年6月学力コンテスト.html">学力コンテスト風 解答解説</a>

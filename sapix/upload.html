@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ページ追加 - Sapix</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Hiragino Sans", sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+h1 { color: #333; border-bottom: 3px solid #2196F3; padding-bottom: 10px; }
+.back-link { display: inline-block; margin-bottom: 20px; color: #1a73e8; text-decoration: none; font-weight: bold; }
+.back-link:hover { text-decoration: underline; }
+#password-screen { background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+#password-screen h2 { color: #555; margin-bottom: 20px; }
+#pw-input { padding: 10px 16px; font-size: 1.1em; border: 2px solid #ddd; border-radius: 8px; width: 200px; margin-right: 8px; }
+#pw-btn { padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; }
+#pw-btn:hover { background: #1976D2; }
+#pw-error { color: #e53935; margin-top: 12px; font-size: 0.95em; display: none; }
+#upload-screen { display: none; }
+#drop-zone { border: 3px dashed #2196F3; border-radius: 12px; padding: 60px 20px; text-align: center; background: white; cursor: pointer; transition: background 0.2s; margin-bottom: 20px; }
+#drop-zone.dragover { background: #E3F2FD; border-color: #1565C0; }
+#drop-zone p { font-size: 1.1em; color: #555; margin: 0; }
+#drop-zone .icon { font-size: 3em; margin-bottom: 10px; }
+#file-input { display: none; }
+#status-box { display: none; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.status-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; }
+.status-item:last-child { border-bottom: none; }
+.status-icon { font-size: 1.2em; }
+.status-ok { color: #43a047; }
+.status-err { color: #e53935; }
+.status-wait { color: #888; }
+.auth-hint { font-size: 0.85em; color: #666; line-height: 1.7; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+#password-screen { margin-bottom: 20px; }
+#pw-btn:disabled { background: #bbb; cursor: default; }
+.status-item > span:last-child { overflow-wrap: anywhere; }
+#drop-zone[aria-disabled="true"] { opacity: 0.6; cursor: default; }
+@media (max-width: 430px) {
+  h1 { font-size: 26px; line-height: 1.4; }
+  #password-screen { padding: 24px; }
+  #pw-input { width: 100%; margin: 0 0 10px; }
+  #pw-btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="./index.html">← Sapixの一覧へ戻る</a>
+<h1>Sapixのページを追加</h1>
+
+<div id="password-screen">
+  <h2>🔒 合言葉を入力</h2>
+  <label for="pw-input" class="sr-only">追加・削除用の合言葉</label>
+  <input type="password" id="pw-input" placeholder="合言葉" autocomplete="off" />
+  <button id="pw-btn" type="button">操作を開始</button>
+  <p class="auth-hint">合言葉は追加・削除の実行時に確認されます。このページは合言葉を保存しません。</p>
+  <div id="pw-error" role="alert"></div>
+</div>
+
+<div id="upload-screen">
+
+  <div id="drop-zone" role="button" tabindex="0" aria-label="HTMLファイルを選択">
+    <div class="icon">📂</div>
+    <p>HTMLファイルをここにドラッグ＆ドロップ</p>
+    <p style="font-size:0.85em; color:#999; margin-top:8px;">または クリックして選択</p>
+  </div>
+  <input type="file" id="file-input" accept=".html" multiple />
+  <p class="auth-hint">HTMLは1ファイル10 MiBまでです（UTF-8で保存した容量。「一覧へ戻る」リンクの追加分を含みます）。</p>
+
+  <div id="status-box">
+    <h3 style="margin:0 0 12px; color:#333;">処理状況</h3>
+    <div id="status-list" aria-live="polite"></div>
+  </div>
+</div>
+
+<!-- API_BASE is configured in ../shared/proxy-client.js. -->
+<script src="../shared/proxy-client.js?v=20260920-2"></script>
+<script>
+const FOLDER = 'sapix';
+const BACK_LINK_HTML = '<a href="./index.html" style="display:inline-block;margin:12px 16px;padding:8px 16px;background:#2196F3;color:white;text-decoration:none;border-radius:8px;font-weight:bold;font-family:-apple-system,\'Hiragino Sans\',sans-serif;">← コンテンツ一覧へ戻る</a>';
+const passphraseInput = document.getElementById('pw-input');
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+let busy = false;
+
+document.getElementById('pw-btn').addEventListener('click', startUpload);
+passphraseInput.addEventListener('keydown', e => { if (e.key === 'Enter') startUpload(); });
+passphraseInput.addEventListener('input', () => {
+  document.getElementById('pw-error').style.display = 'none';
+  updateControls();
+});
+
+function startUpload() {
+  if (busy) return;
+  if (!passphraseInput.value) {
+    document.getElementById('pw-error').textContent = '合言葉を入力してください。';
+    document.getElementById('pw-error').style.display = 'block';
+    passphraseInput.focus();
+    return;
+  }
+  document.getElementById('upload-screen').style.display = 'block';
+  document.getElementById('pw-error').style.display = 'none';
+  updateControls();
+}
+
+function updateControls() {
+  const disabled = busy || !passphraseInput.value;
+  fileInput.disabled = disabled;
+  dropZone.setAttribute('aria-disabled', String(disabled));
+  dropZone.tabIndex = disabled ? -1 : 0;
+  document.getElementById('pw-btn').disabled = busy;
+  document.querySelectorAll('input[name="subject"]').forEach(input => { input.disabled = busy; });
+}
+
+dropZone.addEventListener('click', () => { if (!fileInput.disabled) fileInput.click(); });
+dropZone.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && !fileInput.disabled) {
+    e.preventDefault();
+    fileInput.click();
+  }
+});
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  if (!fileInput.disabled) dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (!fileInput.disabled) handleFiles(Array.from(e.dataTransfer.files));
+});
+fileInput.addEventListener('change', () => { handleFiles(Array.from(fileInput.files)); });
+
+function injectBackLink(html) {
+  if (html.indexOf('コンテンツ一覧へ戻る') !== -1) return html;
+  if (/<body[^>]*>/i.test(html)) {
+    return html.replace(/<body([^>]*)>/i, '<body$1>\n' + BACK_LINK_HTML + '\n');
+  }
+  return BACK_LINK_HTML + '\n' + html;
+}
+
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  MathAppProxy.assertHtmlSize(bytes.length);
+  const chunks = [];
+  for (let i = 0; i < bytes.length; i += 8192) {
+    chunks.push(String.fromCharCode(...bytes.subarray(i, i + 8192)));
+  }
+  return btoa(chunks.join(''));
+}
+
+function setStatus(row, kind, message) {
+  const icon = document.createElement('span');
+  icon.className = 'status-icon status-' + kind;
+  icon.textContent = kind === 'ok' ? '✅' : kind === 'err' ? '❌' : '⏳';
+  const label = document.createElement('span');
+  label.textContent = message;
+  row.replaceChildren(icon, label);
+}
+
+async function handleFiles(files) {
+  if (busy || files.length === 0) return;
+  const passphrase = passphraseInput.value;
+  if (!passphrase) { startUpload(); return; }
+  const statusList = document.getElementById('status-list');
+  document.getElementById('status-box').style.display = 'block';
+  statusList.replaceChildren();
+  const entries = files.map(file => {
+    const row = document.createElement('div');
+    row.className = 'status-item';
+    setStatus(row, 'wait', file.name + ' 処理待ち');
+    statusList.appendChild(row);
+    return { file, row };
+  });
+  const subject = document.querySelector('input[name="subject"]:checked');
+  const selectedSubject = subject ? subject.value : null;
+  busy = true;
+  updateControls();
+  let authenticationFailed = false;
+  try {
+    for (const { file, row } of entries) {
+      if (authenticationFailed) {
+        setStatus(row, 'err', file.name + ' 未処理: 合言葉を入力し直して再実行してください。');
+        continue;
+      }
+      if (!MathAppProxy.validFilename(file.name)) {
+        setStatus(row, 'err', file.name + ' 失敗: 管理用ページを除く .html ファイルを選択してください。');
+        continue;
+      }
+      setStatus(row, 'wait', file.name + ' をアップロード中...');
+      try {
+        const text = await readFileAsText(file);
+        const updatedText = injectBackLink(text);
+        const contentBase64 = utf8ToBase64(updatedText);
+        const body = { folder: FOLDER, filename: file.name, contentBase64 };
+        if (selectedSubject) body.subject = selectedSubject;
+        const result = await MathAppProxy.commit(body, passphrase);
+        setStatus(row, 'ok', file.name + ' アップロード完了（タイトル: ' + result.label + '）。一覧への反映には数分かかることがあります。');
+      } catch (error) {
+        setStatus(row, 'err', file.name + ' 失敗: ' + MathAppProxy.errorMessage(error));
+        if (error.status === 401) {
+          authenticationFailed = true;
+          passphraseInput.focus();
+        }
+      }
+    }
+  } finally {
+    busy = false;
+    fileInput.value = '';
+    updateControls();
+  }
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = () => reject(new Error('read_failed'));
+    reader.onabort = () => reject(new Error('read_aborted'));
+    reader.readAsText(file);
+  });
+}
+
+updateControls();
+</script>
+</body>
+</html>

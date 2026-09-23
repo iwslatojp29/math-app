@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sapix - コンテンツ一覧</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, "Hiragino Sans", sans-serif; max-width: 740px; margin: 0 auto; padding: 20px; background: #f5f5f5; color: #333; }
+    h1 { border-bottom: 3px solid #2196F3; padding-bottom: 10px; }
+    h2 { color: #555; font-size: 1.15em; margin-top: 28px; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #1a73e8; text-decoration: none; font-weight: bold; }
+    .back-link:hover { text-decoration: underline; }
+    .content-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; margin: 0 0 24px; background: #e8f2ff; border: 1px solid #c6ddf7; border-radius: 12px; }
+    .content-tabs a { min-width: 0; padding: 12px 8px; border-radius: 8px; color: #185fa6; text-align: center; text-decoration: none; font-weight: bold; line-height: 1.4; }
+    .content-tabs a:hover { background: #d8eaff; }
+    .content-tabs a[aria-current="page"] { background: #1976D2; color: white; }
+    .content-tabs a:focus-visible { outline: 3px solid #e4a349; outline-offset: 2px; }
+    .intro { color: #596879; line-height: 1.7; }
+    .page-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 28px; }
+    .action-btn { display: inline-block; padding: 12px 18px; border-radius: 8px; color: white; font-weight: bold; line-height: 1.5; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+    .upload-btn { background: #1976D2; }
+    .upload-btn:hover { background: #1565C0; }
+    .delete-page-btn { background: #d63832; }
+    .delete-page-btn:hover { background: #b92c27; }
+    .action-btn:focus-visible { outline: 3px solid #e4a349; outline-offset: 3px; }
+    .card { background: white; border-radius: 10px; padding: 20px; margin: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .card a { color: #1a73e8; text-decoration: none; font-size: 1.1em; font-weight: bold; line-height: 1.6; overflow-wrap: anywhere; }
+    .card a:hover { text-decoration: underline; }
+    @media (max-width: 430px) { .page-actions { gap: 8px; } .action-btn { flex: 1 1 100%; text-align: center; } }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="../">← トップへ戻る</a>
+  <nav class="content-tabs" aria-label="算数の教材を切り替える">
+    <a href="../math/index.html">中学への算数</a>
+    <a href="../sapix/index.html" aria-current="page">Sapix</a>
+  </nav>
+  <h1>Sapix</h1>
+  <p class="intro">Sapixの算数教材です。解答・解説のHTMLファイルを追加できます。</p>
+  <div class="page-actions" aria-label="教材の管理">
+    <a class="action-btn upload-btn" href="./upload.html">＋ HTMLを追加</a>
+    <a class="action-btn delete-page-btn" href="./delete.html">ページを削除</a>
+  </div>
+  <h2>教材一覧</h2>
+  <div class="card">
+    <a href="./SAPIX算数_5月マンスリー対策_解答解説_偏差値75類題_記録つき改訂版.html">SAPIX算数 5月マンスリー対策 改訂版</a>
+  </div>
+</body>
+</html>

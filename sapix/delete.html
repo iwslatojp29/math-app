@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ページ削除 - Sapix</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Hiragino Sans", sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+h1 { color: #333; border-bottom: 3px solid #e53935; padding-bottom: 10px; }
+.back-link { display: inline-block; margin-bottom: 20px; color: #1a73e8; text-decoration: none; font-weight: bold; }
+.back-link:hover { text-decoration: underline; }
+#password-screen { background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+#password-screen h2 { color: #555; margin-bottom: 20px; }
+#pw-input { padding: 10px 16px; font-size: 1.1em; border: 2px solid #ddd; border-radius: 8px; width: 200px; margin-right: 8px; }
+#pw-btn { padding: 10px 20px; background: #e53935; color: white; border: none; border-radius: 8px; font-size: 1em; cursor: pointer; }
+#pw-btn:hover { background: #c62828; }
+#pw-error { color: #e53935; margin-top: 12px; font-size: 0.95em; display: none; }
+#main-screen { display: none; }
+.panel { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.panel > label { display: block; font-weight: bold; color: #555; margin-bottom: 8px; }
+.hint { font-size: 0.82em; color: #999; margin-top: 6px; line-height: 1.6; }
+.btn { padding: 11px 22px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; font-family: inherit; }
+.btn-blue { background: #2196F3; color: white; }
+.btn-blue:hover { background: #1976D2; }
+.btn-red { background: #e53935; color: white; width: 100%; padding: 14px; }
+.btn-red:hover { background: #c62828; }
+.btn:disabled { background: #bbb; cursor: default; }
+#list-panel { display: none; }
+.list-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.list-head h3 { margin: 0; color: #333; font-size: 1.05em; }
+.link-btn { background: none; border: none; color: #1a73e8; font-size: 0.88em; cursor: pointer; font-family: inherit; padding: 0 4px; text-decoration: underline; }
+.row { display: flex; align-items: flex-start; gap: 10px; padding: 11px 4px; border-bottom: 1px solid #eee; }
+.row:last-of-type { border-bottom: none; }
+.row input { width: 18px; height: 18px; margin-top: 2px; flex: none; cursor: pointer; }
+.row label { cursor: pointer; flex: 1; min-width: 0; }
+.row .title { color: #222; font-weight: bold; font-size: 0.97em; word-break: break-word; }
+.row .file { color: #999; font-size: 0.8em; margin-top: 3px; word-break: break-all; }
+.row .orphan { display: inline-block; margin-left: 6px; padding: 1px 7px; background: #FFF3E0; color: #e65100; border-radius: 10px; font-size: 0.72em; font-weight: bold; vertical-align: 1px; }
+.empty { color: #888; padding: 16px 4px; }
+.warn { background: #FFEBEE; border-left: 4px solid #e53935; padding: 12px 14px; border-radius: 8px; color: #b71c1c; font-size: 0.88em; margin: 16px 0; }
+#status-box { display: none; }
+.status-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; font-size: 0.95em; }
+.status-item:last-child { border-bottom: none; }
+.ok { color: #43a047; } .err { color: #e53935; } .wait { color: #888; }
+.auth-hint { font-size: 0.85em; color: #666; line-height: 1.7; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+#password-screen { margin-bottom: 20px; }
+#pw-btn:disabled { background: #bbb; cursor: default; }
+.status-item > span:last-child { overflow-wrap: anywhere; }
+.manual-area { margin-top: 18px; padding-top: 16px; border-top: 1px solid #eee; }
+.manual-area > label { display: block; font-size: 0.9em; font-weight: bold; color: #555; }
+#manual-filename { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95em; margin: 4px 0 10px; }
+#manual-error { margin-top: 8px; font-size: 0.88em; }
+@media (max-width: 430px) {
+  h1 { font-size: 26px; line-height: 1.4; }
+  #password-screen { padding: 24px; }
+  #pw-input { width: 100%; margin: 0 0 10px; }
+  #pw-btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="./index.html">← Sapixの一覧へ戻る</a>
+<h1>Sapixのページを削除</h1>
+
+<div id="password-screen">
+  <h2>🔒 合言葉を入力</h2>
+  <label for="pw-input" class="sr-only">追加・削除用の合言葉</label>
+  <input type="password" id="pw-input" placeholder="合言葉" autocomplete="off" />
+  <button id="pw-btn" type="button">操作を開始</button>
+  <p class="auth-hint">合言葉は追加・削除の実行時に確認されます。このページは合言葉を保存しません。</p>
+  <div id="pw-error" role="alert"></div>
+</div>
+
+<div id="main-screen">
+  <div class="panel">
+    <p class="hint">公開されているコンテンツ一覧から読み込みます。更新の反映には数分かかることがあります。</p>
+    <button class="btn btn-blue" id="load-btn" type="button">ページ一覧を読み込む</button>
+  </div>
+
+  <div class="panel" id="list-panel">
+    <div class="list-head">
+      <h3>削除するページを選んでください</h3>
+      <div>
+        <button class="link-btn" id="sel-all">すべて選択</button>
+        <button class="link-btn" id="sel-none">選択解除</button>
+      </div>
+    </div>
+    <div id="rows"></div>
+    <div class="manual-area">
+      <label for="manual-filename">一覧にないファイルを削除する場合（任意）</label>
+      <p class="hint">この科目フォルダにある正確なファイル名を、拡張子 .html を付けて入力してください。</p>
+      <input id="manual-filename" type="text" placeholder="例: 分数の計算.html" autocomplete="off" />
+      <button class="btn btn-blue" id="manual-add" type="button">削除対象に追加</button>
+      <div id="manual-error" class="err" role="alert"></div>
+    </div>
+    <div class="warn">削除するとHTMLファイル本体と一覧の両方から消えます。元に戻せません。</div>
+    <button class="btn btn-red" id="del-btn" disabled>選択したページを削除</button>
+  </div>
+
+  <div class="panel" id="status-box">
+    <h3 style="margin:0 0 12px; color:#333;">処理状況</h3>
+    <div id="status-list" aria-live="polite"></div>
+  </div>
+</div>
+
+<!-- API_BASE is configured in ../shared/proxy-client.js. -->
+<script src="../shared/proxy-client.js?v=20260920-2"></script>
+<script>
+const FOLDER = 'sapix';
+const passphraseInput = document.getElementById('pw-input');
+let ROWS = [];
+let busy = false;
+
+document.getElementById('pw-btn').addEventListener('click', startDelete);
+passphraseInput.addEventListener('keydown', e => { if (e.key === 'Enter') startDelete(); });
+passphraseInput.addEventListener('input', () => {
+  document.getElementById('pw-error').style.display = 'none';
+  updateControls();
+});
+
+function startDelete() {
+  if (busy) return;
+  if (!passphraseInput.value) {
+    document.getElementById('pw-error').textContent = '合言葉を入力してください。';
+    document.getElementById('pw-error').style.display = 'block';
+    passphraseInput.focus();
+    return;
+  }
+  document.getElementById('main-screen').style.display = 'block';
+  document.getElementById('pw-error').style.display = 'none';
+  updateControls();
+}
+
+function titlesFromIndex(html) {
+  const rows = new Map();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const base = new URL('./index.html', location.href);
+  const directory = new URL('./', base).pathname;
+  doc.querySelectorAll('.card a[href]').forEach(anchor => {
+    try {
+      const link = new URL(anchor.getAttribute('href'), base);
+      if (link.origin !== base.origin || !link.pathname.startsWith(directory)) return;
+      const name = decodeURIComponent(link.pathname.slice(directory.length));
+      if (!MathAppProxy.validFilename(name) || rows.has(name)) return;
+      rows.set(name, { name, title: anchor.textContent.trim() || name, manual: false });
+    } catch (error) {
+      // Ignore malformed links; never infer an alternative filename.
+    }
+  });
+  return Array.from(rows.values()).sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+}
+
+document.getElementById('load-btn').addEventListener('click', loadList);
+
+async function loadList() {
+  if (busy) return;
+  busy = true;
+  ROWS = [];
+  render();
+  document.getElementById('list-panel').style.display = 'block';
+  document.getElementById('manual-error').textContent = '';
+  document.getElementById('status-box').style.display = 'none';
+  const button = document.getElementById('load-btn');
+  button.textContent = '読み込み中...';
+  updateControls();
+  try {
+    const response = await fetch('./index.html?t=' + Date.now(), { cache: 'no-store', credentials: 'omit' });
+    if (!response.ok) throw new Error('list_failed');
+    ROWS = titlesFromIndex(await response.text());
+    render();
+  } catch (error) {
+    const statusList = document.getElementById('status-list');
+    statusList.replaceChildren();
+    const row = document.createElement('div');
+    row.className = 'status-item';
+    setStatus(row, 'err', '一覧を読み込めませんでした。もう一度読み込んでください。');
+    statusList.appendChild(row);
+    document.getElementById('status-box').style.display = 'block';
+  } finally {
+    busy = false;
+    button.textContent = 'ページ一覧を再読み込み';
+    updateControls();
+  }
+}
+
+function render(selectedNames = new Set()) {
+  const box = document.getElementById('rows');
+  box.replaceChildren();
+  if (ROWS.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.textContent = '一覧に削除できるページがありません。未掲載のファイルは下の欄から指定できます。';
+    box.appendChild(empty);
+  }
+  ROWS.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'pick';
+    checkbox.id = 'pick-' + index;
+    checkbox.dataset.index = String(index);
+    checkbox.checked = selectedNames.has(item.name);
+    checkbox.addEventListener('change', updateControls);
+    const label = document.createElement('label');
+    label.htmlFor = checkbox.id;
+    const title = document.createElement('div');
+    title.className = 'title';
+    title.textContent = item.title;
+    if (item.manual) {
+      const badge = document.createElement('span');
+      badge.className = 'orphan';
+      badge.textContent = '手動指定';
+      title.appendChild(badge);
+    }
+    const name = document.createElement('div');
+    name.className = 'file';
+    name.textContent = item.name;
+    label.append(title, name);
+    row.append(checkbox, label);
+    box.appendChild(row);
+  });
+  updateControls();
+}
+
+function picked() {
+  return Array.from(document.querySelectorAll('.pick:checked'))
+    .map(checkbox => ROWS[Number(checkbox.dataset.index)]).filter(Boolean);
+}
+
+function updateControls() {
+  const count = picked().length;
+  const button = document.getElementById('del-btn');
+  button.disabled = busy || !passphraseInput.value || count === 0;
+  button.textContent = busy ? '処理中...' : count ? '選択した ' + count + ' 件を削除' : '選択したページを削除';
+  ['pw-btn', 'load-btn', 'sel-all', 'sel-none', 'manual-add', 'manual-filename'].forEach(id => {
+    document.getElementById(id).disabled = busy;
+  });
+  document.querySelectorAll('.pick').forEach(checkbox => { checkbox.disabled = busy; });
+}
+
+document.getElementById('sel-all').addEventListener('click', () => {
+  if (busy) return;
+  document.querySelectorAll('.pick').forEach(checkbox => { checkbox.checked = true; });
+  updateControls();
+});
+document.getElementById('sel-none').addEventListener('click', () => {
+  if (busy) return;
+  document.querySelectorAll('.pick').forEach(checkbox => { checkbox.checked = false; });
+  updateControls();
+});
+
+document.getElementById('manual-add').addEventListener('click', addManualFilename);
+document.getElementById('manual-filename').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); addManualFilename(); }
+});
+
+function addManualFilename() {
+  if (busy) return;
+  const input = document.getElementById('manual-filename');
+  const filename = input.value;
+  const error = document.getElementById('manual-error');
+  if (!MathAppProxy.validFilename(filename)) {
+    error.textContent = '管理用ページを除く .html ファイル名を入力してください。フォルダや「..」は指定できません。';
+    return;
+  }
+  const selected = new Set(picked().map(item => item.name));
+  selected.add(filename);
+  if (!ROWS.some(item => item.name === filename)) {
+    ROWS.push({ name: filename, title: filename.replace(/\.html$/i, ''), manual: true });
+  }
+  error.textContent = '';
+  input.value = '';
+  render(selected);
+}
+
+function setStatus(row, kind, message) {
+  const icon = document.createElement('span');
+  icon.className = kind;
+  icon.textContent = kind === 'ok' ? '✅' : kind === 'err' ? '❌' : '⏳';
+  const label = document.createElement('span');
+  label.textContent = message;
+  row.replaceChildren(icon, label);
+}
+
+document.getElementById('del-btn').addEventListener('click', doDelete);
+
+async function doDelete() {
+  if (busy) return;
+  const targets = picked();
+  if (!targets.length) return;
+  const passphrase = passphraseInput.value;
+  if (!passphrase) { startDelete(); return; }
+  const names = targets.map(item => '・' + item.title + '（' + item.name + '）').join('\n');
+  if (!confirm('次の ' + targets.length + ' 件を削除します。元に戻せません。\n\n' + names)) return;
+  busy = true;
+  updateControls();
+  document.getElementById('status-box').style.display = 'block';
+  const statusList = document.getElementById('status-list');
+  statusList.replaceChildren();
+  let authenticationFailed = false;
+  try {
+    for (const item of targets) {
+      const row = document.createElement('div');
+      row.className = 'status-item';
+      statusList.appendChild(row);
+      if (authenticationFailed) {
+        setStatus(row, 'err', item.name + ' 未処理: 合言葉を入力し直して再実行してください。');
+        continue;
+      }
+      setStatus(row, 'wait', item.name + ' を削除中...');
+      try {
+        await MathAppProxy.deleteFile({ folder: FOLDER, filename: item.name }, passphrase);
+        setStatus(row, 'ok', item.name + ' を削除しました。一覧への反映には数分かかることがあります。');
+        const selected = new Set(picked().map(target => target.name));
+        selected.delete(item.name);
+        ROWS = ROWS.filter(target => target.name !== item.name);
+        render(selected);
+      } catch (error) {
+        setStatus(row, 'err', item.name + ' 失敗: ' + MathAppProxy.errorMessage(error));
+        if (error.status === 401) {
+          authenticationFailed = true;
+          passphraseInput.focus();
+        }
+      }
+    }
+  } finally {
+    busy = false;
+    updateControls();
+  }
+}
+
+updateControls();
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@ GitHub の書き込み認証は Cloudflare Workers のシークレットに保�
 
 ```text
 GitHub Pages /math-app/
-  math / japanese / science-society の upload.html・delete.html
+  math / sapix / japanese / science-society の upload.html・delete.html
     → shared/proxy-client.js
       → HTTPS + Authorization: Bearer <入力した合言葉>
         → Cloudflare Worker math-app-proxy
@@ -15,6 +15,8 @@ GitHub Pages /math-app/
 ## 使い方
 
 各科目の「ページを追加する」で合言葉を入力し、HTML を選択するかドラッグ＆ドロップします。必要な場合は「コンテンツ一覧へ戻る」リンクを挿入します。完了表示と新しい一覧カードの表示名は、HTML の title ではなくファイル名（既定では末尾の .html を除去）です。既存カードがあるファイルの再送信はカードを重複追加しません。
+
+算数一覧の上部で「中学への算数」と「Sapix」を切り替えられます。それぞれ `math` と `sapix` に保存され、追加・削除は選択した教材の一覧だけに反映されます。合言葉と容量上限は共通です。月間号PDFから教材を作成する「更新」は、中学への算数側で利用します。
 
 「ページを削除する」では公開済みの一覧を読み込んで対象を選びます。一覧に未掲載のファイルはファイル名を指定できます。削除成功後、その行は画面から消えます。反映に時間がかかる場合は GitHub Pages の再公開後に読み直してください。合言葉を間違えた場合は入力し直して再実行できます。
 
