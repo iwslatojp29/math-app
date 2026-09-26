@@ -231,7 +231,7 @@ def inventory_progress(kind, phase, pages, attempt, status, known_count, issues=
     print("monthly inventory: " + json_bytes(record).decode(), flush=True)
 
 
-def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specification, *, booklet_issue=None):
+def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specification, *, booklet_issue=None, page_management=None):
     """Resolve distant official answers against the complete, stable problem catalog."""
     by_id = {problem["id"]: problem for problem in problems}
     for problem in problems:
@@ -277,9 +277,11 @@ def reconcile_solution_pages(problems, solution_pages, images, ai, kind, specifi
         for link in accepted["links"]:
             target = by_id[link["problemId"]]
             target["officialSolutionPages"] = sorted(set(target["officialSolutionPages"] + link["pdfPages"]))
+        if page_management is not None:
+            page_management.append(copy.deepcopy(accepted))
 
 
-def inventory_questions(doc, ai, plan, directory, specification):
+def inventory_questions(doc, ai, plan, directory, specification, *, page_management=None):
     images = {page: page_image(doc, page, directory, prefix=plan["kind"] + "-lesson") for page in range(1, len(doc) + 1)}
     problems, solutions = [], []
     for start in range(1, len(doc) + 1, 5):
@@ -347,9 +349,57 @@ def inventory_questions(doc, ai, plan, directory, specification):
     solution_pages.update(page for problem in problems for page in problem["officialSolutionPages"])
     solution_pages.update(page for link in solutions for page in link["pdfPages"])
     require(solution_pages <= set(images), "solution_pages", "公式解答の参照ページを確認できません。", True)
+    records = []
     reconcile_solution_pages(problems, sorted(solution_pages), images, ai, plan["kind"], specification,
-                             booklet_issue=plan.get("bookletIssue"))
+                             booklet_issue=plan.get("bookletIssue"),
+                             **({"page_management": records} if page_management is not None else {}))
+    if page_management is not None:
+        page_management["solutionPageRecords"] = records
     return problems, images
+
+
+def inventory_scope_context(candidate, issues, entry, inventory, image_pages, images, page_management):
+    """Add actual whole-document evidence only after an explicit scope conflict.
+
+    This is a request for fresh source-grounded verification, not an approval or
+    a filter over findings. Original per-problem requests remain cache-compatible.
+    """
+    if (not isinstance(candidate, dict) or not issues
+            or issues[0] != "候補自身の数学・読みの検証が未解決です。"):
+        return None
+    findings = candidate["verification"]["unresolvedIssues"]
+    if not any("unpairedPages" in issue or (
+            re.search(r"全PDF|全ページ|全体管理|全体の管理|全問一覧|別問題|他の問題", issue)
+            and re.search(r"未確認|未解決|未完了|保持|管理|対応|続き", issue)) for issue in findings):
+        return None
+    records = [{"id": item["id"], "sectionId": item["sectionId"], "number": item["number"],
+                "pdfPages": item["pdfPages"], "officialSolutionPages": item["officialSolutionPages"],
+                "subquestionIds": [sub["id"] for sub in item["subquestions"]]} for item in inventory]
+    neighbours = [item for item in records if item["id"] != entry["id"] and set(item["pdfPages"]) & set(image_pages)]
+    shown = image_pages + sorted({page for item in neighbours for page in
+        item["pdfPages"] + item["officialSolutionPages"]} - set(image_pages))
+    require(set(shown) <= set(images), "lesson_source_images", "隣接問題の続き画像を確認できません。公開を保留しました。", True)
+    management = page_management.get("solutionPageRecords", [])
+    observed = {"targetProblemId": entry["id"], "previousScopeFindings": findings, "totalProblemCount": len(inventory),
+        "allProblemIds": [item["id"] for item in records], "perProblem": records,
+        "targetSourcePages": entry["pdfPages"], "targetOfficialSolutionPages": entry["officialSolutionPages"],
+        "samePageOtherProblems": neighbours, "currentImagePages": shown,
+        "contextOnlyImagePages": [page for page in shown if page not in image_pages],
+        "solutionPagesChecked": sorted({page for record in management for page in record["checkedPdfPages"]}),
+        "observedUnpairedPages": [item for record in management for item in record["unpairedPages"] if item["pdfPage"] in shown]}
+    context = ("\n【全問一覧と今回の1問の担当範囲】次は全問一覧と公式解答対応の検査工程から保持した実データです。"
+        "推測したページ対応ではありません。今回の結果はtargetProblemIdだけですが、他の登録問題を削除・対象外にはしません。"
+        "全PDFの全問を別々の生成で完成させて結合します。同じ原画像に写る別問題の冒頭と、今回追加した続き・解答画像を照合してください。"
+        "今回の添付画像の実際の順序はcurrentImagePagesです。元画像の後ろにcontextOnlyImagePagesを追加しています。"
+        "contextOnlyImagePagesは同頁別問題の所属・続き・公式解答対応を確かめる補助資料です。別問題の条件・答えを対象問題へ混ぜない。"
+        "sourceImageIdsはtargetSourcePagesだけを保持し、補助画像を対象問題の原問題画像として追加しない。"
+        "全ページの未対応解答管理unpairedPagesは先行する公式解答照合schemaの項目です。今回のproblem schemaへ新設する項目ではありません。"
+        "observedUnpairedPagesが空でも未観測の理由を創作しない。確認できた対応はverificationの具体的な根拠として述べられます。"
+        "ただし一覧を盲信して前回の指摘を削除しない。原画像と照合し、対象問題自身の条件・全小問・続き・解答対応に不足や矛盾があれば"
+        "必ずneeds_review/approved=falseを維持する。別問題の登録や続きが画像で確定できない場合も疑義を残す。"
+        "全小問を独立に検算し、前回の具体的所見が追加証拠で解消した場合だけverified/approved=trueにする。"
+        "管理情報:" + json_bytes(observed).decode())
+    return context, shown
 
 
 def validate_problem_coverage(problem, inventory):
@@ -418,12 +468,13 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
         return ["講義の構造: " + report["issue"]]
 
     with open_pdf(pdf_path) as doc:
+        page_management = (generation_context or {}).get("page_management", {})
         if generation_context is not None and "inventory" in generation_context:
             inventory, images = generation_context["inventory"], generation_context["images"]
         else:
-            inventory, images = inventory_questions(doc, ai, plan, directory, specification)
+            inventory, images = inventory_questions(doc, ai, plan, directory, specification, page_management=page_management)
             if generation_context is not None:
-                generation_context.update(inventory=inventory, images=images)
+                generation_context.update(inventory=inventory, images=images, page_management=page_management)
         previous = {item["id"]: item for item in (previous_lesson or {}).get("problems", [])}
         if repair_cycle:
             expected_ids = {entry["id"] for entry in inventory}
@@ -516,8 +567,23 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
             last_independent_review = None
             runtime_scope_limited = False
             scope_recovery = ""
-            for attempt in range(6):
-                if attempt == 4:
+            inventory_scope_recovery = ""
+            inventory_scope_start = None
+            for attempt in range(8):
+                if attempt in (4, 6):
+                    if inventory_scope_start is not None:
+                        break
+                    if attempt == 6 or not runtime_scope_limited:
+                        recovered_scope = inventory_scope_context(candidate, last_issues, entry, inventory,
+                                                                  image_pages, images, page_management)
+                        if recovered_scope is None:
+                            break
+                        context, image_pages = recovered_scope
+                        inputs = [image_data(images[page]) for page in image_pages]
+                        scope_recovery += context
+                        inventory_scope_recovery = context
+                        inventory_scope_start = attempt
+                if attempt == 4 and inventory_scope_start is None:
                     # Existing four requests/cache entries are unchanged. Only
                     # explicit lack of a runtime in self-verification earns two
                     # scoped retries; no finding or approval is rewritten here.
@@ -550,7 +616,8 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     "未解決ならverificationをneeds_reviewとして具体的に残す。直近の指摘:"
                     + json_bytes(_safe_lesson_details(last_issues)).decode() if attempt >= 2 else "")
                 try:
-                    candidate = request_ai.structured(f"lesson-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
+                    attempt_key = (f"inventory-scope-{attempt - inventory_scope_start}" if inventory_scope_start is not None else str(attempt))
+                    candidate = request_ai.structured(f"lesson-{plan['kind']}-{entry['id']}-{attempt_key}" + task_suffix,
                         prompt + feedback + repair_discipline + scope_recovery, problem_schema, inputs, max_tokens=28000)
                 except StudioError as error:
                     if error.code != "model_schema":
@@ -573,7 +640,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     continue
                 report_phase("reviewing")
                 try:
-                    review = request_ai.structured(f"lesson-review-{plan['kind']}-{entry['id']}-{attempt}" + task_suffix,
+                    review = request_ai.structured(f"lesson-review-{plan['kind']}-{entry['id']}-{attempt_key}" + task_suffix,
                     specification + "\n独立した数学・教材検証者として、原画像から全小問を別に検算し、以下の候補を点検。"
                     "重要な条件、相似の条件と対応、面積体積比、単位、例外、全式、数の出所、解法選択理由を確認。"
                     "原図の見た目を根拠にしない。図の点名・primitive座標・与件と導出値・発話state・静的解説・答えを照合。"
@@ -648,7 +715,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 report_phase("reviewing")
                 try:
                     selection = request_ai.structured(f"lesson-label-targets-{plan['kind']}-{entry['id']}" + task_suffix,
-                        selection_prompt, selection_schema, inputs, max_tokens=8000)
+                        selection_prompt + inventory_scope_recovery, selection_schema, inputs, max_tokens=8000)
                     check_stop()
                     jsonschema.validate(selection, selection_schema)
                 except (StudioError, jsonschema.ValidationError) as error:
@@ -684,7 +751,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     patch = None
                     try:
                         patch = request_ai.structured(f"lesson-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + task_suffix,
-                            label_prompt + repair_feedback, label_schema, inputs, max_tokens=14000)
+                            label_prompt + repair_feedback + inventory_scope_recovery, label_schema, inputs, max_tokens=14000)
                         check_stop()
                         jsonschema.validate(patch, label_schema)
                     except (StudioError, jsonschema.ValidationError) as error:
@@ -724,7 +791,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         + "。修復対象識別:" + json_bytes(targets).decode()
                                         + "。修復前所見:" + json_bytes(original_issues).decode()
                                         + "。修復前候補:" + json_bytes(original).decode()
-                                        + "。修復後候補:" + json_bytes(patched).decode(), PROBLEM_REVIEW, inputs, max_tokens=14000)
+                                        + "。修復後候補:" + json_bytes(patched).decode() + inventory_scope_recovery, PROBLEM_REVIEW, inputs, max_tokens=14000)
                                     check_stop()
                                     jsonschema.validate(audit, PROBLEM_REVIEW)
                                 except (StudioError, jsonschema.ValidationError) as error:
@@ -820,7 +887,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     try:
                         patch = request_ai.structured(
                             f"lesson-reference-repair-{plan['kind']}-{entry['id']}-{reference_attempt}" + task_suffix,
-                            reference_prompt + repair_feedback + dimension_recovery, reference_schema, inputs, max_tokens=14000)
+                            reference_prompt + repair_feedback + dimension_recovery + inventory_scope_recovery, reference_schema, inputs, max_tokens=14000)
                         check_stop()
                         jsonschema.validate(patch, reference_schema)
                     except (StudioError, jsonschema.ValidationError) as error:
@@ -884,7 +951,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         "画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                                         + "。修復内容:" + json_bytes(patch).decode()
                                         + "。修復前候補:" + json_bytes(original).decode()
-                                        + "。修復後候補:" + json_bytes(patched).decode(), PROBLEM_REVIEW, inputs, max_tokens=14000)
+                                        + "。修復後候補:" + json_bytes(patched).decode() + inventory_scope_recovery, PROBLEM_REVIEW, inputs, max_tokens=14000)
                                     check_stop()
                                     jsonschema.validate(audit, PROBLEM_REVIEW)
                                 except (StudioError, jsonschema.ValidationError) as error:
