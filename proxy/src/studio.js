@@ -1,6 +1,7 @@
 import { fetchCatalog, validOutputTokens } from './studio-models.js';
 import { studioPage } from './studio-ui.js';
 import { updateIndex } from './index.js';
+import { SapixRecords, sapixCors } from './sapix-records.js';
 
 export const FOLDERS = Object.freeze({ source: '1xHRr5uA9idJP0H9BJcbldZiXdARDxCxi', practice: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp', advanced: '1HVHjm0QceRgUjhYIAmI7kAfafrFjp-S0', html: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp' });
 const SPEC_VERSION = 'monthly-2026-09-20-v1';
@@ -81,7 +82,7 @@ export function handleStudio(request, env) {
 }
 
 export class StudioState {
-  constructor(ctx, env) { this.ctx = ctx; this.storage = ctx.storage; this.env = env; this.mutation = Promise.resolve(); }
+  constructor(ctx, env) { this.ctx = ctx; this.storage = ctx.storage; this.env = env; this.mutation = Promise.resolve(); this.sapix = new SapixRecords(this, { result, fail, random, digest, readBody }); }
   async serial(action) {
     const previous = this.mutation; let release;
     this.mutation = new Promise(resolve => { release = resolve; });
@@ -95,10 +96,11 @@ export class StudioState {
   }
   async fetch(request) {
     try { return await this.route(request); }
-    catch (error) { const safe = error instanceof StudioError ? error : new StudioError(500, 'internal_error'); return result({ error: safe.code, message: errorText[safe.code] }, safe.status); }
+    catch (error) { const safe = error instanceof StudioError ? error : new StudioError(500, 'internal_error'); return result({ error: safe.code, message: errorText[safe.code] }, safe.status, new URL(request.url).pathname.startsWith('/api/sapix/') ? sapixCors(request, this.env) : {}); }
   }
   async route(request) {
     const url = new URL(request.url), path = url.pathname.replace(/\/$/, ''), method = request.method;
+    if (path.startsWith('/api/sapix/')) return this.sapix.route(request, url, path);
     if (path === '/studio' && method === 'GET') return new Response(studioPage(), { headers: {
       'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
       'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
@@ -147,24 +149,29 @@ export class StudioState {
     }
     fail(404, 'not_found');
   }
-  async oauthStart() {
-    if (!this.configured()) fail(503, 'not_configured');
+  async oauthStart(sapix = null) {
+    if (sapix ? !this.sapix.configured() : !this.configured()) fail(503, 'not_configured');
     const state = random(), verifier = random();
     const auth = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-    auth.search = new URLSearchParams({ client_id: this.env.GOOGLE_CLIENT_ID, redirect_uri: `${this.env.STUDIO_ORIGIN}/api/studio/google/callback`, response_type: 'code', scope: 'openid email https://www.googleapis.com/auth/drive', access_type: 'offline', prompt: 'consent', state, code_challenge: await digest(verifier), code_challenge_method: 'S256', login_hint: this.env.STUDIO_OWNER_EMAIL }).toString();
-    const value = await seal({ state, verifier, expires: Date.now() + 600000 }, this.env.STUDIO_SECRET, 'oauth');
+    auth.search = new URLSearchParams({ client_id: this.env.GOOGLE_CLIENT_ID, redirect_uri: `${this.env.STUDIO_ORIGIN}/api/studio/google/callback`, response_type: 'code', scope: sapix ? 'openid email' : 'openid email https://www.googleapis.com/auth/drive', ...(sapix ? {} : { access_type: 'offline', prompt: 'consent' }), state, code_challenge: await digest(verifier), code_challenge_method: 'S256', login_hint: this.env.STUDIO_OWNER_EMAIL }).toString();
+    const value = await seal({ state, verifier, expires: Date.now() + 600000, ...(sapix ? { sapix } : {}) }, this.env.STUDIO_SECRET, 'oauth');
     return new Response(null, { status: 302, headers: { Location: auth.href, 'Set-Cookie': cookie('__Host-studio-oauth', value, 600), 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' } });
   }
   async oauthCallback(request, url) {
     const value = await unseal(getCookie(request, '__Host-studio-oauth'), this.env.STUDIO_SECRET || '', 'oauth');
     if (!value || value.expires < Date.now() || !await sameSecret(value.state, url.searchParams.get('state')) || !url.searchParams.get('code')) fail(403, 'forbidden');
     const response = await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_id: this.env.GOOGLE_CLIENT_ID, client_secret: this.env.GOOGLE_CLIENT_SECRET, code: url.searchParams.get('code'), code_verifier: value.verifier, redirect_uri: `${this.env.STUDIO_ORIGIN}/api/studio/google/callback`, grant_type: 'authorization_code' }), signal: AbortSignal.timeout(15000) });
-    if (!response.ok) fail(401, 'drive_reconnect');
+    if (!response.ok) fail(401, value.sapix ? 'unauthorized' : 'drive_reconnect');
     const token = await response.json();
     const identityResponse = await fetch('https://openidconnect.googleapis.com/v1/userinfo', { headers: { Authorization: `Bearer ${token.access_token}` }, signal: AbortSignal.timeout(15000) });
     if (!identityResponse.ok) fail(401, 'unauthorized');
     const identity = await identityResponse.json();
     if (!identity.email_verified || identity.email !== this.env.STUDIO_OWNER_EMAIL) fail(403, 'forbidden');
+    if (value.sapix) {
+      const response = await this.sapix.issueCode(value.sapix);
+      response.headers.append('Set-Cookie', cookie('__Host-studio-oauth', '', 0));
+      return response;
+    }
     const previous = await unseal(await this.storage.get('google') || '', this.env.STUDIO_SECRET, 'google');
     const refreshToken = token.refresh_token || previous?.refreshToken;
     if (!refreshToken || !String(token.scope || '').split(' ').includes('https://www.googleapis.com/auth/drive')) fail(401, 'drive_reconnect');

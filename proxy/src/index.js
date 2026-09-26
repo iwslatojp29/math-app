@@ -323,7 +323,7 @@ async function mutateIndex(github, env, path, initial, body, label, remove) {
 export default {
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
-    if (path === '/studio' || path.startsWith('/studio/') || path.startsWith('/api/studio/')) return handleStudio(request, env);
+    if (path === '/studio' || path.startsWith('/studio/') || path.startsWith('/api/studio/') || path.startsWith('/api/sapix/')) return handleStudio(request, env);
     const endpoint = path === '/api/commit' || path === '/api/delete';
     const origin = request.headers.get('Origin');
     const allowedOrigin = origin && origin === env.ALLOWED_ORIGIN ? origin : null;

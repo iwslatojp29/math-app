@@ -40,6 +40,8 @@ GitHub Pages /math-app/
 
 ## API
 
+SAPIX の採点記録を別端末と同期する認証・保存の説明は [SAPIX-RECORDS.md](SAPIX-RECORDS.md) を参照してください。
+
 - POST /api/commit: `{folder, filename, contentBase64, commitMessage?, subject?}`。subject は science-society のみ「理科」「社会」を指定し、省略時は「理科」です。
 - POST /api/delete: `{folder, filename}`。
 - 許可 Origin での OPTIONS は 204。認証なし・不一致は 401、許可外 Origin は 403。その他のパスとメソッドは 404。

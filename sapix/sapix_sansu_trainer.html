@@ -295,6 +295,12 @@ svg{display:block}
 .modal-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
 .modal-actions input[type=file]{display:none}
 .scrim{display:none;position:fixed;inset:0;background:rgba(10,14,22,.45);z-index:19}
+.cloud-sync{margin:12px 24px 0;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px}
+.cloud-sync .cloud-copy{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.cloud-sync strong,.cloud-sync small{display:block}
+.cloud-sync small{margin-top:3px;color:var(--ink-2)}
+.cloud-sync[data-error="true"]{border-color:var(--ng)}
+@media(max-width:640px){.cloud-sync{margin:10px 12px 0;padding:12px}.cloud-sync .tbtn{min-height:40px}}
 
 @media (max-width:900px){
   .app{grid-template-columns:minmax(0,1fr)}
@@ -365,7 +371,7 @@ svg{display:block}
         <button class="tbtn" id="importBtn">読み込む</button>
         <button class="tbtn danger" id="clearBtn">全消去</button>
       </div>
-      <div class="foot-note" id="recnote">記録はこの端末のブラウザに保存されます。</div>
+      <div class="foot-note" id="recnote">記録は端末に保存されます。Googleで接続すると、同じアカウントの端末間で同期します。</div>
     </div>
   </aside>
   <div class="scrim" id="scrim"></div>
@@ -375,6 +381,12 @@ svg{display:block}
       <div class="crumb"><span id="crumbUnit">計算</span><span class="sep">›</span><span class="pos" id="crumbPos"></span></div>
       <div class="today" id="today"></div>
     </div>
+    <section class="cloud-sync" id="cloudPanel" aria-label="記録の端末間同期">
+      <div class="cloud-copy"><strong id="cloudStatus" role="status" aria-live="polite">記録はこの端末に保存されます</strong><small id="cloudIdentity">Googleで接続すると、ほかの端末でも記録を続けられます。</small></div>
+      <button type="button" class="tbtn" id="cloudConnect">Googleで接続</button>
+      <button type="button" class="tbtn" id="cloudSync" hidden>今すぐ同期</button>
+      <button type="button" class="tbtn" id="cloudDisconnect" hidden>接続を解除</button>
+    </section>
     <div class="content" id="content"></div>
   </main>
 </div>
@@ -388,6 +400,7 @@ svg{display:block}
   </div>
 </div>
 
+<script src="./record-sync.js?v=20260926-1"></script>
 <script>
 (function(){
 'use strict';
@@ -14522,13 +14535,15 @@ registerProblems([
 /* ====================== 状態・保存 ====================== */
 var LS_REC = 'sapix_sansu_records_v1', LS_SET = 'sapix_sansu_settings_v1';
 var state = { unit: '計算', filter: 'all', test: '*', sort: 'no', pid: null, revealed: false, justRecorded: null, records: {}, recordsError: '', recordsBlocked: false, recordsRaw: null, settings: {limit: 60, sound: true} };
+var recordStore = null, syncReady = false;
 
 function loadAll(){
   try {
-    state.recordsRaw = localStorage.getItem(LS_REC);
-    var loaded = validateRecordMap(JSON.parse(state.recordsRaw == null ? '{}' : state.recordsRaw));
+    recordStore = SapixRecordSync.create({onChange: refreshSyncedRecords, onStatus: renderCloudStatus});
+    var loaded = recordStore.load();
+    state.recordsRaw = loaded.raw;
     state.records = loaded.records;
-    if (loaded.invalid) throw new Error('invalid records');
+    if (loaded.blocked) throw new Error('invalid records');
     state.recordsBlocked = false;
     recordsError('');
   } catch (e) {
@@ -14576,7 +14591,7 @@ function recordsError(message){
   } else if (modalError) modalError.remove();
   if (message) toast(message);
 }
-function saveRecords(candidate, replaceUnreadable){
+function saveRecords(candidate, replaceUnreadable, operation){
   if (state.recordsBlocked && !replaceUnreadable) {
     recordsError('保存済みの記録に読み取れない項目があるため、上書きしていません。「記録を書き出す」で元データを保管して確認してください。');
     return false;
@@ -14584,10 +14599,13 @@ function saveRecords(candidate, replaceUnreadable){
   try {
     var checked = validateRecordMap(candidate);
     if (checked.invalid) throw new Error('invalid records');
-    var json = JSON.stringify(checked.records);
-    localStorage.setItem(LS_REC, json);
-    state.records = checked.records;
-    state.recordsRaw = json;
+    if (!recordStore) throw new Error('sync unavailable');
+    if (operation && operation.type === 'put') operation.id = recordStore.put(operation.pid, operation.value, operation.id);
+    else if (operation && operation.type === 'delete') recordStore.remove([operation.id]);
+    else if (operation && operation.type === 'import') operation.added = recordStore.importRecords(operation.records);
+    else recordStore.replaceRecords(checked.records, {recover: !!replaceUnreadable});
+    state.records = recordStore.getRecords();
+    state.recordsRaw = null;
     state.recordsBlocked = false;
     recordsError('');
     return true;
@@ -14595,6 +14613,28 @@ function saveRecords(candidate, replaceUnreadable){
     recordsError('記録を保存できませんでした。今回の変更は保存されていません。ブラウザの保存設定や空き容量を確認し、もう一度押してください。');
     return false;
   }
+}
+function renderCloudStatus(s){
+  var panel = $('cloudPanel'); if (!panel) return;
+  panel.setAttribute('data-error', String(!!s.error));
+  $('cloudStatus').textContent = s.error || (s.syncing ? '記録を同期中…' : s.connected ? (s.pending ? '端末に保存済み・未同期 ' + s.pending + ' 件' : s.synced ? '記録を同期しました' : '接続済み・同期を確認中') : '記録はこの端末に保存されています');
+  $('cloudIdentity').textContent = s.connected ? s.email : 'Googleで接続すると、ほかの端末でも記録を続けられます。';
+  $('cloudConnect').hidden = s.connected && !s.needsAuth;
+  $('cloudConnect').textContent = s.needsAuth ? 'Googleに再接続' : 'Googleで接続';
+  $('cloudSync').hidden = !s.connected; $('cloudSync').disabled = s.syncing || s.needsAuth || s.blocked;
+  $('cloudDisconnect').hidden = !s.connected;
+}
+function refreshSyncedRecords(records){
+  state.records = records;
+  if (!syncReady) return;
+  var p = current();
+  if (p && $('hist')) $('hist').innerHTML = historyHtml(p.id);
+  if (state.justRecorded && !recordStore.getEntries().some(function(e){ return e.id === state.justRecorded; })) {
+    state.justRecorded = null;
+    if ($('recorded')) $('recorded').hidden = true;
+    var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', 'false');
+  }
+  renderSide(); renderTop();
 }
 function saveSettings(){ try { localStorage.setItem(LS_SET, JSON.stringify({limit: state.settings.limit, sound: state.settings.sound, unit: state.unit, filter: state.filter, test: state.test, sort: state.sort, pid: state.pid})); } catch (e) {} }
 
@@ -14825,13 +14865,10 @@ function reveal(){
 }
 function record(r){
   var p = current(); if (!p || !state.revealed || typeof r !== 'string' || !Object.prototype.hasOwnProperty.call(MARK, r)) return;
-  var candidate = copyRecords(), list = candidate[p.id] || (candidate[p.id] = []);
   var rec = {d: todayISO(), r: r, s: Math.round(elapsedSec()), over: T.over || undefined};
-  var index = state.justRecorded;
-  if (index != null && list[index]) list[index] = rec;
-  else { list.push(rec); index = list.length - 1; }
-  if (!saveRecords(candidate)) return;
-  state.justRecorded = index;
+  var operation = {type: 'put', id: state.justRecorded, pid: p.id, value: rec};
+  if (!saveRecords(state.records, false, operation)) return;
+  state.justRecorded = operation.id;
   $('hist').innerHTML = historyHtml(p.id, true);
   $('hist').scrollLeft = -1e6;
   var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-r') === r));
@@ -14843,10 +14880,7 @@ function record(r){
 }
 function undoRecord(){
   var p = current(); if (!p || state.justRecorded == null) return;
-  var candidate = copyRecords(), list = candidate[p.id] || [];
-  if (!list[state.justRecorded]) return;
-  list.splice(state.justRecorded, 1); if (!list.length) delete candidate[p.id];
-  if (!saveRecords(candidate)) return;
+  if (!saveRecords(state.records, false, {type: 'delete', id: state.justRecorded})) return;
   state.justRecorded = null;
   $('hist').innerHTML = historyHtml(p.id);
   var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', 'false');
@@ -14921,13 +14955,13 @@ function mergeRecords(obj){
     cur.sort(function(a, b){ return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
     if (!cur.length) delete candidate[pid];
   });
-  return {records: candidate, added: added};
+  return {records: candidate, added: added, incoming: checked.records};
 }
 function importRecords(){
   showModal({title: '記録を読み込む', text: '書き出した内容を貼りつけるか、ファイルを選んでください。今の記録に<b>追加</b>されます（同じ記録は重複しません）。', textarea: true, value: '', actions: [
     {label: 'ファイルを選ぶ', fn: function(){ var inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json,application/json'; inp.addEventListener('change', function(){ var f = inp.files[0]; if (!f) return; var fr = new FileReader(); fr.onload = function(){ $('modalTa').value = String(fr.result || ''); }; fr.readAsText(f); }); inp.click(); }},
     {label: '読み込む', fn: function(){
-      try { var result = mergeRecords(JSON.parse($('modalTa').value)); if (!saveRecords(result.records)) return; hideModal(); ensureSelection(); renderSide(); renderProblem(); toast(result.added + ' 件の記録を追加しました'); }
+      try { var result = mergeRecords(JSON.parse($('modalTa').value)); var operation = {type: 'import', records: result.incoming}; if (!saveRecords(result.records, false, operation)) return; hideModal(); ensureSelection(); renderSide(); renderProblem(); toast(operation.added + ' 件の記録を追加しました'); }
       catch (e) { recordsError('読み込めませんでした。日付・採点・所要時間・形式を確認し、書き出した内容をそのまま貼りつけてください。今の記録は変更していません。'); }
     }},
     {label: '閉じる', fn: hideModal}
@@ -14935,7 +14969,7 @@ function importRecords(){
 }
 function clearRecords(){
   var n = 0; Object.keys(state.records).forEach(function(k){ n += state.records[k].length; });
-  showModal({title: '記録をすべて消去', text: 'この端末に保存されている ' + n + ' 件の記録' + (state.recordsBlocked ? 'と、読み取れない保存済みデータもすべて' : '') + 'を消します。この操作は元に<b>もどせません</b>。心配なら先に「記録を書き出す」で保存してください。', actions: [
+  showModal({title: '記録をすべて消去', text: '現在表示されている ' + n + ' 件の記録' + (state.recordsBlocked ? 'と、読み取れない保存済みデータもすべて' : '') + 'を消します。Googleで接続している場合、消去はほかの端末にも同期されます。この操作は元に<b>もどせません</b>。心配なら先に「記録を書き出す」で保存してください。', actions: [
     {label: '消去する', danger: true, fn: function(){ if (!saveRecords({}, true)) return; hideModal(); ensureSelection(); renderSide(); renderProblem(); toast('記録を消去しました'); }},
     {label: 'やめる', fn: hideModal}
   ]});
@@ -14984,6 +15018,18 @@ $('sound').setAttribute('aria-checked', String(state.settings.sound));
 ensureSelection();
 renderSide();
 renderProblem();
+syncReady = true;
+if (recordStore) {
+  $('cloudConnect').addEventListener('click', function(){ recordStore.connect().catch(function(){ recordsError('Google接続を開始できませんでした。ブラウザの保存設定と通信を確認してください。'); }); });
+  $('cloudSync').addEventListener('click', function(){ recordStore.sync(); });
+  $('cloudDisconnect').addEventListener('click', function(){ recordStore.disconnect().catch(function(){ recordsError('接続情報を消去できませんでした。ブラウザの保存設定を確認してください。'); }); });
+  window.addEventListener('online', function(){ recordStore.sync(); });
+  window.addEventListener('focus', function(){ recordStore.sync(); });
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) recordStore.sync(); });
+  setInterval(function(){ if (!document.hidden) recordStore.sync(); }, 60000);
+  var hasAuthCallback = /sapix_(code|state|error)=/.test(location.hash);
+  recordStore.finishAuth().then(function(){ if (!hasAuthCallback) recordStore.sync(); });
+}
 
 })();
 </script>
