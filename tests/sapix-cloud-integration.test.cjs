@@ -21,7 +21,7 @@ class DurableStorage {
 }
 async function setup() {
   const {StudioState,seal} = await import('../proxy/src/studio.js');
-  const env = {GOOGLE_CLIENT_ID:'test-client', GOOGLE_CLIENT_SECRET:'test-client-secret', STUDIO_SECRET:'integration-test-secret-only', STUDIO_OWNER_EMAIL:'owner@example.test', STUDIO_ORIGIN:'https://math-app-proxy.iwslatojp29.workers.dev', ALLOWED_ORIGIN:'https://iwslatojp29.github.io'};
+  const env = {GOOGLE_CLIENT_ID:'test-client', GOOGLE_CLIENT_SECRET:'test-client-secret', STUDIO_SECRET:'integration-test-secret-only', STUDIO_OWNER_EMAIL:'owner@example.test', SAPIX_OWNER_EMAIL:'owner@example.test', STUDIO_ORIGIN:'https://math-app-proxy.iwslatojp29.workers.dev', ALLOWED_ORIGIN:'https://iwslatojp29.github.io'};
   const storage = new DurableStorage(), worker = new StudioState({storage},env);
   const cookie = await seal({email:env.STUDIO_OWNER_EMAIL, csrf:'test', expires:Date.now()+60000},env.STUDIO_SECRET,'session');
   async function transport(input, init = {}) {

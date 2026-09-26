@@ -7,7 +7,7 @@ import worker from '../src/index.js';
 // All accounts, credentials and storage here are isolated test fixtures.
 const ENV = {
   GOOGLE_CLIENT_ID: 'test-client', GOOGLE_CLIENT_SECRET: 'test-google-secret', STUDIO_SECRET: 'test-encryption-key',
-  STUDIO_OWNER_EMAIL: 'owner@example.test', STUDIO_ORIGIN: 'https://worker.example.test',
+  STUDIO_OWNER_EMAIL: 'owner@example.test', SAPIX_OWNER_EMAIL: 'owner@example.test', STUDIO_ORIGIN: 'https://worker.example.test',
   ALLOWED_ORIGIN: 'https://iwslatojp29.github.io', STUDIO_RUNNER_TOKEN: 'r'.repeat(43),
   UPLOAD_SECRET: 'u'.repeat(43), GITHUB_TOKEN: 'g'.repeat(43), OPENAI_API_KEY: 'unused',
 };
@@ -139,7 +139,7 @@ test('grading login requests identity only, checks the owner, and leaves Drive c
 });
 
 test('grading OAuth rejects a non-owner identity and does not create authorization codes', async () => {
-  const f = await fixture(), value = await seal({ state: 'google-state', verifier: 'fake-verifier', expires: Date.now() + 60000, sapix: { state: 's'.repeat(24), challenge: hash('v'.repeat(43)) } }, ENV.STUDIO_SECRET, 'oauth');
+  const f = await fixture(), value = await seal({ state: 'google-state', verifier: 'fake-verifier', expires: Date.now() + 60000, sapix: { state: 's'.repeat(24), challenge: hash('v'.repeat(43)), email: ENV.SAPIX_OWNER_EMAIL } }, ENV.STUDIO_SECRET, 'oauth');
   const original = globalThis.fetch;
   globalThis.fetch = async url => url.endsWith('/token') ? Response.json({ access_token: 'fake' }) : Response.json({ email: 'other@example.test', email_verified: true });
   try {
@@ -237,4 +237,123 @@ test('long deterministic legacy IDs and many attempts use bounded per-record val
   for (const [key, value] of await f.storage.list({ prefix: 'sapix:record:' })) { assert(key.length < 100); assert(JSON.stringify(value).length < 2000); }
   assert.deepEqual(await f.storage.get('job:unrelated'), untouched);
   assert.equal(await f.storage.get('google'), 'protected-token');
+});
+
+async function identityCallback(f, started, email, tokenOverrides = {}) {
+  const cookie = started.headers.get('Set-Cookie').split(';')[0];
+  const oauth = await unseal(cookie.slice(cookie.indexOf('=') + 1), f.env.STUDIO_SECRET, 'oauth');
+  const original = globalThis.fetch;
+  globalThis.fetch = async url => url === 'https://oauth2.googleapis.com/token'
+    ? Response.json({ access_token: 'fake-identity-token', expires_in: 3600, scope: 'openid email', ...tokenOverrides })
+    : Response.json({ email, email_verified: true });
+  try { return await f.state.fetch(request('/api/studio/google/callback?state=' + oauth.state + '&code=test-google-code', { headers: { Cookie: cookie } })); }
+  finally { globalThis.fetch = original; }
+}
+
+async function childLogin(f) {
+  const verifier = 'c'.repeat(43), state = 'd'.repeat(24);
+  const started = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state, challenge: hash(verifier) }), { cookie: f.cookie }));
+  assert.equal(started.status, 302);
+  const google = new URL(started.headers.get('Location'));
+  assert.equal(google.origin, 'https://accounts.google.com');
+  assert.equal(google.searchParams.get('login_hint'), f.env.SAPIX_OWNER_EMAIL);
+  assert.equal(google.searchParams.get('prompt'), 'select_account');
+  assert.equal(google.searchParams.get('scope'), 'openid email');
+  const response = await identityCallback(f, started, f.env.SAPIX_OWNER_EMAIL);
+  assert.equal(response.status, 302);
+  assert(!response.headers.get('Set-Cookie').includes('__Host-studio='));
+  const fragment = new URLSearchParams(new URL(response.headers.get('Location')).hash.slice(1));
+  assert.equal(fragment.get('sapix_state'), state);
+  return json(f, '/api/sapix/auth/exchange', { method: 'POST', body: { code: fragment.get('sapix_code'), verifier } });
+}
+
+test('a dedicated child account signs into grading without inheriting or receiving Studio and Drive access', async () => {
+  const f = await fixture({ SAPIX_OWNER_EMAIL: 'child@example.test' });
+  await f.storage.put('google', 'existing-studio-drive-credential');
+  await f.storage.put('job:untouched', { status: 'needs_attention' });
+  const child = await childLogin(f);
+  assert.equal(child.email, f.env.SAPIX_OWNER_EMAIL);
+  const snapshot = await write(f, child.token, [put('child_attempt')]);
+  assert.equal(snapshot.entries.length, 1);
+  assert.equal((await f.state.fetch(request('/api/studio/sources', { token: child.token }))).status, 401);
+  assert.equal((await f.state.fetch(request('/api/studio/runner/drive-token', { token: child.token }))).status, 401);
+  const childCookie = await seal({ email: f.env.SAPIX_OWNER_EMAIL, csrf: 'test', expires: Date.now() + 60000 }, f.env.STUDIO_SECRET, 'session');
+  assert.equal((await f.state.fetch(request('/api/studio/sources', { cookie: childCookie }))).status, 401);
+  assert.deepEqual(await f.storage.get('job:untouched'), { status: 'needs_attention' });
+  assert.equal(await f.storage.get('google'), 'existing-studio-drive-credential');
+  assert.equal(f.state.access, undefined);
+});
+
+test('Studio owner identity and a valid Studio cookie cannot authorize a different grading account', async () => {
+  const f = await fixture({ SAPIX_OWNER_EMAIL: 'child@example.test' });
+  const started = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state: 's'.repeat(24), challenge: hash('v'.repeat(43)) }), { cookie: f.cookie }));
+  assert.equal(new URL(started.headers.get('Location')).origin, 'https://accounts.google.com');
+  assert.equal((await identityCallback(f, started, f.env.STUDIO_OWNER_EMAIL)).status, 403);
+  assert.equal((await f.storage.list({ prefix: 'sapix:code:' })).size, 0);
+  assert.equal((await f.state.fetch(request('/api/sapix/records', { cookie: f.cookie }))).status, 401);
+});
+
+test('owner change invalidates old tokens and pending old or ownerless codes while preserving all records', async () => {
+  const f = await fixture(), original = await login(f);
+  const existing = await write(f, original.token, [put('existing_grade'), { type: 'delete', id: 'existing_deleted' }]);
+  const verifier = 'p'.repeat(43), state = 'q'.repeat(24);
+  const started = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state, challenge: hash(verifier) }), { cookie: f.cookie }));
+  const oldCode = new URLSearchParams(new URL(started.headers.get('Location')).hash.slice(1)).get('sapix_code');
+  assert.equal((await f.storage.get('sapix:code:' + hash(oldCode))).email, ENV.SAPIX_OWNER_EMAIL);
+  const legacyCode = 'l'.repeat(43);
+  await f.storage.put('sapix:code:' + hash(legacyCode), { challenge: hash(verifier), expires: Date.now() + 60000 });
+  f.env.SAPIX_OWNER_EMAIL = 'child@example.test';
+  assert.equal((await f.state.fetch(request('/api/sapix/records', { token: original.token }))).status, 401);
+  assert.equal((await f.state.fetch(request('/api/sapix/records', { token: original.token, method: 'POST', body: { ops: [put('must_not_be_added')] } }))).status, 401);
+  for (const code of [oldCode, legacyCode]) {
+    const rejected = await f.state.fetch(request('/api/sapix/auth/exchange', { method: 'POST', body: { code, verifier } }));
+    assert.equal(rejected.status, 401);
+  }
+  const child = await childLogin(f);
+  assert.deepEqual(await json(f, '/api/sapix/records', { token: child.token }), existing);
+  assert.equal((await f.state.fetch(request('/api/sapix/records', { token: original.token }))).status, 401);
+});
+
+test('OAuth started for the former grading owner cannot finish after an account change, including older ownerless cookies', async () => {
+  const f = await fixture();
+  const started = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state: 's'.repeat(24), challenge: hash('v'.repeat(43)) })));
+  const cookie = started.headers.get('Set-Cookie').split(';')[0];
+  const pending = await unseal(cookie.slice(cookie.indexOf('=') + 1), f.env.STUDIO_SECRET, 'oauth');
+  f.env.SAPIX_OWNER_EMAIL = 'child@example.test';
+  const original = globalThis.fetch; let providerCalls = 0;
+  globalThis.fetch = async () => { providerCalls++; throw Error('must reject before contacting Google'); };
+  try {
+    for (const login of [pending, { ...pending, sapix: { state: pending.sapix.state, challenge: pending.sapix.challenge } }]) {
+      const sealed = await seal(login, f.env.STUDIO_SECRET, 'oauth');
+      const response = await f.state.fetch(request('/api/studio/google/callback?state=' + pending.state + '&code=pending-google-code', { headers: { Cookie: '__Host-studio-oauth=' + sealed } }));
+      assert.equal(response.status, 403);
+    }
+    assert.equal(providerCalls, 0);
+    assert.equal((await f.storage.list({ prefix: 'sapix:code:' })).size, 0);
+  } finally { globalThis.fetch = original; }
+});
+
+test('Studio Google login keeps its original owner and Drive consent when the grading owner differs', async () => {
+  const f = await fixture({ SAPIX_OWNER_EMAIL: 'child@example.test' });
+  const started = await f.state.fetch(request('/api/studio/google/start'));
+  const google = new URL(started.headers.get('Location'));
+  assert.equal(google.searchParams.get('login_hint'), f.env.STUDIO_OWNER_EMAIL);
+  assert.equal(google.searchParams.get('scope'), 'openid email https://www.googleapis.com/auth/drive');
+  assert.equal(google.searchParams.get('prompt'), 'consent');
+  assert.equal(google.searchParams.get('access_type'), 'offline');
+  const response = await identityCallback(f, started, f.env.STUDIO_OWNER_EMAIL, { refresh_token: 'fake-studio-refresh', scope: 'openid email https://www.googleapis.com/auth/drive' });
+  assert.equal(response.status, 302); assert.equal(response.headers.get('Location'), '/studio');
+  assert.match(response.headers.get('Set-Cookie'), /__Host-studio=/);
+  assert.equal((await unseal(await f.storage.get('google'), f.env.STUDIO_SECRET, 'google')).email, f.env.STUDIO_OWNER_EMAIL);
+  assert.equal((await f.storage.list({ prefix: 'sapix:code:' })).size, 0);
+  const denied = await identityCallback(f, started, f.env.SAPIX_OWNER_EMAIL, { refresh_token: 'must-not-store', scope: 'openid email https://www.googleapis.com/auth/drive' });
+  assert.equal(denied.status, 403);
+  assert.equal((await unseal(await f.storage.get('google'), f.env.STUDIO_SECRET, 'google')).refreshToken, 'fake-studio-refresh');
+});
+
+test('missing grading owner fails closed instead of falling back to the Studio owner', async () => {
+  const f = await fixture({ SAPIX_OWNER_EMAIL: undefined });
+  const response = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state: 's'.repeat(24), challenge: hash('v'.repeat(43)) }), { cookie: f.cookie }));
+  assert.equal(response.status, 503);
+  assert.equal((await f.storage.list({ prefix: 'sapix:code:' })).size, 0);
 });

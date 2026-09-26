@@ -237,7 +237,13 @@
         var response = await send(API + '/api/sapix/records', { method: sent.length ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + token, ...(sent.length ? { 'Content-Type': 'application/json' } : {}) }, ...(sent.length ? { body: JSON.stringify({ ops: sent }) } : {}) });
         if (!auth || auth.token !== token) return false;
         if (!response.ok) {
-          if (response.status === 401) { needsAuth = true; error = '接続の有効期限が切れました。Googleに再接続してください。'; }
+          if (response.status === 401) {
+            // An expired or replaced account must not stay displayed as connected.
+            // The local records and unsent operations are kept for reconnection.
+            auth = null; needsAuth = true; synced = false;
+            try { storage.removeItem(authTokenKey); } catch (e) {}
+            error = '接続を確認できません。Googleに再接続してください。';
+          }
           else { error = '端末には保存済みです。同期できませんでした。通信が戻ると再試行します。'; if (response.status === 429 && response.headers) { var seconds = +response.headers.get('Retry-After'); if (seconds > 0) delay = Math.min(seconds * 1000, 300000); } }
           throw Error('http_' + response.status);
         }

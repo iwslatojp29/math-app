@@ -125,6 +125,12 @@ test('401 asks for reconnect; 429 and 503 preserve pending records and schedule 
     assert.equal(await h.c.sync(), false);
     assert.equal(h.c.getState().outbox.length, 1);
     assert.equal(h.c.getStatus().needsAuth, status === 401);
+    assert.equal(h.c.getStatus().connected, status !== 401);
+    if (status === 401) {
+      assert.equal(h.c.getStatus().email, '');
+      assert.equal(h.store.getItem(Sync.authTokenKey), null);
+      assert.equal(h.c.getRecords().p1[0].r, 'x');
+    }
     assert.equal(h.c.getStatus().syncing, false);
     assert.ok(h.c.getStatus().error);
     assert.equal(h.timers.size > 0, status !== 401);

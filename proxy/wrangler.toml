@@ -11,6 +11,7 @@ BRANCH = "main"
 ALLOWED_ORIGIN = "https://iwslatojp29.github.io"
 LABEL_WITH_EXT = "false"
 STUDIO_OWNER_EMAIL = "tomoatsu.iwasa@axcuria.com"
+SAPIX_OWNER_EMAIL = "iwslatojp29@gmail.com"
 STUDIO_ORIGIN = "https://math-app-proxy.iwslatojp29.workers.dev"
 
 [[durable_objects.bindings]]
