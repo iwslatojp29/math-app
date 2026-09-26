@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { StudioState, FOLDERS, seal } from '../src/studio.js';
 import { MAX_CHAT_PDF_BYTES } from '../src/studio-chat.js';
 
@@ -83,7 +84,7 @@ test('an explicit PDF download checks direct folders then streams unchanged byte
       assert.equal(url.origin, 'https://www.googleapis.com'); assert.equal(url.pathname, '/drive/v3/files/cut-pdf');
       assert.equal(url.searchParams.get('alt'), 'media');
       assert.equal(options.headers.Authorization, 'Bearer synthetic-drive-access');
-      assert.equal(options.redirect, 'error');
+      assert.equal(options.redirect, 'manual');
       return new Response(PDF, { headers: { 'Content-Length': String(PDF.length) } });
     }, async () => {
       assert.equal(downloads, 0, 'selection and fixture setup never download the PDF');
@@ -179,4 +180,54 @@ test('cancel and completed HTML history stay available after handoff migration',
     assert.equal(cancelled.status, 'cancelled'); assert.deepEqual(cancelled.result, oldJob().result);
     await state.alarm(); assert.equal((await state.job('old-html')).status, 'cancelled');
   });
+});
+
+test('real workerd streams a 12MiB PDF through the authenticated Durable Object and rejects redirects without forwarding credentials', async () => {
+  const pdf = Buffer.alloc(12 * 1024 * 1024, 0x42);
+  pdf.set(Buffer.from('%PDF-1.7\n')); pdf.set(Buffer.from('\n%%EOF\n'), pdf.length - 7);
+  const source = { ...clone(SOURCE), size: String(pdf.length) };
+  const code = `
+    import { StudioState } from './src/studio.js';
+    export class RuntimeState extends StudioState {
+      constructor(ctx, env) {
+        super(ctx, env);
+        this.access = { accessToken: 'synthetic-runtime-drive-access', expires: Date.now() + 3600000 };
+      }
+    }
+    export default { fetch(request, env) { return env.STUDIO.get(env.STUDIO.idFromName('owner')).fetch(request); } };
+  `;
+  const bundle = await build({ stdin: { contents: code, resolveDir: fileURLToPath(new URL('..', import.meta.url)), sourcefile: 'runtime-chat.js' },
+    bundle: true, write: false, format: 'esm', platform: 'neutral', loader: { '.md': 'text' } });
+  let redirect = false; const calls = [];
+  const mf = new Miniflare(convertV4MiniflareOptions({ modules: true, compatibilityDate: '2026-09-20',
+    script: bundle.outputFiles[0].text, bindings: ENV, durableObjects: { STUDIO: { className: 'RuntimeState', useSQLite: true } },
+    outboundService: async request => {
+      const url = new URL(request.url);
+      calls.push({ host: url.host, media: url.searchParams.get('alt') === 'media' });
+      assert.equal(url.host, 'www.googleapis.com', 'redirects must never receive the Drive bearer');
+      assert.equal(url.pathname, '/drive/v3/files/cut-pdf');
+      assert.equal(request.method, 'GET');
+      assert.equal(request.headers.get('Authorization'), 'Bearer synthetic-runtime-drive-access');
+      if (url.searchParams.get('alt') !== 'media') return Response.json(source);
+      if (redirect) return new Response(null, { status: 302, headers: { Location: 'https://forbidden.example.test/private-file' } });
+      return new Response(pdf, { headers: { 'Content-Type': 'application/pdf', 'Content-Length': String(pdf.length) } });
+    },
+  }));
+  const cookie = await seal({ email: ENV.STUDIO_OWNER_EMAIL, csrf: CSRF, expires: Date.now() + 3600000 }, ENV.STUDIO_SECRET, 'session');
+  try {
+    const response = await mf.dispatchFetch(ENV.STUDIO_ORIGIN + path(), { headers: { Cookie: '__Host-studio=' + cookie } });
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('Content-Type'), 'application/pdf');
+    assert.equal(response.headers.get('Cache-Control'), 'private, no-store');
+    assert.match(response.headers.get('Content-Disposition'), /^attachment;.*filename\*=UTF-8''/);
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), pdf);
+    assert.deepEqual(calls.map(call => call.media), [false, true, false], 'metadata is rechecked after every byte was streamed');
+    redirect = true;
+    const blocked = await mf.dispatchFetch(ENV.STUDIO_ORIGIN + path(), { headers: { Cookie: '__Host-studio=' + cookie } });
+    assert.equal(blocked.status, 502);
+    const error = await blocked.json(); assert.equal(error.error, 'drive_unavailable');
+    assert(!JSON.stringify(error).includes('synthetic-runtime-drive-access'));
+    assert(!JSON.stringify(error).includes('forbidden.example.test'));
+    assert.deepEqual(calls.map(call => call.media), [false, true, false, false, true]);
+  } finally { await mf.dispose(); }
 });

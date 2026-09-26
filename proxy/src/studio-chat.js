@@ -38,8 +38,10 @@ export class StudioChat {
     if (!/^\d+$/.test(String(source.size)) || !Number.isSafeInteger(size) || size < 1) this.fail(502, 'drive_unavailable');
     if (size > MAX_CHAT_PDF_BYTES) this.fail(413, 'source_too_large');
     const token = await this.studio.accessToken();
+    // workerd does not support redirect:"error". Inspect 3xx below without
+    // following a redirect or forwarding the Drive bearer to another host.
     const media = await fetch(`https://www.googleapis.com/drive/v3/files/${id}?alt=media&supportsAllDrives=true`, {
-      headers: { Authorization: `Bearer ${token.accessToken}` }, signal: AbortSignal.timeout(120000), redirect: 'error',
+      headers: { Authorization: `Bearer ${token.accessToken}` }, signal: AbortSignal.timeout(120000), redirect: 'manual',
     });
     if (!media.ok || !media.body) {
       await media.body?.cancel();
