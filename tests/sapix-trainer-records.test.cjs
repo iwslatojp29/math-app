@@ -36,7 +36,7 @@ function boot({ stored = new Map(), failRead = false, problems = 1 } = {}) {
     nodes.set(id, el);
     return el;
   }
-  ['hist', 'recorded', 'recordError', 'nextBtn', 'prevBtn', 'main', 'modal', 'modalText', 'modalTa'].forEach(node);
+  ['hist', 'recorded', 'recordError', 'nextBtn', 'prevBtn', 'main', 'mainScroll', 'timerPanel', 'resetBtn', 'modal', 'modalText', 'modalTa'].forEach(node);
   nodes.get('recorded').hidden = true;
   nodes.get('recordError').hidden = true;
   nodes.get('modal').hidden = true;
@@ -92,7 +92,7 @@ function boot({ stored = new Map(), failRead = false, problems = 1 } = {}) {
   });
   const functions = ['loadAll', 'validRecordDate', 'validateRecordMap', 'copyRecords', 'recordsError',
     'saveRecords', 'recs', 'latest', 'countOf', 'current', 'todayISO', 'fmtDate', 'fmtSec',
-    'historyHtml', 'record', 'undoRecord', 'mergeRecords', 'importRecords', 'clearRecords',
+    'historyHtml', 'stripHtml', 'record', 'undoRecord', 'mergeRecords', 'importRecords', 'clearRecords',
     'exportRecords', 'mk', 'esc', 'visible', 'sortList', 'matchFilter', 'problemsOf', 'inUnit', 'inTest',
     'selectProblem', 'saveSettings', 'nav', 'refreshSyncedRecords'];
   vm.runInContext([...declarations, ...functions.map(sourceOf)].join('\n'), ctx);
@@ -463,4 +463,38 @@ test('background removal clears stale undo feedback without navigating or reveal
   assert.equal(h.ctx.state.pid, 'p2');
   assert.equal(h.ctx.state.revealed, false);
   assert.equal(h.renderCount, renders);
+});
+
+test('actual overtime freezes at answer time, persists without clamping, and is visible after reload', () => {
+  const h = boot(); let clock = 100000;
+  h.ctx.Date.now = () => clock;
+  h.ctx.setInterval = () => 1; h.ctx.clearInterval = () => {}; h.ctx.beep = () => {};
+  const begin = html.indexOf('var CIRC ='), end = html.indexOf('var actx =', begin);
+  vm.runInContext(html.slice(begin, end), h.ctx);
+  h.ctx.timerInit(60);
+  clock += 83456;
+  h.ctx.timerStop();
+  clock += 120000; // Time spent reading the answer must not enter the saved solve time.
+  h.ctx.record('x');
+  const restored = boot({ stored: h.stored });
+  assert.deepEqual(plain(restored.ctx.recs('p1')), [{ d: '2026-09-26', r: 'x', s: 83, over: true }]);
+  assert.match(restored.ctx.historyHtml('p1'), /class="duration">1分23秒<\/span>/);
+  assert.match(restored.ctx.historyHtml('p1'), /制限超過/);
+  assert.match(restored.ctx.stripHtml('p1'), /class="duration">1:23<\/span>/);
+});
+
+test('legacy records without a time show no fabricated zero, while an explicit zero remains visible', () => {
+  const h = boot();
+  h.ctx.recordStore.importRecords({ p1: [{ d: '2026-09-26', r: 'o' }], p2: [{ d: '2026-09-26', r: 't', s: 0 }] });
+  assert.doesNotMatch(h.ctx.historyHtml('p1'), /class="duration"|0秒/);
+  assert.doesNotMatch(h.ctx.stripHtml('p1'), /class="duration"|0:00/);
+  assert.match(h.ctx.historyHtml('p2'), /class="duration">0秒<\/span>/);
+  assert.match(h.ctx.stripHtml('p2'), /class="duration">0:00<\/span>/);
+});
+
+test('imported fractional times round consistently at a minute boundary in both history displays', () => {
+  const h = boot();
+  h.ctx.recordStore.importRecords({ p1: [{ d: '2026-09-26', r: 'o', s: 59.6 }] });
+  assert.match(h.ctx.historyHtml('p1'), /class="duration">1分<\/span>/);
+  assert.match(h.ctx.stripHtml('p1'), /class="duration">1:00<\/span>/);
 });
