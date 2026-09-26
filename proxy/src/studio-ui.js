@@ -8,6 +8,7 @@ const STYLES = `
 @media(max-width:520px){.operation-tabs{grid-template-columns:1fr;gap:8px;padding:8px 0 14px}.operation-tab{padding:12px 14px;border-radius:12px}.operation-tab small{display:none}.operation-tab strong{font-size:14px}.operation-mark{width:33px;height:32px}.operation-arrow{display:block;font-size:18px}.hero h1{font-size:27px}.hero{padding:28px 0 18px}.section-head{flex-wrap:wrap}.section-head h2{font-size:18px}.start-button{font-size:14px}.source-title,.job-title{font-size:14px}.operation-disclosure{font-size:12px}.job-card,#sources-title,#history{scroll-margin-top:145px}}
 
 .previous-issue{border:1px solid var(--line);background:#f1f4ef;color:var(--muted);padding:10px 12px;border-radius:9px;margin-top:12px}.previous-issue-title{font-size:12px;font-weight:650;margin:0 0 5px}.previous-issue .summary{margin:6px 0 0}
+.previous-api-issue{margin-top:12px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#f7f9f5}.previous-api-issue>summary{font-size:12px;font-weight:650;color:var(--muted);cursor:pointer}.previous-api-issue .summary{margin-top:9px}
 .operation-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.operation-tab{text-decoration:none}.operation-tab strong{font-size:15px}.handoff-panel{margin-top:18px}.handoff-panel h3{font-size:16px;margin:0 0 8px}.handoff-panel p{font-size:13px;color:var(--muted);line-height:1.9}.handoff-downloads{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}.handoff-downloads a{font-size:13px}.handoff-downloads a[aria-disabled="true"]{opacity:.5;pointer-events:none}.chat-prompt{width:100%;min-height:155px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit;font:inherit;font-size:14px;line-height:1.8;resize:vertical}.handoff-panel label{display:block;font-size:13px;font-weight:650;margin:18px 0 7px}.handoff-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.handoff-actions>*{font-size:13px}.handoff-import{border-top:1px solid var(--line);padding-top:16px;margin-top:20px}.job-card,#sources-title,#history{scroll-margin-top:150px}
 @media(max-width:780px){.operation-tabs{grid-template-columns:1fr;gap:7px}.operation-tab{padding:11px 14px}.operation-tab small{display:none}.operation-mark{height:31px}.operation-arrow{display:block}.operation-tab strong{font-size:14px}.job-card,#sources-title,#history{scroll-margin-top:205px}}
 @media(max-width:420px){.handoff-downloads{grid-template-columns:1fr}}
@@ -275,13 +276,19 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   function appendIssue(parent, job, message, details = []) {
     if (!message && !details.length) return;
     let container = parent;
-    const previous = active(job) || recovering(job);
-    if (previous) {
+    const historical = jobOperation(job) === 'html';
+    const previous = !historical && (active(job) || recovering(job));
+    if (historical) {
+      container = node('details', 'previous-api-issue');
+      container.open = false;
+      container.append(node('summary', '', '以前のAPI生成の記録'));
+      parent.append(container);
+    } else if (previous) {
       container = node('div', 'previous-issue');
       container.append(node('p', 'previous-issue-title', '前回停止時の指摘（' + (recovering(job) ? '自動再開待ち' : '再開処理中') + '）'));
       parent.append(container);
     }
-    if (message) container.append(node('p', previous ? 'summary' : 'job-error', message));
+    if (message) container.append(node('p', previous || historical ? 'summary' : 'job-error', message));
     if (details.length) {
       const list = node('ul', 'summary');
       for (const detail of details) list.append(node('li', '', detail));

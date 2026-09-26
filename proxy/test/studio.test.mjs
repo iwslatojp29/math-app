@@ -1173,6 +1173,33 @@ test('studio old HTML failures hand off their source PDF instead of retrying the
   assert(!ui.calls.some(call => call.options.method === 'POST'));
 });
 
+test('studio folds old HTML API errors into historical details and keeps result links visible', async () => {
+  const oldError = '一部の処理に確認が必要です。同じジョブを再開できます。';
+  const issueDetails = Array.from({ length: 5 }, (_, index) => '以前の確認指摘 ' + (index + 1));
+  for (const status of ['needs_attention', 'completed']) {
+    const saved = job({ id: 'old-api-record', operation: 'html', status, error: oldError, result: {
+      outputs: [{ kind: 'practice', html: { url: 'https://example.test/old-saved.html' }, error: { message: '以前の数学・解説の確認結果', details: issueDetails } }],
+      errors: [{ kind: 'advanced', message: '以前の別の停止理由' }],
+    } });
+    const original = structuredClone(saved);
+    const ui = await uiFixture({ hash: '#chat', jobs: [saved] });
+    const descendants = ui.elements.get('jobs').descendants();
+    const records = descendants.filter(element => element.tagName === 'details');
+    assert.equal(records.length, 3);
+    assert(records.every(element => element.open === false));
+    assert(records.every(element => element.children[0].tagName === 'summary' && element.children[0].textContent === '以前のAPI生成の記録'));
+    assert(records.some(element => element.textContent.includes(oldError)), 'the old resume phrase remains available only inside its history disclosure');
+    assert(!descendants.some(element => element.className === 'job-error'), 'historical issues must not look like current red errors');
+    assert.deepEqual(records.flatMap(element => element.descendants()).filter(element => element.tagName === 'li').map(element => element.textContent), issueDetails);
+    const hiddenContent = records.flatMap(element => element.descendants());
+    assert(descendants.filter(element => element.tagName === 'p' && element.textContent.includes(oldError)).every(element => hiddenContent.includes(element)));
+    const link = descendants.find(element => element.href === 'https://example.test/old-saved.html');
+    assert(link && !hiddenContent.includes(link), 'saved output links stay outside collapsed issue records');
+    assert(descendants.some(element => element.dataset.focusKey === 'html-task:old-api-record'));
+    assert.deepEqual(saved, original);
+  }
+});
+
 test('studio polls recoverable failures through automatic restart and completion', async () => {
   for (const flags of [{ status: 'failed', retryable: true }, { status: 'failed', retryable: true, continuation: true }, { status: 'needs_attention', dispatchUncertain: true }]) {
     let current = job(flags);
