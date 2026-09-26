@@ -8,6 +8,9 @@ const STYLES = `
 @media(max-width:520px){.operation-tabs{grid-template-columns:1fr;gap:8px;padding:8px 0 14px}.operation-tab{padding:12px 14px;border-radius:12px}.operation-tab small{display:none}.operation-tab strong{font-size:14px}.operation-mark{width:33px;height:32px}.operation-arrow{display:block;font-size:18px}.hero h1{font-size:27px}.hero{padding:28px 0 18px}.section-head{flex-wrap:wrap}.section-head h2{font-size:18px}.start-button{font-size:14px}.source-title,.job-title{font-size:14px}.operation-disclosure{font-size:12px}.job-card,#sources-title,#history{scroll-margin-top:145px}}
 
 .previous-issue{border:1px solid var(--line);background:#f1f4ef;color:var(--muted);padding:10px 12px;border-radius:9px;margin-top:12px}.previous-issue-title{font-size:12px;font-weight:650;margin:0 0 5px}.previous-issue .summary{margin:6px 0 0}
+.operation-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.operation-tab{text-decoration:none}.operation-tab strong{font-size:15px}.handoff-panel{margin-top:18px}.handoff-panel h3{font-size:16px;margin:0 0 8px}.handoff-panel p{font-size:13px;color:var(--muted);line-height:1.9}.handoff-downloads{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}.handoff-downloads a{font-size:13px}.handoff-downloads a[aria-disabled="true"]{opacity:.5;pointer-events:none}.chat-prompt{width:100%;min-height:155px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit;font:inherit;font-size:14px;line-height:1.8;resize:vertical}.handoff-panel label{display:block;font-size:13px;font-weight:650;margin:18px 0 7px}.handoff-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.handoff-actions>*{font-size:13px}.handoff-import{border-top:1px solid var(--line);padding-top:16px;margin-top:20px}.job-card,#sources-title,#history{scroll-margin-top:150px}
+@media(max-width:780px){.operation-tabs{grid-template-columns:1fr;gap:7px}.operation-tab{padding:11px 14px}.operation-tab small{display:none}.operation-mark{height:31px}.operation-arrow{display:block}.operation-tab strong{font-size:14px}.job-card,#sources-title,#history{scroll-margin-top:205px}}
+@media(max-width:420px){.handoff-downloads{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 `;
 
@@ -21,10 +24,11 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   const labels = { queued: '順番待ち', running: '作成中', needs_attention: '確認が必要', failed: '作成できませんでした', completed: '完成', cancelled: '取り消し済み' };
   const stageLabels = { queued: '作成を待っています', download: 'PDF を取得しています', pdf_review: '冊子のページと切り出し範囲を確認しています', lesson_inventory: '全問題と小問の一覧を確認しています', lesson_generation: '全問題の講義と検算を進めています', publishing: '講義を公開して表示を確認しています', reading: 'PDF を読み込んでいます', downloading: 'PDF を取得しています', analyzing: '内容を整理しています', planning: '教材の構成を考えています', generating: '問題と解説を作成しています', validating: '内容を確認しています', rendering: '教材ファイルを仕上げています', uploading: '完成ファイルを保存しています', completed: '教材が完成しました', needs_attention: '保存できた教材を残して、確認を待っています', failed: '保存済みの段階から再試行できます', interrupted: 'クラウド処理が中断しました', cancelled: '作成を取り消しました' };
   const kindLabels = { practice: '日日の演習', advanced: '発展演習・学力コンテスト' };
-  const operationLabels = { extract: 'PDFを切り出す', html: '解答解説HTMLを作成する' };
+  const operationLabels = { extract: 'PDFを切り出す', html: 'Chatに渡す' };
+  const chatPrompt = '添付したPDFと作成指示書（MD）に従い、全問題を対象にアニメーション付きの解答解説HTMLを作成してください。指示書の検算・出典確認も行ってください。保存・公開はアプリで行うので、完成HTMLはダウンロードできるファイルとして渡してください。';
   const jobOperation = job => job?.operation === 'html' ? 'html' : 'extract';
   const active = job => job?.status === 'queued' || job?.status === 'running';
-  const recovering = job => ['failed', 'needs_attention'].includes(job?.status) && (job.retryable === true || job.dispatchUncertain === true);
+  const recovering = job => jobOperation(job) !== 'html' && ['failed', 'needs_attention'].includes(job?.status) && (job.retryable === true || job.dispatchUncertain === true);
   const text = value => typeof value === 'string' ? value : '';
   const clean = value => text(value).replace(/\b(?:sk-[A-Za-z0-9_-]{8,}|gh[opsu]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+)\b/g, '[非表示]').replace(/Bearer\s+\S+/gi, 'Bearer [非表示]').slice(0, 4000);
   const node = (tag, className, content) => { const item = document.createElement(tag); if (className) item.className = className; if (content !== undefined) item.textContent = content; return item; };
@@ -113,25 +117,29 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     renderSources();
   }
   function updateLocation() {
-    const params = new URLSearchParams({ operation: state.operation });
+    const params = new URLSearchParams(state.operation === 'html' ? 'chat' : 'operation=extract');
     if (state.selectedJob) params.set('job', state.selectedJob);
-    history.replaceState(null, '', location.pathname + location.search + '#' + params.toString());
+    if (state.operation === 'html' && state.selectedFiles.html) params.set('file', state.selectedFiles.html);
+    history.replaceState(null, '', location.pathname + location.search + '#' + params.toString().replace(/^chat=/, 'chat'));
     try { localStorage.setItem('math-studio-operation', state.operation); } catch { /* Operation tabs also work with storage disabled. */ }
   }
   function renderOperation() {
     const html = state.operation === 'html';
     for (const operation of ['extract', 'html']) {
       const tab = $('operation-' + operation);
-      tab.setAttribute('aria-selected', String(state.operation === operation));
+      tab.setAttribute('aria-pressed', String(state.operation === operation));
       tab.classList.toggle('selected', state.operation === operation);
       tab.disabled = state.starting.size > 0;
     }
-    $('operation-title').textContent = html ? '選んだPDFから、解答解説HTMLへ。' : '月間号から、必要なPDFを切り出す。';
-    $('operation-intro').textContent = html ? '切り出し済みのPDFを選び、専用ボタンから解答解説HTMLを作成・公開します。' : '月間号を選び、専用ボタンからAIによる範囲判定・PDFの切り出し・Driveへの保存を行います。';
-    $('sources-title').textContent = html ? '解説するPDFを選ぶ' : '切り出す月間号を選ぶ';
-    $('jobs-title').textContent = html ? 'HTML作成の履歴' : 'PDF切り出しの履歴';
-    $('jobs-description').textContent = html ? '解答解説HTMLの作成状況と、公開した講義' : 'PDFの作成状況と、保存したファイル';
-    $('operation-disclosure').textContent = html ? '実行ボタンを押すと、選択した切り出しPDFをAIで読み取り、解答解説HTMLを作成します。完成HTMLをDriveへ保存し、講義ページを公開します。AIの利用料金が発生します。' : '実行ボタンを押すと、選択した月間号をAIで読み取り、日日系と発展・学コン系の範囲を判定してPDFを切り出し、Driveへ保存します。AIの利用料金が発生します。解答解説HTMLの生成は行いません。';
+    $('operation-title').textContent = html ? 'PDFと指示書を、ChatGPTへ。' : '切り出して、Chatへ渡し、HTMLを取り込む。';
+    $('operation-intro').textContent = html ? '2つのファイルをダウンロードしてChatGPTに添付します。完成した解答解説HTMLは、取込画面から保存・公開できます。' : 'まず月間号から必要なPDFを切り出します。解答解説はPDFと指示書をChatGPTに添付して作り、完成HTMLを取り込みます。';
+    $('sources-title').textContent = html ? 'Chatに渡すPDFを選ぶ' : '切り出す月間号を選ぶ';
+    $('jobs-title').textContent = html ? '以前のHTML作成履歴' : 'PDF切り出しの履歴';
+    $('jobs-description').textContent = html ? '保存済みの結果を開けます。新しい解説はChatGPTで作成します。' : 'PDFの作成状況と、保存したファイル';
+    $('operation-disclosure').textContent = html ? '選択したPDFと、元の解答解説作成指示書（MD）を手元に保存します。2つのファイルは、ご自身でChatGPTに添付してください。' : '実行ボタンを押すと、選択した月間号をAIで読み取り、日日系と発展・学コン系の範囲を判定してPDFを切り出し、Driveへ保存します。AIの利用料金が発生します。解答解説HTMLの生成は行いません。';
+    $('model-settings').hidden = html;
+    $('start-job').hidden = html;
+    $('chat-panel').hidden = !html;
     $('start-job').textContent = operationLabels[state.operation];
     renderStart();
   }
@@ -140,6 +148,19 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     const running = state.jobs.find(active);
     const pending = state.starting.size > 0;
     $('selected-source').textContent = selected ? name(selected) : 'PDFが選択されていません';
+    if (state.operation === 'html') {
+      $('start-job').disabled = true;
+      $('show-running').hidden = true;
+      $('start-state').textContent = selected ? 'PDFと指示書を保存してから、ChatGPTに添付してください。' : 'まず一覧からChatに渡すPDFを選択してください。';
+      $('chat-ready').hidden = !selected || !state.authenticated;
+      $('chat-prompt').value = chatPrompt;
+      const downloadable = Boolean(selected && text(selected.modifiedTime));
+      $('download-pdf').setAttribute('aria-disabled', String(!downloadable));
+      if (downloadable) $('download-pdf').href = '/api/studio/chat/pdf/' + encodeURIComponent(fileId(selected)) + '?modifiedTime=' + encodeURIComponent(selected.modifiedTime);
+      else $('download-pdf').removeAttribute('href');
+      if (selected && !downloadable) $('start-state').textContent = 'PDFの更新日時を確認できません。「画面を更新」してからダウンロードしてください。';
+      return;
+    }
     $('start-job').disabled = !selected || !modelReady() || Boolean(running) || pending || !state.authenticated;
     $('start-state').textContent = pending ? '開始状況を確認しています…' : running ? (jobOperation(running) === 'html' ? '解答解説HTMLを作成中です。' : 'PDFを切り出しています。') + '完了後に次の処理を開始できます。' : !state.jobsLoaded ? '作成履歴を確認しています…' : !selected ? 'まず一覧からPDFを選択してください。選択だけでは処理は始まりません。' : !modelReady() ? '開始するには、利用できるモデルを確認・選択してください。' : 'この実行ボタンを押すまで、AI処理やファイルの保存は始まりません。';
     $('show-running').hidden = !running || jobOperation(running) === state.operation;
@@ -149,6 +170,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     const id = fileId(file);
     if (!id) return;
     state.selectedFiles[state.operation] = id;
+    updateLocation();
     renderSources();
   }
   function renderSources() {
@@ -223,6 +245,19 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     notice('');
     updateLocation(); renderOperation(); renderSources(); renderJobs();
     await loadSources(operation);
+    if (operation === 'extract' && !state.models) await loadModels();
+  }
+  async function openChatForJob(job) {
+    await chooseOperation('html');
+    await loadSources('html', true);
+    const ids = jobOperation(job) === 'html' ? [job.fileId] : (job.result?.outputs || []).map(output => output?.pdf?.id);
+    const file = state.sources.html.find(item => ids.includes(fileId(item)));
+    if (file) selectSource(file);
+    $('sources-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  async function copyChatPrompt() {
+    try { await navigator.clipboard.writeText($('chat-prompt').value); notice('ChatGPTに貼り付ける文面をコピーしました。PDFと指示書も添付してください。'); }
+    catch { $('chat-prompt').focus(); $('chat-prompt').select(); notice('文面を選択しました。コピーしてChatGPTに貼り付けてください。'); }
   }
   function safeUrl(value) {
     if (typeof value !== 'string' || !value.trim() || value.length > 4096) return null;
@@ -254,6 +289,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     }
   }
   function stageText(job) {
+    if (jobOperation(job) === 'html' && ['failed', 'needs_attention'].includes(job.status)) return 'このPDFと指示書をChatGPTに添付して、解答解説HTMLを作成できます。';
     if (recovering(job)) return job.dispatchUncertain ? 'クラウド処理の起動を確認しています。状況が確認できると自動で再開します。' : '保存済みの段階からクラウド処理を自動で再開します。再開状況を確認しています。';
     if (['cancelled', 'failed', 'needs_attention'].includes(job.status)) return stageLabels[job.status];
     if (text(job.message)) return clean(job.message);
@@ -266,7 +302,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
       const list = $('jobs');
       list.replaceChildren();
       const ordered = state.jobs.filter(job => jobOperation(job) === state.operation).sort((a, b) => Number(active(b)) - Number(active(a)) || (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0));
-      if (!ordered.length) { list.append(node('p', 'empty', state.jobsError || (state.operation === 'html' ? 'HTMLの作成履歴がここに並びます。\nPDFを選択し、HTML作成ボタンから開始してください。' : 'PDF切り出しの履歴がここに並びます。\n月間号を選択し、PDF切り出しボタンから開始してください。'))); return; }
+      if (!ordered.length) { list.append(node('p', 'empty', state.jobsError || (state.operation === 'html' ? '以前のHTML作成履歴はありません。\n新しい解答解説はPDFと指示書をChatGPTに添付して作成します。' : 'PDF切り出しの履歴がここに並びます。\n月間号を選択し、PDF切り出しボタンから開始してください。'))); return; }
       for (const job of ordered) {
         const id = jobId(job);
         const card = node('article', 'job-card' + (active(job) ? ' active' : '') + (state.selectedJob === id ? ' selected' : ''));
@@ -326,12 +362,12 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
         }
         const actions = node('div', 'job-actions');
         if (active(job) || job.status === 'needs_attention') addAction(actions, job, 'cancel', '取り消す', 'quiet');
-        if (['failed', 'needs_attention'].includes(job.status)) addAction(actions, job, 'retry', job.status === 'needs_attention' ? 'もう一度試す' : '再試行する', 'secondary');
-        if (jobOperation(job) === 'extract' && !active(job) && outputs.some(output => output.pdf?.url)) {
-          const htmlTask = node('button', 'secondary', '保存済みPDFからHTML作成画面を開く');
+        if (jobOperation(job) === 'extract' && ['failed', 'needs_attention'].includes(job.status)) addAction(actions, job, 'retry', job.status === 'needs_attention' ? 'もう一度試す' : '再試行する', 'secondary');
+        if (!active(job) && (jobOperation(job) === 'html' || outputs.some(output => output.pdf?.url))) {
+          const htmlTask = node('button', 'secondary', 'このPDFをChatに渡す');
           htmlTask.type = 'button'; htmlTask.dataset.focusKey = 'html-task:' + id;
           htmlTask.disabled = state.starting.size > 0;
-          htmlTask.addEventListener('click', async () => { await chooseOperation('html'); await loadSources('html', true); $('sources-title').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+          htmlTask.addEventListener('click', () => openChatForJob(job));
           actions.append(htmlTask);
         }
         if (actions.childNodes.length) card.append(actions);
@@ -367,6 +403,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   }
   async function startJob() {
     const operation = state.operation;
+    if (operation !== 'extract') return;
     const file = state.files.find(item => fileId(item) === state.selectedFiles[operation]);
     const id = fileId(file);
     if (!id || state.starting.size || state.jobs.some(active) || !modelReady()) return;
@@ -381,13 +418,14 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
       state.selectedJob = jobId(value.job);
       state.selectedJobs[operation] = state.selectedJob;
       updateLocation(); renderJobs();
-      const task = operation === 'html' ? '解答解説HTMLの作成' : 'PDFの切り出し';
+      const task = 'PDFの切り出し';
       notice(active(value.job) ? task + 'を開始しました。画面を閉じても処理は続きます。' : value.job.status === 'completed' ? 'この処理は完了済みです。履歴から保存済みファイルを開けます。' : '保存された履歴を表示しました。状況を確認して再試行してください。');
       $('history').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
     } catch (error) { notice(error.message, true); await refreshJobs(); }
     finally { state.starting.delete(requestKey); renderOperation(); renderSources(); }
   }
   async function jobAction(job, action) {
+    if (action === 'retry' && jobOperation(job) === 'html') { await openChatForJob(job); return; }
     const id = jobId(job);
     if (state.actions.has(id)) return;
     state.actions.add(id);
@@ -424,12 +462,17 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     } catch (error) { state.jobsError = error.message; notice(error.message, true); renderJobs(); }
     finally { state.refreshing = false; $('refresh-jobs').disabled = false; schedule(); }
   }
-  async function loadWorkspace() {
-    const [, models] = await Promise.allSettled([loadSources(state.operation, true), api('/models')]);
+  async function loadModels() {
+    let catalog;
+    try { catalog = await api('/models'); } catch (error) { catalog = { latestVerified: false, models: [], warning: error.message }; }
     if (!state.authenticated) return;
-    state.models = models.status === 'fulfilled' ? models.value : { latestVerified: false, models: [], warning: models.reason.message };
+    state.models = catalog;
     if (state.models.diagnosticReason) console.info('Model catalog: ' + state.models.diagnosticReason);
     renderModels();
+  }
+  async function loadWorkspace() {
+    await Promise.allSettled([loadSources(state.operation, true), state.operation === 'extract' ? loadModels() : Promise.resolve()]);
+    if (!state.authenticated) return;
     await refreshJobs();
     const selected = state.jobs.find(job => jobId(job) === state.selectedJob);
     if (selected && jobOperation(selected) !== state.operation) {
@@ -487,6 +530,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   $('operation-extract').addEventListener('click', () => chooseOperation('extract'));
   $('operation-html').addEventListener('click', () => chooseOperation('html'));
   $('start-job').addEventListener('click', startJob);
+  $('copy-chat-prompt').addEventListener('click', copyChatPrompt);
   $('show-running').addEventListener('click', () => { const running = state.jobs.find(active); if (running) chooseOperation(jobOperation(running)); });
   $('search').addEventListener('input', renderSources);
   $('model').addEventListener('change', event => { state.selectedModel = event.target.value; renderSources(); });
@@ -499,7 +543,8 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     state.selectedJob = hash.get('job') || '';
     let storedOperation = '';
     try { storedOperation = localStorage.getItem('math-studio-operation') || ''; } catch { /* No storage is required. */ }
-    state.operation = (hash.get('operation') || storedOperation) === 'html' ? 'html' : 'extract';
+    state.operation = hash.has('chat') || (hash.get('operation') || storedOperation) === 'html' ? 'html' : 'extract';
+    state.selectedFiles.html = hash.get('file') || '';
     state.selectedJobs[state.operation] = state.selectedJob;
   } catch { /* The cloud history remains available without a URL selection. */ }
   renderOperation();
@@ -516,12 +561,12 @@ export function studioPage({ nonce = '' } = {}) {
   return `<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="referrer" content="no-referrer"><meta name="theme-color" content="#17644e"><title>教材スタジオ · math-app</title><style${attribute}>${STYLES}</style></head>
 <body><header class="topbar"><div class="wrap topline"><div class="brand"><span class="brand-mark" aria-hidden="true">∑</span><div>教材スタジオ<small>MATH-APP STUDIO</small></div></div><div class="connection"><span class="dot" id="connection-dot"></span><span id="connection-label" role="status">接続を確認中</span></div></div></header>
-<main class="wrap"><section class="hero"><p class="eyebrow">MATH MATERIALS WORKSPACE</p><h1 id="operation-title">月間号から、必要なPDFを切り出す。</h1><p id="operation-intro">資料を選択し、それぞれの実行ボタンから処理を開始します。</p></section>
-<div class="operation-tabs" role="tablist" aria-label="作業を選択"><button type="button" role="tab" aria-selected="true" aria-label="PDFを切り出す" class="operation-tab selected" id="operation-extract"><span class="operation-mark" aria-hidden="true">PDF</span><span><strong>PDFを切り出す</strong><small>月間号 → 範囲判定・切り出し → Drive保存</small></span><span class="operation-arrow" aria-hidden="true">→</span></button><button type="button" role="tab" aria-selected="false" aria-label="解答解説HTMLを作成する" class="operation-tab" id="operation-html"><span class="operation-mark" aria-hidden="true">HTML</span><span><strong>解答解説HTMLを作成する</strong><small>保存済みPDF → 解答解説の作成 → 講義公開</small></span><span class="operation-arrow" aria-hidden="true">→</span></button></div>
+<main class="wrap"><section class="hero"><p class="eyebrow">MATH MATERIALS WORKSPACE</p><h1 id="operation-title">切り出して、Chatへ渡し、HTMLを取り込む。</h1><p id="operation-intro">PDF切り出し → ChatGPTで解説作成 → 完成HTMLの取込、の3ステップで進めます。</p></section>
+<nav class="operation-tabs" aria-label="教材作成の3ステップ"><button type="button" aria-pressed="true" aria-label="PDFを切り出す" class="operation-tab selected" id="operation-extract"><span class="operation-mark" aria-hidden="true">1</span><span><strong>PDFを切り出す</strong><small>月間号から必要なページを保存</small></span><span class="operation-arrow" aria-hidden="true">→</span></button><button type="button" aria-pressed="false" aria-label="Chatに渡す" class="operation-tab" id="operation-html"><span class="operation-mark" aria-hidden="true">2</span><span><strong>Chatに渡す</strong><small>切り出しPDF＋元の指示書を添付</small></span><span class="operation-arrow" aria-hidden="true">→</span></button><a class="operation-tab" id="operation-import" href="https://iwslatojp29.github.io/math-app/math/upload.html" target="_blank" rel="noopener noreferrer"><span class="operation-mark" aria-hidden="true">3</span><span><strong>完成HTMLを取り込む</strong><small>Chatで作ったHTMLを保存・公開</small></span><span class="operation-arrow" aria-hidden="true">↗</span></a></nav>
 <div class="section-head"><p class="fine" id="account"></p><div class="job-actions"><button class="quiet" id="logout" type="button" hidden>ログアウト</button><button class="quiet" id="refresh-all" type="button">画面を更新</button></div></div>
 <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
 <section class="panel gate" id="gate"><h2 id="gate-title">接続を確認しています</h2><p id="gate-copy">保存された接続と作成履歴を読み込みます。</p><a class="primary" id="login" href="/api/studio/google/start" hidden>Google に接続する <span aria-hidden="true">→</span></a></section>
-<div class="layout" id="workspace" hidden><section class="panel" aria-labelledby="sources-title"><div class="section-head"><div><h2 id="sources-title">切り出す月間号を選ぶ</h2><p id="source-count">Google Drive の PDF</p></div></div><label class="sr-only" for="search">PDF の名前で絞り込み</label><input class="search" id="search" type="search" placeholder="PDF の名前で探す" autocomplete="off"><div class="source-list" id="sources"><p class="empty">教材を読み込んでいます…</p></div><details class="model-settings" id="model-settings"><summary>モデルを選ぶ（通常は自動）</summary><label for="model">教材作成に使うモデル</label><select id="model" disabled><option>モデルを確認中…</option></select><p class="fine" id="model-note"></p><p class="model-notice" id="model-warning" hidden></p></details><section class="start-panel" aria-labelledby="start-title"><p class="start-label" id="start-title">選択したPDF</p><p class="selected-source" id="selected-source">PDFが選択されていません</p><p class="operation-disclosure" id="operation-disclosure"></p><button class="primary start-button" type="button" id="start-job" disabled>PDFを切り出す</button><p class="fine start-state" id="start-state" role="status">一覧からPDFを選択してください。</p><button class="quiet" type="button" id="show-running" hidden>進行中の作業を表示</button></section></section>
+<div class="layout" id="workspace" hidden><section class="panel" aria-labelledby="sources-title"><div class="section-head"><div><h2 id="sources-title">切り出す月間号を選ぶ</h2><p id="source-count">Google Drive の PDF</p></div></div><label class="sr-only" for="search">PDF の名前で絞り込み</label><input class="search" id="search" type="search" placeholder="PDF の名前で探す" autocomplete="off"><div class="source-list" id="sources"><p class="empty">教材を読み込んでいます…</p></div><details class="model-settings" id="model-settings"><summary>モデルを選ぶ（通常は自動）</summary><label for="model">PDFの範囲判定に使うモデル</label><select id="model" disabled><option>モデルを確認中…</option></select><p class="fine" id="model-note"></p><p class="model-notice" id="model-warning" hidden></p></details><section class="start-panel" aria-labelledby="start-title"><p class="start-label" id="start-title">選択したPDF</p><p class="selected-source" id="selected-source">PDFが選択されていません</p><p class="operation-disclosure" id="operation-disclosure"></p><button class="primary start-button" type="button" id="start-job" disabled>PDFを切り出す</button><p class="fine start-state" id="start-state" role="status">一覧からPDFを選択してください。</p><button class="quiet" type="button" id="show-running" hidden>進行中の作業を表示</button><section class="handoff-panel" id="chat-panel" hidden><div id="chat-ready" hidden><h3>2つのファイルをChatGPTに添付</h3><div class="handoff-downloads"><a class="primary" id="download-pdf" download target="_blank" rel="noopener noreferrer">PDFをダウンロード</a><a class="secondary" id="download-instructions" href="/api/studio/chat/instructions" download target="_blank" rel="noopener noreferrer">元の指示書（MD）をダウンロード</a></div><label for="chat-prompt">ChatGPTに貼り付ける文面</label><textarea class="chat-prompt" id="chat-prompt" readonly></textarea><div class="handoff-actions"><button class="secondary" type="button" id="copy-chat-prompt">文面をコピー</button><a class="primary" id="open-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く ↗</a></div><p>ChatGPTでPDFとMDを添付し、コピーした文面を送信してください。生成されたHTMLファイルをダウンロードしたら、次の取込画面へ進みます。</p></div><div class="handoff-import"><a class="secondary" href="https://iwslatojp29.github.io/math-app/math/upload.html" target="_blank" rel="noopener noreferrer">完成HTMLを取り込む ↗</a><p>完成したHTMLを選び、プレビューを確認してから保存・公開します。</p></div></section></section></section>
 <section class="panel" id="history" aria-labelledby="jobs-title"><div class="section-head"><div><h2 id="jobs-title">PDF切り出しの履歴</h2><p id="jobs-description">PDFの作成状況と、保存したファイル</p></div><button class="quiet" id="refresh-jobs" type="button">履歴を更新</button></div><div class="job-list" id="jobs"><p class="empty">作成履歴を読み込んでいます…</p></div><p class="fine" id="poll-note">作成履歴はクラウドに保存されます。</p></section></div>
 <noscript><p class="notice">教材スタジオを利用するには JavaScript を有効にしてください。</p></noscript></main><footer class="footer"><div class="wrap">math-app · 教材スタジオ</div></footer><script${attribute}>${studioScript()}</script></body></html>`;
 }

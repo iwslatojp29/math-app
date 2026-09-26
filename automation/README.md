@@ -20,10 +20,13 @@ node --test proxy/test/sapix-import.test.mjs
 
 ## PDF切り出しと解答解説HTML作成
 
-算数一覧の「更新」から Studio を開き、作業を選択します。資料の選択だけでは処理を開始しません。それぞれの専用実行ボタンを押すと、選択した処理だけを実行します。
+算数一覧の「更新」から Studio を開きます。現在は **PDF切り出し → PDF・MDをChatへ渡す → 完成HTMLを取り込む** 流れです。操作手順は [proxy/STUDIO.md](../proxy/STUDIO.md) を参照してください。HTMLを作るための新しい生成API要求は起動しません。
 
 - **PDFを切り出す**: 元の月間号を選び、API経由のAIによる範囲判定・独立再検証を経て、日日系と発展・学コン系のPDFを固定Driveフォルダへ保存します。ここで完了し、HTML作成や公開は開始しません。
-- **解答解説HTMLを作成する**: 固定の日日系・発展系フォルダに保存済みの切り出しPDFを1本選びます。そのPDFの全問を対象にHTMLを1本作成し、Drive保存とPages公開を確認します。元の月間号の再解析やPDF切り出しは行いません。
+- **Chatに渡す**: 固定の日日系・発展系フォルダに保存済みの切り出しPDFを選び、PDFと元の `specs/animation-html.md` を取得します。利用者が両方をChatへ添付します。
+- **完成HTMLを取り込む**: Chatで作ったHTMLを既存の算数追加画面で選び、静的プレビュー後に一覧へ公開します。生成APIや自動数学検証、HTMLのDrive保存は実行しません。
+
+新規 `operation: html` の作成・旧HTMLジョブの再試行と自動再開は拒否し、Chatでの作成を案内します。古いタブからの操作でも誤ってAPI生成を再開しません。以降のHTMLパイプライン説明・テストは、保存済み履歴との互換性を保つため残している旧方式の実装記録です。
 
 `monthly-pdf.yml` は `workflow_dispatch` の `job_id` だけを受け取り、Workerからジョブに固定された `operation` (`extract` / `html`)・入力資料・モデル・仕様を取得します。ブラウザを閉じても処理はGitHub Actionsで継続します。
 

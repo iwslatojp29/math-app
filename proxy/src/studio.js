@@ -3,6 +3,7 @@ import { studioPage } from './studio-ui.js';
 import { updateIndex } from './index.js';
 import { SapixRecords, sapixCors } from './sapix-records.js';
 import { SapixImport } from './sapix-import.js';
+import { StudioChat } from './studio-chat.js';
 
 export const FOLDERS = Object.freeze({ source: '1xHRr5uA9idJP0H9BJcbldZiXdARDxCxi', practice: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp', advanced: '1HVHjm0QceRgUjhYIAmI7kAfafrFjp-S0', html: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp' });
 const SPEC_VERSION = 'monthly-2026-09-20-v1';
@@ -18,6 +19,8 @@ const errorText = {
   cancelled: '処理は停止されています。', latest_unavailable: '最新モデルを確認できません。モデルを明示的に選ぶか、後でお試しください。',
   existing_file: '同名の既存教材を保護するため公開を停止しました。', file_too_large: '生成HTMLが公開できる容量を超えています。',
   not_found: '対象が見つかりません。', source_changed: '選択したPDFが更新されています。一覧を読み直してください。',
+  source_too_large: 'このPDFはダウンロードできる容量（100MiB）を超えています。',
+  html_chat_required: 'HTMLはChatGPTで作成します。「Chatに渡す」で切り出しPDFと指示書をダウンロードし、ChatGPTへ添付してください。完成HTMLは取り込み画面から登録できます。',
   busy: '別の教材を処理しています。完了後に選択してください。', internal_error: '処理を完了できませんでした。保存済みの状態から再試行できます。',
   runner_conflict: '別のクラウド実行がこの処理を担当しています。',
   operation_mismatch: 'PDF切り出しとHTML作成は別の処理です。保存済みの成果物は保持し、選択されていない処理を停止しました。HTMLは「HTMLを作成」で既存の切り出しPDFを選んで開始してください。',
@@ -99,7 +102,7 @@ export function handleStudio(request, env) {
 }
 
 export class StudioState {
-  constructor(ctx, env) { this.ctx = ctx; this.storage = ctx.storage; this.env = env; this.mutation = Promise.resolve(); this.sapix = new SapixRecords(this, { result, fail, random, digest, readBody }); this.sapixImport = new SapixImport(this, { result, fail, random, digest, readBody, sameSecret }); }
+  constructor(ctx, env) { this.ctx = ctx; this.storage = ctx.storage; this.env = env; this.mutation = Promise.resolve(); this.sapix = new SapixRecords(this, { result, fail, random, digest, readBody }); this.sapixImport = new SapixImport(this, { result, fail, random, digest, readBody, sameSecret }); this.chat = new StudioChat(this, { fail, folders: FOLDERS }); }
   async serial(action) {
     const previous = this.mutation; let release;
     this.mutation = new Promise(resolve => { release = resolve; });
@@ -136,6 +139,9 @@ export class StudioState {
       if (request.headers.get('Origin') !== this.env.STUDIO_ORIGIN || !await sameSecret(request.headers.get('x-studio-csrf'), session.csrf)) fail(403, 'forbidden');
     }
     if (path === '/api/studio/logout' && method === 'POST') return result({ ok: true }, 200, { 'Set-Cookie': cookie('__Host-studio', '', 0) });
+    if (path === '/api/studio/chat/instructions' && method === 'GET') return this.chat.instructions();
+    const chatPdf = /^\/api\/studio\/chat\/pdf\/([A-Za-z0-9_-]{1,160})$/.exec(path);
+    if (chatPdf && method === 'GET') return this.chat.pdf(chatPdf[1], url.searchParams.get('modifiedTime'));
     if (path === '/api/studio/sources' && method === 'GET') return result({ files: await this.sources(url.searchParams.get('operation') || 'extract') });
     if (path === '/api/studio/models' && method === 'GET') return result(await this.catalog());
     if (path === '/api/studio/jobs' && method === 'GET') { await this.reconcile(); return result({ jobs: (await this.jobs()).map(publicJob) }); }
@@ -146,6 +152,7 @@ export class StudioState {
       if (!match[2] && method === 'GET') { await this.reconcile(job); return result({ job: publicJob(await this.job(job.id)) }); }
       if (method === 'POST') return this.serial(async () => {
         const current = await this.job(job.id);
+        if (match[2] === 'retry' && operationOf(current) === 'html') fail(409, 'html_chat_required');
         if (match[2] === 'cancel' && !['completed', 'cancelled'].includes(current.status)) {
           current.status = 'cancelled'; current.dispatchUncertain = false; current.retryable = false; current.message = '停止しました。'; current.updatedAt = now(); await this.saveJob(current);
           if (current.runId) await this.github(`actions/runs/${current.runId}/cancel`, 'POST').catch(() => {});
@@ -277,7 +284,7 @@ export class StudioState {
   async job(id) { const job = await this.storage.get(`job:${id}`); if (!job) fail(404, 'not_found'); return job; }
   async saveJob(job) {
     await this.storage.put(`job:${job.id}`, job);
-    if (!TERMINAL.has(job.status) || job.retryable || job.dispatchUncertain) await this.scheduleCheck();
+    if (operationOf(job) !== 'html' && (!TERMINAL.has(job.status) || job.retryable || job.dispatchUncertain)) await this.scheduleCheck();
   }
   async scheduleCheck(delay = 5 * 60000) {
     if (!this.storage.setAlarm) return; // Unit-test storage adapters do not run timers.
@@ -290,6 +297,7 @@ export class StudioState {
     try {
       await this.reconcile();
       for (const snapshot of await this.jobs()) {
+        if (operationOf(snapshot) === 'html') continue;
         if (!snapshot.retryable && !snapshot.dispatchUncertain) continue;
         await this.serial(async () => {
           const job = await this.job(snapshot.id);
@@ -311,11 +319,12 @@ export class StudioState {
         }).catch(() => { /* A provider outage for one job must not prevent other resumable jobs. */ });
       }
     } finally {
-      if ((await this.jobs()).some(job => !TERMINAL.has(job.status) || job.retryable || job.dispatchUncertain)) await this.scheduleCheck();
+      if ((await this.jobs()).some(job => operationOf(job) !== 'html' && (!TERMINAL.has(job.status) || job.retryable || job.dispatchUncertain))) await this.scheduleCheck();
     }
   }
   async createJob(body) {
     if (!['extract', 'html'].includes(body.operation)) fail(400, 'invalid_request');
+    if (body.operation === 'html') fail(409, 'html_chat_required');
     if (typeof body.fileId !== 'string' || !/^[A-Za-z0-9_-]+$/.test(body.fileId)) fail(400, 'invalid_request');
     const operation = body.operation;
     const source = (await this.sources(operation)).find(file => file.id === body.fileId);
@@ -364,6 +373,7 @@ export class StudioState {
     return response.status === 204 ? {} : response.json();
   }
   async dispatch(job) {
+    if (operationOf(job) === 'html') fail(409, 'html_chat_required');
     // Save queued before dispatch. An uncertain dispatch is reconciled by run-name, never blindly replayed.
     job.dispatchedAt = now(); job.dispatchUncertain = false; await this.saveJob(job);
     try { await this.github('actions/workflows/monthly-pdf.yml/dispatches', 'POST', { ref: this.env.BRANCH, inputs: { job_id: job.id } }); }
@@ -371,7 +381,7 @@ export class StudioState {
   }
   async reconcile(onlyJob = null) {
     const jobs = onlyJob ? [onlyJob] : await this.jobs();
-    const candidates = jobs.filter(job => (['queued', 'running'].includes(job.status) || job.dispatchUncertain) && Date.now() - Date.parse(job.updatedAt) > 120000);
+    const candidates = jobs.filter(job => operationOf(job) !== 'html' && (['queued', 'running'].includes(job.status) || job.dispatchUncertain) && Date.now() - Date.parse(job.updatedAt) > 120000);
     if (!candidates.length) return;
     let runs;
     try { runs = (await this.github('actions/workflows/monthly-pdf.yml/runs?per_page=50')).workflow_runs || []; } catch { return; }

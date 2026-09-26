@@ -1,4 +1,7 @@
-"""Browser regression for the two independent Studio operations.
+"""Optional mock-browser regression for extraction, Chat handoff and HTML import.
+
+Run only in an environment that permits Playwright browser testing. Codex
+CUA-only sessions should use test/studio.test.mjs and CUA instead.
 
 Run with Python + Playwright and Node installed:
   python test/studio-ui.browser.py --node node --output-dir ../../work/studio-qa
@@ -86,11 +89,19 @@ class Fixture:
             result = {"files": self.sources[operation]}
             if self.source_expired:
                 status, result = 401, {"error": "drive_reconnect"}
+        elif path == "/chat/instructions":
+            route.fulfill(status=200, content_type="text/markdown; charset=utf-8", headers={"Content-Disposition": 'attachment; filename="original-instructions.md"', "Cache-Control": "private, no-store"}, body="# Original instruction fixture")
+            return
+        elif path.startswith("/chat/pdf/"):
+            source = next(item for item in self.sources["html"] if item["id"] == path.split("/")[-1])
+            assert parse_qs(url.query)["modifiedTime"] == [source["modifiedTime"]]
+            route.fulfill(status=200, content_type="application/pdf", headers={"Content-Disposition": 'attachment; filename="selected.pdf"', "Cache-Control": "private, no-store"}, body=b"%PDF-1.4\n% Mock download fixture\n")
+            return
         elif path == "/jobs" and request.method == "GET":
             result = {"jobs": self.jobs}
         elif path == "/jobs" and request.method == "POST":
             assert set(body) == {"fileId", "model", "operation"}
-            assert body["operation"] in {"extract", "html"}
+            assert body["operation"] == "extract", "Studio must never create an HTML API job"
             source = next(item for item in self.sources[body["operation"]] if item["id"] == body["fileId"])
             created = job("created-" + str(len(self.jobs)), body["operation"], fileId=source["id"], fileName=source["name"],
                           status="queued", stage="queued")
@@ -101,6 +112,7 @@ class Fixture:
             selected = next(item for item in self.jobs if item["id"] == parts[2])
             if len(parts) == 4:
                 assert request.method == "POST" and parts[3] in {"retry", "cancel"}
+                assert not (parts[3] == "retry" and selected.get("operation") == "html")
                 selected.update(status="queued" if parts[3] == "retry" else "cancelled", stage="queued" if parts[3] == "retry" else "cancelled")
             result = {"job": selected}
         elif path == "/logout":
@@ -126,7 +138,7 @@ class Fixture:
 def ready(page, operation="extract"):
     expect(page.locator("#connection-label")).to_have_text("Google 接続済み")
     expect(page.locator("#sources .source-card").first).to_be_visible()
-    expect(page.locator("#operation-" + operation)).to_have_attribute("aria-selected", "true")
+    expect(page.locator("#operation-" + operation)).to_have_attribute("aria-pressed", "true")
     expect(page.locator("#refresh-jobs")).to_be_enabled()
 
 
@@ -152,62 +164,68 @@ def run(browser, html, output):
     page.locator("#model-settings summary").click()
     page.locator("#model").select_option("gpt-other")
     page.locator('[data-focus-key="job:legacy"]').click()
-    page.get_by_role("tab", name="解答解説HTMLを作成する", exact=True).click()
+    page.locator("#operation-html").click()
     ready(page, "html")
+    expect(page.locator("#model-settings")).to_be_hidden()
+    expect(page.locator("#start-job")).to_be_hidden()
     expect(page.locator("#jobs .job-card")).to_have_count(1)
-    expect(page.locator('[data-focus-key="job:old-html"]')).to_be_visible()
     select(page, "html:advanced-pdf")
-    page.get_by_role("tab", name="PDFを切り出す", exact=True).click()
-    expect(page.locator('[data-focus-key="source:extract:monthly"]')).to_have_attribute("aria-pressed", "true")
+    expect(page.locator("#chat-ready")).to_be_visible()
+    expect(page.locator("#download-instructions")).to_have_attribute("href", "/api/studio/chat/instructions")
+    expect(page.locator("#open-chatgpt")).to_have_attribute("href", "https://chatgpt.com/")
+    expect(page.locator("#operation-import")).to_have_attribute("href", "https://iwslatojp29.github.io/math-app/math/upload.html")
     assert not fixture.mutations
-    page.screenshot(path=str(output / "extract-ready-desktop.png"), full_page=True)
+    assert not any(call["path"].startswith("/chat/") for call in fixture.calls)
+    with page.expect_download() as pending:
+        page.locator("#download-pdf").click()
+    assert pending.value.suggested_filename == "selected.pdf"
+    with page.expect_download() as pending:
+        page.locator("#download-instructions").click()
+    assert pending.value.suggested_filename == "original-instructions.md"
+    page.locator("#copy-chat-prompt").click()
+    expect(page.locator("#notice")).to_contain_text("文面")
+    assert not fixture.mutations
+    page.screenshot(path=str(output / "chat-ready-desktop.png"), full_page=True)
+    page.locator("#operation-extract").click()
+    expect(page.locator('[data-focus-key="source:extract:monthly"]')).to_have_attribute("aria-pressed", "true")
     page.locator("#start-job").click()
     expect(page.locator("#notice")).to_contain_text("PDFの切り出しを開始")
     assert fixture.mutations == [{"path": "/jobs", "query": "", "method": "POST", "body": {"fileId": "monthly", "model": "gpt-other", "operation": "extract"}, "csrf": CSRF}]
-    expect(page.locator("#start-job")).to_be_disabled()
     extraction = fixture.jobs[0]
-    extraction.update(status="completed", stage="completed", result={"outputs": [{"kind": "practice", "pdf": {"name": CUT["name"], "url": "https://drive.example.test/created"}}]})
+    extraction.update(status="completed", stage="completed", result={"outputs": [{"kind": "practice", "pdf": {"id": "fresh-pdf", "name": "今回切り出した新しいPDF.pdf", "url": "https://drive.example.test/created"}}]})
     fixture.sources["html"].append({**CUT, "id": "fresh-pdf", "name": "今回切り出した新しいPDF.pdf"})
     page.locator("#refresh-jobs").click()
-    expect(page.locator("#operation-extract")).to_have_attribute("aria-selected", "true")
     expect(page.locator("#start-job")).to_be_enabled()
-    assert len(fixture.mutations) == 1
-    page.get_by_role("tab", name="解答解説HTMLを作成する", exact=True).click()
+    page.locator("#operation-html").click()
     expect(page.locator('[data-focus-key="source:html:fresh-pdf"]')).to_be_visible()
-    assert len(fixture.mutations) == 1
-    page.get_by_role("tab", name="PDFを切り出す", exact=True).click()
+    page.locator("#operation-extract").click()
     page.locator('[data-focus-key="html-task:' + extraction["id"] + '"]').click()
-    expect(page.locator("#operation-html")).to_have_attribute("aria-selected", "true")
+    expect(page.locator('[data-focus-key="source:html:fresh-pdf"]')).to_have_attribute("aria-pressed", "true")
     assert len(fixture.mutations) == 1
-    select(page, "html:cut-pdf")
-    page.screenshot(path=str(output / "html-ready-desktop.png"), full_page=True)
-    page.locator("#start-job").click()
-    expect(page.locator("#notice")).to_contain_text("解答解説HTMLの作成を開始")
-    assert fixture.mutations[-1]["body"] == {"fileId": "cut-pdf", "model": "gpt-other", "operation": "html"}
-    assert len(fixture.mutations) == 2
-    html_job = fixture.jobs[0]
     page.reload()
     ready(page, "html")
-    expect(page.locator('[data-focus-key="job:' + html_job["id"] + '"]')).to_be_visible()
-    assert len(fixture.mutations) == 2
-    page.get_by_role("tab", name="PDFを切り出す", exact=True).click()
-    select(page, "extract:monthly")
-    expect(page.locator("#start-job")).to_be_disabled()
-    expect(page.locator("#show-running")).to_be_visible()
-    page.locator("#show-running").click()
-    expect(page.locator("#operation-html")).to_have_attribute("aria-selected", "true")
-    page.locator('[data-focus-key="cancel:' + html_job["id"] + '"]').click()
-    expect(page.locator("#notice")).to_contain_text("取り消しを受け付けました")
-    assert fixture.mutations[-1]["path"].endswith("/cancel")
-    html_job.update(status="failed", stage="failed", error="再試行できるテストのエラー")
-    page.locator("#refresh-jobs").click()
-    page.locator('[data-focus-key="retry:' + html_job["id"] + '"]').click()
-    expect(page.locator("#notice")).to_contain_text("再試行を受け付けました")
-    assert fixture.mutations[-1]["path"].endswith("/retry")
+    expect(page.locator('[data-focus-key="source:html:fresh-pdf"]')).to_have_attribute("aria-pressed", "true")
+    assert len(fixture.mutations) == 1
     fixture.clean()
     context.close()
 
-    # Layout and adversarial strings use independent, mutation-free sessions.
+    # Old failed HTML retains outputs and hands off the original source; no retry.
+    history = Fixture(html)
+    history.jobs[1].update(status="needs_attention", retryable=True, continuation=True,
+                           result={"outputs": [{"kind": "practice", "html": {"url": "https://lesson.example.test/saved.html"}, "error": {"message": "以前の確認指摘", "details": ["数値を確認"]}}]})
+    context, page = history.attach(browser)
+    page.goto(ORIGIN + "/studio#chat")
+    ready(page, "html")
+    assert not any(call["path"] == "/models" for call in history.calls)
+    expect(page.locator('[data-focus-key="retry:old-html"]')).to_have_count(0)
+    expect(page.locator('[data-focus-key="cancel:old-html"]')).to_be_visible()
+    page.locator('[data-focus-key="html-task:old-html"]').click()
+    expect(page.locator('[data-focus-key="source:html:cut-pdf"]')).to_have_attribute("aria-pressed", "true")
+    expect(page.locator("#jobs")).to_contain_text("以前の確認指摘")
+    assert not history.mutations
+    history.clean()
+    context.close()
+
     for width in [1366, 1194, 1024, 768, 390]:
         layout = Fixture(html)
         context, page = layout.attach(browser, width)
@@ -217,12 +235,12 @@ def run(browser, html, output):
         no_overflow(page)
         if width == 390:
             page.screenshot(path=str(output / "extract-mobile.png"), full_page=True)
-        page.get_by_role("tab", name="解答解説HTMLを作成する", exact=True).click()
+        page.locator("#operation-html").click()
         ready(page, "html")
         select(page, "html:advanced-pdf")
         no_overflow(page)
         if width == 390:
-            page.screenshot(path=str(output / "html-mobile.png"), full_page=True)
+            page.screenshot(path=str(output / "chat-mobile.png"), full_page=True)
         assert not layout.mutations
         layout.clean()
         context.close()
@@ -237,8 +255,9 @@ def run(browser, html, output):
     expect(page.locator("#sources img")).to_have_count(0)
     assert page.evaluate("window.remoteCode") is None
     expect(page.locator("#start-job")).to_be_disabled()
-    page.locator("#model").select_option("gpt-other")
-    expect(page.locator("#start-job")).to_be_enabled()
+    page.locator("#operation-html").click()
+    select(page, "html:cut-pdf")
+    expect(page.locator("#download-pdf")).to_have_attribute("aria-disabled", "false")
     assert not safety.mutations
     safety.source_expired = True
     page.locator("#refresh-all").click()
@@ -249,9 +268,9 @@ def run(browser, html, output):
     safety.clean()
     context.close()
     return {"result": "PASS", "widths": [1366, 1194, 1024, 768, 390],
-            "checks": ["selection-is-read-only", "explicit-operation-and-csrf", "extract-completes-without-html",
-                       "independent-history", "legacy-links", "new-cut-pdf-refresh", "mode-reload", "cross-operation-busy-gate",
-                       "cancel-and-retry", "unverified-model-gate", "text-safety", "drive-reconnect", "no-horizontal-overflow"],
+            "checks": ["selection-is-read-only", "extraction-only-job-and-csrf", "explicit-pdf-and-original-md-downloads",
+                       "chat-handoff-without-model", "legacy-links", "new-cut-pdf-refresh", "mode-and-source-reload",
+                       "no-html-api-retry", "copyable-chat-prompt", "import-link", "text-safety", "drive-reconnect", "no-horizontal-overflow"],
             "screenshots": str(output)}
 
 

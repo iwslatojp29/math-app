@@ -5,6 +5,11 @@ workers_dev = true
 
 account_id = "c80fe779b712b44128d2da4e637814fd"
 
+[[rules]]
+type = "Text"
+globs = ["**/*.md"]
+fallthrough = true
+
 [vars]
 REPO = "iwslatojp29/math-app"
 BRANCH = "main"

@@ -29,7 +29,7 @@ export default { async fetch(request) {
 `;
 
 test('real workerd accepts model/Pages GET/asset HEAD options, and never follows redirects with API credentials', async () => {
-  const bundle = await build({ stdin: { contents: source, resolveDir: fileURLToPath(new URL('..', import.meta.url)), sourcefile: 'runtime-fixture.js' }, bundle: true, write: false, format: 'esm', platform: 'neutral', keepNames: true });
+  const bundle = await build({ stdin: { contents: source, resolveDir: fileURLToPath(new URL('..', import.meta.url)), sourcefile: 'runtime-fixture.js' }, bundle: true, write: false, format: 'esm', platform: 'neutral', keepNames: true, loader: { '.md': 'text' } });
   let redirect = null; const calls = [];
   const mf = new Miniflare(convertV4MiniflareOptions({ modules: true, compatibilityDate: '2026-09-20', script: bundle.outputFiles[0].text, outboundService: async request => {
     const url = new URL(request.url); calls.push({ host: url.host, path: url.pathname, method: request.method });
@@ -69,7 +69,7 @@ test('real SQLite Durable Object scans 28 subfolders and persists both zero and 
     }
     export default {fetch(request,env) { return env.STUDIO.get(env.STUDIO.idFromName('owner')).fetch(request); }};
   `;
-  const bundle = await build({ stdin: { contents: code, resolveDir: fileURLToPath(new URL('..', import.meta.url)), sourcefile: 'runtime-scan.js' }, bundle: true, write: false, format: 'esm', platform: 'neutral' });
+  const bundle = await build({ stdin: { contents: code, resolveDir: fileURLToPath(new URL('..', import.meta.url)), sourcefile: 'runtime-scan.js' }, bundle: true, write: false, format: 'esm', platform: 'neutral', loader: { '.md': 'text' } });
   let calls = 0, countPerFolder = 0;
   const mf = new Miniflare(convertV4MiniflareOptions({ modules: true, compatibilityDate: '2026-09-20', script: bundle.outputFiles[0].text, durableObjects: { STUDIO: { className: 'RuntimeState', useSQLite: true } }, outboundService: async request => {
     calls++; const url = new URL(request.url); assert.equal(url.host, 'www.googleapis.com');

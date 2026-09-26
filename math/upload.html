@@ -35,11 +35,22 @@ h1 { color: #333; border-bottom: 3px solid #2196F3; padding-bottom: 10px; }
 #pw-btn:disabled { background: #bbb; cursor: default; }
 .status-item > span:last-child { overflow-wrap: anywhere; }
 #drop-zone[aria-disabled="true"] { opacity: 0.6; cursor: default; }
+.intro { line-height: 1.8; }
+.review-item { padding: 12px 0; border-bottom: 1px solid #eee; }
+.review-item button { max-width: 100%; overflow-wrap: anywhere; padding: 8px 12px; cursor: pointer; }
+#review-panel { margin-top: 20px; }
+#preview-frame { width: 100%; height: 520px; border: 1px solid #bbb; background: white; }
+#preview-title { overflow-wrap: anywhere; }
+#publish-btn { margin-top: 16px; padding: 12px 24px; border: 0; border-radius: 8px; background: #1976D2; color: white; font: inherit; cursor: pointer; }
+#publish-btn:disabled { background: #999; cursor: default; }
+@media (max-width: 480px) { body { padding: 12px; } #password-screen { padding: 20px; } #pw-input { width: 100%; margin: 0 0 12px; } #drop-zone { padding: 36px 12px; } }
 </style>
 </head>
 <body>
 <a class="back-link" href="./index.html">← コンテンツ一覧へ戻る</a>
 <h1>ページを追加する</h1>
+<p class="intro">Chatで作った解答解説HTMLを選択し、表示と内容を確認してから一覧へ追加します。ファイルの選択だけでは公開されません。</p>
+<p class="auth-hint">この画面ではAIによる数学の自動検証は行いません。</p>
 
 <div id="password-screen">
   <h2>🔒 合言葉を入力してください</h2>
@@ -61,8 +72,15 @@ h1 { color: #333; border-bottom: 3px solid #2196F3; padding-bottom: 10px; }
   <p class="auth-hint">HTMLは1ファイル10 MiBまでです（UTF-8で保存した容量。「一覧へ戻る」リンクの追加分を含みます）。</p>
 
   <div id="status-box">
-    <h3 style="margin:0 0 12px; color:#333;">処理状況</h3>
+    <h2 style="margin:0 0 12px; color:#333;">追加するファイル</h2>
     <div id="status-list" aria-live="polite"></div>
+    <section id="review-panel" hidden>
+      <h3 id="preview-title">静的プレビュー</h3>
+      <p class="auth-hint">この静的プレビューでは外部通信、アニメーション・音声は動きません。表示が空の場合やアニメーション・音声の確認は、Chatのプレビューまたは保存したHTMLで行ってください。</p>
+      <iframe id="preview-frame" title="HTMLの静的プレビュー" sandbox="allow-same-origin" referrerpolicy="no-referrer"></iframe>
+    </section>
+    <p id="publish-summary" class="auth-hint"></p>
+    <button id="publish-btn" type="button" disabled>一覧へ追加</button>
   </div>
 </div>
 
@@ -74,9 +92,13 @@ const BACK_LINK_HTML = '<a href="./index.html" style="display:inline-block;margi
 const passphraseInput = document.getElementById('pw-input');
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
+const publishButton = document.getElementById('publish-btn');
+const previewFrame = document.getElementById('preview-frame');
+let entries = [];
 let busy = false;
 
 document.getElementById('pw-btn').addEventListener('click', startUpload);
+publishButton.addEventListener('click', publishFiles);
 passphraseInput.addEventListener('keydown', e => { if (e.key === 'Enter') startUpload(); });
 passphraseInput.addEventListener('input', () => {
   document.getElementById('pw-error').style.display = 'none';
@@ -102,7 +124,9 @@ function updateControls() {
   dropZone.setAttribute('aria-disabled', String(disabled));
   dropZone.tabIndex = disabled ? -1 : 0;
   document.getElementById('pw-btn').disabled = busy;
-  document.querySelectorAll('input[name="subject"]').forEach(input => { input.disabled = busy; });
+  const pending = entries.filter(entry => entry.html !== undefined && !entry.done).length;
+  publishButton.disabled = disabled || pending === 0;
+  document.getElementById('publish-summary').textContent = pending ? pending + '件のHTMLを追加します。上のファイル名を押すとプレビューを切り替えられます。' : '';
 }
 
 dropZone.addEventListener('click', () => { if (!fileInput.disabled) fileInput.click(); });
@@ -151,43 +175,131 @@ function setStatus(row, kind, message) {
   row.replaceChildren(icon, label);
 }
 
+// Preview only: allow-same-origin makes static srcdoc visible in the in-app
+// browser; never add allow-scripts. The sandbox and CSP both prohibit scripts.
+// A detached template stays inert. Keep a static, non-navigable
+// subset, then apply a restrictive CSP before any imported content is parsed.
+// The original HTML, including its scripts, is retained separately for upload.
+const PREVIEW_TAGS = new Set(('title style div span section article main header footer nav aside h1 h2 h3 h4 h5 h6 p br hr strong em b i u s small sub sup code pre blockquote ul ol li dl dt dd table caption colgroup col thead tbody tfoot tr th td a img figure figcaption details summary button input select option textarea label progress meter svg g path rect line polyline polygon circle ellipse text tspan defs marker pattern clippath mask symbol use lineargradient radialgradient stop image').split(' '));
+const PREVIEW_CSP = "default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:; media-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
+
+function previewAttributeAllowed(tag, name, value) {
+  name = name.toLowerCase();
+  if (/^on/.test(name) || ['srcdoc', 'srcset', 'action', 'formaction', 'form', 'target', 'ping', 'http-equiv', 'nonce', 'is', 'autofocus'].includes(name)) return false;
+  if (name === 'href' || name === 'xlink:href') return (tag === 'use' && /^#[A-Za-z0-9_-]+$/.test(value)) || (tag === 'image' && /^data:image\//i.test(value));
+  if (name === 'src') return tag === 'img' && /^data:image\//i.test(value);
+  return true;
+}
+
+function previewMarkup(html) {
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  for (const element of template.content.querySelectorAll('*')) {
+    const tag = element.localName.toLowerCase();
+    if (!PREVIEW_TAGS.has(tag)) { element.remove(); continue; }
+    for (const attribute of Array.from(element.attributes)) {
+      if (!previewAttributeAllowed(tag, attribute.name, attribute.value)) element.removeAttribute(attribute.name);
+    }
+    if (['button', 'input', 'select', 'textarea'].includes(tag)) element.setAttribute('disabled', '');
+  }
+  return '<!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="' + PREVIEW_CSP + '"></head><body>' + template.innerHTML + '</body></html>';
+}
+
+function showPreview(entry) {
+  if (entry.html === undefined) return;
+  document.getElementById('preview-title').textContent = '静的プレビュー: ' + entry.file.name;
+  previewFrame.srcdoc = previewMarkup(entry.html);
+  document.getElementById('review-panel').hidden = false;
+}
+
+function basicHtml(text) {
+  const start = text.replace(/^\uFEFF/, '').replace(/^(?:\s|<!--[\s\S]*?-->)+/, '');
+  return !text.includes('\u0000') && /^(?:<!doctype\s+html\b[^>]*>\s*)?<html(?:\s|>)/i.test(start)
+    && /<body(?:\s|>)/i.test(text) && /<\/body\s*>/i.test(text) && /<\/html\s*>(?:\s|<!--[\s\S]*?-->)*$/i.test(text);
+}
+
 async function handleFiles(files) {
   if (busy || files.length === 0) return;
-  const passphrase = passphraseInput.value;
-  if (!passphrase) { startUpload(); return; }
+  if (!passphraseInput.value) { startUpload(); return; }
   const statusList = document.getElementById('status-list');
   document.getElementById('status-box').style.display = 'block';
+  document.getElementById('review-panel').hidden = true;
+  previewFrame.srcdoc = '';
   statusList.replaceChildren();
-  const entries = files.map(file => {
+  entries = files.map(file => {
+    const item = document.createElement('div');
+    item.className = 'review-item';
     const row = document.createElement('div');
     row.className = 'status-item';
-    setStatus(row, 'wait', file.name + ' 処理待ち');
-    statusList.appendChild(row);
-    return { file, row };
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = file.name + ' をプレビュー';
+    button.disabled = true;
+    const entry = { file, row, button, done: false };
+    button.addEventListener('click', () => showPreview(entry));
+    setStatus(row, 'wait', file.name + ' 確認中');
+    item.append(button, row);
+    statusList.appendChild(item);
+    return entry;
   });
-  const subject = document.querySelector('input[name="subject"]:checked');
-  const selectedSubject = subject ? subject.value : null;
   busy = true;
   updateControls();
-  let authenticationFailed = false;
+  const names = new Set();
   try {
-    for (const { file, row } of entries) {
-      if (authenticationFailed) {
-        setStatus(row, 'err', file.name + ' 未処理: 合言葉を入力し直して再実行してください。');
-        continue;
-      }
+    for (const entry of entries) {
+      const { file, row, button } = entry;
       if (!MathAppProxy.validFilename(file.name)) {
         setStatus(row, 'err', file.name + ' 失敗: 管理用ページを除く .html ファイルを選択してください。');
         continue;
       }
+      if (names.has(file.name)) { setStatus(row, 'err', file.name + ' 同じ名前のファイルは1件ずつ選んでください。'); continue; }
+      names.add(file.name);
+      try {
+        MathAppProxy.assertHtmlSize(file.size);
+        const text = await readFileAsText(file);
+        if (!basicHtml(text)) {
+          setStatus(row, 'err', file.name + ' HTML文書を確認できません。Chatで作成した完全なHTMLファイルを選んでください。');
+          continue;
+        }
+        const updatedText = injectBackLink(text);
+        MathAppProxy.assertHtmlSize(new TextEncoder().encode(updatedText).length);
+        entry.html = updatedText;
+        button.disabled = false;
+        setStatus(row, 'wait', file.name + ' 追加前 — 表示と内容を確認してください。');
+      } catch (error) {
+        setStatus(row, 'err', file.name + ' 失敗: ' + (error.code === 'invalid_utf8' ? 'UTF-8形式のHTMLファイルを選んでください。' : MathAppProxy.errorMessage(error)));
+      }
+    }
+    const first = entries.find(entry => entry.html !== undefined);
+    if (first) showPreview(first);
+  } finally {
+    busy = false;
+    fileInput.value = '';
+    updateControls();
+  }
+}
+
+async function publishFiles() {
+  if (busy) return;
+  const passphrase = passphraseInput.value;
+  if (!passphrase) { startUpload(); return; }
+  const pending = entries.filter(entry => entry.html !== undefined && !entry.done);
+  if (!pending.length) return;
+  busy = true;
+  updateControls();
+  let authenticationFailed = false;
+  try {
+    for (const entry of pending) {
+      const { file, row } = entry;
+      if (authenticationFailed) {
+        setStatus(row, 'err', file.name + ' 未処理: 合言葉を入力し直して一覧へ追加を押してください。');
+        continue;
+      }
       setStatus(row, 'wait', file.name + ' をアップロード中...');
       try {
-        const text = await readFileAsText(file);
-        const updatedText = injectBackLink(text);
-        const contentBase64 = utf8ToBase64(updatedText);
-        const body = { folder: FOLDER, filename: file.name, contentBase64 };
-        if (selectedSubject) body.subject = selectedSubject;
+        const body = { folder: FOLDER, filename: file.name, contentBase64: utf8ToBase64(entry.html) };
         const result = await MathAppProxy.commit(body, passphrase);
+        entry.done = true;
         setStatus(row, 'ok', file.name + ' アップロード完了（タイトル: ' + result.label + '）。一覧への反映には数分かかることがあります。');
       } catch (error) {
         setStatus(row, 'err', file.name + ' 失敗: ' + MathAppProxy.errorMessage(error));
@@ -199,19 +311,14 @@ async function handleFiles(files) {
     }
   } finally {
     busy = false;
-    fileInput.value = '';
     updateControls();
   }
 }
 
-function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = e => resolve(e.target.result);
-    reader.onerror = () => reject(new Error('read_failed'));
-    reader.onabort = () => reject(new Error('read_aborted'));
-    reader.readAsText(file);
-  });
+async function readFileAsText(file) {
+  const bytes = await file.arrayBuffer();
+  try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); }
+  catch (error) { const invalid = new Error('invalid_utf8'); invalid.code = 'invalid_utf8'; throw invalid; }
 }
 
 updateControls();

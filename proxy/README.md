@@ -18,7 +18,7 @@ GitHub Pages /math-app/
 
 算数一覧の上部で「中学への算数」と「Sapix」を切り替えられます。それぞれ `math` と `sapix` に保存され、追加・削除は選択した教材の一覧だけに反映されます。合言葉と容量上限は共通です。月間号PDFから教材を作成する「更新」は、中学への算数側で利用します。
 
-「更新」で開く `/studio` は、**PDFを切り出す**・**解答解説HTMLを作成する** の2つの作業に分かれます。資料を選ぶだけでは実行せず、専用の実行ボタンで開始します。PDF切り出しはAIによる範囲判定とDrive保存で完了します。HTML作成は固定の出力フォルダにある切り出しPDFを別途選び、そのPDFから生成・保存・公開します。手順は [automation/README.md](../automation/README.md) を参照してください。
+「更新」で開く `/studio` は、**PDFを切り出す → Chatに渡す → 完成HTMLを取り込む** の流れです。PDF切り出しだけはAIのAPIで範囲を判定してDriveへ保存します。切り出し済みPDFと元のMD指示書をダウンロードしてChatへ添付し、完成HTMLを算数の追加画面へ取り込みます。ファイル選択では公開せず、静的プレビュー後の「一覧へ追加」で送信します。Chat用ダウンロードとHTML取り込みは生成APIを呼びません。手順は [STUDIO.md](STUDIO.md) を参照してください。
 
 「ページを削除する」では公開済みの一覧を読み込んで対象を選びます。一覧に未掲載のファイルはファイル名を指定できます。削除成功後、その行は画面から消えます。反映に時間がかかる場合は GitHub Pages の再公開後に読み直してください。合言葉を間違えた場合は入力し直して再実行できます。
 
@@ -42,7 +42,10 @@ GitHub Pages /math-app/
 
 ## API
 
-Studio の新規ジョブは `POST /api/studio/jobs` に `{fileId, model, operation}` を送ります。`operation` は `extract` または `html` の明示が必須です。`GET /api/studio/sources?operation=extract` は元の月間号、`operation=html` は固定の日日系・発展系フォルダにあるPDFを返し、サーバーでも入力と作業の対応を検証します。ジョブ・履歴・再開・runner進捗・公開でも作業種別を維持します。Studio は管理者のGoogle接続とCSRF保護を使います。
+Studio の新規ジョブは `POST /api/studio/jobs` に `{fileId, model, operation: "extract"}` を送ります。旧 `html` の新規作成・再実行は受け付けず、Chatを使う流れを案内します。`GET /api/studio/sources?operation=extract` は元の月間号、`operation=html` はChatに渡す固定の日日系・発展系フォルダにあるPDFを返します。Studio は管理者のGoogle接続とCSRF保護を使います。
+
+- `GET /api/studio/chat/instructions`: 元の作成指示書MDを添付ファイルとして取得します。
+- `GET /api/studio/chat/pdf/<Drive ID>?modifiedTime=<一覧の更新日時>`: 保存先・形式・更新日時を照合した切り出しPDFを取得します。認証必須、キャッシュ禁止、100MiB上限です。
 
 SAPIX の採点記録を別端末と同期する認証・保存の説明は [SAPIX-RECORDS.md](SAPIX-RECORDS.md) を参照してください。
 
