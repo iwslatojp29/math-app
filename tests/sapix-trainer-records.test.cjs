@@ -36,7 +36,7 @@ function boot({ stored = new Map(), failRead = false, problems = 1 } = {}) {
     nodes.set(id, el);
     return el;
   }
-  ['hist', 'recorded', 'recordError', 'nextBtn', 'prevBtn', 'main', 'mainScroll', 'timerPanel', 'resetBtn', 'modal', 'modalText', 'modalTa'].forEach(node);
+  ['hist', 'recorded', 'recordError', 'nextBtn', 'prevBtn', 'main', 'mainScroll', 'timerPanel', 'resetBtn', 'problemInfo', 'problemSource', 'modal', 'modalText', 'modalTa'].forEach(node);
   nodes.get('recorded').hidden = true;
   nodes.get('recordError').hidden = true;
   nodes.get('modal').hidden = true;

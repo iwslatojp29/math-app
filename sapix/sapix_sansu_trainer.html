@@ -51,7 +51,7 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(
 svg{display:block}
 
 /* ---------- app frame ---------- */
-.app{display:grid;grid-template-columns:336px minmax(0,1fr);flex:1;min-height:0}
+.app{display:grid;grid-template-columns:336px minmax(0,1fr);grid-template-rows:minmax(0,1fr);flex:1;min-height:0;isolation:isolate}
 .side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;overflow:hidden}
 .side-panes{display:grid;grid-template-rows:minmax(0,45fr) minmax(0,55fr);flex:1;min-height:0;overflow:hidden}
 .side-pane{display:flex;flex-direction:column;min-height:0;overflow:hidden}
@@ -119,19 +119,26 @@ svg{display:block}
 /* ---------- main ---------- */
 .main{min-height:0;min-width:0;overflow:hidden;display:flex;flex-direction:column}
 .main-scroll{min-height:0;flex:1;overflow-y:auto;overscroll-behavior-y:contain}
-.topbar{flex:none;z-index:5;display:flex;align-items:center;gap:10px;padding:8px 18px;background:var(--panel);border-bottom:1px solid var(--line)}
-.top-meta{flex:1;min-width:0}
-.menu-btn{display:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--panel);place-items:center}
+.topbar{flex:none;z-index:5;display:flex;align-items:center;gap:12px;padding:5px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top-meta{display:flex;align-items:center;gap:10px;flex:1;min-width:0;font-size:12px;color:var(--muted)}
+.question-label{flex:none;font-size:16px;color:var(--ink);font-family:var(--font-disp);font-weight:900}
+#crumbUnit{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu-btn{display:none;flex:none;width:32px;height:32px;border-radius:7px;border:1px solid var(--line);background:var(--panel);place-items:center}
 .menu-btn svg{width:20px;height:20px}
-.crumb{font-family:var(--font-disp);font-weight:700;font-size:15px;color:var(--ink-2);display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
-.crumb .sep{color:var(--line-strong)}
-.crumb .pos{color:var(--muted);font-weight:500;font-variant-numeric:tabular-nums}
-.topbar .today{font-family:var(--font-disp);font-size:11px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
-.content{padding:10px 12px 32px;max-width:1100px;width:100%;margin:0 auto}
+.content{padding:0 0 24px;width:100%;margin:0}
+.problem-info{position:relative;flex:none}
+.problem-info summary{display:block;list-style:none;padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.problem-info summary::-webkit-details-marker{display:none}
+.problem-info summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.problem-info[open] summary{color:var(--accent);background:var(--accent-soft);border-color:var(--accent-line)}
+.info-panel{position:absolute;right:0;top:calc(100% + 6px);width:min(380px,calc(100vw - 24px));max-height:min(70dvh,460px);overflow:auto;overscroll-behavior:contain;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--shadow);font-size:13px;color:var(--ink-2)}
+.info-panel h2{margin:14px 0 8px;font-size:12px;color:var(--muted)}
+.info-panel .info-meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px}
+.info-source{margin:8px 0 12px;font-weight:700;overflow-wrap:anywhere}
+.info-time{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:12px}
+.info-time strong{font-size:16px;font-variant-numeric:tabular-nums}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
-.card-head{padding:12px 18px;border-bottom:1px solid var(--line);background:var(--panel-2)}
-.head-left{display:flex;align-items:center;gap:18px;min-width:0}
+.card{background:var(--panel);overflow:hidden}
 .history{display:flex;direction:rtl;gap:6px;overflow-x:auto;max-width:100%;padding-bottom:2px;scrollbar-width:thin}
 .history .rec{direction:ltr;display:flex;flex-direction:column;align-items:center;gap:2px;flex:none;min-width:40px}
 .history .rec .d{font-family:var(--font-disp);font-size:11px;font-weight:500;color:var(--muted);line-height:1.2;white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -140,43 +147,39 @@ svg{display:block}
 .history .rec.new .mk{animation:pop .35s ease-out}
 .history .nohist{direction:ltr;font-size:12px;color:var(--muted);font-weight:500;padding-bottom:6px}
 @keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
-.pnum{display:flex;flex-direction:column;gap:4px;min-width:0}
-.pnum .pn{font-family:var(--font-disp);font-weight:900;font-size:30px;line-height:1;letter-spacing:.01em}
-.pnum .src{font-family:var(--font-disp);font-size:12px;font-weight:500;color:var(--muted);overflow-wrap:anywhere}
-.pnum .src .stars{color:var(--star);letter-spacing:.05em}
+.info-source .stars{color:var(--star);letter-spacing:.05em}
 
 /* timer */
-.timer{display:flex;align-items:center;gap:8px;flex:none}
-.timer-copy{width:90px;font-size:11px;color:var(--muted);line-height:1.5}
-.timer-copy strong{display:block;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
-.ring{position:relative;width:60px;height:60px;flex:none}
-.ring svg{width:60px;height:60px;transform:rotate(90deg) scaleX(-1)}
+.timer{display:flex;align-items:center;gap:6px;flex:none}
+.ring{display:flex;align-items:center;gap:5px;height:32px;flex:none}
+.ring svg{width:20px;height:20px;flex:none;transform:rotate(90deg) scaleX(-1)}
 .ring .track{fill:none;stroke:var(--line);stroke-width:7}
 .ring .bar{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;transition:stroke .3s}
-.ring .t{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-disp);font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.ring .t{min-width:4.5ch;font-family:var(--font-disp);font-weight:700;font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .ring.warn .bar{stroke:var(--mid)}
 .ring.warn .t{color:var(--mid)}
 .ring.over .bar{stroke:var(--ng)}
-.ring.over .t{color:var(--ng);font-size:15px;font-weight:900}
+.ring.over .t{color:var(--ng);font-weight:900}
 .ring.over{animation:shake .5s ease-in-out 1}
 .ring.done .bar{stroke:var(--muted)}
 .ring.done .t{color:var(--muted)}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.timer-ctl{display:flex;flex-direction:column;gap:4px}
-.ibtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;color:var(--ink-2)}
+.timer-ctl{display:flex;gap:4px}
+.ibtn{width:32px;height:32px;border-radius:7px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;color:var(--ink-2)}
 .ibtn svg{width:18px;height:18px}
 .ibtn:hover{border-color:var(--line-strong)}
 .timer-lbl{font-family:var(--font-disp);font-size:10px;color:var(--muted);font-weight:500}
 
 /* problem body */
-.problem{padding:22px 24px 8px;background:
+.problem{padding:12px 22px 8px;background:
   repeating-linear-gradient(to bottom,transparent 0 35px,var(--paper-rule) 35px 36px);
-  background-position:0 22px}
+  background-position:0 12px}
 .pgrid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 28px;align-items:start}
 .pgrid.nofig{grid-template-columns:minmax(0,1fr)}
 .ptext{font-size:18px;line-height:36px;color:var(--ink);text-indent:1em;margin:0}
 .ptext p{margin:0;text-indent:1em}
 .ptext rt{font-size:9px;color:var(--ink-2)}
+.problem .math{white-space:normal}
 .subq{list-style:none;margin:0;padding:0;font-size:18px;line-height:36px}
 .subq li{display:grid;grid-template-columns:3.2em minmax(0,1fr);gap:0}
 .subq .ql{text-align:left;white-space:nowrap}
@@ -263,8 +266,10 @@ svg{display:block}
 .recorded{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:14px;font-family:var(--font-disp);font-weight:700;font-size:14px;color:var(--ink-2)}
 .recorded .mk{width:22px;height:22px;flex:none}
 .recorded .undo{color:var(--muted);text-decoration:underline;font-weight:500;font-size:13px}
-.record-feedback{display:grid;grid-template-columns:22px minmax(0,1fr) auto;flex:none;justify-content:flex-start;margin:14px 18px 0;padding:12px 16px;border:1px solid var(--accent-line);border-radius:12px;background:var(--accent-soft)}
-.save-error{flex:none;margin:12px 18px 0;color:var(--ng);font-weight:700;font-size:14px;line-height:1.7}
+.record-feedback{flex:none;justify-content:flex-start;margin:0;padding:6px 14px;border-top:1px solid var(--accent-line);background:var(--accent-soft);gap:6px 12px;font-size:12px;line-height:1.5}
+.record-feedback .mk{width:18px;height:18px}
+.record-feedback .undo{margin-left:auto;white-space:nowrap;color:var(--accent)}
+.save-error{flex:none;margin:0;padding:6px 14px;border-top:1px solid var(--ng);color:var(--ng);font-weight:700;font-size:13px;line-height:1.5}
 .nav{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 4px 0;flex-wrap:wrap}
 .nav .btn{min-height:46px;font-size:15px}
 
@@ -321,26 +326,19 @@ svg{display:block}
   .side.open{transform:none}
   .scrim.show{display:block}
   .menu-btn{display:grid}
-  .content{padding:8px 10px 28px}
-  .card-head{padding:12px 16px}
-  .problem{padding:18px 16px 6px}
+  .content{padding:0 0 24px}
+  .problem{padding:12px 16px 6px}
   .actions,.answer,.record{padding-left:16px;padding-right:16px}
 }
 @media (max-width:640px){
-  .topbar{padding:6px 10px;gap:8px}
-  .topbar .today{display:none}
-  .crumb{font-size:12px;gap:2px 6px}
-  .crumb .sep{display:none}
-  .crumb .pos{width:100%}
-  .timer-copy{width:72px}
-  .timer-copy strong{font-size:14px}
-  .head-left{flex-wrap:wrap;gap:8px 16px}
-  .record-feedback{grid-template-columns:22px minmax(0,1fr);gap:8px 10px}
-  .record-feedback .undo{grid-column:2;justify-self:start}
+  .topbar{padding:5px 8px;gap:6px}
+  .top-meta{gap:6px;font-size:11px}
+  .question-label{font-size:14px}
+  .problem-info summary{font-size:11px;padding:5px 6px}
+  .record-feedback{padding:6px 10px;gap:4px 8px}
   .pgrid{grid-template-columns:minmax(0,1fr)}
   .fig{justify-self:center}
   .ptext,.subq{font-size:17px}
-  .pnum .pn{font-size:26px}
   .mbtn{width:96px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -410,23 +408,31 @@ svg{display:block}
     <div class="topbar">
       <button class="menu-btn" id="menuBtn" aria-label="メニューを開く"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
       <div class="top-meta">
-        <div class="crumb"><span id="crumbUnit">計算</span><span class="sep">›</span><span class="pos" id="crumbPos"></span></div>
-        <div class="today" id="today"></div>
+        <strong class="question-label" id="questionLabel">問1</strong><span id="crumbUnit">計算</span>
       </div>
       <div class="timer" id="timerPanel" aria-label="回答タイマー">
         <div class="ring" id="ring"><svg viewBox="0 0 92 92" aria-hidden="true"><circle class="track" cx="46" cy="46" r="40"/><circle class="bar" id="bar" cx="46" cy="46" r="40"/></svg><div class="t" id="tdisp" role="timer" aria-live="off">1:00</div></div>
-        <div class="timer-copy">回答時間<strong id="elapsedDisplay">0秒</strong><div class="timer-lbl" id="tlbl">制限 1分</div></div>
         <div class="timer-ctl">
           <button class="ibtn" id="pauseBtn" aria-label="一時停止"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
-          <button class="ibtn" id="resetBtn" aria-label="タイマーをやり直す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><polyline points="4 3 4 8 9 8"/></svg></button>
         </div>
       </div>
+      <details class="problem-info" id="problemInfo">
+        <summary>情報・履歴</summary>
+        <div class="info-panel">
+          <div class="info-meta"><span id="crumbPos"></span><span id="today"></span></div>
+          <div class="info-source" id="problemSource"></div>
+          <div class="info-time">回答時間<strong id="elapsedDisplay">0秒</strong><span class="timer-lbl" id="tlbl">制限 1分</span></div>
+          <button class="tbtn" id="resetBtn" aria-label="タイマーをやり直す">計測をやり直す</button>
+          <h2>採点と回答時間</h2>
+          <div class="history" id="hist" aria-label="採点と回答時間の記録"></div>
+        </div>
+      </details>
     </div>
     <div class="main-scroll" id="mainScroll">
-      <div class="recorded record-feedback" id="recorded" role="status" aria-live="polite" hidden></div>
-      <p class="save-error" id="recordError" role="alert" hidden></p>
       <div class="content" id="content"></div>
     </div>
+    <p class="save-error" id="recordError" role="alert" hidden></p>
+    <div class="recorded record-feedback" id="recorded" role="status" aria-live="polite" hidden></div>
   </main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -14795,6 +14801,8 @@ function historyHtml(pid, newest){
 function renderTop(){
   var list = visible(), idx = -1;
   list.forEach(function(p, i){ if (p.id === state.pid) idx = i; });
+  var p = current();
+  $('questionLabel').textContent = p ? '問' + p.no : '問題';
   $('crumbUnit').textContent = (state.unit === '*' ? 'すべての単元' : state.unit) + (state.test !== '*' ? '（' + state.test + '）' : '');
   $('crumbPos').textContent = list.length ? (idx + 1) + ' / ' + list.length : '0 / 0';
   var d = new Date(), w = ['日', '月', '火', '水', '木', '金', '土'][d.getDay()];
@@ -14809,9 +14817,13 @@ function figureHtml(p){ if (!p.figure) return ''; var f = typeof p.figure === 'f
 
 function renderProblem(){
   var p = current();
+  $('problemInfo').open = false;
+  $('hist').innerHTML = p ? historyHtml(p.id) : '<span class="nohist">問題を選んでください</span>';
+  $('problemSource').innerHTML = p ? esc(p.unit) + '・' + esc(p.src) + (p.stars ? ' <span class="stars">' + '★'.repeat(p.stars) + '</span>' : '') + (p.check ? '<span class="tag-check">要確認</span>' : '') : '';
   $('timerPanel').hidden = !p;
   if (!p) {
     timerStop();
+    $('elapsedDisplay').textContent = '—'; $('tlbl').textContent = '問題を選択してください'; $('resetBtn').disabled = true;
     $content.innerHTML = '<div class="card"><div class="problem" style="padding:36px 24px"><p class="ptext" style="text-indent:0;color:var(--muted)">この条件に合う問題はありません。左のしぼりこみを「すべて」にするか、別の単元・テスト範囲を選んでください。</p></div></div>';
     renderTop(); return;
   }
@@ -14819,12 +14831,6 @@ function renderProblem(){
   var qs = p.questions ? '<ol class="subq">' + p.questions.map(function(q){ return '<li><span class="ql">' + q.l + '</span><span>' + q.t + '</span></li>'; }).join('') + '</ol>' : '';
   var html =
     '<article class="card" id="card">' +
-      '<header class="card-head">' +
-        '<div class="head-left">' +
-          '<div class="pnum"><span class="pn">問' + p.no + '</span><span class="src">' + (state.unit === '*' ? esc(p.unit) + '・' : '') + esc(p.src) + (p.stars ? ' <span class="stars">' + '★'.repeat(p.stars) + '</span>' : '') + (p.check ? '<span class="tag-check">要確認</span>' : '') + '</span></div>' +
-          '<div class="history" id="hist" aria-label="採点と回答時間の記録">' + historyHtml(p.id) + '</div>' +
-        '</div>' +
-      '</header>' +
       '<section class="problem"><div class="pgrid' + (fig ? '' : ' nofig') + '"><div><div class="ptext">' + p.body + '</div>' + qs + (p.after || '') + '</div>' + fig + '</div></section>' +
       '<div class="actions" id="actions"><button class="btn primary" id="revealBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/></svg>解答・解説を見る</button></div>' +
       '<section class="answer" id="answer" hidden></section>' +
@@ -15068,6 +15074,7 @@ function clearRecords(){
 }
 
 document.addEventListener('click', function(e){
+  var info = $('problemInfo'); if (info.open && !info.contains(e.target)) info.open = false;
   var t = e.target && typeof e.target.closest === 'function' ? e.target.closest('button, a') : null; if (!t) return;
   if (t.dataset.filter) { setFilter(t.dataset.filter); return; }
   if (t.dataset.test) { setTest(t.dataset.test); return; }
@@ -15089,13 +15096,14 @@ document.addEventListener('click', function(e){
   }
 });
 $('scrim').addEventListener('click', closeSide);
+$('problemInfo').addEventListener('toggle', function(){ if (this.open) $('hist').scrollLeft = -1e6; });
 $('modal').addEventListener('click', function(e){ if (e.target === $('modal')) hideModal(); });
 $('limit').addEventListener('change', function(){ state.settings.limit = +this.value; saveSettings(); if (current() && !state.revealed) timerInit(state.settings.limit); });
 document.addEventListener('keydown', function(e){
   if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
   if (e.key === 'ArrowRight') nav(1);
   else if (e.key === 'ArrowLeft') nav(-1);
-  else if (e.key === 'Escape') { hideModal(); closeSide(); }
+  else if (e.key === 'Escape') { hideModal(); closeSide(); $('problemInfo').open = false; }
 });
 document.addEventListener('pointerdown', unlockAudio, {once: true});
 
