@@ -91,7 +91,7 @@ function boot({ stored = new Map(), failRead = false, problems = 1 } = {}) {
     return match[0];
   });
   const functions = ['loadAll', 'validRecordDate', 'validateRecordMap', 'copyRecords', 'recordsError',
-    'saveRecords', 'recs', 'latest', 'countOf', 'current', 'todayISO', 'fmtDate', 'fmtSec',
+    'saveRecords', 'recs', 'latest', 'recordSource', 'countOf', 'current', 'todayISO', 'fmtDate', 'fmtSec',
     'historyHtml', 'renderParentHistory', 'stripHtml', 'record', 'undoRecord', 'mergeRecords', 'importRecords', 'clearRecords',
     'exportRecords', 'mk', 'esc', 'visible', 'sortList', 'matchFilter', 'problemsOf', 'inUnit', 'inTest',
     'selectProblem', 'saveSettings', 'nav', 'refreshSyncedRecords'];
@@ -313,6 +313,19 @@ test('rendered score buttons use their native currentTarget and do not depend on
   assert.equal(h.ctx.recs('p1').length, 1);
   const delegated = html.slice(html.indexOf("document.addEventListener('click'"), html.indexOf("$('scrim').addEventListener"));
   assert.doesNotMatch(delegated, /\bmbtn\b|\brecord\(/);
+});
+
+test('the recorded-problems view opens history for a parent-only grade without copying it into its child', () => {
+  const h = boot();
+  h.ctx.PROBLEMS[0].parentId = 'parent';
+  h.ctx.recordStore.put('parent', {d: '2026-09-25', r: 'x', s: 91});
+  const before = h.stored.get(recordKey);
+  h.ctx.state.filter = 'recorded';
+  vm.runInContext(sourceOf('renderProblem'), h.ctx);
+  h.ctx.renderProblem();
+  assert.equal(h.nodes.get('problemInfo').open, true);
+  assert.equal(h.stored.get(recordKey), before);
+  assert.equal(h.ctx.state.records.p1, undefined);
 });
 
 for (const mark of ['o', 't', 'x']) {

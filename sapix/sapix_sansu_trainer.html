@@ -95,6 +95,7 @@ svg{display:block}
 .prow .strip .rec .mk{width:18px;height:18px}
 .prow .strip .rec .duration{font-size:9px;line-height:1.2;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink-2)}
 .prow .strip .none{direction:ltr;font-size:11px;color:var(--muted);font-weight:500;width:118px;text-align:right;padding-right:6px}
+.prow .strip .legacy-label{direction:ltr;align-self:center;flex:none;font-size:10px;padding:2px 4px;border:1px solid var(--line-strong);border-radius:4px;color:var(--ink-2)}
 .prow .strip.more{box-shadow:inset -14px 0 10px -10px var(--line-strong)}
 .prow .pn{font-family:var(--font-disp);font-weight:700;font-size:14px;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
 .prow .pt{font-size:12px;color:var(--ink-2);font-weight:700;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
@@ -316,10 +317,16 @@ svg{display:block}
 .modal-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
 .modal-actions input[type=file]{display:none}
 .scrim{display:none;position:fixed;inset:0;background:rgba(10,14,22,.45);z-index:19}
-.cloud-sync{margin:6px 0 0;padding:12px 0 0;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
-.cloud-sync .cloud-copy{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.cloud-sync{flex:none;margin:0;padding:8px 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px}
+.cloud-sync .cloud-copy{min-width:0;overflow-wrap:anywhere;line-height:1.4}
 .cloud-sync strong,.cloud-sync small{display:block}
 .cloud-sync small{margin-top:3px;color:var(--ink-2)}
+.cloud-actions{display:flex;gap:6px;margin-bottom:5px}
+.cloud-actions .tbtn{flex:1;min-height:36px}
+.cloud-account{position:relative;margin-top:4px}
+.cloud-account summary{cursor:pointer;color:var(--muted)}
+.cloud-account .account-panel{position:absolute;top:100%;left:0;right:0;z-index:10;padding:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow)}
+.cloud-account .foot-btns{margin-top:8px}
 .cloud-sync[data-error="true"]{border-color:var(--ng)}
 
 @media (max-width:900px){
@@ -358,6 +365,14 @@ svg{display:block}
       <div class="brand-logo" aria-hidden="true">算</div>
       <h1>20260926‗SAPIX間違い一覧<small>1問1分・〇△×で記録・全単元</small></h1>
     </div>
+    <section class="cloud-sync" id="cloudPanel" aria-label="記録の端末間同期">
+      <div class="cloud-actions"><button type="button" class="tbtn" id="cloudSync">記録を同期</button><button type="button" class="tbtn" id="showRecords">記録を見る</button></div>
+      <div class="cloud-copy"><strong id="cloudStatus" role="status" aria-live="polite">記録を読み込んでいます…</strong></div>
+      <details class="cloud-account"><summary>接続アカウント</summary><div class="account-panel">
+        <small id="cloudIdentity">Googleで接続すると、ほかの端末でも記録を続けられます。</small>
+        <div class="foot-btns"><button type="button" class="tbtn" id="cloudConnect">Googleで接続</button><button type="button" class="tbtn" id="cloudDisconnect" hidden>接続を解除</button></div>
+      </div></details>
+    </section>
     <div class="side-panes">
       <section class="side-pane" aria-labelledby="unitsTitle">
         <h2 class="pane-title" id="unitsTitle">単元を選ぶ</h2>
@@ -389,12 +404,6 @@ svg{display:block}
               <button class="tbtn danger" id="clearBtn">全消去</button>
             </div>
             <div class="foot-note" id="recnote">記録は端末に保存されます。Googleで接続すると、同じアカウントの端末間で同期します。</div>
-            <section class="cloud-sync" id="cloudPanel" aria-label="記録の端末間同期">
-              <div class="cloud-copy"><strong id="cloudStatus" role="status" aria-live="polite">記録はこの端末に保存されます</strong><small id="cloudIdentity">Googleで接続すると、ほかの端末でも記録を続けられます。</small></div>
-              <button type="button" class="tbtn" id="cloudConnect">Googleで接続</button>
-              <button type="button" class="tbtn" id="cloudSync" hidden>今すぐ同期</button>
-              <button type="button" class="tbtn" id="cloudDisconnect" hidden>接続を解除</button>
-            </section>
           </div>
         </div>
       </section>
@@ -429,9 +438,9 @@ svg{display:block}
           <button class="tbtn" id="resetBtn" aria-label="タイマーをやり直す">計測をやり直す</button>
           <button class="tbtn" id="audioTestBtn">音を確認</button>
           <p class="foot-note" id="audioStatus" role="status">画面を一度タップすると通知音が有効になります。</p>
-          <h2>採点と回答時間</h2>
+          <h2 id="currentHistoryTitle">採点と回答時間</h2>
           <div class="history" id="hist" aria-label="採点と回答時間の記録"></div>
-          <details id="parentHistory" hidden><summary>分割前の問題全体の記録</summary><p class="foot-note">以前の一括採点です。小問の成績には含めません。</p><div class="history" id="parentHist"></div></details>
+          <section id="parentHistory" hidden><h2>分割前の問題全体の記録</h2><p class="foot-note">以前の一括採点です。この小問だけの採点とは分けて表示しています。</p><div class="history" id="parentHist"></div></section>
         </div>
       </details>
     </div>
@@ -14589,7 +14598,7 @@ registerProblems([
 /* ====================== 状態・保存 ====================== */
 var LS_REC = 'sapix_sansu_records_v1', LS_SET = 'sapix_sansu_settings_v1';
 var state = { unit: '計算', filter: 'all', test: '*', sort: 'no', pid: null, revealed: false, justRecorded: null, lastRecorded: null, records: {}, recordsError: '', recordsBlocked: false, recordsRaw: null, settings: {limit: 60, sound: true} };
-var recordStore = null, syncReady = false;
+var recordStore = null, syncReady = false, cloudState = {};
 
 function loadAll(){
   try {
@@ -14669,14 +14678,21 @@ function saveRecords(candidate, replaceUnreadable, operation){
   }
 }
 function renderCloudStatus(s){
+  cloudState = s;
   var panel = $('cloudPanel'); if (!panel) return;
   panel.setAttribute('data-error', String(!!s.error));
-  $('cloudStatus').textContent = s.error || (s.syncing ? '記録を同期中…' : s.connected ? (s.pending ? '端末に保存済み・未同期 ' + s.pending + ' 件' : s.synced ? '記録を同期しました' : '接続済み・同期を確認中') : '記録はこの端末に保存されています');
+  $('cloudStatus').textContent = s.error || (s.syncing ? '記録を同期中…' : s.connected ? (s.pending ? '端末に保存済み・未同期 ' + s.pending + ' 件' : s.synced ? '記録を同期しました' : '接続済み・同期を確認中') : 'この端末に保存中・同期するにはGoogleに接続');
   $('cloudIdentity').textContent = s.connected ? s.email : 'Googleで接続すると、ほかの端末でも記録を続けられます。';
   $('cloudConnect').hidden = s.connected && !s.needsAuth;
   $('cloudConnect').textContent = s.needsAuth ? 'Googleに再接続' : 'Googleで接続';
-  $('cloudSync').hidden = !s.connected; $('cloudSync').disabled = s.syncing || s.needsAuth || s.blocked;
+  $('cloudSync').hidden = false; $('cloudSync').disabled = !!(s.syncing || s.blocked);
   $('cloudDisconnect').hidden = !s.connected;
+}
+function syncRecords(){
+  if (!recordStore || cloudState.syncing || cloudState.blocked) return;
+  return Promise.resolve().then(function(){
+    return cloudState.connected && !cloudState.needsAuth ? recordStore.sync() : recordStore.connect();
+  }).catch(function(){ recordsError('記録を同期できませんでした。Googleの接続と通信状態を確認して、もう一度「記録を同期」を押してください。端末の記録は残っています。'); });
 }
 function refreshSyncedRecords(records){
   state.records = records;
@@ -14692,28 +14708,32 @@ function refreshSyncedRecords(records){
     state.lastRecorded = null;
     $('recorded').hidden = true;
   }
+  if (!p) ensureSelection();
   renderSide(); renderTop();
+  if (!p && current()) renderProblem();
 }
 function saveSettings(){ try { localStorage.setItem(LS_SET, JSON.stringify({limit: state.settings.limit, sound: state.settings.sound, unit: state.unit, filter: state.filter, test: state.test, sort: state.sort, pid: state.pid})); } catch (e) {} }
 
 function recs(pid){ return state.records[pid] || []; }
+function recordSource(p){ return !recs(p.id).length && p.parentId && recs(p.parentId).length ? p.parentId : p.id; }
 function latest(pid){ var r = recs(pid); return r.length ? r[r.length - 1].r : null; }
 function countOf(pid, r){ var n = 0; recs(pid).forEach(function(x){ if (x.r === r) n++; }); return n; }
 function inUnit(p, unit){ return unit === '*' || p.unit === unit || (p.units && p.units.indexOf(unit) >= 0); }
 function inTest(p, t){ return t === '*' || (p.tests && p.tests.indexOf(t) >= 0); }
 function problemsOf(unit){ return PROBLEMS.filter(function(p){ return inUnit(p, unit) && inTest(p, state.test); }); }
 function matchFilter(p, f){
-  var l = latest(p.id);
+  var l = latest(recordSource(p));
   if (f === 'all') return true;
+  if (f === 'recorded') return l !== null;
   if (f === 'none') return l === null;
   return l === f;
 }
 function sortList(list){
   if (state.sort === 'ng') {
     list = list.slice().sort(function(a, b){
-      var d = countOf(b.id, 'x') - countOf(a.id, 'x'); if (d) return d;
-      d = countOf(b.id, 't') - countOf(a.id, 't'); if (d) return d;
-      var la = latest(a.id), lb = latest(b.id);
+      var d = countOf(recordSource(b), 'x') - countOf(recordSource(a), 'x'); if (d) return d;
+      d = countOf(recordSource(b), 't') - countOf(recordSource(a), 't'); if (d) return d;
+      var la = latest(recordSource(a)), lb = latest(recordSource(b));
       var rank = {x: 0, t: 1, o: 2}; var ra = la ? rank[la] : 3, rb = lb ? rank[lb] : 3; if (ra !== rb) return ra - rb;
       return PROBLEMS.indexOf(a) - PROBLEMS.indexOf(b);
     });
@@ -14735,7 +14755,12 @@ function fmtSec(s){ s = Math.round(s); if (s < 60) return s + '秒'; return Math
 var $ = function(id){ return document.getElementById(id); };
 var $filters = $('filters'), $units = $('units'), $plist = $('plist'), $plistTitle = $('plistTitle'), $content = $('content'), $tests = $('tests');
 
-var FILTERS = [{k: 'all', l: 'すべて'}, {k: 'none', l: '未実施'}, {k: 't', l: '△の問題', m: 't'}, {k: 'x', l: '×の問題', m: 'x'}];
+var FILTERS = [{k: 'all', l: 'すべて'}, {k: 'recorded', l: '記録あり'}, {k: 'none', l: '未実施'}, {k: 't', l: '△の問題', m: 't'}, {k: 'x', l: '×の問題', m: 'x'}];
+
+function showRecordedProblems(){
+  state.unit = '*'; state.test = '*'; state.filter = 'recorded';
+  ensureSelection(); renderSide(); renderProblem(); saveSettings();
+}
 
 function renderFilters(){
   var pool = problemsOf(state.unit);
@@ -14752,7 +14777,7 @@ function renderTests(){
   }).join('');
 }
 function unitBtn(key, label, n){
-  var ng = n ? problemsOf(key).filter(function(p){ return latest(p.id) === 'x'; }).length : 0;
+  var ng = n ? problemsOf(key).filter(function(p){ return latest(recordSource(p)) === 'x'; }).length : 0;
   return '<button class="unit' + (key === '*' ? ' all' : '') + '" data-unit="' + esc(key) + '" aria-current="' + (state.unit === key) + '"' + (n ? '' : ' disabled title="この範囲には問題がありません"') + '><span class="nm">' + esc(label) + '</span>' +
     (n ? (ng ? '<span class="ng-badge">×' + ng + '</span>' : '') + '<span class="cnt">' + n + '問</span>' : '<span class="cnt">–</span>') + '</button>';
 }
@@ -14767,6 +14792,10 @@ function stripHtml(pid, max){
   if (max && r.length > max) r = r.slice(r.length - max);
   return r.map(function(x){ return '<span class="rec" title="' + fmtDate(x.d, true) + (x.s != null ? '・回答 ' + fmtSec(x.s) : '') + (x.over ? '・制限超過' : '') + '"><span class="d">' + fmtDate(x.d) + '</span>' + mk(x.r) + (x.s != null ? '<span class="duration">' + Math.floor(Math.round(x.s) / 60) + ':' + String(Math.round(x.s) % 60).padStart(2, '0') + '</span>' : '') + '</span>'; }).join('');
 }
+function stripForProblem(p){
+  var pid = recordSource(p);
+  return (pid !== p.id ? '<span class="legacy-label">分割前</span>' : '') + stripHtml(pid, 10);
+}
 function renderPlist(){
   var list = visible();
   var previous = $plist.querySelector('.prow[aria-current="true"]');
@@ -14776,11 +14805,12 @@ function renderPlist(){
   var sortbar = '<div class="sortbar"><span class="lbl">並び順</span>' +
     '<button class="sbtn" data-sort="no" aria-pressed="' + (state.sort === 'no') + '">番号順</button>' +
     '<button class="sbtn" data-sort="ng" aria-pressed="' + (state.sort === 'ng') + '">×が多い順</button></div>';
-  if (!list.length) { $plist.innerHTML = sortbar + '<div class="empty">該当する問題はありません</div>'; $('problemScroll').scrollTop = 0; renderPlist.selectionKey = selectionKey; return; }
+  if (state.filter === 'recorded') sortbar += '<p class="unit-note">保存済み記録を表示します。「分割前」は元の問題全体の採点です。</p>';
+  if (!list.length) { $plist.innerHTML = sortbar + '<div class="empty">' + (state.filter === 'recorded' ? '表示できる記録がありません。ほかの端末で解いた場合は「記録を同期」を押してください。' : '該当する問題はありません') + '</div>'; $('problemScroll').scrollTop = 0; renderPlist.selectionKey = selectionKey; return; }
   $plist.innerHTML = sortbar + list.map(function(p){
-    var n = recs(p.id).length;
+    var n = recs(recordSource(p)).length;
     return '<button class="prow" data-pid="' + esc(p.id) + '" aria-current="' + (p.id === state.pid) + '">' +
-      '<span class="strip' + (n > 3 ? ' more' : '') + '">' + stripHtml(p.id, 10) + '</span>' +
+      '<span class="strip' + (n > 3 ? ' more' : '') + '">' + stripForProblem(p) + '</span>' +
       '<span class="pn">' + (state.unit === '*' ? '' : '') + '問' + p.no + '</span>' +
       '<span class="pt">' + esc(p.title) + (p.check ? '<span class="chk">要確認</span>' : '') + '<span class="ps">' + (state.unit === '*' ? esc(p.unit) + '・' : '') + esc(p.src) + '</span></span></button>';
   }).join('');
@@ -14826,6 +14856,7 @@ var ICON_RESET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 function figureHtml(p){ if (!p.figure) return ''; var f = typeof p.figure === 'function' ? p.figure() : p.figure; return '<div class="fig">' + f + '</div>'; }
 
 function renderParentHistory(p){
+  var title = $('currentHistoryTitle'); if (title) title.textContent = p && p.parentId ? 'この小問の採点と回答時間' : '採点と回答時間';
   var box = $('parentHistory'), history = $('parentHist'); if (!box || !history) return;
   box.hidden = !p || !p.parentId || !recs(p.parentId).length;
   history.innerHTML = box.hidden ? '' : historyHtml(p.parentId);
@@ -14837,7 +14868,7 @@ function renderParentHistory(p){
 function renderProblem(){
   var p = current();
   renderParentHistory(p);
-  $('problemInfo').open = false;
+  $('problemInfo').open = state.filter === 'recorded' && !!p;
   $('hist').innerHTML = p ? historyHtml(p.id) : '<span class="nohist">問題を選んでください</span>';
   $('problemSource').innerHTML = p ? esc(p.unit) + '・' + esc(p.src) + (p.stars ? ' <span class="stars">' + '★'.repeat(p.stars) + '</span>' : '') + (p.check ? '<span class="tag-check">要確認</span>' : '') : '';
   $('timerPanel').hidden = !p;
@@ -15156,6 +15187,7 @@ document.addEventListener('click', function(e){
     case 'nextBtn': nav(1); break;
     case 'undoBtn': undoRecord(); break;
     case 'menuBtn': openSide(); break;
+    case 'showRecords': showRecordedProblems(); break;
     case 'exportBtn': exportRecords(); break;
     case 'importBtn': importRecords(); break;
     case 'clearBtn': clearRecords(); break;
@@ -15210,7 +15242,7 @@ function loadGeneratedProblems(){
 loadAll();
 if (recordStore) {
   $('cloudConnect').addEventListener('click', function(){ recordStore.connect().catch(function(){ recordsError('Google接続を開始できませんでした。ブラウザの保存設定と通信を確認してください。'); }); });
-  $('cloudSync').addEventListener('click', function(){ recordStore.sync(); });
+  $('cloudSync').addEventListener('click', syncRecords);
   $('cloudDisconnect').addEventListener('click', function(){ recordStore.disconnect().catch(function(){ recordsError('接続情報を消去できませんでした。ブラウザの保存設定を確認してください。'); }); });
   window.addEventListener('online', function(){ recordStore.sync(); });
   window.addEventListener('focus', function(){ recordStore.sync(); });
