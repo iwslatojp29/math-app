@@ -678,7 +678,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 feedback = "\n独立検証で以下が未解決です。原画像で修正:" + json_bytes(review).decode()
                 feedback += "\n修正対象の前回候補:" + json_bytes(candidate).decode()
 
-            def repair_invisible_labels(original, original_review, original_issues):
+            def repair_invisible_labels(original, original_review, original_issues, *, allowed_ids=None, request_namespace=""):
                 """Select evidenced text placeholders, then replace only their data.
 
                 Selection is model-assisted because names/coordinates cannot
@@ -690,13 +690,26 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     if item["kind"] == "polyline" and item["color"] == "none" and len(item["points"]) == 2
                     and sum((item["points"][0][axis] - item["points"][1][axis]) ** 2 for axis in ("x", "y")) <= 4
                     and any(item["id"] in cue["state"]["visibleIds"] for cue in cues.values())}
+                limited = allowed_ids is not None
+                if limited:
+                    # This path may replace only elements introduced by the
+                    # just-rejected reference patch, never pre-existing anchors.
+                    if (not allowed_ids or len(allowed_ids) != len(set(allowed_ids))
+                            or not set(allowed_ids) <= set(placeholders)):
+                        return None, original_issues
+                    placeholders = {identifier: item for identifier, item in placeholders.items() if identifier in allowed_ids}
                 findings = [issue for issue in original_review["issues"]
                     if "polyline" in issue.lower() and re.search(r"label|文字|ラベル", issue, re.I)
                     and re.search(r"none|不可視|透明", issue, re.I)]
                 named = [identifier for identifier in placeholders if any(re.search(
                     r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
-                if not named:
+                if not named and not (limited and findings):
                     return None, original_issues
+                if limited:
+                    # A collective "all added elements" finding need not name
+                    # every ID. Source-grounded selection must justify each
+                    # permitted replacement; a legitimate anchor stays blocked.
+                    named = list(allowed_ids)
 
                 selection_schema = obj({"targets": arr(obj({
                     "id": {"type": "string", "enum": list(placeholders)},
@@ -707,14 +720,15 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     "正当な不可視アンカー・補助座標・移動基準・当たり判定は対象にしない。ID名や座標の一致だけでラベルだと推測しない。"
                     "各対象について原問題・発話・図のどの意味から文字が必要かwhyTextNeededへ具体的に記録し、"
                     "単に小さい・透明だからという根拠は不可。そのIDがvisibleIdsにあるcueだけをcueIdsへ記録する。対象は重複させない。"
-                    "検証者が明示した必須ID:" + json_bytes(named).decode()
+                    + ("参照修復で追加された検査対象ID（文字だという根拠は各IDごとに原画像で確認する）:"
+                       if limited else "検証者が明示した必須ID:") + json_bytes(named).decode()
                     + "。候補として許可された不可視primitive:" + json_bytes(list(placeholders.values())).decode()
                     + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                     + "。前回の独立検証:" + json_bytes(original_review).decode()
                     + "。候補:" + json_bytes(original).decode())
                 report_phase("reviewing")
                 try:
-                    selection = request_ai.structured(f"lesson-label-targets-{plan['kind']}-{entry['id']}" + task_suffix,
+                    selection = request_ai.structured(f"lesson-label-targets-{plan['kind']}-{entry['id']}" + request_namespace + task_suffix,
                         selection_prompt + inventory_scope_recovery, selection_schema, inputs, max_tokens=8000)
                     check_stop()
                     jsonschema.validate(selection, selection_schema)
@@ -734,6 +748,12 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 label_schema = obj({"labels": arr({"$ref": "#/$defs/label"}),
                                     "verification": {"$ref": "#/$defs/verification"}})
                 label_schema["$defs"] = {key: copy.deepcopy(schema["$defs"][key]) for key in ("label", "verification")}
+                if limited:
+                    properties = label_schema["$defs"]["label"]["properties"]
+                    properties["id"]["enum"] = target_ids
+                    properties["fontSize"]["minimum"] = 14
+                    properties["color"]["enum"] = [color for color in properties["color"]["enum"] if color != "none"]
+                    properties["text"]["pattern"] = r"\S"
                 label_prompt = ("原画像と候補を照合し、指定IDの不可視文字代替polylineだけを実際のkind=labelへ修復してください。"
                     "labelsは指定IDと完全一致する集合を各1件返す。ID追加・削除・変更は禁止。"
                     "textは原画像・数値・単位・既存発話に基づく空でない文字列、fontSizeは14以上、colorはnone以外。"
@@ -750,7 +770,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     report_phase("generating")
                     patch = None
                     try:
-                        patch = request_ai.structured(f"lesson-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + task_suffix,
+                        patch = request_ai.structured(f"lesson-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + request_namespace + task_suffix,
                             label_prompt + repair_feedback + inventory_scope_recovery, label_schema, inputs, max_tokens=14000)
                         check_stop()
                         jsonschema.validate(patch, label_schema)
@@ -776,7 +796,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                 report_phase("reviewing")
                                 try:
                                     audit = request_ai.structured(
-                                        f"lesson-review-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + task_suffix,
+                                        f"lesson-review-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + request_namespace + task_suffix,
                                         specification + "\n独立した数学・教材検証者として原画像から全小問を別に検算し、"
                                         "条件・相似の対応・面積体積比・単位・例外・全式・数の出所・解法選択理由を確認してください。"
                                         "公式解答があれば全小問を照合し、なければその事実を明記する。全cueのかな読みを数値/点名/単位まで読む。"
@@ -865,6 +885,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 dimension_recovery = ""
                 request_schema = reference_schema
                 reference_attempts, dimension_observations = 0, []
+                rejected_added_labels = None
 
                 def added_dimensions(value):
                     observations = []
@@ -916,6 +937,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                             if name == "label":
                                 properties["fontSize"]["minimum"] = 14
                     invalid_added_dimensions = []
+                    rejected_added_labels = None
                     reference_attempts += 1
                     report_phase("generating")
                     patch = None
@@ -1004,9 +1026,20 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         issues.append("図の参照修復後の独立検証の根拠が空欄です。")
                                     if not issues:
                                         issues = ["図の参照修復後の独立検証で承認されませんでした。"]
+                                    if (not audit["approved"] and audit["issues"] and additions
+                                            and audit["checkedSubquestionIds"] == required_ids
+                                            and all(audit[key].strip() for key in fields)):
+                                        rejected_added_labels = (patched, audit, list(issues), [item["id"] for item in additions])
                     repair_feedback = "\n前回の参照修復の問題:" + json_bytes(_safe_lesson_details(issues)).decode()
                     if isinstance(patch, dict):
                         repair_feedback += "。前回の参照修復候補:" + json_bytes(patch).decode()
+                if rejected_added_labels is not None:
+                    rejected, review, label_issues, added_ids = rejected_added_labels
+                    repaired, label_issues = repair_invisible_labels(rejected, review, label_issues,
+                        allowed_ids=added_ids, request_namespace="-reference-added")
+                    if repaired is not None:
+                        return repaired, []
+                    issues = label_issues
                 diagnostic = "参照修復の診断: " + json_bytes({"referenceAttempts": reference_attempts,
                     "dimensionRecoveryAttempts": max(0, reference_attempts - 2),
                     "invalidAddedDimensions": dimension_observations}).decode()
