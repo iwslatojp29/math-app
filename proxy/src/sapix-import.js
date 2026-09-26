@@ -63,23 +63,38 @@ export class SapixImport {
     try { const value = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(decode(file.content))); if (!validSapixCatalog(value)) throw new Error(); return value; } catch { this.fail(409, 'sapix_import_catalog'); }
   }
   async model() {
-    const cached = await this.storage.get('sapix-import:model');
-    if (cached?.checkedAt > Date.now() - 900000) return cached.model;
-    if (!this.env.ANTHROPIC_API_KEY) this.fail(503, 'sapix_import_model');
-    const models = []; let after;
+    // Diagnostics are fixed codes only: never include a key, provider body,
+    // arbitrary exception message, request URL, or returned model document.
+    let diagnostic = 'models_cache_read_failed';
     try {
+      const cached = await this.storage.get('sapix-import:model');
+      if (cached?.checkedAt > Date.now() - 900000) return cached.model;
+      diagnostic = 'models_config_missing'; if (!this.env.ANTHROPIC_API_KEY) throw new Error();
+      const models = []; let after;
       for (let page = 0; page < 10; page++) {
+        diagnostic = 'models_request_options_failed';
         const url = new URL('https://api.anthropic.com/v1/models'); url.searchParams.set('limit', '100'); if (after) url.searchParams.set('after_id', after);
-        const response = await fetch(url, { headers: { 'x-api-key': this.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' }, redirect: 'error', signal: AbortSignal.timeout(15000) });
-        if (!response.ok) throw new Error(); const body = await response.json(); if (!Array.isArray(body.data)) throw new Error();
+        // workerd rejects redirect:"error" before sending the request. Manual
+        // mode exposes 3xx to the status check without forwarding credentials.
+        const options = { headers: { 'x-api-key': this.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' }, redirect: 'manual', signal: AbortSignal.timeout(15000) };
+        diagnostic = 'models_network_failed'; const response = await fetch(url, options);
+        if (!response.ok) { diagnostic = 'models_http_' + (Number.isInteger(response.status) && response.status >= 100 && response.status <= 599 ? response.status : 'invalid'); throw new Error(); }
+        diagnostic = 'models_invalid_json'; const body = await response.json();
+        diagnostic = 'models_invalid_response'; if (!Array.isArray(body?.data) || body.data.some(item => !item || typeof item !== 'object')) throw new Error();
         models.push(...body.data.filter(item => /^claude-fable-\d[A-Za-z0-9-]*$/.test(item.id || '') && Number.isFinite(Date.parse(item.created_at))));
-        if (!body.has_more) { after = null; break; } if (!body.last_id || body.last_id === after) throw new Error(); after = body.last_id;
+        if (!body.has_more) { after = null; break; } diagnostic = 'models_pagination_invalid'; if (typeof body.last_id !== 'string' || !body.last_id || body.last_id === after) throw new Error(); after = body.last_id;
       }
-      if (after || !models.length) throw new Error();
+      diagnostic = 'models_pagination_limit'; if (after) throw new Error();
+      diagnostic = 'models_fable_unavailable'; if (!models.length) throw new Error();
+      diagnostic = 'models_selection_failed';
       models.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at) || b.id.localeCompare(a.id, 'en', { numeric: true }));
       const model = { id: models[0].id, name: safeMessage(models[0].display_name) || models[0].id };
+      diagnostic = 'models_cache_write_failed';
       await this.storage.put('sapix-import:model', { model, checkedAt: Date.now() }); return model;
-    } catch { this.fail(503, 'sapix_import_model'); }
+    } catch (error) {
+      if (diagnostic === 'models_network_failed') diagnostic = ['AbortError', 'TimeoutError'].includes(error?.name) ? 'models_network_timeout' : error?.name === 'TypeError' ? 'models_network_typeerror' : diagnostic;
+      this.fail(503, 'sapix_import_model', diagnostic);
+    }
   }
   async fingerprint(file) { return this.digest(JSON.stringify([file.id, file.name, file.mimeType, file.md5Checksum || null, file.createdTime, file.modifiedTime, String(file.size || ''), [...(file.parents || [])].sort()])); }
   async files() {
@@ -288,7 +303,7 @@ export class SapixImport {
     job.publicationCheckedAt = now();
     try {
       const base = new URL('./', job.result.url), url = new URL('problems/generated.json', base); url.searchParams.set('v', job.result.commitSha); url.searchParams.set('check', Date.now());
-      const response = await fetch(url, { headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' }, cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(10000) });
+      const response = await fetch(url, { headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' }, cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(10000) });
       if (!response.ok) throw new Error();
       const catalog = await this.readBody(response, 8 * 1024 * 1024); if (!validSapixCatalog(catalog)) throw new Error();
       const sources = catalog.sources.filter(source => job.files.some(file => file.id === source.fileId)), ids = new Set(sources.flatMap(source => source.problemIds));
@@ -299,7 +314,7 @@ export class SapixImport {
       // the owner object. Every referenced asset must pass before completion.
       const start = job.publicationVerifiedAssets || 0, selected = paths.slice(start, start + 20);
       for (let index = 0; index < selected.length; index += 5) {
-        const responses = await Promise.all(selected.slice(index, index + 5).map(path => { const asset = new URL(path, base); asset.searchParams.set('v', job.result.commitSha); return fetch(asset, { method: 'HEAD', cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(5000) }); }));
+        const responses = await Promise.all(selected.slice(index, index + 5).map(path => { const asset = new URL(path, base); asset.searchParams.set('v', job.result.commitSha); return fetch(asset, { method: 'HEAD', cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(5000) }); }));
         for (const asset of responses) { if (asset.status !== 200) throw new Error(); job.publicationVerifiedAssets = (job.publicationVerifiedAssets || 0) + 1; }
       }
       if (job.publicationVerifiedAssets >= paths.length) { job.status = 'completed'; job.stage = 'completed'; job.progress = 100; job.error = null; job.message = `${job.result.addedProblems} 小問の取り込みが完了しました。問題と元画像の公開を確認しました。`; }

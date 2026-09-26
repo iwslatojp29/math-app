@@ -118,6 +118,28 @@ test('Fable discovery follows model pagination, verifies newest model and fails 
   await mockedFetch(async () => Response.json({ data: [{ id: 'claude-other-7', created_at: '2027-01-01T00:00:00Z' }], has_more: false }), async () => { await assert.rejects(f.service.model(), error => error.code === 'sapix_import_model'); });
 });
 
+test('model diagnostics distinguish configuration, HTTP, network, parsing, selection and storage without exposing provider secrets', async () => {
+  const payload = 'sk-ant-sensitive-fake-api-key provider response body';
+  const cases = [
+    { diagnostic: 'models_config_missing', setup: f => { delete f.state.env.ANTHROPIC_API_KEY; } },
+    { diagnostic: 'models_http_403', fetch: async () => new Response(payload, { status: 403 }) },
+    { diagnostic: 'models_network_typeerror', fetch: async () => { throw new TypeError(payload); } },
+    { diagnostic: 'models_network_timeout', fetch: async () => { throw new DOMException(payload, 'TimeoutError'); } },
+    { diagnostic: 'models_invalid_json', fetch: async () => new Response(payload, { status: 200 }) },
+    { diagnostic: 'models_invalid_response', fetch: async () => Response.json({ error: payload }) },
+    { diagnostic: 'models_fable_unavailable', fetch: async () => Response.json({ data: [{ id: 'claude-other-5', created_at: '2026-08-01T00:00:00Z' }], has_more: false }) },
+    { diagnostic: 'models_cache_write_failed', setup: f => { const put = f.storage.put.bind(f.storage); f.storage.put = async (key, value) => { if (key === 'sapix-import:model') throw new Error(payload); return put(key, value); }; }, fetch: async () => Response.json({ data: [{ id: MODEL.id, display_name: MODEL.name, created_at: '2026-08-28T00:00:00Z' }], has_more: false }) },
+  ];
+  for (const entry of cases) {
+    const f = await fixture(); await f.storage.delete('sapix-import:model'); entry.setup?.(f);
+    await mockedFetch(entry.fetch || (() => { throw new Error('Provider must not be called'); }), async () => {
+      const result = await responseJSON(f.state, request(API + '/candidates', { cookie: f.cookie }), 503);
+      assert.equal(result.error, 'sapix_import_model'); assert.equal(result.diagnostic, entry.diagnostic);
+      assert(!JSON.stringify(result).includes(payload)); assert(!JSON.stringify(result).includes(ENV.ANTHROPIC_API_KEY));
+    });
+  }
+});
+
 test('confirmation pins selected revisions/model, concurrent double submit dispatches once, unselected IDs and 11-file batches fail', async () => {
   const f = await fixture(), scan = await f.service.scan(); await f.storage.put('sapix-import:model', { model: { id: 'claude-fable-6', name: 'Later' }, checkedAt: Date.now() });
   const body = { scanId: scan.scanId, fileIds: [SOURCE.id] };
@@ -250,7 +272,7 @@ async function allowPublicationCheck(f, overrides = {}) { const job = await f.se
 test('completion waits for public catalog plus every original image, hides premature links, and does not let the runner bypass the check', async () => {
   const f = await publishingFixture(); assert.match(f.result.url, /\?v=commit/);
   let readyCatalog = false, readyImage = false; const publicCalls = [];
-  await mockedFetch(async (input, options) => { const url = new URL(input); publicCalls.push({ url, options }); assert.equal(url.origin, 'https://example.github.io'); assert.equal(options.redirect, 'error'); assert.equal(options.headers?.Authorization, undefined); return options.method === 'HEAD' ? new Response(null, { status: readyImage ? 200 : 404 }) : Response.json(readyCatalog ? f.catalog : EMPTY()); }, async () => {
+  await mockedFetch(async (input, options) => { const url = new URL(input); publicCalls.push({ url, options }); assert.equal(url.origin, 'https://example.github.io'); assert.equal(options.redirect, 'manual'); assert.equal(options.headers?.Authorization, undefined); return options.method === 'HEAD' ? new Response(null, { status: readyImage ? 200 : 404 }) : Response.json(readyCatalog ? f.catalog : EMPTY()); }, async () => {
     const first = await responseJSON(f.state, request(API + '/jobs', { cookie: f.cookie })); assert.equal(first.jobs[0].status, 'publishing'); assert.equal(first.jobs[0].result, null);
     await responseJSON(f.state, request(RUNNER + ID, { runner: true, method: 'POST', body: { status: 'completed' } }), 409);
     await responseJSON(f.state, request(API + '/jobs/' + ID + '/cancel', { cookie: f.cookie, method: 'POST', body: {} }), 409);

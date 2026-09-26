@@ -29,8 +29,8 @@ const errorText = {
   sapix_import_capacity: '一度に処理できる容量を超えています。資料を少なくして取り込んでください。',
   sapix_import_publishing: '保存した問題の公開を確認しています。この段階では取り消しできません。',
 };
-class StudioError extends Error { constructor(status, code) { super(code); this.status = status; this.code = code; } }
-const fail = (status, code) => { throw new StudioError(status, code); };
+class StudioError extends Error { constructor(status, code, diagnostic) { super(code); this.status = status; this.code = code; if (code === 'sapix_import_model' && /^models_[a-z0-9_]{1,60}$/.test(diagnostic || '')) this.diagnostic = diagnostic; } }
+const fail = (status, code, diagnostic) => { throw new StudioError(status, code, diagnostic); };
 const now = () => new Date().toISOString();
 const result = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers } });
 const b64 = bytes => typeof bytes.toBase64 === 'function' ? bytes.toBase64() : btoa(Array.from(bytes, b => String.fromCharCode(b)).join(''));
@@ -105,7 +105,7 @@ export class StudioState {
   }
   async fetch(request) {
     try { return await this.route(request); }
-    catch (error) { const safe = error instanceof StudioError ? error : new StudioError(500, 'internal_error'); return result({ error: safe.code, message: errorText[safe.code] }, safe.status, new URL(request.url).pathname.startsWith('/api/sapix/') ? sapixCors(request, this.env) : {}); }
+    catch (error) { const safe = error instanceof StudioError ? error : new StudioError(500, 'internal_error'); return result({ error: safe.code, message: errorText[safe.code], ...(safe.diagnostic ? { diagnostic: safe.diagnostic } : {}) }, safe.status, new URL(request.url).pathname.startsWith('/api/sapix/') ? sapixCors(request, this.env) : {}); }
   }
   async route(request) {
     const url = new URL(request.url), path = url.pathname.replace(/\/$/, ''), method = request.method;

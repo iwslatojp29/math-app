@@ -13,7 +13,7 @@ const CLIENT = String.raw`(function(){
     let response;try{response=await fetch(path.startsWith('/api/')?path:'/studio/api/sapix-import'+path,options);}catch{throw new Error('通信できませんでした。作成履歴を確認してから再試行してください。');}
     const value=await response.json();
     if(response.status===401){state.authenticated=false;clearTimeout(state.timer);$('workspace').hidden=true;$('gate').hidden=false;throw new Error('Studio の Google 接続が必要です。');}
-    if(!response.ok)throw new Error(value.message||'操作を完了できませんでした。画面を更新して再試行してください。');
+    if(!response.ok)throw new Error((value.message||'操作を完了できませんでした。画面を更新して再試行してください。')+(/^models_[a-z0-9_]{1,60}$/.test(value.diagnostic||'')?'（確認コード：'+value.diagnostic+'）':''));
     return value;
   }
   function controls(){const n=state.selected.size;$('start').textContent=n?'選択した '+n+' 件を確認する':'取り込む資料を選んでください';$('start').disabled=state.busy||!n||n>10||state.jobs.some(recovering);$('reload').disabled=state.busy;$('count').textContent=state.files.length+' 件の候補 / '+n+' 件選択';}
