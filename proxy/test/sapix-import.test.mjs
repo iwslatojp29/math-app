@@ -102,6 +102,62 @@ test('large candidate snapshots are split below Durable Object value limits and 
   assert.equal(result.job.files[0].id, 'file-599');
 });
 
+test('batched breadth-first traversal keeps parent paths across pagination, deduplicates repeats and excludes outside parents', async () => {
+  const f = await fixture(), calls = [];
+  f.state.drive = async (path, params) => {
+    const parents = [...params.q.matchAll(/'([^']+)' in parents/g)].map(match => match[1]); calls.push({ parents, page: params.pageToken });
+    assert(parents.length <= 20); assert.match(params.q, /createdTime >= '2026-09-23T15:00:00Z'/);
+    if (parents[0] === SAPIX_IMPORT_FOLDER) return { files: Array.from({ length: 28 }, (_, index) => ({ id: 'unit-' + index, name: '単元' + index, mimeType: 'application/vnd.google-apps.folder', parents: [SAPIX_IMPORT_FOLDER] })) };
+    if (parents[0] === 'deep') return { files: [{ ...SOURCE, id: 'deep-source', parents: ['deep'] }] };
+    const files = parents.map(parent => ({ ...SOURCE, id: parent === 'deep' ? 'deep-source' : 'source-' + parent, parents: [parent] }));
+    if (parents.includes('unit-0') && !params.pageToken) return { files: [files[0], { id: 'deep', name: '復習', mimeType: 'application/vnd.google-apps.folder', parents: ['unit-0'] }], nextPageToken: 'second-page' };
+    return { files: [...files, { ...SOURCE, id: 'outside', parents: ['not-in-tree'] }] };
+  };
+  const files = await f.service.files();
+  assert.equal(files.length, 29); assert.equal(files.find(file => file.id === 'deep-source').unitPath, '単元0/復習');
+  for (let index = 0; index < 28; index++) assert.equal(files.find(file => file.id === 'source-unit-' + index).unitPath, '単元' + index);
+  assert(!files.some(file => file.id === 'outside')); assert.equal(new Set(files.map(file => file.id)).size, 29);
+  assert.deepEqual(calls.map(call => call.parents.length), [1, 20, 20, 9], 'last group includes remaining sibling folders and discovered descendant');
+});
+
+test('batched parent metadata fails closed when missing or ambiguous, including folders shared by two rooted parents', async () => {
+  for (const type of ['missing', 'shared-file', 'shared-folder']) {
+    const f = await fixture();
+    f.state.drive = async (path, params) => {
+      if (params.q.startsWith("'" + SAPIX_IMPORT_FOLDER + "'")) return { files: ['a', 'b'].map(id => ({ id, name: id, mimeType: 'application/vnd.google-apps.folder', parents: [SAPIX_IMPORT_FOLDER] })) };
+      const file = { ...SOURCE, parents: ['a', 'b'] }; if (type === 'missing') delete file.parents; if (type === 'shared-folder') file.mimeType = 'application/vnd.google-apps.folder';
+      return { files: [file] };
+    };
+    await assert.rejects(f.service.files(), error => error.code === 'sapix_import_parent');
+  }
+});
+
+test('selection revalidation detects a source moved between two parents in the same grouped query', async () => {
+  const f = await fixture(); let parent = 'a';
+  f.state.drive = async (path, params) => params.q.startsWith("'" + SAPIX_IMPORT_FOLDER + "'")
+    ? { files: ['a', 'b'].map(id => ({ id, name: id, mimeType: 'application/vnd.google-apps.folder', parents: [SAPIX_IMPORT_FOLDER] })) }
+    : { files: [{ ...SOURCE, parents: [parent] }] };
+  const scan = await f.service.scan(); assert.equal(scan.files[0].unitPath, 'a'); parent = 'b';
+  const result = await responseJSON(f.state, request(API + '/jobs', { cookie: f.cookie, method: 'POST', body: { scanId: scan.scanId, fileIds: [SOURCE.id] } }), 409);
+  assert.equal(result.error, 'sapix_import_source_changed'); assert(!f.githubCalls.some(call => call.path.endsWith('/dispatches')));
+});
+
+test('scan failures report fixed stage/category codes without private names, IDs, keys or raw exception text', async () => {
+  const privateText = 'private-file.pdf private-file-id sk-ant-never-expose';
+  const cases = [
+    ['scan_drive_fetch_request_limit', f => { f.state.drive = async () => { throw new Error('Too many subrequests: ' + privateText); }; }],
+    ['scan_drive_fetch_timeout', f => { f.state.drive = async () => { throw new DOMException(privateText, 'TimeoutError'); }; }],
+    ['scan_fingerprint_typeerror', f => { f.service.digest = async () => { throw new TypeError(privateText); }; }],
+    ['scan_snapshot_write_value_limit', f => { f.storage.transaction = async () => { throw new Error('Value too large. 128 KiB: ' + privateText); }; }],
+    ['scan_snapshot_write_key_limit', f => { f.storage.transaction = async () => { throw new Error('Too many keys: ' + privateText); }; }],
+    ['scan_snapshot_cleanup_failed', f => { f.storage.list = async () => { throw new Error(privateText); }; }],
+  ];
+  for (const [diagnostic, configure] of cases) {
+    const f = await fixture(); configure(f); const result = await responseJSON(f.state, request(API + '/candidates', { cookie: f.cookie }), 503);
+    assert.equal(result.diagnostic, diagnostic); assert.equal(result.error, 'sapix_import_scan'); assert(!JSON.stringify(result).includes(privateText));
+  }
+});
+
 test('catalog above Contents API inline limit is read from its immutable Git blob', async () => {
   const f = await fixture(), calls = [], blobSha = 'b'.repeat(40);
   f.state.github = async path => { calls.push(path); return path.startsWith('contents/') ? { sha: blobSha, encoding: 'none', content: '', size: 2000000 } : { content: encode(EMPTY()) }; };
@@ -319,7 +375,7 @@ test('browser-closed recovery retries at most three times and isolates provider 
   await seedJob(f, { status: 'failed', retryable: true, autoAttempts: 3 }); await f.service.alarm(); assert.equal((await f.service.job(ID)).retryable, false); assert.equal(f.githubCalls.filter(call => call.path.endsWith('/dispatches')).length, 3);
   const other = await fixture(); await seedJob(other, { status: 'failed', retryable: true }); const second = '00000000-0000-4000-8000-000000000002'; await seedJob(other, { id: second, status: 'failed', retryable: true });
   const github = other.state.github; let fail = true; other.state.github = async (...args) => { if (fail) { fail = false; throw new Error('fake provider outage'); } return github(...args); };
-  await other.service.alarm(); assert.equal(other.githubCalls.filter(call => call.path.endsWith('/dispatches')).length, 1); assert.equal((await other.service.job(second)).status, 'queued'); assert(other.storage.alarmAt > Date.now());
+  await other.service.alarm(); assert.equal(other.githubCalls.filter(call => call.path.endsWith('/dispatches')).length, 1); assert.equal((await other.service.jobs()).filter(job => job.status === 'queued').length, 1); assert(other.storage.alarmAt > Date.now());
 });
 
 test('shared strict catalog validator rejects cross-source image paths and executable extra fields', () => {

@@ -97,32 +97,77 @@ export class SapixImport {
     }
   }
   async fingerprint(file) { return this.digest(JSON.stringify([file.id, file.name, file.mimeType, file.md5Checksum || null, file.createdTime, file.modifiedTime, String(file.size || ''), [...(file.parents || [])].sort()])); }
+  scanFailure(stage, error) {
+    if (typeof error?.code === 'string' && Number.isInteger(error.status)) throw error;
+    // Inspect exceptions only for these fixed categories. Never return or log
+    // the exception text, which could contain private Drive metadata.
+    const message = String(error?.message || '');
+    const reason = /too many subrequests|subrequest.{0,40}(limit|exceed)/i.test(message) ? 'request_limit'
+      : /too many keys|(?:maximum|limit).{0,30}128.{0,20}(?:key|pair)|(?:key|pair).{0,30}(?:maximum|limit)/i.test(message) ? 'key_limit'
+      : /value.{0,40}too (?:large|big)|128.{0,10}(?:ki?b|kilobyte)|value.{0,30}size.{0,20}limit/i.test(message) ? 'value_limit'
+      : /(?:timed? ?out|timeout)/i.test(message) || ['TimeoutError', 'AbortError'].includes(error?.name) ? 'timeout'
+      : error?.name === 'TypeError' ? 'typeerror' : error?.name === 'RangeError' ? 'rangeerror' : 'failed';
+    this.fail(503, 'sapix_import_scan', `scan_${stage}_${reason}`);
+  }
   async files() {
-    const queue = [{ id: SAPIX_IMPORT_FOLDER, path: '' }], seen = new Set(), files = [];
+    let stage = 'drive_fetch';
+    try {
+    const queue = [{ id: SAPIX_IMPORT_FOLDER, path: '' }], seen = new Set(), knownFolders = new Map([[SAPIX_IMPORT_FOLDER, '']]), files = new Map();
     while (queue.length) {
-      const folder = queue.shift(); if (seen.has(folder.id)) continue; seen.add(folder.id); if (seen.size > 1000) this.fail(413, 'sapix_import_capacity');
+      const folders = [];
+      while (queue.length && folders.length < 20) { const folder = queue.shift(); if (!seen.has(folder.id)) { seen.add(folder.id); folders.push(folder); } }
+      if (!folders.length) continue; if (seen.size > 1000) this.fail(413, 'sapix_import_capacity');
+      const parents = new Map(folders.map(folder => [folder.id, folder.path]));
+      const parentQuery = folders.map(folder => `'${folder.id}' in parents`).join(' or ');
+      const mimeQuery = [...MIME].map(mime => `mimeType = '${mime}'`).join(' or ');
+      const query = `${folders.length > 1 ? '(' + parentQuery + ')' : parentQuery} and trashed = false and (mimeType = 'application/vnd.google-apps.folder' or (createdTime >= '${SAPIX_IMPORT_SINCE}' and (${mimeQuery})))`;
       let pageToken; const pages = new Set();
       do {
-        const data = await this.owner.drive('files', { q: `'${folder.id}' in parents and trashed = false`, fields: 'nextPageToken,files(id,name,mimeType,createdTime,modifiedTime,size,md5Checksum,parents)', pageSize: '1000', supportsAllDrives: 'true', includeItemsFromAllDrives: 'true', ...(pageToken ? { pageToken } : {}) });
-        for (const file of data.files || []) {
-          if (!FILE_ID.test(file.id)) continue;
-          if (file.mimeType === 'application/vnd.google-apps.folder') queue.push({ id: file.id, path: [folder.path, file.name].filter(Boolean).join('/') });
-          else if (MIME.has(file.mimeType) && Date.parse(file.createdTime) >= Date.parse(SAPIX_IMPORT_SINCE)) files.push({ ...file, unitPath: folder.path, fingerprint: await this.fingerprint(file) });
+        stage = 'drive_fetch';
+        const data = await this.owner.drive('files', { q: query, fields: 'nextPageToken,files(id,name,mimeType,createdTime,modifiedTime,size,md5Checksum,parents)', pageSize: '1000', supportsAllDrives: 'true', includeItemsFromAllDrives: 'true', ...(pageToken ? { pageToken } : {}) });
+        stage = 'drive_metadata';
+        for (const original of data.files || []) {
+          if (!FILE_ID.test(original?.id) || (original.mimeType !== 'application/vnd.google-apps.folder' && !MIME.has(original.mimeType))) continue;
+          // A single-parent query proves its parent when a fixture/older API
+          // omits parents. A batched query must identify the exact parent.
+          const file = { ...original, parents: Array.isArray(original.parents) ? original.parents : folders.length === 1 ? [folders[0].id] : null };
+          if (!file.parents) this.fail(409, 'sapix_import_parent');
+          const matching = file.parents.filter(parent => parents.has(parent)); if (!matching.length) continue;
+          const rootedParents = new Set(file.parents.filter(parent => knownFolders.has(parent)));
+          if (rootedParents.size !== 1) this.fail(409, 'sapix_import_parent');
+          const unitPath = parents.get(matching[0]);
+          if (file.mimeType === 'application/vnd.google-apps.folder') {
+            const path = [unitPath, file.name].filter(Boolean).join('/');
+            if (knownFolders.has(file.id)) { if (knownFolders.get(file.id) !== path) this.fail(409, 'sapix_import_parent'); }
+            else { knownFolders.set(file.id, path); queue.push({ id: file.id, path }); }
+          } else if (Date.parse(file.createdTime) >= Date.parse(SAPIX_IMPORT_SINCE)) {
+            stage = 'fingerprint'; const candidate = { ...file, unitPath, fingerprint: await this.fingerprint(file) }; stage = 'drive_metadata';
+            const previous = files.get(file.id);
+            if (previous && previous.unitPath !== unitPath) this.fail(409, 'sapix_import_parent');
+            if (previous && previous.fingerprint !== candidate.fingerprint) this.fail(409, 'sapix_import_source_changed');
+            files.set(file.id, candidate);
+          }
         }
         pageToken = data.nextPageToken; if (pageToken && pages.has(pageToken)) this.fail(502, 'drive_unavailable'); if (pageToken) pages.add(pageToken);
       } while (pageToken);
     }
-    return files.sort((a, b) => a.createdTime.localeCompare(b.createdTime) || a.name.localeCompare(b.name, 'ja'));
+    stage = 'sort'; return [...files.values()].sort((a, b) => a.createdTime.localeCompare(b.createdTime) || a.name.localeCompare(b.name, 'ja'));
+    } catch (error) { this.scanFailure(stage, error); }
   }
   async scan() {
-    const [files, catalog, model] = await Promise.all([this.files(), this.catalog(), this.model()]);
+    let stage = 'providers';
+    try {
+    const [files, catalog, model] = await Promise.all([this.files(), this.catalog().catch(error => this.scanFailure('catalog', error)), this.model()]);
+    stage = 'filter';
     const imported = new Set(catalog.sources.map(source => source.fileId));
     const candidates = files.filter(file => !imported.has(file.id));
-    const scanId = crypto.randomUUID(), content = JSON.stringify(candidates), chunks = {};
+    stage = 'snapshot_encode'; const scanId = crypto.randomUUID(), content = JSON.stringify(candidates), chunks = {};
     for (let index = 0; index * 20000 < content.length; index++) chunks[`${SCAN_DATA}${scanId}:${index}`] = content.slice(index * 20000, (index + 1) * 20000);
-    await this.storage.transaction(async transaction => { await transaction.put(chunks); await transaction.put(SCAN + scanId, { parts: Object.keys(chunks).length, model, expires: Date.now() + 1800000 }); });
+    stage = 'snapshot_write'; await this.storage.transaction(async transaction => { await transaction.put(chunks); await transaction.put(SCAN + scanId, { parts: Object.keys(chunks).length, model, expires: Date.now() + 1800000 }); });
+    stage = 'snapshot_cleanup';
     for (const [key, value] of await this.storage.list({ prefix: SCAN })) if (value.expires < Date.now()) { await this.storage.delete(Array.from({ length: value.parts }, (_, index) => SCAN_DATA + key.slice(SCAN.length) + ':' + index)); await this.storage.delete(key); }
     return { files: candidates.map(({ id, name, mimeType, createdTime, modifiedTime, size, unitPath }) => ({ id, name, mimeType, createdTime, modifiedTime, size, unitPath })), model, scanId };
+    } catch (error) { this.scanFailure(stage, error); }
   }
   async createJob(body) {
     if (!keys(body, ['scanId', 'fileIds']) || typeof body.scanId !== 'string' || !/^[a-f0-9-]{36}$/.test(body.scanId) || !Array.isArray(body.fileIds) || !body.fileIds.length || body.fileIds.length > 10 || body.fileIds.some(id => !FILE_ID.test(id)) || new Set(body.fileIds).size !== body.fileIds.length) this.fail(400, 'invalid_request');

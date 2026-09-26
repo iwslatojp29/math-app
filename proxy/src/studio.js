@@ -21,6 +21,8 @@ const errorText = {
   busy: '別の教材を処理しています。完了後に選択してください。', internal_error: '処理を完了できませんでした。保存済みの状態から再試行できます。',
   runner_conflict: '別のクラウド実行がこの処理を担当しています。',
   sapix_import_model: '最新の Claude Fable を確認できません。API の接続を確認して再試行してください。',
+  sapix_import_scan: 'Drive の候補一覧を確認できませんでした。時間をおいて候補を更新してください。',
+  sapix_import_parent: '資料の単元フォルダを一意に確認できませんでした。親フォルダを確認して候補を更新してください。',
   sapix_import_catalog: '追加問題のデータ形式を確認できないため、取り込みを保留しました。',
   sapix_import_scan_expired: '候補一覧の有効期限が切れました。候補を更新して選び直してください。',
   sapix_import_source_changed: '選択した資料が更新または移動されています。候補を更新して確認し直してください。',
@@ -29,7 +31,7 @@ const errorText = {
   sapix_import_capacity: '一度に処理できる容量を超えています。資料を少なくして取り込んでください。',
   sapix_import_publishing: '保存した問題の公開を確認しています。この段階では取り消しできません。',
 };
-class StudioError extends Error { constructor(status, code, diagnostic) { super(code); this.status = status; this.code = code; if (code === 'sapix_import_model' && /^models_[a-z0-9_]{1,60}$/.test(diagnostic || '')) this.diagnostic = diagnostic; } }
+class StudioError extends Error { constructor(status, code, diagnostic) { super(code); this.status = status; this.code = code; if ((code === 'sapix_import_model' && /^models_[a-z0-9_]{1,60}$/.test(diagnostic || '')) || (code === 'sapix_import_scan' && /^scan_[a-z0-9_]{1,60}$/.test(diagnostic || ''))) this.diagnostic = diagnostic; } }
 const fail = (status, code, diagnostic) => { throw new StudioError(status, code, diagnostic); };
 const now = () => new Date().toISOString();
 const result = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers } });
