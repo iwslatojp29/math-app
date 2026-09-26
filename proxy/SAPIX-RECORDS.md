@@ -4,6 +4,20 @@
 
 通信できない間も端末に記録を保存します。「同期待ち」はまだ別端末へ届いていない状態です。通信復帰時やページを開き直したときに再試行し、「今すぐ同期」でも確認できます。初めて使う端末ではオンラインで接続してください。ブラウザのデータを消す前には同期の完了を確認するか、記録を書き出してください。
 
+## 管理設定
+
+採点用の Google Cloud プロジェクトと OAuth アプリは `iwslatojp29@gmail.com` で管理します。会社アカウントで管理する教材生成 Studio とは別の設定です。
+
+| 項目 | 採点用の設定 |
+| --- | --- |
+| Google Cloud プロジェクト | [SAPIX Family Grading（iw29-sapix-grading）](https://console.cloud.google.com/home/dashboard?project=iw29-sapix-grading) |
+| 組織 | No organization（組織なし） |
+| OAuth アプリ名 | SAPIX 採点記録 |
+| OAuth クライアント名・種類 | SAPIX family grading / ウェブアプリケーション |
+| ログインを許可するアカウント | `iwslatojp29@gmail.com` |
+| 要求するスコープ | `openid email`（本人確認とメールアドレス。Drive の権限は要求しません） |
+| 資格情報の保存先 | Cloudflare Worker の `SAPIX_GOOGLE_CLIENT_ID` / `SAPIX_GOOGLE_CLIENT_SECRET` シークレット |
+
 ## 認証と保存先
 
 - 採点の認証に使うアカウントは専用設定 `SAPIX_OWNER_EMAIL` です。現在は `iwslatojp29@gmail.com` を指定しています。それ以外のアカウントは拒否し、設定がない場合も旧管理者へ自動で戻しません。
