@@ -257,7 +257,8 @@ svg{display:block}
 .recorded{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:14px;font-family:var(--font-disp);font-weight:700;font-size:14px;color:var(--ink-2)}
 .recorded .mk{width:22px;height:22px;flex:none}
 .recorded .undo{color:var(--muted);text-decoration:underline;font-weight:500;font-size:13px}
-.record .save-error{margin:12px 0 0;color:var(--ng);font-weight:700;font-size:14px;line-height:1.7}
+.record-feedback{display:grid;grid-template-columns:22px minmax(0,1fr) auto;flex:none;justify-content:flex-start;margin:14px 18px 0;padding:12px 16px;border:1px solid var(--accent-line);border-radius:12px;background:var(--accent-soft)}
+.save-error{flex:none;margin:12px 18px 0;color:var(--ng);font-weight:700;font-size:14px;line-height:1.7}
 .nav{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 4px 0;flex-wrap:wrap}
 .nav .btn{min-height:46px;font-size:15px}
 
@@ -321,6 +322,8 @@ svg{display:block}
   .actions,.answer,.record{padding-left:16px;padding-right:16px}
 }
 @media (max-width:640px){
+  .record-feedback{grid-template-columns:22px minmax(0,1fr);gap:8px 10px}
+  .record-feedback .undo{grid-column:2;justify-self:start}
   .card-head{grid-template-columns:minmax(0,1fr)}
   .timer{justify-content:flex-start}
   .pgrid{grid-template-columns:minmax(0,1fr)}
@@ -398,6 +401,8 @@ svg{display:block}
       <button type="button" class="tbtn" id="cloudSync" hidden>今すぐ同期</button>
       <button type="button" class="tbtn" id="cloudDisconnect" hidden>接続を解除</button>
     </section>
+    <div class="recorded record-feedback" id="recorded" role="status" aria-live="polite" hidden></div>
+    <p class="save-error" id="recordError" role="alert" hidden></p>
     <div class="content" id="content"></div>
   </main>
 </div>
@@ -14545,7 +14550,7 @@ registerProblems([
 
 /* ====================== 状態・保存 ====================== */
 var LS_REC = 'sapix_sansu_records_v1', LS_SET = 'sapix_sansu_settings_v1';
-var state = { unit: '計算', filter: 'all', test: '*', sort: 'no', pid: null, revealed: false, justRecorded: null, records: {}, recordsError: '', recordsBlocked: false, recordsRaw: null, settings: {limit: 60, sound: true} };
+var state = { unit: '計算', filter: 'all', test: '*', sort: 'no', pid: null, revealed: false, justRecorded: null, lastRecorded: null, records: {}, recordsError: '', recordsBlocked: false, recordsRaw: null, settings: {limit: 60, sound: true} };
 var recordStore = null, syncReady = false;
 
 function loadAll(){
@@ -14642,8 +14647,11 @@ function refreshSyncedRecords(records){
   if (p && $('hist')) $('hist').innerHTML = historyHtml(p.id);
   if (state.justRecorded && !recordStore.getEntries().some(function(e){ return e.id === state.justRecorded; })) {
     state.justRecorded = null;
-    if ($('recorded')) $('recorded').hidden = true;
     var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', 'false');
+  }
+  if (state.lastRecorded && !recordStore.getEntries().some(function(e){ return e.id === state.lastRecorded.id; })) {
+    state.lastRecorded = null;
+    $('recorded').hidden = true;
   }
   renderSide(); renderTop();
 }
@@ -14804,8 +14812,6 @@ function renderProblem(){
         '<div class="marks">' +
           ['o', 't', 'x'].map(function(r){ return '<button type="button" class="mbtn" data-r="' + r + '" aria-pressed="false">' + mk(r) + '<span class="cap">' + MARK[r] + ' ' + MARK_CAP[r] + '</span></button>'; }).join('') +
         '</div>' +
-        '<div class="recorded" id="recorded" role="status" aria-live="polite" hidden></div>' +
-        '<p class="save-error" id="recordError" role="alert"' + (state.recordsError ? '' : ' hidden') + '>' + esc(state.recordsError) + '</p>' +
       '</section>' +
     '</article>' +
     '<div class="nav"><button class="btn ghost" id="prevBtn">← 前の問題</button><button class="btn" id="nextBtn">次の問題 →</button></div>';
@@ -14888,27 +14894,38 @@ function reveal(){
 }
 function record(r){
   var p = current(); if (!p || !state.revealed || typeof r !== 'string' || !Object.prototype.hasOwnProperty.call(MARK, r)) return;
+  /* 採点で絞りこみ・並び順が変わる前に、次の問題を決めておく。 */
+  var list = visible(), idx = list.indexOf(p), next = idx >= 0 ? list[idx + 1] : null;
   var rec = {d: todayISO(), r: r, s: Math.round(elapsedSec()), over: T.over || undefined};
   var operation = {type: 'put', id: state.justRecorded, pid: p.id, value: rec};
   if (!saveRecords(state.records, false, operation)) return;
   state.justRecorded = operation.id;
+  state.lastRecorded = {id: operation.id, pid: p.id};
+  var rd = $('recorded'); rd.hidden = false;
+  rd.innerHTML = mk(r, '') + '<span>' + esc(p.unit) + ' 問' + p.no + ' に ' + MARK[r] + ' を記録しました（' + fmtDate(rec.d, true) + '）' + (next ? '' : ' — この一覧の最後の問題です。') + '</span><button class="undo" id="undoBtn">取り消して戻る</button>';
+  if (next) {
+    selectProblem(next.id);
+    toast(MARK[r] + ' を記録して、次の問題へ進みました');
+    return;
+  }
   $('hist').innerHTML = historyHtml(p.id, true);
   $('hist').scrollLeft = -1e6;
   var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-r') === r));
-  var rd = $('recorded'); rd.hidden = false;
-  rd.innerHTML = mk(r, '') + '<span>' + MARK[r] + ' を記録しました（' + fmtDate(rec.d, true) + '）</span><button class="undo" id="undoBtn">取り消す</button>';
-  var nb = $('nextBtn'); if (nb && !nb.disabled) nb.classList.add('primary');
   renderSide(); renderTop();
   toast(MARK[r] + ' を記録しました');
 }
 function undoRecord(){
-  var p = current(); if (!p || state.justRecorded == null) return;
-  if (!saveRecords(state.records, false, {type: 'delete', id: state.justRecorded})) return;
+  var saved = state.lastRecorded; if (!saved) return;
+  if (!saveRecords(state.records, false, {type: 'delete', id: saved.id})) return;
+  state.lastRecorded = null;
   state.justRecorded = null;
-  $('hist').innerHTML = historyHtml(p.id);
-  var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', 'false');
-  $('recorded').hidden = true; var nb = $('nextBtn'); if (nb) nb.classList.remove('primary');
-  renderSide(); renderTop(); toast('記録を取り消しました');
+  $('recorded').hidden = true;
+  if (!visible().some(function(p){ return p.id === saved.pid; })) {
+    var original = PROBLEMS.find(function(p){ return p.id === saved.pid; });
+    if (original) { state.unit = original.unit; state.filter = 'all'; state.test = '*'; }
+  }
+  selectProblem(saved.pid);
+  toast('記録を取り消して、元の問題に戻りました');
 }
 
 /* ====================== ナビ・イベント ====================== */

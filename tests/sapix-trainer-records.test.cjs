@@ -24,7 +24,7 @@ function sourceOf(name) {
   return rest.slice(0, end.index + 1);
 }
 
-function boot({ stored = new Map(), failRead = false } = {}) {
+function boot({ stored = new Map(), failRead = false, problems = 1 } = {}) {
   const nodes = new Map();
   function node(id) {
     const attrs = new Map();
@@ -50,7 +50,7 @@ function boot({ stored = new Map(), failRead = false } = {}) {
     return b;
   });
   const content = { innerHTML: '', querySelectorAll: () => buttons };
-  const h = { stored, nodes, buttons, writes: 0, failWrite: false, modal: null, messages: [], renderCount: 0 };
+  const h = { stored, nodes, buttons, writes: 0, failWrite: false, modal: null, messages: [], renderCount: 0, trace: [] };
   // A local calendar date that differs from the UTC date catches accidental UTC recording.
   class LocalDate extends Date {
     constructor(...args) { super(...(args.length ? args : ['2026-09-25T15:05:00Z'])); }
@@ -62,17 +62,21 @@ function boot({ stored = new Map(), failRead = false } = {}) {
     Date: LocalDate,
     localStorage: {
       getItem(k) { if (failRead) throw Error('blocked'); return stored.get(k) ?? null; },
-      setItem(k, v) { h.writes++; if (h.failWrite) throw Error('quota'); stored.set(k, v); },
+      setItem(k, v) { h.writes++; if (h.failWrite) throw Error('quota'); stored.set(k, v); if (k === recordKey) h.trace.push('saved'); },
       removeItem(k) { stored.delete(k); }
     },
     document: { querySelectorAll: () => buttons, createElement: () => node('') },
     $: id => nodes.get(id), $content: content,
-    PROBLEMS: [{ id: 'p1', no: 1, src: 'fixture', body: '問題' }, { id: 'p2' }],
+    PROBLEMS: Array.from({ length: problems }, (_, i) => ({ id: `p${i + 1}`, no: i + 1, unit: '計算', src: 'fixture', body: '問題', tests: ['fixture-test'] })),
     T: { over: false }, elapsedSec: () => 12.4,
     toast: message => h.messages.push(message),
     renderSide() {}, renderTop() {}, ensureSelection() {},
-    renderProblem() { h.renderCount++; },
-    figureHtml: () => '', visible: () => ctx.PROBLEMS, timerInit() {},
+    renderProblem() {
+      h.renderCount++; h.trace.push('render:' + ctx.state.pid);
+      ctx.state.revealed = false; ctx.state.justRecorded = null;
+      buttons.forEach(b => b.setAttribute('aria-pressed', 'false'));
+    },
+    closeSide() {}, figureHtml: () => '', timerInit() {},
     ICON_PAUSE: '', ICON_RESET: '',
     showModal(options) { h.modal = options; nodes.get('modal').hidden = false; nodes.get('modalTa').value = options.value || ''; },
     hideModal() { nodes.get('modal').hidden = true; }
@@ -80,7 +84,6 @@ function boot({ stored = new Map(), failRead = false } = {}) {
   ctx.SapixRecordSync = { create: options => Sync.create({ ...options, storage: ctx.localStorage, crypto, setTimeout: () => 1, clearTimeout() {} }) };
   ctx.recordStore = null;
   ctx.syncReady = false;
-  ctx.refreshSyncedRecords = records => { ctx.state.records = records; };
   ctx.renderCloudStatus = () => {};
   const declarations = ['LS_REC', 'state', 'MARK', 'MARK_CAP'].map(name => {
     const match = html.match(new RegExp(`^var ${name} = .+$`, 'm'));
@@ -90,10 +93,13 @@ function boot({ stored = new Map(), failRead = false } = {}) {
   const functions = ['loadAll', 'validRecordDate', 'validateRecordMap', 'copyRecords', 'recordsError',
     'saveRecords', 'recs', 'latest', 'countOf', 'current', 'todayISO', 'fmtDate', 'fmtSec',
     'historyHtml', 'record', 'undoRecord', 'mergeRecords', 'importRecords', 'clearRecords',
-    'exportRecords', 'mk', 'esc'];
+    'exportRecords', 'mk', 'esc', 'visible', 'sortList', 'matchFilter', 'problemsOf', 'inUnit', 'inTest',
+    'selectProblem', 'saveSettings', 'nav', 'refreshSyncedRecords'];
   vm.runInContext([...declarations, ...functions.map(sourceOf)].join('\n'), ctx);
   ctx.loadAll();
   h.writes = 0;
+  h.trace = [];
+  ctx.syncReady = true;
   ctx.state.pid = 'p1';
   ctx.state.revealed = true;
   h.ctx = ctx;
@@ -293,7 +299,8 @@ test('rendered score buttons use their native currentTarget and do not depend on
   vm.runInContext(sourceOf('renderProblem'), h.ctx);
   h.ctx.renderProblem();
   assert.match(h.ctx.$content.innerHTML, /type="button" class="mbtn"/);
-  assert.match(h.ctx.$content.innerHTML, /id="recorded" role="status" aria-live="polite"/);
+  assert.match(html, /id="recorded" role="status" aria-live="polite"/);
+  assert.doesNotMatch(h.ctx.$content.innerHTML, /id="recorded"/);
   h.ctx.state.revealed = true;
   const nestedTargets = [{ tagName: 'circle' }, { tagName: 'span' }, { nodeType: 3 }];
   h.buttons.forEach((button, i) => {
@@ -306,4 +313,154 @@ test('rendered score buttons use their native currentTarget and do not depend on
   assert.equal(h.ctx.recs('p1').length, 1);
   const delegated = html.slice(html.indexOf("document.addEventListener('click'"), html.indexOf("$('scrim').addEventListener"));
   assert.doesNotMatch(delegated, /\bmbtn\b|\brecord\(/);
+});
+
+for (const mark of ['o', 't', 'x']) {
+  test(`${mark} saves the current problem before auto-advancing and ignores a second tap until reveal`, () => {
+    const h = boot({ problems: 3 });
+    h.ctx.record(mark);
+    assert.equal(h.ctx.state.pid, 'p2');
+    assert.equal(h.ctx.state.revealed, false);
+    assert.equal(h.ctx.state.justRecorded, null);
+    assert.equal(h.ctx.state.lastRecorded.pid, 'p1');
+    assert.equal(h.ctx.recordStore.getEntries().find(e => e.id === h.ctx.state.lastRecorded.id).value.r, mark);
+    assert.deepEqual(h.trace.slice(0, 2), ['saved', 'render:p2']);
+    assert.equal(h.nodes.get('recorded').hidden, false);
+    assert.match(h.nodes.get('recorded').innerHTML, /問1/);
+    assert.match(h.nodes.get('recorded').innerHTML, /取り消して戻る/);
+    assert.equal(h.ctx.recs('p2').length, 0);
+    const writes = h.writes;
+    h.ctx.record(mark);
+    assert.equal(h.writes, writes);
+    assert.equal(h.ctx.state.pid, 'p2');
+    assert.equal(h.ctx.recs('p2').length, 0);
+  });
+}
+
+test('unattempted filtering does not skip the next row when the saved row disappears', () => {
+  const h = boot({ problems: 3 });
+  h.ctx.state.filter = 'none';
+  h.ctx.record('o');
+  assert.equal(h.ctx.state.pid, 'p2');
+  assert.deepEqual(plain(h.ctx.visible().map(p => p.id)), ['p2', 'p3']);
+  h.ctx.state.revealed = true;
+  h.ctx.record('t');
+  assert.equal(h.ctx.state.pid, 'p3');
+  assert.equal(h.ctx.state.lastRecorded.pid, 'p2');
+  assert.equal(h.ctx.recordStore.getEntries().length, 2);
+});
+
+test('correcting an x-filtered problem auto-advances to its original successor', () => {
+  const h = boot({ problems: 3 });
+  for (const p of h.ctx.PROBLEMS) h.ctx.recordStore.put(p.id, { d: '2026-09-25', r: 'x', s: 20 });
+  h.ctx.state.filter = 'x';
+  h.ctx.record('o');
+  assert.equal(h.ctx.state.pid, 'p2');
+  assert.equal(h.ctx.latest('p1'), 'o');
+  assert.deepEqual(plain(h.ctx.visible().map(p => p.id)), ['p2', 'p3']);
+});
+
+test('x-count sorting uses the next ID captured before scoring changes the order', () => {
+  const h = boot({ problems: 3 });
+  h.ctx.state.sort = 'ng';
+  h.ctx.state.pid = 'p2';
+  assert.deepEqual(plain(h.ctx.visible().map(p => p.id)), ['p1', 'p2', 'p3']);
+  h.ctx.record('x');
+  assert.deepEqual(plain(h.ctx.visible().map(p => p.id)), ['p2', 'p1', 'p3']);
+  assert.equal(h.ctx.state.pid, 'p3');
+});
+
+test('the final problem stays revealed and corrections retain one stable undo ID', () => {
+  const h = boot({ problems: 3 });
+  h.ctx.state.pid = 'p3';
+  h.ctx.record('x');
+  const id = h.ctx.state.lastRecorded.id;
+  assert.equal(h.ctx.state.pid, 'p3');
+  assert.equal(h.ctx.state.revealed, true);
+  assert.equal(h.renderCount, 0);
+  assert.match(h.nodes.get('recorded').innerHTML, /最後の問題/);
+  h.ctx.record('o');
+  assert.equal(h.ctx.state.lastRecorded.id, id);
+  assert.equal(h.ctx.recs('p3').length, 1);
+  assert.equal(h.ctx.recordStore.getEntries()[0].seq, 2);
+});
+
+test('a failed save never advances or resets the revealed problem and retry advances once', () => {
+  const h = boot({ problems: 3 });
+  h.failWrite = true;
+  h.ctx.record('t');
+  assert.equal(h.ctx.state.pid, 'p1');
+  assert.equal(h.ctx.state.revealed, true);
+  assert.equal(h.ctx.state.lastRecorded, null);
+  assert.equal(h.renderCount, 0);
+  assert.equal(h.nodes.get('recordError').hidden, false);
+  h.failWrite = false;
+  h.ctx.record('t');
+  assert.equal(h.ctx.state.pid, 'p2');
+  assert.equal(h.renderCount, 1);
+  assert.equal(h.ctx.recs('p1').length, 1);
+});
+
+test('undo after auto-next deletes only the latest ID and returns to that problem', () => {
+  const h = boot({ problems: 3 });
+  h.ctx.recordStore.put('p1', { d: '2026-09-24', r: 'o', s: 10 });
+  h.ctx.recordStore.put('p2', { d: '2026-09-25', r: 't', s: 20 });
+  h.ctx.record('x');
+  const undoId = h.ctx.state.lastRecorded.id;
+  assert.equal(h.ctx.state.pid, 'p2');
+  h.ctx.undoRecord();
+  assert.equal(h.ctx.state.pid, 'p1');
+  assert.equal(h.ctx.state.revealed, false);
+  assert.equal(h.ctx.state.lastRecorded, null);
+  assert.equal(h.ctx.state.justRecorded, null);
+  assert.equal(h.nodes.get('recorded').hidden, true);
+  assert.equal(h.ctx.latest('p1'), 'o');
+  assert.equal(h.ctx.latest('p2'), 't');
+  assert.ok(h.ctx.recordStore.getState().deleted.includes(undoId));
+  assert.deepEqual(savedRecords(h), { p1: [{ d: '2026-09-24', r: 'o', s: 10 }], p2: [{ d: '2026-09-25', r: 't', s: 20 }] });
+});
+
+test('undo still returns to the recorded problem after the user changes units and filters', () => {
+  const h = boot({ problems: 3 });
+  h.ctx.PROBLEMS[2].unit = '図形';
+  h.ctx.record('o');
+  h.ctx.state.unit = '図形'; h.ctx.state.filter = 'x'; h.ctx.state.test = 'other-test';
+  h.ctx.selectProblem('p3');
+  h.ctx.undoRecord();
+  assert.equal(h.ctx.state.pid, 'p1');
+  assert.equal(h.ctx.state.unit, '計算');
+  assert.equal(h.ctx.state.filter, 'all');
+  assert.equal(h.ctx.state.test, '*');
+  assert.ok(h.ctx.visible().some(p => p.id === 'p1'));
+  assert.equal(h.ctx.recordStore.getEntries().length, 0);
+});
+
+test('failed undo after auto-next retains the current problem, feedback and retryable saved ID', () => {
+  const h = boot({ problems: 3 });
+  h.ctx.record('o');
+  const before = h.stored.get(recordKey), undo = plain(h.ctx.state.lastRecorded), feedback = h.nodes.get('recorded').innerHTML;
+  h.failWrite = true;
+  h.ctx.undoRecord();
+  assert.equal(h.stored.get(recordKey), before);
+  assert.equal(h.ctx.state.pid, 'p2');
+  assert.deepEqual(plain(h.ctx.state.lastRecorded), undo);
+  assert.equal(h.nodes.get('recorded').hidden, false);
+  assert.equal(h.nodes.get('recorded').innerHTML, feedback);
+  h.failWrite = false;
+  h.ctx.undoRecord();
+  assert.equal(h.ctx.state.pid, 'p1');
+  assert.equal(h.ctx.recordStore.getEntries().length, 0);
+});
+
+test('background removal clears stale undo feedback without navigating or revealing a problem', () => {
+  const h = boot({ problems: 3 });
+  h.ctx.record('o');
+  const id = h.ctx.state.lastRecorded.id;
+  const renders = h.renderCount;
+  h.ctx.recordStore.remove([id]);
+  assert.equal(h.ctx.state.lastRecorded, null);
+  assert.equal(h.nodes.get('recorded').hidden, true);
+  assert.equal(h.ctx.state.pid, 'p2');
+  assert.equal(h.ctx.state.revealed, false);
+  assert.equal(h.renderCount, renders);
 });
