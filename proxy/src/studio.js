@@ -20,6 +20,7 @@ const errorText = {
   not_found: '対象が見つかりません。', source_changed: '選択したPDFが更新されています。一覧を読み直してください。',
   busy: '別の教材を処理しています。完了後に選択してください。', internal_error: '処理を完了できませんでした。保存済みの状態から再試行できます。',
   runner_conflict: '別のクラウド実行がこの処理を担当しています。',
+  operation_mismatch: 'PDF切り出しとHTML作成は別の処理です。保存済みの成果物は保持し、選択されていない処理を停止しました。HTMLは「HTMLを作成」で既存の切り出しPDFを選んで開始してください。',
   sapix_import_model: '最新の Claude Fable を確認できません。API の接続を確認して再試行してください。',
   sapix_import_scan: 'Drive の候補一覧を確認できませんでした。時間をおいて候補を更新してください。',
   sapix_import_parent: '資料の単元フォルダを一意に確認できませんでした。親フォルダを確認して候補を更新してください。',
@@ -84,8 +85,12 @@ function cleanMessage(value) {
 }
 function publicJob(job) {
   const { id, fileId, fileName, source, model, status, stage, message, progress, createdAt, updatedAt, result: output, error, runId } = job;
-  return { id, fileId, fileName, source, model, status, stage, message, progress, createdAt, updatedAt, result: output, error, runId };
+  return { id, fileId, fileName, source, operation: operationOf(job), ...(job.sourceKind ? { sourceKind: job.sourceKind } : {}), model, status, stage, message, progress, createdAt, updatedAt, result: output, error, runId };
 }
+const operationOf = job => job.operation === 'html' ? 'html' : 'extract';
+const runnerJob = job => ({ ...job, operation: operationOf(job) });
+const lessonStage = stage => /^(?:lesson(?:_|$)|visual(?:_|$)|validating$|publishing$)/.test(String(stage || ''));
+const htmlResult = value => Array.isArray(value?.outputs) && value.outputs.some(output => output?.html || output?.published);
 
 export function handleStudio(request, env) {
   if (!env.STUDIO) return result({ error: 'not_configured', message: errorText.not_configured }, 503);
@@ -130,7 +135,7 @@ export class StudioState {
       if (request.headers.get('Origin') !== this.env.STUDIO_ORIGIN || !await sameSecret(request.headers.get('x-studio-csrf'), session.csrf)) fail(403, 'forbidden');
     }
     if (path === '/api/studio/logout' && method === 'POST') return result({ ok: true }, 200, { 'Set-Cookie': cookie('__Host-studio', '', 0) });
-    if (path === '/api/studio/sources' && method === 'GET') return result({ files: await this.sources() });
+    if (path === '/api/studio/sources' && method === 'GET') return result({ files: await this.sources(url.searchParams.get('operation') || 'extract') });
     if (path === '/api/studio/models' && method === 'GET') return result(await this.catalog());
     if (path === '/api/studio/jobs' && method === 'GET') { await this.reconcile(); return result({ jobs: (await this.jobs()).map(publicJob) }); }
     if (path === '/api/studio/jobs' && method === 'POST') { const body = await readBody(request); return this.serial(async () => result({ job: publicJob(await this.createJob(body)) })); }
@@ -148,12 +153,15 @@ export class StudioState {
           const runs = (await this.github('actions/workflows/monthly-pdf.yml/runs?per_page=100')).workflow_runs || [];
           const existing = runs.find(run => run.display_title === `monthly-${current.id}` && run.status !== 'completed');
           if (existing) {
+            if (current.operationBlocked) fail(409, 'operation_mismatch');
             current.runId = String(existing.id); current.status = existing.status === 'in_progress' ? 'running' : 'queued'; current.error = null;
             current.updatedAt = now(); await this.saveJob(current); return result({ job: publicJob(current) });
           }
           // A network timeout may hide a successful dispatch. Allow GitHub time to expose it.
           if (current.dispatchUncertain && Date.now() - Date.parse(current.dispatchedAt) < 15 * 60000) return result({ job: publicJob(current) });
-          current.status = 'queued'; current.retryable = false; current.autoAttempts = 0; current.error = null; current.runId = null; current.message = '保存済みの処理から再開します。'; current.updatedAt = now();
+          current.status = 'queued'; current.retryable = false; current.autoAttempts = 0; current.error = null; current.runId = null;
+          if (current.operationBlocked) { current.operationBlocked = false; current.stage = 'queued'; current.operation = operationOf(current); }
+          current.message = '保存済みの処理から再開します。'; current.updatedAt = now();
           await this.saveJob(current); await this.dispatch(current);
         }
         return result({ job: publicJob(current) });
@@ -220,7 +228,25 @@ export class StudioState {
     if (!response.ok) fail(response.status === 401 ? 401 : 502, response.status === 401 ? 'drive_reconnect' : 'drive_unavailable');
     return response.json();
   }
-  async sources() {
+  async sources(operation = 'extract') {
+    if (!['extract', 'html'].includes(operation)) fail(400, 'invalid_request');
+    if (operation === 'html') {
+      // Only already-extracted PDFs in the two fixed destination folders.
+      // Do not recurse into monthly sources or accept a browser-provided folder.
+      const files = [], seen = new Set();
+      for (const sourceKind of ['practice', 'advanced']) {
+        const parent = FOLDERS[sourceKind]; let pageToken;
+        do {
+          const page = await this.drive('files', { q: `'${parent}' in parents and trashed = false and mimeType = 'application/pdf'`, fields: 'nextPageToken,files(id,name,mimeType,size,modifiedTime,md5Checksum,parents)', pageSize: '1000', ...(pageToken ? { pageToken } : {}) });
+          for (const file of page.files || []) {
+            if (file.mimeType !== 'application/pdf' || !/\.pdf$/i.test(file.name || '') || !file.parents?.includes(parent) || seen.has(file.id)) continue;
+            seen.add(file.id); files.push({ ...file, sourceKind });
+          }
+          pageToken = page.nextPageToken;
+        } while (pageToken);
+      }
+      return files.sort((a, b) => b.name.localeCompare(a.name, 'ja', { numeric: true }));
+    }
     // Only the selected source tree; generated folders are never recursively ingested.
     const folders = [FOLDERS.source], seen = new Set(), files = [];
     while (folders.length) {
@@ -288,19 +314,47 @@ export class StudioState {
     }
   }
   async createJob(body) {
+    if (!['extract', 'html'].includes(body.operation)) fail(400, 'invalid_request');
     if (typeof body.fileId !== 'string' || !/^[A-Za-z0-9_-]+$/.test(body.fileId)) fail(400, 'invalid_request');
-    const source = (await this.sources()).find(file => file.id === body.fileId);
+    const operation = body.operation;
+    const source = (await this.sources(operation)).find(file => file.id === body.fileId);
     if (!source) fail(404, 'not_found');
     const catalog = await this.catalog();
     const model = !body.model || body.model === 'auto' ? (catalog.latestVerified ? catalog.defaultModel : null) : body.model;
     const selectedModel = catalog.models.find(candidate => candidate.id === model && validOutputTokens(candidate.maxOutputTokens));
     if (!model || !selectedModel) fail(409, 'latest_unavailable');
-    const fingerprint = await digest(JSON.stringify([source.id, source.md5Checksum || source.modifiedTime, model, SPEC_VERSION]));
-    const jobs = await this.jobs(), duplicate = jobs.find(job => job.fingerprint === fingerprint && job.status !== 'cancelled');
+    const fingerprint = await digest(JSON.stringify([operation, source.id, source.md5Checksum || source.modifiedTime, model, SPEC_VERSION]));
+    const legacyFingerprint = operation === 'extract' ? await digest(JSON.stringify([source.id, source.md5Checksum || source.modifiedTime, model, SPEC_VERSION])) : null;
+    const jobs = await this.jobs(), duplicate = jobs.find(job => (job.fingerprint === fingerprint || (!job.operation && job.fingerprint === legacyFingerprint)) && job.status !== 'cancelled');
     if (duplicate) return duplicate;
     if (jobs.some(job => !TERMINAL.has(job.status))) fail(409, 'busy');
-    const job = { id: crypto.randomUUID(), fileId: source.id, fileName: source.name, source, model, modelMaxOutputTokens: selectedModel.maxOutputTokens, folders: FOLDERS, specVersion: SPEC_VERSION, fingerprint, status: 'queued', stage: 'queued', progress: 0, message: 'クラウド処理の開始を待っています。', createdAt: now(), updatedAt: now(), runId: null, result: null, error: null };
+    const legacyProvenance = operation === 'html' ? await this.legacyProvenance(source, source.sourceKind, jobs) : null;
+    const job = { id: crypto.randomUUID(), fileId: source.id, fileName: source.name, source, operation, ...(operation === 'html' ? { sourceKind: source.sourceKind } : {}), ...(legacyProvenance ? { legacyProvenance } : {}), model, modelMaxOutputTokens: selectedModel.maxOutputTokens, folders: FOLDERS, specVersion: SPEC_VERSION, fingerprint, status: 'queued', stage: 'queued', progress: 0, message: operation === 'html' ? '選択したPDFのHTML作成を待っています。' : 'PDF切り出しの開始を待っています。', createdAt: now(), updatedAt: now(), runId: null, result: null, error: null };
     await this.saveJob(job); await this.dispatch(job); return job;
+  }
+  legacyLink(job, source, kind) {
+    if (!job || operationOf(job) !== 'extract' || !job.source?.id || job.source.id === source.id) return null;
+    const name = source.name.replace(/\.pdf$/i, '') + '_講義アニメーション.html';
+    const matches = (job.result?.outputs || []).filter(output => output.kind === kind
+      && output.pdf?.id === source.id && output.pdf.name === source.name && output.pdf.mimeType === 'application/pdf'
+      && output.pdf.parents?.includes(FOLDERS[kind]) && output.html?.id && output.html.name === name
+      && output.html.mimeType === 'text/html' && output.html.parents?.includes(FOLDERS.html));
+    if (matches.length !== 1) return null;
+    const html = matches[0].html;
+    return { previousSourceId: job.source.id, previousJobId: job.id, pdfId: source.id, kind,
+      htmlFileId: html.id, htmlFileName: html.name, htmlParentId: FOLDERS.html,
+      ...(typeof html.md5Checksum === 'string' && /^[a-f0-9]{32}$/i.test(html.md5Checksum) ? { htmlSavedMd5: html.md5Checksum } : {}) };
+  }
+  async legacyProvenance(source, kind, jobs) {
+    const candidates = jobs.map(job => this.legacyLink(job, source, kind)).filter(Boolean);
+    if (!candidates.length) return null;
+    const path = `math/${source.name.replace(/\.pdf$/i, '')}_講義アニメーション.html`;
+    const owner = await this.storage.get(`published:${await digest(path)}`);
+    if (owner) return candidates.find(item => item.previousJobId === owner.jobId && item.previousSourceId === owner.sourceId) || null;
+    // A Drive-only old output may have no Pages ledger. Do not guess between
+    // different saved files or monthly sources sharing a display name.
+    const identities = new Set(candidates.map(item => JSON.stringify([item.previousSourceId, item.htmlFileId])));
+    return identities.size === 1 ? candidates[0] : null;
   }
   async github(path, method = 'GET', body, allow = []) {
     const response = await fetch(`https://api.github.com/repos/${this.env.REPO}/${path}`, { method, headers: { Authorization: `Bearer ${this.env.GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'math-app-studio', 'Content-Type': 'application/json' }, ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(25000) });
@@ -334,22 +388,41 @@ export class StudioState {
       await this.saveJob(job);
     });
   }
+  async guardOperation(job, { stage, checkpoint, publishing = false, output } = {}) {
+    const operation = operationOf(job);
+    const wrong = operation === 'extract'
+      ? (publishing || lessonStage(stage) || lessonStage(job.stage) || /^(?:lesson|visual)(?:[_.-]|$)/.test(checkpoint || '') || htmlResult(output))
+      : (/^pdf_(?:review|saved)$/.test(stage || '') || /^(?:classification|page-classification|pdf-proof)(?:[_.-]|$)/.test(checkpoint || ''));
+    if (!job.operationBlocked && !wrong) return;
+    // Retain old completed results exactly as stored, but reject new incompatible
+    // writes. Other jobs are untouched; a manual retry starts the current runner.
+    if (!['completed', 'cancelled'].includes(job.status)) {
+      job.status = 'needs_attention'; job.stage = 'operation_required'; job.operationBlocked = true;
+      job.retryable = false; job.continuation = false; job.dispatchUncertain = false;
+      job.error = errorText.operation_mismatch; job.message = errorText.operation_mismatch; job.updatedAt = now();
+      await this.saveJob(job);
+    }
+    fail(409, 'operation_mismatch');
+  }
   async runner(request, path, method) {
     if (path === '/api/studio/runner/drive-token' && method === 'GET') return result(await this.accessToken());
     const match = /^\/api\/studio\/runner\/jobs\/([a-zA-Z0-9-]+)(?:\/(publish|checkpoints)(?:\/([a-zA-Z0-9_.-]{1,180}))?)?$/.exec(path);
     if (!match) fail(404, 'not_found');
     const job = await this.job(match[1]);
     if (!match[2] && method === 'GET') {
+      if (job.status !== 'completed' && job.status !== 'cancelled' && (job.operationBlocked || (operationOf(job) === 'extract' && lessonStage(job.stage)))) {
+        return this.serial(async () => { const current = await this.job(job.id); if (!['completed', 'cancelled'].includes(current.status)) await this.guardOperation(current); return result({ job: runnerJob(current) }); });
+      }
       if (!validOutputTokens(job.modelMaxOutputTokens)) {
         const catalog = await this.catalog();
         const selectedModel = catalog.models.find(candidate => candidate.id === job.model && validOutputTokens(candidate.maxOutputTokens));
         // Enrich the response without writing a stale job snapshot over a
         // cancellation or progress update received during catalog refresh.
         const current = await this.job(job.id);
-        if (selectedModel && current.model === job.model) return result({ job: { ...current, modelMaxOutputTokens: selectedModel.maxOutputTokens } });
-        return result({ job: current });
+        if (selectedModel && current.model === job.model) return result({ job: runnerJob({ ...current, modelMaxOutputTokens: selectedModel.maxOutputTokens }) });
+        return result({ job: runnerJob(current) });
       }
-      return result({ job });
+      return result({ job: runnerJob(job) });
     }
     if (job.status === 'cancelled') fail(409, 'cancelled');
     const runId = request.headers.get('X-Studio-Run-Id');
@@ -360,6 +433,7 @@ export class StudioState {
     if (match[2] === 'checkpoints' && match[3]) {
       const checkpointKey = `checkpoint:${job.id}:${match[3]}`;
       if (method === 'GET') {
+        await this.serial(async () => { const current = await this.job(job.id); if (current.status === 'cancelled') fail(409, 'cancelled'); if (current.runId !== runId) fail(409, 'runner_conflict'); await this.guardOperation(current, { checkpoint: match[3] }); });
         const metadata = await this.storage.get(checkpointKey);
         if (!metadata) return result({ value: null });
         const parts = await this.storage.get(Array.from({ length: metadata.parts }, (_, i) => `${checkpointKey}:${metadata.version}:${i}`));
@@ -367,11 +441,13 @@ export class StudioState {
       }
       if (method === 'PUT') {
         const body = await readBody(request), text = JSON.stringify(body.value ?? null), version = crypto.randomUUID(), chunks = {};
+        await this.serial(async () => { const current = await this.job(job.id); if (current.status === 'cancelled') fail(409, 'cancelled'); if (current.runId !== runId) fail(409, 'runner_conflict'); await this.guardOperation(current, { checkpoint: match[3], output: match[3] === 'result' ? body.value : undefined }); });
         for (let i = 0; i * 20000 < text.length; i++) chunks[`${checkpointKey}:${version}:${i}`] = text.slice(i * 20000, (i + 1) * 20000);
         await this.storage.transaction(async txn => {
           const current = await txn.get(`job:${job.id}`);
           if (current?.status === 'cancelled') fail(409, 'cancelled');
           if (!current || current.runId !== runId) fail(409, 'runner_conflict');
+          if (current.operationBlocked) fail(409, 'operation_mismatch');
           const previous = await txn.get(checkpointKey);
           await txn.put(chunks); await txn.put(checkpointKey, { parts: Object.keys(chunks).length, version });
           if (previous) await txn.delete(Array.from({ length: previous.parts }, (_, i) => `${checkpointKey}:${previous.version}:${i}`));
@@ -387,6 +463,7 @@ export class StudioState {
         if (!current.runId && (body.status !== 'running' || String(body.runId) !== runId)) fail(409, 'runner_conflict');
         if (current.status === 'completed' && body.status !== 'completed') fail(409, 'runner_conflict');
         if (body.status && !['queued', 'running', 'needs_attention', 'failed', 'completed'].includes(body.status)) fail(400, 'invalid_request');
+        await this.guardOperation(current, { stage: body.stage, output: body.result });
         for (const name of ['stage', 'message', 'error']) if (body[name] !== undefined) current[name] = cleanMessage(body[name]);
         if (body.status) current.status = body.status;
         if (typeof body.retryable === 'boolean') current.retryable = body.retryable;
@@ -395,7 +472,7 @@ export class StudioState {
         if (Number.isFinite(body.progress)) current.progress = Math.max(0, Math.min(100, body.progress));
         current.runId = runId; current.dispatchUncertain = false;
         if (body.result && encoder.encode(JSON.stringify(body.result)).length < 32000) current.result = body.result;
-        current.updatedAt = now(); await this.saveJob(current); return result({ job: current });
+        current.updatedAt = now(); await this.saveJob(current); return result({ job: runnerJob(current) });
       });
     }
     fail(404, 'not_found');
@@ -403,8 +480,10 @@ export class StudioState {
   async publish(id, body, runId) {
     const job = await this.job(id); if (job.status === 'cancelled') fail(409, 'cancelled');
     if (!runId || job.runId !== runId) fail(409, 'runner_conflict');
+    await this.guardOperation(job, { publishing: true });
     const filename = body.fileName, base = job.source.name.replace(/\.pdf$/i, '');
-    if (![`${base}‗日日の演習_講義アニメーション.html`, `${base}‗発展演習+学力コンテスト_講義アニメーション.html`].includes(filename)) fail(400, 'invalid_request');
+    if (!['practice', 'advanced'].includes(job.sourceKind) || !job.source.parents?.includes(FOLDERS[job.sourceKind])) fail(400, 'invalid_request');
+    if (filename !== `${base}_講義アニメーション.html`) fail(400, 'invalid_request');
     if (encoder.encode(filename).length > 255 || /[\\/\u0000-\u001f]/.test(filename)) fail(400, 'invalid_request');
     const content = body.contentBase64;
     if (typeof content !== 'string' || content.length > 4 * Math.ceil(24 * 1024 * 1024 / 3)) fail(413, 'file_too_large');
@@ -420,13 +499,22 @@ export class StudioState {
     if (!/<!doctype html/i.test(prefix) || !prefix.includes('math-app-generated-lesson')) fail(400, 'invalid_request');
     const path = `math/${filename}`, ownershipKey = `published:${await digest(path)}`;
     const owner = await this.storage.get(ownershipKey);
+    let legacyOwner = false;
+    const proof = job.legacyProvenance;
+    if (proof && owner?.jobId === proof.previousJobId && owner.sourceId === proof.previousSourceId
+        && proof.pdfId === job.source.id && proof.kind === job.sourceKind) {
+      const previous = await this.storage.get(`job:${proof.previousJobId}`);
+      const observed = this.legacyLink(previous, job.source, job.sourceKind);
+      legacyOwner = Boolean(observed && observed.htmlFileId === proof.htmlFileId && observed.htmlFileName === filename
+        && observed.previousSourceId === proof.previousSourceId && observed.htmlParentId === proof.htmlParentId);
+    }
     for (let attempt = 0; attempt < 4; attempt++) {
       const reference = await this.github(`git/ref/heads/${this.env.BRANCH}`);
       const head = await this.github(`git/commits/${reference.object.sha}`);
       const tree = await this.github(`git/trees/${head.tree.sha}?recursive=1`);
       if (tree.truncated) fail(502, 'github_unavailable');
       const existing = tree.tree.find(entry => entry.path === path);
-      if (existing && (owner?.sourceId !== job.source.id || ![owner.blob, owner.previousBlob].includes(existing.sha))) fail(409, 'existing_file');
+      if (existing && ((owner?.sourceId !== job.source.id && !legacyOwner) || ![owner.blob, owner.previousBlob].includes(existing.sha))) fail(409, 'existing_file');
       const indexEntry = tree.tree.find(entry => entry.path === 'math/index.html'); if (!indexEntry) fail(502, 'github_unavailable');
       const indexBlob = await this.github(`git/blobs/${indexEntry.sha}`);
       const html = new TextDecoder('utf-8', { fatal: true }).decode(unb64(indexBlob.content.replace(/\s/g, '')));

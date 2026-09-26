@@ -17,7 +17,7 @@ import jsonschema
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from lesson_pipeline import reconcile_solution_pages, render_lesson, validate_problem_coverage
 from pdf_pipeline import extract_pdf, obj, plans_from_classification, same_pdf_visual_content, verify_extracted
-from run_monthly import main, run_job, save_verified, validate_job
+from run_monthly import generate_verified_lesson, main, run_job, save_verified, validate_job
 from studio_common import (ADVANCED_FOLDER, PRACTICE_FOLDER, SOURCE_FOLDER, DriveClient, ResponsesClient,
                            StudioClient, StudioError, digest_file, key_for, response_diagnostic)
 
@@ -396,13 +396,23 @@ class APITests(unittest.TestCase):
                 self.assertEqual(update["continuation"], continuation)
                 self.assertEqual(update["status"], "needs_attention" if error.attention else "failed")
 
-    def test_main_runner_conflict_exits_quietly_without_mutating_status(self):
-        studio = MemoryStudio()
-        studio.job = lambda: {"status": "queued"}
-        with patch("run_monthly.StudioClient", return_value=studio), \
-                patch("run_monthly.run_job", side_effect=StudioError("runner_conflict", "other run")):
-            self.assertEqual(main(["--job-id", "test-job"]), 0)
-        self.assertEqual(studio.updates, [])
+    def test_main_runner_conflict_or_wrong_operation_exits_without_mutating_status(self):
+        for code in ("runner_conflict", "operation_mismatch"):
+            with self.subTest(code=code):
+                studio = MemoryStudio()
+                studio.job = lambda: {"status": "queued"}
+                with patch("run_monthly.StudioClient", return_value=studio), \
+                        patch("run_monthly.run_job", side_effect=StudioError(code, "stopped")):
+                    self.assertEqual(main(["--job-id", "test-job"]), 0)
+                self.assertEqual(studio.updates, [])
+
+    def test_worker_operation_guard_survives_http_error_mapping(self):
+        session = FakeSession([FakeResponse({"error": "operation_mismatch"}, 409)])
+        client = StudioClient("https://worker.example", "fake", "job", session)
+        with self.assertRaises(StudioError) as caught:
+            client.update(stage="lesson_inventory")
+        self.assertEqual(caught.exception.code, "operation_mismatch")
+        self.assertEqual(len(session.calls), 1)
 
     def test_drive_token_is_refreshed_after_unauthorized_without_logging(self):
         studio = MemoryStudio()
@@ -467,7 +477,7 @@ class APITests(unittest.TestCase):
 
 
 class IntegrationTests(unittest.TestCase):
-    def test_complete_private_pipeline_saves_both_pdfs_before_real_js_rendering(self):
+    def test_independent_pdf_and_html_jobs_keep_real_js_rendering_and_source_identity(self):
         if not shutil.which("node"):
             self.skipTest("Node.js is required for the real renderer integration test")
         automation = Path(__file__).resolve().parents[1]
@@ -500,6 +510,11 @@ class IntegrationTests(unittest.TestCase):
                     events.append("inventory")
                     value = {"problems": inventory, "solutionLinks": [], "coverage": [{"pdfPage": 1,
                         "questionIds": [problem["id"] for problem in inventory], "noQuestionReason": ""}], "unresolvedIssues": []}
+                elif key.startswith("solutions-review-"):
+                    value = {"approved": True, "checkedPdfPages": [1], "issues": []}
+                elif key.startswith("solutions-"):
+                    value = {"links": [], "unpairedPages": [{"pdfPage": 1, "reason": "Synthetic questions only."}],
+                             "checkedPdfPages": [1], "unresolvedIssues": []}
                 elif key.startswith("lesson-"):
                     problem = next(problem for problem in fixture["problems"] if "-" + problem["id"] + "-" in key)
                     value = ({"approved": True, "checkedSubquestionIds": [sub["id"] for sub in problem["subquestions"]],
@@ -520,6 +535,7 @@ class IntegrationTests(unittest.TestCase):
                     page.insert_image(page.rect, filename=str(automation / "renderer/fixtures/geometry-source.png"))
                 doc.save(source_path)
             original = source_path.read_bytes()
+            original_booklet = original
             source = {"id": "fixture-source", "name": "2026年9月号_fixture.pdf", "mimeType": "application/pdf",
                       "size": str(len(original)), "md5Checksum": hashlib.md5(original).hexdigest(), "parents": [SOURCE_FOLDER]}
             class FixtureDrive:
@@ -540,22 +556,44 @@ class IntegrationTests(unittest.TestCase):
                    "folders": {"source": SOURCE_FOLDER, "practice": PRACTICE_FOLDER, "advanced": ADVANCED_FOLDER, "html": PRACTICE_FOLDER}}
             def publish(_studio, html, name, source_id):
                 self.assertIn(b"math-app-generated-lesson", html.read_bytes())
+                self.assertEqual(source_id, source["id"])
                 return {"url": "https://fixture.invalid/lesson", "contentVerified": True}
             with patch("run_monthly.DriveClient", FixtureDrive), patch("run_monthly.ResponsesClient", FixtureAI), \
                     patch("run_monthly.browser_and_visual_qa", return_value={"browserChecksPassed": True}), \
-                    patch("run_monthly.publish_and_verify", side_effect=publish):
+                    patch("run_monthly.generate_verified_lesson", wraps=generate_verified_lesson) as generate, \
+                    patch("run_monthly.publish_and_verify", side_effect=publish) as publisher:
                 result = run_job(studio, job, "fake-fixture-key", directory)
+                generate.assert_not_called()
+                publisher.assert_not_called()
             self.assertEqual(result["errors"], [])
-            self.assertEqual(events[:3], ["practice", "advanced", "inventory"])
-            self.assertEqual(set(saved), {"practice", "advanced", "html-practice", "html-advanced"})
+            self.assertEqual(events, ["practice", "advanced"])
+            self.assertEqual(set(saved), {"practice", "advanced"})
+            self.assertEqual(studio.updates[-1]["status"], "completed")
             for kind in ("practice", "advanced"):
                 with fitz.open(stream=saved[kind], filetype="pdf") as doc:
                     self.assertEqual(len(doc), 1)
+                original = saved[kind]
+                source = {"id": "saved-" + kind, "name": next(output["pdf"]["name"] for output in result["outputs"] if output["kind"] == kind),
+                          "mimeType": "application/pdf", "size": str(len(original)), "parents": [job["folders"][kind]],
+                          "md5Checksum": hashlib.md5(original).hexdigest()}
+                html_studio = MemoryStudio()
+                html_job = {**job, "operation": "html", "sourceKind": kind, "source": source}
+                with patch("run_monthly.DriveClient", FixtureDrive), patch("run_monthly.ResponsesClient", FixtureAI), \
+                        patch("run_monthly.browser_and_visual_qa", return_value={"browserChecksPassed": True}), \
+                        patch("run_monthly.classify_pdf", side_effect=AssertionError("HTML must not classify")), \
+                        patch("run_monthly.extract_pdf", side_effect=AssertionError("HTML must not extract")), \
+                        patch("run_monthly.publish_and_verify", side_effect=publish) as publisher:
+                    html_result = run_job(html_studio, html_job, "fake-fixture-key", directory)
+                self.assertEqual(html_result["errors"], [])
+                self.assertEqual(len(html_result["outputs"]), 1)
+                self.assertNotIn("pdf", html_result["outputs"][0])
+                self.assertEqual(html_result["outputs"][0]["html"]["name"], source["name"][:-4] + "_講義アニメーション.html")
+                publisher.assert_called_once()
                 html = saved["html-" + kind].decode("utf-8")
                 self.assertIn("data:image/jpeg;base64,", html)
                 self.assertIn('id="lesson-data"', html)
                 self.assertNotIn('<script src=', html)
-            self.assertEqual(source_path.read_bytes(), original)
+            self.assertEqual(source_path.read_bytes(), original_booklet)
             self.assertFalse(list(directory.glob("math-app-monthly-*")), "Private intermediate directory must be removed")
             self.assertEqual(studio.updates[-1]["status"], "completed")
 

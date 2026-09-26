@@ -179,7 +179,7 @@ test('concurrent identical job creation dispatches once and forbids arbitrary Dr
   const { state, cookie } = await fixture();
   const mock = cloud();
   await withFetch(mock.fetch, async () => {
-    const responses = await Promise.all(Array.from({ length: 3 }, () => state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { fileId: SOURCE.id, model: 'auto' } }))));
+    const responses = await Promise.all(Array.from({ length: 3 }, () => state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { operation: 'extract', fileId: SOURCE.id, model: 'auto' } }))));
     const bodies = await Promise.all(responses.map(response => response.json()));
     assert.equal(new Set(bodies.map(body => body.job.id)).size, 1);
     assert.equal(mock.calls.filter(call => call.url.pathname.endsWith('/dispatches')).length, 1);
@@ -187,7 +187,7 @@ test('concurrent identical job creation dispatches once and forbids arbitrary Dr
     assert.equal(bodies[0].job.model, 'gpt-6-astra');
     assert.equal(bodies[0].job.fingerprint, undefined, 'public job must omit internal fingerprint');
     assert.equal(bodies[0].job.folders, undefined, 'public job must omit runner settings');
-    const outside = await state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { fileId: 'outside-the-source-tree', model: 'auto' } }));
+    const outside = await state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { operation: 'extract', fileId: 'outside-the-source-tree', model: 'auto' } }));
     assert.equal(outside.status, 404);
   });
 });
@@ -198,10 +198,10 @@ test('auto refuses unverified latest while explicit available selection works; u
   const mock = cloud();
   await withFetch(mock.fetch, async () => {
     for (const model of ['auto', 'gpt-imaginary']) {
-      const response = await state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { fileId: SOURCE.id, model } }));
+      const response = await state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { operation: 'extract', fileId: SOURCE.id, model } }));
       assert.equal(response.status, 409); assert.equal((await response.json()).error, 'latest_unavailable');
     }
-    const explicit = await state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { fileId: SOURCE.id, model: 'gpt-5.6-sol' } }));
+    const explicit = await state.fetch(request('/api/studio/jobs', { method: 'POST', cookie, body: { operation: 'extract', fileId: SOURCE.id, model: 'gpt-5.6-sol' } }));
     assert.equal(explicit.status, 200); assert.equal((await explicit.json()).job.model, 'gpt-5.6-sol');
     assert.equal(mock.calls.filter(call => call.url.pathname.endsWith('/dispatches')).length, 1);
   });
@@ -211,12 +211,12 @@ test('a different model cannot start while another job is active, and changed so
   const { state, cookie } = await fixture();
   const source = clone(SOURCE), mock = cloud({ source });
   await withFetch(mock.fetch, async () => {
-    const first = (await (await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'auto' } }))).json()).job;
-    const busy = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'gpt-5.6-sol' } }));
+    const first = (await (await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { operation: 'extract', fileId: SOURCE.id, model: 'auto' } }))).json()).job;
+    const busy = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { operation: 'extract', fileId: SOURCE.id, model: 'gpt-5.6-sol' } }));
     assert.equal(busy.status, 409); assert.equal((await busy.json()).error, 'busy');
     await state.saveJob({ ...await state.job(first.id), status: 'completed' });
     source.md5Checksum = 'new-source-checksum';
-    const next = (await (await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'auto' } }))).json()).job;
+    const next = (await (await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { operation: 'extract', fileId: SOURCE.id, model: 'auto' } }))).json()).job;
     assert.notEqual(next.id, first.id);
   });
 });
@@ -290,10 +290,183 @@ const OUTPUT_NAME = '2026年9月号‗日日の演習_講義アニメーショ�
 const OUTPUT_PATH = 'math/' + OUTPUT_NAME;
 const OUTPUT_HTML = '<!doctype html><html><head><meta name="math-app-generated-lesson" content="v1"></head><body>数学の教材</body></html>';
 const PUBLISH_BODY = { fileName: OUTPUT_NAME, contentBase64: Buffer.from(OUTPUT_HTML).toString('base64') };
+const HTML_SOURCE = { ...SOURCE, id: 'extracted-pdf', name: '2026年9月号‗日日の演習.pdf', parents: [FOLDERS.practice] };
+function htmlJob(overrides = {}) { return job({ operation: 'html', sourceKind: 'practice', source: HTML_SOURCE, fileId: HTML_SOURCE.id, fileName: HTML_SOURCE.name, ...overrides }); }
 async function publishRequest(state, body = PUBLISH_BODY) { return state.fetch(request('/api/studio/runner/jobs/job-test/publish', { runner: true, method: 'POST', body })); }
 
+test('operation is mandatory before any provider lookup or dispatch', async () => {
+  const { state, cookie } = await fixture();
+  await withFetch(() => { throw new Error('No provider call is permitted'); }, async () => {
+    for (const operation of [undefined, '', 'both', 'HTML', null]) {
+      const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, operation } }));
+      assert.equal(response.status, 400);
+    }
+    assert.equal((await state.jobs()).length, 0);
+  });
+});
+
+test('HTML sources are paginated direct PDFs from the two fixed output folders only', async () => {
+  const { state, cookie } = await fixture();
+  const advanced = { ...HTML_SOURCE, id: 'advanced-pdf', name: '発展.pdf', parents: [FOLDERS.advanced] };
+  const calls = [];
+  state.drive = async (path, params) => {
+    calls.push(params); assert.equal(path, 'files');
+    assert.match(params.q, /mimeType = 'application\/pdf'$/);
+    if (params.q.startsWith(`'${FOLDERS.practice}'`)) return params.pageToken
+      ? { files: [HTML_SOURCE] }
+      : { nextPageToken: 'next', files: [
+        HTML_SOURCE, { ...HTML_SOURCE, id: 'html', name: 'lesson.html', mimeType: 'text/html' },
+        { ...SOURCE }, { ...HTML_SOURCE, id: 'folder', mimeType: 'application/vnd.google-apps.folder' },
+      ] };
+    assert(params.q.startsWith(`'${FOLDERS.advanced}'`));
+    return { files: [advanced] };
+  };
+  const response = await state.fetch(request('/api/studio/sources?operation=html', { cookie }));
+  assert.equal(response.status, 200);
+  const files = (await response.json()).files;
+  assert.deepEqual(new Map(files.map(file => [file.id, file.sourceKind])), new Map([[HTML_SOURCE.id, 'practice'], [advanced.id, 'advanced']]));
+  assert.equal(calls.length, 3);
+  assert.equal(calls[1].pageToken, 'next');
+  assert.equal((await state.fetch(request('/api/studio/sources?operation=both', { cookie }))).status, 400);
+});
+
+test('HTML jobs freeze server-observed cut PDF metadata and ignore forged browser provenance', async () => {
+  const { state, cookie } = await fixture(); const seen = [];
+  state.sources = async operation => { seen.push(operation); return operation === 'html' ? [{ ...HTML_SOURCE, sourceKind: 'practice' }] : [SOURCE]; };
+  state.dispatch = async () => {};
+  const rejected = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { operation: 'html', fileId: SOURCE.id } }));
+  assert.equal(rejected.status, 404);
+  const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: {
+    operation: 'html', fileId: HTML_SOURCE.id, sourceKind: 'advanced', source: SOURCE,
+    folders: { practice: 'attacker-folder' }, legacyProvenance: { previousJobId: 'forged' },
+  } }));
+  assert.equal(response.status, 200);
+  const published = (await response.json()).job, saved = await state.job(published.id);
+  assert.equal(published.operation, 'html'); assert.equal(published.sourceKind, 'practice');
+  assert.equal(saved.source.id, HTML_SOURCE.id); assert.equal(saved.source.name, HTML_SOURCE.name);
+  assert.equal(saved.folders.practice, FOLDERS.practice); assert.equal(saved.legacyProvenance, undefined);
+  assert.equal(published.fingerprint, undefined); assert.equal(published.folders, undefined);
+  assert.deepEqual(seen, ['html', 'html']);
+});
+
+test('operation fingerprints distinguish workflows while retaining legacy extract deduplication', async () => {
+  const { state } = await fixture();
+  const source = { ...HTML_SOURCE, sourceKind: 'practice' };
+  state.sources = async () => [source]; state.dispatch = async () => {};
+  const extract = await state.createJob({ operation: 'extract', fileId: source.id });
+  await state.saveJob({ ...extract, status: 'completed' });
+  const html = await state.createJob({ operation: 'html', fileId: source.id });
+  assert.notEqual(html.id, extract.id); assert.notEqual(html.fingerprint, extract.fingerprint);
+  assert.equal((await state.createJob({ operation: 'html', fileId: source.id })).id, html.id);
+  const { state: legacy } = await fixture(); legacy.sources = async () => [SOURCE];
+  legacy.dispatch = () => { throw new Error('Legacy job must not be dispatched again'); };
+  const fingerprint = createHash('sha256').update(JSON.stringify([SOURCE.id, SOURCE.md5Checksum, 'gpt-6-astra', 'monthly-2026-09-20-v1'])).digest('base64url');
+  await legacy.saveJob(job({ fingerprint, status: 'completed' }));
+  assert.equal((await legacy.createJob({ operation: 'extract', fileId: SOURCE.id })).id, 'job-test');
+});
+
+test('legacy completed jobs retain their artifacts and report extract without mutating storage', async () => {
+  const { state, storage, cookie } = await fixture();
+  const original = job({ status: 'completed', stage: 'completed', runId: '42', result: { outputs: [{ kind: 'practice', pdf: HTML_SOURCE, html: { id: 'old-html' }, published: { url: 'https://example.test/old' } }] } });
+  await state.saveJob(original);
+  for (const options of [{ cookie }, { runner: true }]) {
+    const path = options.runner ? '/api/studio/runner/jobs/job-test' : '/api/studio/jobs/job-test';
+    const response = await state.fetch(request(path, options)); assert.equal(response.status, 200);
+    const value = (await response.json()).job;
+    assert.equal(value.operation, 'extract'); assert.deepEqual(value.result, original.result);
+  }
+  assert.deepEqual(await storage.get('job:job-test'), original);
+});
+
+test('legacy and new extract jobs reject lesson stages, checkpoints, result HTML and publication', async () => {
+  const attempts = [
+    ['/api/studio/runner/jobs/job-test', 'PATCH', { stage: 'lesson_inventory' }],
+    ['/api/studio/runner/jobs/job-test/checkpoints/lesson-practice-1', 'PUT', { value: {} }],
+    ['/api/studio/runner/jobs/job-test/checkpoints/result', 'PUT', { value: { outputs: [{ html: { id: 'new-html' } }] } }],
+    ['/api/studio/runner/jobs/job-test', 'PATCH', { status: 'completed', result: { outputs: [{ published: { url: 'https://example.test/new' } }] } }],
+    ['/api/studio/runner/jobs/job-test/publish', 'POST', PUBLISH_BODY],
+  ];
+  for (const operation of [undefined, 'extract']) for (const [path, method, body] of attempts) {
+    const { state, storage } = await fixture();
+    const previousResult = { outputs: [{ kind: 'practice', pdf: HTML_SOURCE }] };
+    await state.saveJob(job({ operation, runId: '42', result: previousResult, retryable: true, continuation: true }));
+    const response = await withFetch(() => { throw new Error('No provider mutation is permitted'); }, () => state.fetch(request(path, { runner: true, method, body })));
+    assert.equal(response.status, 409, path); assert.equal((await response.json()).error, 'operation_mismatch');
+    const saved = await state.job('job-test');
+    assert.equal(saved.status, 'needs_attention'); assert.equal(saved.stage, 'operation_required');
+    assert.equal(saved.operationBlocked, true); assert.equal(saved.retryable, false); assert.equal(saved.continuation, false);
+    assert.deepEqual(saved.result, previousResult);
+    assert.equal([...storage.values.keys()].some(key => key.startsWith('checkpoint:')), false);
+    const overwrite = await state.fetch(request('/api/studio/runner/jobs/job-test', { runner: true, method: 'PATCH', body: { status: 'failed', retryable: true, error: 'old runner error' } }));
+    assert.equal(overwrite.status, 409); assert.equal((await state.job('job-test')).stage, 'operation_required');
+  }
+});
+
+test('a running legacy lesson is stopped when fetched, but completed legacy lessons remain intact', async () => {
+  const { state } = await fixture();
+  await state.saveJob(job({ runId: '42', stage: 'lesson_generation' }));
+  const response = await state.fetch(request('/api/studio/runner/jobs/job-test', { runner: true }));
+  assert.equal(response.status, 409); assert.equal((await response.json()).error, 'operation_mismatch');
+  assert.equal((await state.job('job-test')).operationBlocked, true);
+});
+
+test('HTML jobs reject classification and PDF extraction checkpoints but accept lesson checkpoints', async () => {
+  for (const name of ['classification', 'page-classification-1', 'pdf-proof-practice']) {
+    const { state } = await fixture(); await state.saveJob(htmlJob({ runId: '42' }));
+    const response = await state.fetch(request('/api/studio/runner/jobs/job-test/checkpoints/' + name, { runner: true, method: 'GET' }));
+    assert.equal(response.status, 409); assert.equal((await response.json()).error, 'operation_mismatch');
+  }
+  const { state } = await fixture(); await state.saveJob(htmlJob({ runId: '42' }));
+  const response = await state.fetch(request('/api/studio/runner/jobs/job-test/checkpoints/lesson-practice-1', { runner: true, method: 'PUT', body: { value: { safe: true } } }));
+  assert.equal(response.status, 200);
+});
+
+const publicationKey = () => 'published:' + createHash('sha256').update(OUTPUT_PATH).digest('base64url');
+function oldOutputJob() {
+  return job({ id: 'old-combined-job', status: 'completed', result: { outputs: [{ kind: 'practice', pdf: clone(HTML_SOURCE),
+    html: { id: 'old-html-file', name: OUTPUT_NAME, mimeType: 'text/html', parents: [FOLDERS.html], md5Checksum: 'a'.repeat(32) },
+  }] } });
+}
+
+test('HTML creation passes only server-validated legacy output provenance privately to the runner', async () => {
+  const { state, storage, cookie } = await fixture();
+  await state.saveJob(oldOutputJob());
+  await storage.put(publicationKey(), { sourceId: SOURCE.id, jobId: 'old-combined-job', blob: 'old-blob' });
+  state.sources = async () => [{ ...HTML_SOURCE, sourceKind: 'practice' }]; state.dispatch = async () => {};
+  const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { operation: 'html', fileId: HTML_SOURCE.id } }));
+  const created = (await response.json()).job, saved = await state.job(created.id);
+  assert.equal(created.legacyProvenance, undefined);
+  assert.deepEqual(saved.legacyProvenance, { previousSourceId: SOURCE.id, previousJobId: 'old-combined-job', pdfId: HTML_SOURCE.id,
+    kind: 'practice', htmlFileId: 'old-html-file', htmlFileName: OUTPUT_NAME, htmlParentId: FOLDERS.html, htmlSavedMd5: 'a'.repeat(32) });
+  const runner = await state.fetch(request('/api/studio/runner/jobs/' + created.id, { runner: true }));
+  assert.deepEqual((await runner.json()).job.legacyProvenance, saved.legacyProvenance);
+  const mismatched = oldOutputJob(); mismatched.result.outputs[0].pdf.id = 'other-pdf';
+  assert.equal(state.legacyLink(mismatched, HTML_SOURCE, 'practice'), null);
+  await storage.put(publicationKey(), { sourceId: SOURCE.id, jobId: 'another-owner', blob: 'old-blob' });
+  assert.equal(await state.legacyProvenance(HTML_SOURCE, 'practice', [oldOutputJob()]), null);
+});
+
+test('legacy Pages ownership migrates only through the exact saved PDF and unchanged published blob', async () => {
+  for (const violation of [null, 'manual-edit', 'changed-chain', 'wrong-owner']) {
+    const { state, storage } = await fixture(); const previous = oldOutputJob(); await state.saveJob(previous);
+    const proof = state.legacyLink(previous, HTML_SOURCE, 'practice');
+    await state.saveJob(htmlJob({ runId: '42', legacyProvenance: proof }));
+    const oldContent = OUTPUT_HTML.replace('数学の教材', '前の教材');
+    await storage.put(publicationKey(), { sourceId: SOURCE.id, jobId: violation === 'wrong-owner' ? 'another-owner' : previous.id, blob: createHash('sha1').update(oldContent).digest('hex') });
+    const git = gitFixture({ initial: { [OUTPUT_PATH]: oldContent } });
+    if (violation === 'manual-edit') git.writeManual(OUTPUT_PATH, 'manual update');
+    if (violation === 'changed-chain') { previous.result.outputs[0].html.id = 'replacement-html'; await state.saveJob(previous); }
+    await withFetch(git.fetch, async () => {
+      const response = await publishRequest(state);
+      assert.equal(response.status, violation ? 409 : 200, String(violation));
+      if (violation) { assert.equal((await response.json()).error, 'existing_file'); assert.equal(git.calls.some(call => call.method !== 'GET'), false); }
+      else { assert.equal(git.files().get(OUTPUT_PATH), OUTPUT_HTML); assert.equal((await storage.get(publicationKey())).sourceId, HTML_SOURCE.id); }
+    });
+  }
+});
+
 test('publishing creates lesson and index together in one atomic branch update and a retry is idempotent', async () => {
-  const { state } = await fixture(); await state.saveJob(job({ runId: '42' }));
+  const { state } = await fixture(); await state.saveJob(htmlJob({ runId: '42' }));
   const git = gitFixture();
   await withFetch(git.fetch, async () => {
     const response = await publishRequest(state); assert.equal(response.status, 200);
@@ -309,7 +482,7 @@ test('publishing creates lesson and index together in one atomic branch update a
 });
 
 test('publishing protects an existing manual file and rejects unapproved output names', async () => {
-  const { state } = await fixture(); await state.saveJob(job({ runId: '42' }));
+  const { state } = await fixture(); await state.saveJob(htmlJob({ runId: '42' }));
   const git = gitFixture({ initial: { [OUTPUT_PATH]: 'manual lesson, preserve me' } });
   await withFetch(git.fetch, async () => {
     const response = await publishRequest(state); assert.equal(response.status, 409); assert.equal((await response.json()).error, 'existing_file');
@@ -321,7 +494,7 @@ test('publishing protects an existing manual file and rejects unapproved output 
 });
 
 test('a response lost after publishing can be retried, but later manual edits are protected', async () => {
-  const { state } = await fixture(); await state.saveJob(job({ runId: '42' }));
+  const { state } = await fixture(); await state.saveJob(htmlJob({ runId: '42' }));
   const git = gitFixture({ dropAfterPatch: true });
   await withFetch(git.fetch, async () => {
     const interrupted = await publishRequest(state); assert.equal(interrupted.status, 500);
@@ -408,7 +581,7 @@ test('checkpoint writes recheck cancellation or runner replacement after waiting
 
 test('reconcile cannot replace a completion received while GitHub status is pending', async () => {
   const { state } = await fixture();
-  await state.saveJob(job({ runId: '42', status: 'running', updatedAt: new Date(Date.now() - 180000).toISOString() }));
+  await state.saveJob(htmlJob({ runId: '42', status: 'running', updatedAt: new Date(Date.now() - 180000).toISOString() }));
   let resolveRuns, queried;
   const started = new Promise(resolve => { queried = resolve; });
   await withFetch(() => { queried(); return new Promise(resolve => { resolveRuns = resolve; }); }, async () => {
@@ -441,7 +614,7 @@ test('auto job creation dispatches a future verified model instead of a fixed fa
   await storage.put('catalog-v2', { ...CATALOG, defaultModel: 'gpt-7-nova', models: [{ id: 'gpt-7-nova', label: 'Future official flagship', maxOutputTokens: 192000 }] });
   const mock = cloud();
   await withFetch(mock.fetch, async () => {
-    const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'auto' } }));
+    const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { operation: 'extract', fileId: SOURCE.id, model: 'auto' } }));
     assert.equal(response.status, 200);
     assert.equal((await response.json()).job.model, 'gpt-7-nova');
     assert.equal(mock.calls.filter(call => call.url.pathname.endsWith('/dispatches')).length, 1);
@@ -452,7 +625,7 @@ test('new jobs copy the selected verified output capacity and ignore browser-sup
   const { state, cookie } = await fixture();
   const mock = cloud();
   await withFetch(mock.fetch, async () => {
-    const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { fileId: SOURCE.id, model: 'gpt-5.6-sol', modelMaxOutputTokens: 999999 } }));
+    const response = await state.fetch(request('/api/studio/jobs', { cookie, method: 'POST', body: { operation: 'extract', fileId: SOURCE.id, model: 'gpt-5.6-sol', modelMaxOutputTokens: 999999 } }));
     assert.equal(response.status, 200);
     const created = (await response.json()).job;
     const saved = await state.job(created.id);
@@ -540,6 +713,26 @@ async function fireAlarm(state, storage) {
   storage.alarmAt = null; // Durable storage clears a fired alarm before invoking its handler.
   await state.alarm();
 }
+
+test('blocked legacy runners cannot resume while live or via alarms, and manual retry starts extract after exit', async () => {
+  const { state, storage, cookie } = await fixture();
+  await state.saveJob(job({ runId: '42', status: 'running', stage: 'lesson_inventory' }));
+  assert.equal((await state.fetch(request('/api/studio/runner/jobs/job-test', { runner: true }))).status, 409);
+  const runs = [{ id: 42, display_title: 'monthly-job-test', status: 'in_progress' }];
+  const calls = alarmGithub(state, { runs });
+  await fireAlarm(state, storage);
+  assert.equal(dispatchCalls(calls).length, 0);
+  const active = await state.fetch(request('/api/studio/jobs/job-test/retry', { cookie, method: 'POST', body: {} }));
+  assert.equal(active.status, 409); assert.equal((await active.json()).error, 'operation_mismatch');
+  assert.equal((await state.job('job-test')).operationBlocked, true);
+  runs[0].status = 'completed';
+  const retried = await state.fetch(request('/api/studio/jobs/job-test/retry', { cookie, method: 'POST', body: {} }));
+  assert.equal(retried.status, 200);
+  const saved = await state.job('job-test');
+  assert.equal(saved.operation, 'extract'); assert.equal(saved.operationBlocked, false);
+  assert.equal(saved.stage, 'queued'); assert.equal(saved.runId, null);
+  assert.equal(dispatchCalls(calls).length, 1);
+});
 
 test('durable recovery schedules active work without postponing an existing earlier alarm', async () => {
   const { state, storage } = await fixture();
@@ -679,12 +872,12 @@ class Element {
   scrollIntoView() {}
   descendants() { return this.children.flatMap(child => [child, ...child.descendants()]); }
 }
-async function uiFixture({ jobs = [], files = [SOURCE], models = CATALOG, responder, script = studioScript() } = {}) {
+async function uiFixture({ jobs = [], files = [SOURCE], htmlFiles = [{ ...SOURCE, id: 'cut-pdf', name: '日日の演習.pdf', sourceKind: 'practice' }], models = CATALOG, responder, script = studioScript() } = {}) {
   const elements = new Map([...studioPage().matchAll(/\bid="([^"]+)"/g)].map(match => [match[1], new Element()]));
   const calls = [];
   const document = { hidden: false, activeElement: null, getElementById: id => { assert(elements.has(id), 'Missing UI element: ' + id); return elements.get(id); },
     createElement: tag => new Element(tag), querySelectorAll: () => [...elements.values()].flatMap(element => [element, ...element.descendants()]), addEventListener() {} };
-  const defaults = { '/session': { authenticated: true, configured: true, csrf: CSRF, email: ENV.STUDIO_OWNER_EMAIL }, '/sources': { files }, '/models': models, '/jobs': { jobs }, '/logout': { ok: true } };
+  const defaults = { '/session': { authenticated: true, configured: true, csrf: CSRF, email: ENV.STUDIO_OWNER_EMAIL }, '/sources?operation=extract': { files }, '/sources?operation=html': { files: htmlFiles }, '/models': models, '/jobs': { jobs }, '/logout': { ok: true } };
   runInNewContext(script, { document, URL, URLSearchParams, AbortController, Intl, Date, Set, console,
     location: { origin: ENV.STUDIO_ORIGIN, pathname: '/studio', search: '', hash: '' }, history: { replaceState() {} }, matchMedia: () => ({ matches: true }),
     setTimeout: () => 1, clearTimeout() {}, fetch: async (url, options) => {
@@ -744,11 +937,14 @@ test('studio ignores blank and non-string review details', async () => {
   assert.equal(items[0].textContent, 'image-2: 数値が欠けています。');
 });
 
-test('studio shows Japanese progress and prevents concurrent issue selection', async () => {
+test('studio shows Japanese progress and permits selection without starting concurrent work', async () => {
   const ui = await uiFixture({ files: [SOURCE, { ...SOURCE, id: 'other', name: '2026年8月号.pdf' }], jobs: [job({ stage: 'lesson_generation' })] });
   assert.match(ui.elements.get('jobs').textContent, /全問題の講義と検算を進めています/);
-  assert(ui.elements.get('sources').children.every(button => button.disabled));
-  assert.match(ui.elements.get('sources').textContent, /別の号を作成中です/);
+  assert(ui.elements.get('sources').children.every(button => !button.disabled));
+  await ui.elements.get('sources').children[1].listeners.click();
+  assert.equal(ui.elements.get('start-job').disabled, true);
+  assert.match(ui.elements.get('start-state').textContent, /完了後に次の処理/);
+  assert(!ui.calls.some(call => call.options.method === 'POST'));
   const cancelled = await uiFixture({ jobs: [job({ status: 'cancelled' })] });
   assert(!cancelled.elements.get('jobs').textContent.includes('再試行する'));
   assert.match(cancelled.elements.get('jobs').textContent, /作成を取り消しました/);
@@ -756,10 +952,13 @@ test('studio shows Japanese progress and prevents concurrent issue selection', a
 
 test('studio permits explicit fallback selection but never silently marks it as latest', async () => {
   const ui = await uiFixture({ models: { ...CATALOG, latestVerified: false, defaultModel: null } });
-  assert(ui.elements.get('sources').children[0].disabled);
+  assert.equal(ui.elements.get('sources').children[0].disabled, false);
+  await ui.elements.get('sources').children[0].listeners.click();
+  assert.equal(ui.elements.get('start-job').disabled, true);
   assert.equal(ui.elements.get('model-settings').open, true);
   await ui.elements.get('model').listeners.change({ target: { value: 'gpt-5.6-sol' } });
-  assert.equal(ui.elements.get('sources').children[0].disabled, false);
+  assert.equal(ui.elements.get('start-job').disabled, false);
+  assert(!ui.calls.some(call => call.options.method === 'POST'));
   assert.match(ui.elements.get('model').children[0].textContent, /確認できていません/);
 });
 
@@ -774,7 +973,7 @@ test('studio logout uses CSRF and removes private screen data; Drive expiry give
   assert.equal(ui.elements.get('account').textContent, '');
   assert.equal(ui.elements.get('jobs').children.length, 0);
   assert.equal(ui.elements.get('login').hidden, false);
-  const disconnected = await uiFixture({ responder: path => path === '/sources' ? Response.json({ error: 'drive_reconnect' }, { status: 401 }) : null });
+  const disconnected = await uiFixture({ responder: path => path === '/sources?operation=extract' ? Response.json({ error: 'drive_reconnect' }, { status: 401 }) : null });
   assert.equal(disconnected.elements.get('workspace').hidden, true);
   assert.equal(disconnected.elements.get('login').hidden, false);
   assert.match(disconnected.elements.get('gate-copy').textContent, /Google Drive/);
@@ -788,4 +987,92 @@ test('production bundling with preserved names keeps browser code self-contained
   assert.equal(ui.elements.get('connection-label').textContent, 'Google 接続済み');
   assert.equal(ui.elements.get('workspace').hidden, false);
   assert.equal(ui.elements.get('sources').children[0].disabled, false);
+});
+
+
+test('studio source, tab, model and history selections never start processing', async () => {
+  const extraction = job({ id: 'extract-history', operation: 'extract', status: 'completed' });
+  const html = job({ id: 'html-history', operation: 'html', fileId: 'cut-pdf', fileName: '日日の演習.pdf', status: 'completed' });
+  const ui = await uiFixture({ jobs: [extraction, html] });
+  await ui.elements.get('sources').children[0].listeners.click();
+  assert.equal(ui.elements.get('sources').children[0]['aria-pressed'], 'true');
+  assert.equal(ui.elements.get('start-job').textContent, 'PDFを切り出す');
+  assert.equal(ui.elements.get('start-job').disabled, false);
+  assert.match(ui.elements.get('jobs-title').textContent, /PDF切り出し/);
+  assert(!ui.elements.get('jobs').textContent.includes('日日の演習.pdf'));
+  await ui.click('operation-html');
+  assert.equal(ui.elements.get('operation-html')['aria-selected'], 'true');
+  assert.equal(ui.elements.get('start-job').disabled, true);
+  assert(ui.calls.some(call => call.path === '/sources?operation=html'));
+  assert.match(ui.elements.get('jobs-title').textContent, /HTML作成/);
+  assert.match(ui.elements.get('jobs').textContent, /日日の演習.pdf/);
+  assert(!ui.elements.get('jobs').textContent.includes(SOURCE.name));
+  await ui.elements.get('sources').children[0].listeners.click();
+  await ui.elements.get('model').listeners.change({ target: { value: 'gpt-5.6-sol' } });
+  const title = ui.elements.get('jobs').descendants().find(element => element.dataset.focusKey === 'job:html-history');
+  await title.listeners.click();
+  await ui.flush();
+  assert(!ui.calls.some(call => call.options.method === 'POST'));
+  await ui.click('operation-extract');
+  assert.equal(ui.elements.get('sources').children[0]['aria-pressed'], 'true', 'each operation retains its own selected PDF');
+});
+
+test('studio dedicated execute button sends one explicit operation and CSRF token', async () => {
+  for (const operation of ['extract', 'html']) {
+    const selectedId = operation === 'html' ? 'cut-pdf' : SOURCE.id;
+    const ui = await uiFixture({ responder: (path, options) => path === '/jobs' && options.method === 'POST'
+      ? Response.json({ job: job({ id: 'new-' + operation, operation, fileId: selectedId, status: 'queued' }) }) : null });
+    if (operation === 'html') await ui.click('operation-html');
+    await ui.elements.get('sources').children[0].listeners.click();
+    await ui.flush();
+    assert.equal(ui.calls.filter(call => call.options.method === 'POST').length, 0);
+    const execute = ui.elements.get('start-job').listeners.click;
+    await Promise.all([execute(), execute()]);
+    await ui.flush();
+    const mutations = ui.calls.filter(call => call.options.method === 'POST');
+    assert.equal(mutations.length, 1);
+    assert.equal(mutations[0].path, '/jobs');
+    assert.equal(mutations[0].options.headers['x-studio-csrf'], CSRF);
+    assert.deepEqual(JSON.parse(mutations[0].options.body), { fileId: selectedId, model: 'auto', operation });
+    assert.equal(ui.elements.get('start-job').disabled, true);
+    assert.match(ui.elements.get('jobs').textContent, /順番待ち/);
+    assert.equal(ui.elements.get('operation-' + operation)['aria-selected'], 'true');
+  }
+});
+
+test('studio PDF completion stays in extraction and opening the HTML task is read-only', async () => {
+  const ui = await uiFixture({ jobs: [job({ id: 'finished-pdf', operation: 'extract', status: 'completed', result: {
+    outputs: [{ kind: 'practice', pdf: { name: '日日の演習.pdf', url: 'https://drive.google.com/file/d/cut-pdf/view' } }],
+  } })] });
+  assert.equal(ui.elements.get('operation-extract')['aria-selected'], 'true');
+  assert.match(ui.elements.get('operation-disclosure').textContent, /解答解説HTMLの生成は行いません/);
+  const open = ui.elements.get('jobs').descendants().find(element => element.dataset.focusKey === 'html-task:finished-pdf');
+  assert(open);
+  await open.listeners.click();
+  await ui.flush();
+  assert.equal(ui.elements.get('operation-html')['aria-selected'], 'true');
+  assert.equal(ui.elements.get('start-job').disabled, true, 'the HTML input still requires an explicit selection');
+  assert(!ui.calls.some(call => call.options.method === 'POST'));
+});
+
+test('studio refreshes an already visited HTML source list after extraction completes', async () => {
+  const extraction = job({ id: 'finishing-pdf', operation: 'extract', status: 'running' });
+  let currentJob = extraction;
+  let htmlFiles = [];
+  const ui = await uiFixture({ responder: (path, options) => {
+    if (path === '/jobs' && options.method !== 'POST') return Response.json({ jobs: [currentJob] });
+    if (path === '/sources?operation=html') return Response.json({ files: htmlFiles });
+    return null;
+  } });
+  await ui.click('operation-html');
+  assert.match(ui.elements.get('sources').textContent, /切り出し済みのPDFがありません/);
+  await ui.click('operation-extract');
+  currentJob = { ...extraction, status: 'completed' };
+  htmlFiles = [{ ...SOURCE, id: 'new-cut-pdf', name: '新しく切り出したPDF.pdf', sourceKind: 'practice' }];
+  await ui.click('refresh-jobs');
+  assert.equal(ui.elements.get('operation-extract')['aria-selected'], 'true');
+  await ui.click('operation-html');
+  assert.match(ui.elements.get('sources').textContent, /新しく切り出したPDF.pdf/);
+  assert.equal(ui.calls.filter(call => call.path === '/sources?operation=html').length, 2);
+  assert(!ui.calls.some(call => call.options.method === 'POST'));
 });

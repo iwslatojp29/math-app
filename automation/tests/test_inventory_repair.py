@@ -115,6 +115,21 @@ class InventoryRepairTests(unittest.TestCase):
         self.assertEqual(ai.tasks, expected * 2)
         self.assertEqual(len(ai.session_fixture.calls), 3, "Resume must reuse even the invalid cached first candidate")
 
+    def test_direct_html_plan_scans_all_answer_pages_without_classification_labels(self):
+        problem = self.problem()
+        candidate = self.batch([problem])
+        # The inventory has not linked this distant official answer. The
+        # separate all-page solution pass must still find and verify it.
+        answers = {"links": [{"problemId": problem["id"], "pdfPages": [2], "evidence": "Same synthetic conditions."}],
+                   "unpairedPages": [{"pdfPage": 1, "reason": "Problem text only."}],
+                   "checkedPdfPages": [1, 2], "unresolvedIssues": []}
+        ai = FixtureAI([candidate, self.review(), answers, self.review()])
+        plan = {"kind": "practice", "scanAllSolutionPages": True,
+                "pages": [{"printedPages": [], "labels": []} for _ in range(2)]}
+        problems, _ = lesson_pipeline.inventory_questions(self.doc, ai, plan, self.directory, "Fixture specification")
+        self.assertEqual(problems[0]["officialSolutionPages"], [2])
+        self.assertEqual(ai.tasks[-2:], ["solutions-practice-0-0", "solutions-review-practice-0-0"])
+
     def test_page_outside_pdf_is_repaired_with_exact_bad_reference(self):
         correct = self.batch([self.problem()])
         invalid = copy.deepcopy(correct)

@@ -232,9 +232,10 @@ class VisualRepairTests(unittest.TestCase):
         self.assertEqual(ai.structured.call_count, 2)
         self.assertTrue(ai.structured.call_args.args[1].endswith('["image-1"]'))
 
-    def test_run_job_keeps_verified_pdf_but_never_saves_or_publishes_rejected_html(self):
+    def test_html_job_never_saves_or_publishes_rejected_html(self):
         source = {"id": "fixture-source", "name": "2026年9月号.pdf"}
         job = {"id": self.studio.job_id, "model": "fixture-model", "specVersion": "test-v1",
+               "operation": "html", "sourceKind": "practice",
                "status": "queued", "folders": {"practice": "fixture-pdf-folder", "html": "fixture-html-folder"}}
         plan = {**self.plan, "pages": [{"pdfPage": 1}], "missing": []}
         drive = Mock()
@@ -251,7 +252,7 @@ class VisualRepairTests(unittest.TestCase):
                 patch.object(run_monthly, "check_source"), \
                 patch.object(run_monthly, "DriveClient", return_value=drive), \
                 patch.object(run_monthly, "ResponsesClient", return_value=Mock()), \
-                patch.object(run_monthly, "open_pdf", return_value=nullcontext(object())), \
+                patch.object(run_monthly, "open_pdf", return_value=nullcontext([object()])), \
                 patch.object(run_monthly, "classify_pdf", return_value=({"issue": {"year": 2026, "month": 9}}, None)), \
                 patch.object(run_monthly, "plans_from_classification", return_value=[plan]), \
                 patch.object(run_monthly, "extract_pdf", return_value={"pageCount": 1, "allPagesPixelMatched": True}), \
@@ -259,12 +260,11 @@ class VisualRepairTests(unittest.TestCase):
                 patch.object(run_monthly, "generate_verified_lesson", side_effect=exhausted) as generate, \
                 patch.object(run_monthly, "publish_and_verify") as publish:
             result = run_monthly.run_job(self.studio, job, "fixture-unused-key", self.directory)
-        save.assert_called_once()
-        self.assertEqual(save.call_args.args[5], "application/pdf")
+        save.assert_not_called()
         generate.assert_called_once()
         publish.assert_not_called()
         output = result["outputs"][0]
-        self.assertEqual(output["pdf"], saved_pdf)
+        self.assertNotIn("pdf", output)
         self.assertNotIn("html", output)
         self.assertNotIn("htmlVerification", output)
         self.assertNotIn("published", output)
@@ -275,9 +275,10 @@ class VisualRepairTests(unittest.TestCase):
         self.assertEqual(self.studio.updates[-1]["status"], "needs_attention")
         self.assertFalse(self.studio.updates[-1]["retryable"])
 
-    def test_generic_lesson_errors_keep_bounded_private_diagnostics_and_saved_pdf(self):
+    def test_generic_html_job_errors_keep_bounded_private_diagnostics(self):
         source = {"id": "fixture-source", "name": "2026年9月号.pdf"}
         job = {"id": self.studio.job_id, "model": "fixture-model", "specVersion": "test-v1",
+               "operation": "html", "sourceKind": "practice",
                "status": "queued", "folders": {"practice": "fixture-pdf-folder", "html": "fixture-html-folder"}}
         plan = {**self.plan, "pages": [{"pdfPage": 1}], "missing": []}
         saved_pdf = {"id": "saved-pdf", "name": plan["name"]}
@@ -295,7 +296,7 @@ class VisualRepairTests(unittest.TestCase):
                         patch.object(run_monthly, "check_source"), \
                         patch.object(run_monthly, "DriveClient", return_value=drive), \
                         patch.object(run_monthly, "ResponsesClient", return_value=Mock()), \
-                        patch.object(run_monthly, "open_pdf", return_value=nullcontext(object())), \
+                        patch.object(run_monthly, "open_pdf", return_value=nullcontext([object()])), \
                         patch.object(run_monthly, "classify_pdf", return_value=({"issue": {"year": 2026, "month": 9}}, None)), \
                         patch.object(run_monthly, "plans_from_classification", return_value=[plan]), \
                         patch.object(run_monthly, "extract_pdf", return_value={"pageCount": 1, "allPagesPixelMatched": True}), \
@@ -304,14 +305,13 @@ class VisualRepairTests(unittest.TestCase):
                         patch.object(run_monthly, "publish_and_verify") as publish, \
                         patch("sys.stdout", stdout), patch("sys.stderr", stderr):
                     result = run_monthly.run_job(self.studio, job, "fixture-unused-key", self.directory)
-                save.assert_called_once()
-                self.assertEqual(save.call_args.args[5], "application/pdf")
+                save.assert_not_called()
                 generate.assert_called_once()
-                self.assertEqual(generate.call_args.args[3]["bookletIssue"], {"year": 2026, "month": 9})
+                self.assertNotIn("bookletIssue", generate.call_args.args[3])
                 publish.assert_not_called()
                 output = result["outputs"][0]
-                self.assertEqual(output["pdf"], saved_pdf)
-                self.assertTrue(output["pdfVerification"]["allPagesPixelMatched"])
+                self.assertNotIn("pdf", output)
+                self.assertNotIn("pdfVerification", output)
                 self.assertTrue({"html", "htmlVerification", "published"}.isdisjoint(output))
                 self.assertEqual(output["error"]["code"], code)
                 details = output["error"]["details"]

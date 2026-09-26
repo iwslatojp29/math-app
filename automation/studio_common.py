@@ -114,6 +114,8 @@ class StudioClient:
                     raise StudioError("cancelled", "処理は停止されています。")
                 if failure_code == "runner_conflict":
                     raise StudioError("runner_conflict", "別のクラウド実行がこのジョブを処理しています。")
+                if failure_code == "operation_mismatch":
+                    raise StudioError("operation_mismatch", "選択した作業と異なる処理を停止しました。", True)
                 if failure_code == "existing_file":
                     raise StudioError("publish_conflict", "同名の既存教材を保護するため公開を保留しました。", True)
                 if failure_code == "drive_reconnect":
@@ -247,7 +249,7 @@ class DriveClient:
                 "drive_verification", "保存されたファイルの内容・名前・保存先を確認できません。", True)
         return metadata
 
-    def upload(self, path: Path, name, folder, mime, properties, existing_id=None):
+    def upload(self, path: Path, name, folder, mime, properties, existing_id=None, *, legacy_provenance=None):
         """Reserved Drive IDs and status queries make retries safe after an uncertain upload."""
         cp_key = key_for("drive-upload", [folder, name, properties.get("mathAppSource"), properties.get("mathAppKind")])
         saved = self.studio.checkpoint(cp_key) or {}
@@ -261,7 +263,8 @@ class DriveClient:
         current_props = current.get("appProperties", {}) if current else {}
         require(not current or (current.get("name") == name and current.get("mimeType") == mime
                 and folder in current.get("parents", []) and not current.get("trashed")
-                and current_props.get("mathAppSource") == properties.get("mathAppSource")
+                and (current_props.get("mathAppSource") == properties.get("mathAppSource")
+                     or legacy_html_ownership(current, name, folder, mime, properties, legacy_provenance))
                 and current_props.get("mathAppKind") == properties.get("mathAppKind")
                 and current_props.get("mathAppSavedMd5") == current.get("md5Checksum")),
                 "drive_name_conflict", "同名の別内容ファイルがあるため上書きを保留しました。", True)
@@ -300,6 +303,34 @@ class DriveClient:
                         require(recoveries <= 4, "drive_upload", "Google Driveへの保存が進みません。")
                     offset = next_offset
         return self.verify_saved(file_id, name, folder, mime, path)
+
+
+def legacy_html_ownership(current, name, folder, mime, properties, provenance):
+    """Accept only the Worker-proven old job artifact; never trust PDF appProperties.
+
+    Called again immediately before upload so edits after the initial lookup
+    cannot be hidden by a matching old source ID.
+    """
+    if not isinstance(provenance, dict) or not isinstance(current, dict):
+        return False
+    props = current.get("appProperties", {})
+    checksum = current.get("md5Checksum")
+    kind = provenance.get("kind")
+    return (kind in ("practice", "advanced") and mime == "text/html"
+            and properties.get("mathAppKind") == "html-" + kind
+            and properties.get("mathAppSource") == provenance.get("pdfId")
+            and all(isinstance(provenance.get(field), str) and bool(SAFE_ID.fullmatch(provenance[field]))
+                    for field in ("previousJobId", "previousSourceId", "pdfId", "htmlFileId"))
+            and current.get("id") == provenance.get("htmlFileId")
+            and current.get("name") == name == provenance.get("htmlFileName")
+            and current.get("mimeType") == mime and not current.get("trashed")
+            and folder == PRACTICE_FOLDER == provenance.get("htmlParentId")
+            and folder in current.get("parents", [])
+            and props.get("mathAppSource") == provenance.get("previousSourceId")
+            and props.get("mathAppKind") == properties.get("mathAppKind")
+            and isinstance(checksum, str) and bool(re.fullmatch(r"[a-fA-F0-9]{32}", checksum))
+            and props.get("mathAppSavedMd5") == checksum
+            and (not provenance.get("htmlSavedMd5") or provenance["htmlSavedMd5"] == checksum))
 
 
 def response_diagnostic(response, budget):

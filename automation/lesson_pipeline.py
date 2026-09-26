@@ -340,6 +340,10 @@ def inventory_questions(doc, ai, plan, directory, specification):
     require(bool(problems), "no_problems", "PDF内の対象問題を確定できません。", True)
     solution_pages = {index + 1 for index, page in enumerate(plan["pages"])
                       if set(page["labels"]) & {"practice_solutions", "advanced_solutions", "contest_solutions"}}
+    if plan.get("scanAllSolutionPages"):
+        # Direct HTML jobs have no prior range classification. Review every
+        # page against the complete inventory, including distant answer pages.
+        solution_pages.update(images)
     solution_pages.update(page for problem in problems for page in problem["officialSolutionPages"])
     solution_pages.update(page for link in solutions for page in link["pdfPages"])
     require(solution_pages <= set(images), "solution_pages", "公式解答の参照ページを確認できません。", True)

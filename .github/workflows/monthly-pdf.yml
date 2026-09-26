@@ -1,11 +1,11 @@
-name: Monthly PDF lessons
+name: PDF extraction or HTML lesson
 run-name: monthly-${{ inputs.job_id }}
 
 on:
   workflow_dispatch:
     inputs:
       job_id:
-        description: Private studio job ID
+        description: Private studio job ID with one selected operation
         required: true
         type: string
 
@@ -42,7 +42,7 @@ jobs:
           python -m pip install --disable-pip-version-check -r automation/requirements.txt
           npm install --prefix "$RUNNER_TEMP/monthly-browser" --no-audit --no-fund playwright
           "$RUNNER_TEMP/monthly-browser/node_modules/.bin/playwright" install --with-deps chromium
-      - name: Process selected booklet and verify saved lessons
+      - name: Run the selected PDF extraction or HTML creation job
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/monthly-browser/node_modules/playwright/index.mjs
         run: python automation/run_monthly.py --job-id "$JOB_ID"
