@@ -1,11 +1,14 @@
 """Repair added invalid dimensions without changing existing lecture data or caches."""
 import copy
+import json
 import unittest
 from unittest.mock import Mock, patch
 
+import jsonschema
 import test_lesson_reference_repair as reference_fixtures
 import lesson_pipeline
 from test_issue_repair import MemoryStudio, RecordingAI
+from studio_common import json_bytes
 
 
 class LessonDimensionRecoveryTests(unittest.TestCase):
@@ -51,7 +54,50 @@ class LessonDimensionRecoveryTests(unittest.TestCase):
                 self.case.mutate = lambda stage, count, value: value.update(self.invalid_patch(width)) if stage == "patch" else None
                 error = self.case.assert_blocked()
                 self.assertEqual(self.case.counts, {"candidate": 4, "patch": 4, "review": 0})
-                self.assertIn("Invalid primitive width", " ".join(error.details))
+                self.assertIn("schemaに一致しません", " ".join(error.details))
+                diagnostic = json.loads(next(item.split("参照修復の診断: ", 1)[1] for item in error.details if "参照修復の診断: " in item))
+                self.assertEqual(diagnostic["referenceAttempts"], 4)
+                self.assertEqual(diagnostic["dimensionRecoveryAttempts"], 2)
+                self.assertTrue(all(item["id"] == "p3-labelB" and item["kind"] == "line"
+                    and item["field"] == "width" and item["value"] == width for item in diagnostic["invalidAddedDimensions"]))
+                self.assertEqual([item["attempt"] for item in diagnostic["invalidAddedDimensions"]], [1, 2, 3, 4])
+
+    def test_only_dimension_recovery_schema_enforces_every_positive_primitive_dimension(self):
+        schema_path = self.case.fixture.root / "lesson.schema.json"
+        original_schema_bytes = schema_path.read_bytes()
+        self.case.mutate = self.bad_dimensions_then_label
+        self.case.generate()
+        requests = [request for request in self.case.requests if request[0].startswith("lesson-reference-repair-")]
+        first, second, recovery = [request[2] for request in requests]
+        self.assertEqual(first, second)
+        restored = copy.deepcopy(recovery)
+        fields = ("width", "height", "radius", "strokeWidth", "scale", "fontSize")
+        for alternative in recovery["$defs"]["primitive"]["anyOf"]:
+            name = alternative["$ref"].rsplit("/", 1)[-1]
+            properties = recovery["$defs"][name]["properties"]
+            for field in fields:
+                if field in properties:
+                    self.assertEqual(properties[field]["exclusiveMinimum"], 0, (name, field))
+                    self.assertNotIn("exclusiveMinimum", first["$defs"][name]["properties"][field])
+                    restored["$defs"][name]["properties"][field].pop("exclusiveMinimum")
+            if name == "label":
+                self.assertEqual(properties["fontSize"]["minimum"], 14)
+                self.assertNotIn("minimum", first["$defs"][name]["properties"]["fontSize"])
+                restored["$defs"][name]["properties"]["fontSize"].pop("minimum")
+        self.assertEqual(restored, first, "Only recovery dimension constraints may change")
+        self.assertEqual(schema_path.read_bytes(), original_schema_bytes)
+        for width in [0, -1]:
+            jsonschema.validate(self.invalid_patch(width), first)
+            with self.assertRaises(jsonschema.ValidationError):
+                jsonschema.validate(self.invalid_patch(width), recovery)
+        for size in [0, -1, 13.99]:
+            label_patch = copy.deepcopy(self.case.patch_value)
+            label_patch["addedPrimitives"][0]["fontSize"] = size
+            jsonschema.validate(label_patch, first)
+            with self.assertRaises(jsonschema.ValidationError):
+                jsonschema.validate(label_patch, recovery)
+        label_patch["addedPrimitives"][0]["fontSize"] = 14
+        jsonschema.validate(label_patch, recovery)
 
     def test_dimension_recovery_cannot_skip_independent_math_rejection(self):
         def mutate(stage, count, value):
@@ -113,6 +159,53 @@ class LessonDimensionRecoveryTests(unittest.TestCase):
         repeated, _ = generate(again)
         self.assertEqual(repeated, expected)
         self.assertEqual(again.scripted_session.calls, [], "A later resume must reuse the accepted repair and independent review")
+
+    def test_old_invalid_dimension_recovery_caches_do_not_match_the_new_strict_schema(self):
+        # Recreate all old request bodies, including the two exhausted recovery
+        # entries, by removing only the new dimension constraints. On the old
+        # fourth request the previous finding came from semantic validation.
+        self.case.mutate = lambda stage, count, value: value.update(self.invalid_patch()) if stage == "patch" else None
+        self.case.assert_blocked()
+        old_requests = copy.deepcopy(self.case.requests)
+        original_reference_schema = copy.deepcopy(old_requests[4][2])
+        self.assertEqual(len(old_requests), 8)
+        for request in old_requests[6:]:
+            request[2] = copy.deepcopy(original_reference_schema)
+            request[1] = request[1].replace(
+                json_bytes(["図の参照修復が指定された欠落ID専用schemaに一致しません。"]).decode(),
+                json_bytes(["講義の構造: Invalid primitive width"]).decode())
+        studio = MemoryStudio()
+        seed = RecordingAI(studio, [copy.deepcopy(self.case.broken) for _ in range(4)]
+            + [self.invalid_patch() for _ in range(4)])
+        for key, prompt, schema, images, budget in old_requests:
+            seed.structured(key, prompt, schema, images, max_tokens=budget)
+        self.assertEqual(len(seed.scripted_session.calls), 8)
+        before = copy.deepcopy(studio.values)
+        self.case.requests = []
+        self.case.counts = dict.fromkeys(self.case.counts, 0)
+        self.case.mutate = self.bad_dimensions_then_label
+        expected, _ = self.case.generate()
+        review = {"approved": True, "issues": [],
+            "checkedSubquestionIds": [item["id"] for item in self.case.original["subquestions"]],
+            **{key: self.case.original["verification"][key] for key in
+               ("independentCheck", "officialAnswerCheck", "reasoningCheck", "readingsCheck")}}
+        resumed = RecordingAI(studio, [copy.deepcopy(self.case.patch_value), review])
+        fixture = self.case.fixture
+
+        def generate(client):
+            with patch.object(lesson_pipeline, "inventory_questions", return_value=(fixture.inventory, fixture.images)):
+                return lesson_pipeline.generate_lesson(fixture.pdf, Mock(structured=client.structured), studio,
+                    fixture.plan, fixture.directory, "Retain all questions and mathematical conditions.",
+                    "2026年9月号", fixture.root / "lesson.schema.json")
+
+        self.assertEqual(generate(resumed)[0], expected)
+        self.assertEqual(len(resumed.scripted_session.calls), 2)
+        self.assertEqual({key: studio.values[key] for key in before}, before)
+        new_request = resumed.scripted_session.calls[0]
+        self.assertEqual(new_request["text"]["format"]["schema"]["$defs"]["line"]["properties"]["width"]["exclusiveMinimum"], 0)
+        again = RecordingAI(studio, [])
+        self.assertEqual(generate(again)[0], expected)
+        self.assertEqual(again.scripted_session.calls, [])
 
 
 if __name__ == "__main__":

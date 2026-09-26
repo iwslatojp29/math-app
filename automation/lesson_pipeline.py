@@ -863,6 +863,27 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 repair_feedback, issues = "", original_issues
                 invalid_added_dimensions = []
                 dimension_recovery = ""
+                request_schema = reference_schema
+                reference_attempts, dimension_observations = 0, []
+
+                def added_dimensions(value):
+                    observations = []
+                    primitives = value.get("addedPrimitives", []) if isinstance(value, dict) else []
+                    if not isinstance(primitives, list):
+                        return observations
+                    for primitive in primitives:
+                        if not isinstance(primitive, dict) or not isinstance(primitive.get("id"), str) or not isinstance(primitive.get("kind"), str):
+                            continue
+                        for field in ("width", "height", "radius", "strokeWidth", "scale", "fontSize"):
+                            number = primitive.get(field)
+                            if type(number) not in (int, float):
+                                continue
+                            minimum = 14 if field == "fontSize" and primitive["kind"] == "label" else 0
+                            if number <= 0 or (minimum and number < minimum):
+                                observations.append({"id": primitive["id"], "kind": primitive["kind"],
+                                    "field": field, "value": number, "requirement": "14以上" if minimum else "正数"})
+                    return observations
+
                 for reference_attempt in range(4):
                     if reference_attempt == 2:
                         # Keep the original two requests/cache keys unchanged.
@@ -881,15 +902,33 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                             "根拠を得られなければverificationをneeds_reviewとして具体的に残す。"
                             "元のprimitive・viewBox・cue本文と参照順・transform数値・条件・式・答えは編集対象外です。"
                             "各欠落IDをちょうど1方式で全件覆い、修復後も全小問を独立に検算します。")
+                        # Tighten only the two dimension-recovery requests. The
+                        # normal schema and original repair fingerprints remain
+                        # unchanged; previously invalid recovery results cannot
+                        # match this stricter request's cache identity.
+                        request_schema = copy.deepcopy(reference_schema)
+                        for alternative in request_schema["$defs"]["primitive"]["anyOf"]:
+                            name = alternative["$ref"].rsplit("/", 1)[-1]
+                            properties = request_schema["$defs"][name]["properties"]
+                            for field in ("width", "height", "radius", "strokeWidth", "scale", "fontSize"):
+                                if field in properties:
+                                    properties[field]["exclusiveMinimum"] = 0
+                            if name == "label":
+                                properties["fontSize"]["minimum"] = 14
                     invalid_added_dimensions = []
+                    reference_attempts += 1
                     report_phase("generating")
                     patch = None
                     try:
                         patch = request_ai.structured(
                             f"lesson-reference-repair-{plan['kind']}-{entry['id']}-{reference_attempt}" + task_suffix,
-                            reference_prompt + repair_feedback + dimension_recovery + inventory_scope_recovery, reference_schema, inputs, max_tokens=14000)
+                            reference_prompt + repair_feedback + dimension_recovery + inventory_scope_recovery, request_schema, inputs, max_tokens=14000)
                         check_stop()
-                        jsonschema.validate(patch, reference_schema)
+                        observed_dimensions = added_dimensions(patch)
+                        dimension_observations = (dimension_observations + [
+                            {"attempt": reference_attempts, **item, "id": item["id"][:180], "kind": item["kind"][:40]}
+                            for item in observed_dimensions[:6]])[-6:]
+                        jsonschema.validate(patch, request_schema)
                     except (StudioError, jsonschema.ValidationError) as error:
                         if isinstance(error, StudioError) and error.code != "model_schema":
                             raise
@@ -925,15 +964,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                 issues = candidate_issues(patched, entry)
                                 if (len(issues) == 1 and (issues[0].startswith("講義の構造: Invalid primitive ")
                                         or issues[0].startswith("講義の構造: Diagram labels must start at 14"))):
-                                    for primitive in additions:
-                                        for field in ("width", "height", "radius", "strokeWidth", "scale", "fontSize"):
-                                            if field not in primitive:
-                                                continue
-                                            value = primitive[field]
-                                            minimum = 14 if field == "fontSize" and primitive["kind"] == "label" else 0
-                                            if value <= 0 or (minimum and value < minimum):
-                                                invalid_added_dimensions.append({"id": primitive["id"], "kind": primitive["kind"],
-                                                    "field": field, "value": value, "requirement": "14以上" if minimum else "正数"})
+                                    invalid_added_dimensions = observed_dimensions
                             if not issues:
                                 report_phase("reviewing")
                                 try:
@@ -976,7 +1007,10 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     repair_feedback = "\n前回の参照修復の問題:" + json_bytes(_safe_lesson_details(issues)).decode()
                     if isinstance(patch, dict):
                         repair_feedback += "。前回の参照修復候補:" + json_bytes(patch).decode()
-                return None, [*original_issues, *issues]
+                diagnostic = "参照修復の診断: " + json_bytes({"referenceAttempts": reference_attempts,
+                    "dimensionRecoveryAttempts": max(0, reference_attempts - 2),
+                    "invalidAddedDimensions": dimension_observations}).decode()
+                return None, [*original_issues, *issues, diagnostic]
 
             if verified is None and last_independent_review is not None:
                 verified, last_issues = repair_invisible_labels(candidate, last_independent_review, last_issues)
