@@ -14906,7 +14906,7 @@ function unlockAudio(){ try { if (!actx) actx = new (window.AudioContext || wind
 function beep(kind){
   if (!state.settings.sound) return;
   try {
-    unlockAudio(); if (!actx) return;
+    unlockAudio(); if (!actx || actx.state !== 'running') return;
     var now = actx.currentTime;
     (kind === 'limit' ? [0, 0.16] : [0]).forEach(function(t){
       var o = actx.createOscillator(), g = actx.createGain();

@@ -175,6 +175,11 @@ test('beep creates one short tone for periodic/default previews and two for the 
   ctx.beep('limit'); assert.equal(notes.length, 4);
   assert.ok(Math.abs(notes[3].startAt - notes[2].startAt - 0.16) < 1e-9);
   for (const note of notes) assert.ok(note.stopAt - note.startAt < 0.1);
+  ctx.actx.state = 'suspended'; ctx.actx.resume = () => Promise.resolve();
+  ctx.beep('tick'); ctx.beep('limit');
+  assert.equal(notes.length, 4, 'browser-blocked audio must not queue old cues for the next tap');
+  ctx.actx.state = 'running'; ctx.beep('tick');
+  assert.equal(notes.length, 5, 'audio resumes with the current cue only');
   ctx.state.settings.sound = false; ctx.beep('limit');
-  assert.equal(notes.length, 4);
+  assert.equal(notes.length, 5);
 });
