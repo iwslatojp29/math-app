@@ -828,6 +828,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
                 review_named = False
                 review_linear = False
+                review_collection = False
                 if not named and not (limited and findings):
                     # Preserve the old invisible/added paths and their request
                     # fingerprints. A new path needs explicit missing-text
@@ -861,10 +862,24 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                         named = [identifier for identifier in placeholders if any(re.search(
                             r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
                         if not named:
-                            return None, original_issues
+                            collection_findings = [issue for issue in original_review["issues"]
+                                if re.search(r"diagram\.primitives|primitives?(?:の|一覧|全体)|図形(?:一覧|全体)", issue, re.I)
+                                and re.search(r"全件|全部|すべて|全て|全体|(?:一覧|全)[0-9０-９]+件", issue)
+                                and re.search(r"polyline|(?<![A-Za-z])line(?![A-Za-z])|線分|折れ線", issue, re.I)
+                                and re.search(r"label|文字|ラベル|注釈", issue, re.I)
+                                and re.search(r"(?<![0-9０-９一二三四五六七八九十百])[1１一]件も(?:なく|ない|存在しない)|"
+                                              r"(?<![0-9０-９])[0０]件|ゼロ|皆無|全欠落|存在しない", issue)]
+                            if (not collection_findings or not placeholders
+                                    or any(item["kind"] == "label" for item in original["diagram"]["primitives"])):
+                                return None, original_issues
+                            # The collection observation does not make every
+                            # line a label. Selection must identify actual text
+                            # from source evidence and leave real geometry alone.
+                            review_collection = True
                         review_linear = True
                     review_named = True
-                    request_namespace += "-review-linear" if review_linear else "-review-named"
+                    request_namespace += ("-review-collection" if review_collection else
+                                          "-review-linear" if review_linear else "-review-named")
                 if limited:
                     # A collective "all added elements" finding need not name
                     # every ID. Source-grounded selection must justify each
@@ -884,7 +899,10 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     + "ID名や座標の一致だけでラベルだと推測しない。"
                     "各対象について原問題・発話・図のどの意味から文字が必要かwhyTextNeededへ具体的に記録し、"
                     "単に小さい・透明だからという根拠は不可。そのIDがvisibleIdsにあるcueだけをcueIdsへ記録する。対象は重複させない。"
-                    + ("参照修復で追加された検査対象ID（文字だという根拠は各IDごとに原画像で確認する）:"
+                    + ("独立検証は図形一覧全体を指摘し個別IDを列挙していません。実候補のlabelは0件で、"
+                       "可視line/polyline候補は" + str(len(placeholders)) + "件です。"
+                       "全候補を文字と決めつけず、原画像と全cueを照合し必要な文字だけを選ぶ。個別明示の必須ID:"
+                       if review_collection else "参照修復で追加された検査対象ID（文字だという根拠は各IDごとに原画像で確認する）:"
                        if limited else "検証者が明示した必須ID:") + json_bytes(named).decode()
                     + ("。文字の必要性を調べる候補line/polyline:" if review_linear else
                        "。文字の必要性を調べる候補polyline:" if review_named else "。候補として許可された不可視primitive:")
@@ -981,7 +999,11 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         "他のprimitive・cue・viewBox・条件・式・答えは変更されていません。追加変更が必要なら否認する。"
                                         "全小問IDをcheckedSubquestionIdsへ。具体的な未解決事項はapproved=falseとして残す。"
                                         "後段のブラウザ検証や実音声試聴を実施済みとは言わない。"
-                                        "画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
+                                        + ("元の独立検証は図形一覧全体の文字注釈欠落を指摘しています。選別されたIDだけでなく全cueと図形一覧を照合し、"
+                                           "取り残した必要な文字がないか、正当な矢印・枠線・辺を文字化していないかを再検証する。"
+                                           "必要な注釈が一つでも未実装ならapproved=falseとし、修復済みという検証文だけで承認しない。"
+                                           if review_collection else "")
+                                        + "画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                                         + "。修復対象識別:" + json_bytes(targets).decode()
                                         + "。修復前所見:" + json_bytes(original_issues).decode()
                                         + "。修復前候補:" + json_bytes(original).decode()
