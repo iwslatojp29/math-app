@@ -92,7 +92,7 @@ function boot({ stored = new Map(), failRead = false, problems = 1 } = {}) {
   });
   const functions = ['loadAll', 'validRecordDate', 'validateRecordMap', 'copyRecords', 'recordsError',
     'saveRecords', 'recs', 'latest', 'countOf', 'current', 'todayISO', 'fmtDate', 'fmtSec',
-    'historyHtml', 'stripHtml', 'record', 'undoRecord', 'mergeRecords', 'importRecords', 'clearRecords',
+    'historyHtml', 'renderParentHistory', 'stripHtml', 'record', 'undoRecord', 'mergeRecords', 'importRecords', 'clearRecords',
     'exportRecords', 'mk', 'esc', 'visible', 'sortList', 'matchFilter', 'problemsOf', 'inUnit', 'inTest',
     'selectProblem', 'saveSettings', 'nav', 'refreshSyncedRecords'];
   vm.runInContext([...declarations, ...functions.map(sourceOf)].join('\n'), ctx);

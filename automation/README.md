@@ -1,5 +1,25 @@
 # 月間号PDFのクラウド処理
 
+## SAPIX の追加取り込み
+
+SAPIX の「更新」から `/studio/sapix-import` を開き、候補を選んで確認してから取り込みます。既存の教材スタジオの管理者用 Drive 接続を使用します。採点用の Gmail 接続とは別です。API キーは Worker の `ANTHROPIC_API_KEY` シークレットに置き、ブラウザへ返しません。
+
+対象は固定 Drive フォルダ `1f1AhUw8Yciyye8V1_eZbvTBGlpQU0EyO` とその子フォルダにある PDF・PNG・JPEG・WebP です。初回の日時判定は **2026年9月24日 0:00 JST 以降のファイル作成日時**を使います。古いファイルを移動した日時は判定できません。取り込み台帳の Drive ID で再取り込みを防ぎます。
+
+一度に10ファイルまで選択できます。最新の利用可能な Claude Fable を Models API で調べ、確認時のモデルと資料の版をジョブへ固定します。`sapix-import.yml` が小問ごとに抽出・検算し、固定テンプレートに渡す JSON と画像を単一コミットで追加します。秘密値・中間結果・元 PDF を Actions artifact に残しません。原画像は公開される教材の出典画像として保存します。
+
+資料が変わった場合や読み取り・答えに未解決事項がある場合は、選択したバッチ全体を公開せず履歴に理由を表示します。既存の問題・採点を置き換えません。生成済みのチェックポイントを再利用し、Pages への反映確認後に完了を表示します。1ファイル100MiB・100ページ、バッチ全体で出典画像100枚・64MiBまでです。
+
+既存問題は `sapix/problem-parts.js` で小問ごとに表示します。元の問題の ID と記録は保持し、小問には安定した別 ID を付けます。分割前の一括採点は「情報・履歴」に表示し、小問の成績には流用しません。
+
+```sh
+python -m unittest discover -s automation/tests -p test_sapix_import.py
+node --test tests/sapix-generated-problems.test.cjs tests/sapix-problem-parts.test.cjs
+node --test proxy/test/sapix-import.test.mjs
+```
+
+## 月間号の処理手順
+
 `monthly-pdf.yml` は `workflow_dispatch` の `job_id` だけを受け取り、Workerから選択済みのジョブを取得します。ブラウザを閉じても処理はGitHub Actionsで継続します。
 
 ```text

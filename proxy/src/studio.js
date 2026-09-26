@@ -2,6 +2,7 @@ import { fetchCatalog, validOutputTokens } from './studio-models.js';
 import { studioPage } from './studio-ui.js';
 import { updateIndex } from './index.js';
 import { SapixRecords, sapixCors } from './sapix-records.js';
+import { SapixImport } from './sapix-import.js';
 
 export const FOLDERS = Object.freeze({ source: '1xHRr5uA9idJP0H9BJcbldZiXdARDxCxi', practice: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp', advanced: '1HVHjm0QceRgUjhYIAmI7kAfafrFjp-S0', html: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp' });
 const SPEC_VERSION = 'monthly-2026-09-20-v1';
@@ -19,6 +20,14 @@ const errorText = {
   not_found: '対象が見つかりません。', source_changed: '選択したPDFが更新されています。一覧を読み直してください。',
   busy: '別の教材を処理しています。完了後に選択してください。', internal_error: '処理を完了できませんでした。保存済みの状態から再試行できます。',
   runner_conflict: '別のクラウド実行がこの処理を担当しています。',
+  sapix_import_model: '最新の Claude Fable を確認できません。API の接続を確認して再試行してください。',
+  sapix_import_catalog: '追加問題のデータ形式を確認できないため、取り込みを保留しました。',
+  sapix_import_scan_expired: '候補一覧の有効期限が切れました。候補を更新して選び直してください。',
+  sapix_import_source_changed: '選択した資料が更新または移動されています。候補を更新して確認し直してください。',
+  sapix_import_duplicate: '選択した資料はすでに取り込まれています。候補一覧を更新してください。',
+  sapix_import_assets: '問題の元画像を確認できないため、公開を保留しました。',
+  sapix_import_capacity: '一度に処理できる容量を超えています。資料を少なくして取り込んでください。',
+  sapix_import_publishing: '保存した問題の公開を確認しています。この段階では取り消しできません。',
 };
 class StudioError extends Error { constructor(status, code) { super(code); this.status = status; this.code = code; } }
 const fail = (status, code) => { throw new StudioError(status, code); };
@@ -82,7 +91,7 @@ export function handleStudio(request, env) {
 }
 
 export class StudioState {
-  constructor(ctx, env) { this.ctx = ctx; this.storage = ctx.storage; this.env = env; this.mutation = Promise.resolve(); this.sapix = new SapixRecords(this, { result, fail, random, digest, readBody }); }
+  constructor(ctx, env) { this.ctx = ctx; this.storage = ctx.storage; this.env = env; this.mutation = Promise.resolve(); this.sapix = new SapixRecords(this, { result, fail, random, digest, readBody }); this.sapixImport = new SapixImport(this, { result, fail, random, digest, readBody, sameSecret }); }
   async serial(action) {
     const previous = this.mutation; let release;
     this.mutation = new Promise(resolve => { release = resolve; });
@@ -100,12 +109,13 @@ export class StudioState {
   }
   async route(request) {
     const url = new URL(request.url), path = url.pathname.replace(/\/$/, ''), method = request.method;
+    if (path === '/studio/sapix-import' || path.startsWith('/studio/api/sapix-import') || path.startsWith('/studio/runner/sapix-import/')) return this.sapixImport.route(request, url, path);
     if (path.startsWith('/api/sapix/')) return this.sapix.route(request, url, path);
     if (path === '/studio' && method === 'GET') return new Response(studioPage(), { headers: {
       'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
       'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
     } });
-    if (path === '/api/studio/google/start' && method === 'GET') return this.oauthStart();
+    if (path === '/api/studio/google/start' && method === 'GET') return this.oauthStart(null, url.searchParams.get('return') === 'sapix-import' ? '/studio/sapix-import' : null);
     if (path === '/api/studio/google/callback' && method === 'GET') return this.oauthCallback(request, url);
     if (path.startsWith('/api/studio/runner/')) {
       if (!await sameSecret(request.headers.get('Authorization')?.replace(/^Bearer /, ''), this.env.STUDIO_RUNNER_TOKEN)) fail(401, 'unauthorized');
@@ -149,13 +159,13 @@ export class StudioState {
     }
     fail(404, 'not_found');
   }
-  async oauthStart(sapix = null) {
+  async oauthStart(sapix = null, returnTo = null) {
     if (sapix ? !this.sapix.configured() : !this.configured()) fail(503, 'not_configured');
     const state = random(), verifier = random();
     const clientId = sapix ? this.env.SAPIX_GOOGLE_CLIENT_ID : this.env.GOOGLE_CLIENT_ID;
     const auth = new URL('https://accounts.google.com/o/oauth2/v2/auth');
     auth.search = new URLSearchParams({ client_id: clientId, redirect_uri: `${this.env.STUDIO_ORIGIN}/api/studio/google/callback`, response_type: 'code', scope: sapix ? 'openid email' : 'openid email https://www.googleapis.com/auth/drive', ...(sapix ? (this.sapix.ownerEmail() !== this.env.STUDIO_OWNER_EMAIL ? { prompt: 'select_account' } : {}) : { access_type: 'offline', prompt: 'consent' }), state, code_challenge: await digest(verifier), code_challenge_method: 'S256', login_hint: sapix ? this.sapix.ownerEmail() : this.env.STUDIO_OWNER_EMAIL }).toString();
-    const value = await seal({ state, verifier, expires: Date.now() + 600000, ...(sapix ? { sapix: { ...sapix, email: this.sapix.ownerEmail(), clientId } } : {}) }, this.env.STUDIO_SECRET, 'oauth');
+    const value = await seal({ state, verifier, expires: Date.now() + 600000, ...(sapix ? { sapix: { ...sapix, email: this.sapix.ownerEmail(), clientId } } : {}), ...(returnTo === '/studio/sapix-import' ? { returnTo } : {}) }, this.env.STUDIO_SECRET, 'oauth');
     return new Response(null, { status: 302, headers: { Location: auth.href, 'Set-Cookie': cookie('__Host-studio-oauth', value, 600), 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' } });
   }
   async oauthCallback(request, url) {
@@ -183,7 +193,7 @@ export class StudioState {
     await this.storage.put('google', await seal({ refreshToken, email: identity.email }, this.env.STUDIO_SECRET, 'google'));
     this.access = { accessToken: token.access_token, expires: Date.now() + token.expires_in * 1000 };
     const session = await seal({ email: identity.email, csrf: random(), expires: Date.now() + SESSION_SECONDS * 1000 }, this.env.STUDIO_SECRET, 'session');
-    const headers = new Headers({ Location: '/studio', 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' });
+    const headers = new Headers({ Location: value.returnTo === '/studio/sapix-import' ? value.returnTo : '/studio', 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' });
     headers.append('Set-Cookie', cookie('__Host-studio', session, SESSION_SECONDS)); headers.append('Set-Cookie', cookie('__Host-studio-oauth', '', 0));
     return new Response(null, { status: 302, headers });
   }
@@ -240,12 +250,13 @@ export class StudioState {
     await this.storage.put(`job:${job.id}`, job);
     if (!TERMINAL.has(job.status) || job.retryable || job.dispatchUncertain) await this.scheduleCheck();
   }
-  async scheduleCheck() {
+  async scheduleCheck(delay = 5 * 60000) {
     if (!this.storage.setAlarm) return; // Unit-test storage adapters do not run timers.
-    const due = Date.now() + 5 * 60000, previous = await this.storage.getAlarm();
+    const due = Date.now() + delay, previous = await this.storage.getAlarm();
     if (!previous || previous > due) await this.storage.setAlarm(due);
   }
   async alarm() {
+    await this.sapixImport.alarm().catch(() => {});
     // Durable alarms continue recovery even with every browser closed.
     try {
       await this.reconcile();

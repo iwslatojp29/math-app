@@ -1,0 +1,44 @@
+name: SAPIX Drive import
+run-name: sapix-import-${{ inputs.job_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Private SAPIX import job ID
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: math-app-sapix-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    env:
+      STUDIO_URL: https://math-app-proxy.iwslatojp29.workers.dev
+      STUDIO_RUNNER_TOKEN: ${{ secrets.STUDIO_RUNNER_TOKEN }}
+      JOB_ID: ${{ inputs.job_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install private runner dependencies
+        run: python -m pip install --disable-pip-version-check -r automation/requirements.txt
+      - name: Import selected SAPIX questions and source images
+        run: python automation/run_sapix_import.py --job-id "$JOB_ID"
+      - name: Report interrupted run
+        if: ${{ failure() || cancelled() }}
+        run: python automation/run_sapix_import.py --job-id "$JOB_ID" --report-failure
+      # No artifacts, source uploads, or credentials in Actions output. Claude and
+      # Drive credentials are retrieved only from the claimed job's private config.

@@ -45,6 +45,8 @@ html,body{height:100%}
 html{height:100dvh}
 body{margin:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%;touch-action:manipulation}
 .back-link{align-self:flex-start;flex:none;margin:10px 18px 0;font-size:13px;color:var(--accent);text-decoration:none;font-weight:700}
+.side-links{display:flex;flex:none;align-items:center;justify-content:space-between;gap:12px;margin:10px 18px 0}
+.side-links .back-link{margin:0}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;touch-action:manipulation}
 button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 [hidden]{display:none!important}
@@ -351,7 +353,7 @@ svg{display:block}
 
 <div class="app">
   <aside class="side" id="side" aria-label="メニュー">
-    <a class="back-link" href="./index.html">← コンテンツ一覧へ戻る</a>
+    <div class="side-links"><a class="back-link" href="./index.html">← コンテンツ一覧へ戻る</a><a class="back-link" id="updateProblems" href="https://math-app-proxy.iwslatojp29.workers.dev/studio/sapix-import" title="Google Driveから追加する問題を確認">更新</a></div>
     <div class="brand">
       <div class="brand-logo" aria-hidden="true">算</div>
       <h1>20260926‗SAPIX間違い一覧<small>1問1分・〇△×で記録・全単元</small></h1>
@@ -360,6 +362,7 @@ svg{display:block}
       <section class="side-pane" aria-labelledby="unitsTitle">
         <h2 class="pane-title" id="unitsTitle">単元を選ぶ</h2>
         <div class="side-scroll" id="selectionScroll" tabindex="0" role="region" aria-label="単元・しぼりこみ・設定">
+          <p class="unit-note" id="catalogStatus" role="status" hidden></p>
           <div class="unit-list" id="units"></div>
           <section class="side-sec">
             <h2 class="side-title">しぼりこみ</h2>
@@ -421,12 +424,14 @@ svg{display:block}
         <div class="info-panel">
           <div class="info-meta"><span id="crumbPos"></span><span id="today"></span></div>
           <div class="info-source" id="problemSource"></div>
+          <details id="partContext" hidden><summary>元の問題の設問を確認</summary><div id="partContextBody"></div></details>
           <div class="info-time">回答時間<strong id="elapsedDisplay">0秒</strong><span class="timer-lbl" id="tlbl">制限 1分</span></div>
           <button class="tbtn" id="resetBtn" aria-label="タイマーをやり直す">計測をやり直す</button>
           <button class="tbtn" id="audioTestBtn">音を確認</button>
           <p class="foot-note" id="audioStatus" role="status">画面を一度タップすると通知音が有効になります。</p>
           <h2>採点と回答時間</h2>
           <div class="history" id="hist" aria-label="採点と回答時間の記録"></div>
+          <details id="parentHistory" hidden><summary>分割前の問題全体の記録</summary><p class="foot-note">以前の一括採点です。小問の成績には含めません。</p><div class="history" id="parentHist"></div></details>
         </div>
       </details>
     </div>
@@ -448,6 +453,8 @@ svg{display:block}
 </div>
 
 <script src="./record-sync.js?v=20260926-2"></script>
+<script src="./problem-parts.js?v=20260926-1"></script>
+<script src="./generated-problems.js?v=20260926-1"></script>
 <script>
 (function(){
 'use strict';
@@ -14676,6 +14683,7 @@ function refreshSyncedRecords(records){
   if (!syncReady) return;
   var p = current();
   if (p && $('hist')) $('hist').innerHTML = historyHtml(p.id);
+  renderParentHistory(p);
   if (state.justRecorded && !recordStore.getEntries().some(function(e){ return e.id === state.justRecorded; })) {
     state.justRecorded = null;
     var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', 'false');
@@ -14817,8 +14825,18 @@ var ICON_RESET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 
 function figureHtml(p){ if (!p.figure) return ''; var f = typeof p.figure === 'function' ? p.figure() : p.figure; return '<div class="fig">' + f + '</div>'; }
 
+function renderParentHistory(p){
+  var box = $('parentHistory'), history = $('parentHist'); if (!box || !history) return;
+  box.hidden = !p || !p.parentId || !recs(p.parentId).length;
+  history.innerHTML = box.hidden ? '' : historyHtml(p.parentId);
+  var context = $('partContext'), content = $('partContextBody');
+  if (context && content) { context.hidden = !p || !p.contextQuestions; context.open = false; content.innerHTML = context.hidden ? '' : p.contextQuestions.map(function(q){ return '<p><b>' + esc(q.l) + '</b> ' + q.t + '</p>'; }).join(''); }
+
+}
+
 function renderProblem(){
   var p = current();
+  renderParentHistory(p);
   $('problemInfo').open = false;
   $('hist').innerHTML = p ? historyHtml(p.id) : '<span class="nohist">問題を選んでください</span>';
   $('problemSource').innerHTML = p ? esc(p.unit) + '・' + esc(p.src) + (p.stars ? ' <span class="stars">' + '★'.repeat(p.stars) + '</span>' : '') + (p.check ? '<span class="tag-check">要確認</span>' : '') : '';
@@ -15162,17 +15180,34 @@ document.addEventListener('visibilitychange', function(){ if (!document.hidden &
 window.addEventListener('pageshow', function(){ if (actx) unlockAudio(); });
 
 /* ====================== 起動 ====================== */
+function startTrainer(){
+  if (typeof SapixProblemParts !== 'undefined') {
+    var divided = SapixProblemParts.split(PROBLEMS); PROBLEMS = divided.problems;
+    if (divided.firstByParent[state.pid]) state.pid = divided.firstByParent[state.pid];
+  }
+  if (state.test !== '*' && TESTS.indexOf(state.test) < 0) state.test = '*';
+  if (state.unit !== '*' && !problemsOf(state.unit).length) state.unit = '*';
+  if (!FILTERS.some(function(f){ return f.k === state.filter; })) state.filter = 'all';
+  if (state.sort !== 'ng') state.sort = 'no';
+  $('limit').value = String(state.settings.limit);
+  $('sound').setAttribute('aria-checked', String(state.settings.sound));
+  ensureSelection();
+  renderSide();
+  renderProblem();
+  syncReady = true;
+}
+function loadGeneratedProblems(){
+  return Promise.resolve().then(function(){
+    if (typeof SapixGeneratedProblems === 'undefined') throw new Error('catalog_unavailable');
+    return SapixGeneratedProblems.load({problems: PROBLEMS, units: UNITS, tests: TESTS, timeoutMs: 5000});
+  }).then(function(result){
+    PROBLEMS = result.problems; UNITS = result.units; TESTS = result.tests;
+  }).catch(function(){
+    $('catalogStatus').textContent = '追加問題を読み込めませんでした。既存の問題はそのまま使えます。追加問題を使うときはページを開き直してください。';
+    $('catalogStatus').hidden = false;
+  }).then(startTrainer);
+}
 loadAll();
-if (state.test !== '*' && TESTS.indexOf(state.test) < 0) state.test = '*';
-if (state.unit !== '*' && !problemsOf(state.unit).length) state.unit = '*';
-if (!FILTERS.some(function(f){ return f.k === state.filter; })) state.filter = 'all';
-if (state.sort !== 'ng') state.sort = 'no';
-$('limit').value = String(state.settings.limit);
-$('sound').setAttribute('aria-checked', String(state.settings.sound));
-ensureSelection();
-renderSide();
-renderProblem();
-syncReady = true;
 if (recordStore) {
   $('cloudConnect').addEventListener('click', function(){ recordStore.connect().catch(function(){ recordsError('Google接続を開始できませんでした。ブラウザの保存設定と通信を確認してください。'); }); });
   $('cloudSync').addEventListener('click', function(){ recordStore.sync(); });
@@ -15184,6 +15219,7 @@ if (recordStore) {
   var hasAuthCallback = /sapix_(code|state|error)=/.test(location.hash);
   recordStore.finishAuth().then(function(){ if (!hasAuthCallback) recordStore.sync(); });
 }
+loadGeneratedProblems();
 
 })();
 </script>
