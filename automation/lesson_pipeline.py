@@ -31,6 +31,27 @@ PROBLEM_REVIEW = obj({
     "independentCheck": STR, "officialAnswerCheck": STR, "reasoningCheck": STR, "readingsCheck": STR,
     "issues": arr(STR),
 })
+
+
+def _diagram_label_absence(issue):
+    """Recognize a diagram-wide zero-label finding, not unrelated missing data."""
+    for sentence in re.split(r"[。！？\n]+", issue):
+        if not re.search(r"diagram\.primitives|primitives?(?:の|一覧|全体)|図形(?:一覧|全体)", sentence, re.I):
+            continue
+        if re.search(
+                r"(?<![A-Za-z0-9_-])(?:label|ラベル|文字(?:注釈|要素)?|注釈)['\"`]?\s*"
+                r"(?:の(?:primitive|要素|図形))?\s*(?:が|は|も|[:：=])?\s*"
+                r"(?:(?<![0-9０-９一二三四五六七八九十百])[1１一](?:件|つ|個)も(?:なく|ない|無く|無い|存在しない)|"
+                r"(?<![0-9０-９])[0０](?:件|個)(?![0-9０-９])|ゼロ|皆無|"
+                r"無(?=$|[\s、,;；])|無い|無く|無し|なし|ない|存在しない)"
+                r"(?!とは(?:言え|限ら)|わけでは|ことはない|では(?:ない|なく))", sentence, re.I):
+            return True
+        if re.search(r"\b(?:has|contains)\s+no\s+(?:labels|text\s+(?:labels|annotations))\b|"
+                     r"\blabel\s+count\s*(?:is|[:=])\s*(?:zero|0)\b", sentence, re.I):
+            return True
+    return False
+
+
 SOLUTION_SCHEMA = obj({
     "links": arr(obj({"problemId": STR, "pdfPages": arr({"type": "integer"}), "evidence": STR})),
     "unpairedPages": arr(obj({"pdfPage": {"type": "integer"}, "reason": STR})),
@@ -829,6 +850,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 review_named = False
                 review_linear = False
                 review_collection = False
+                review_absence = False
                 if not named and not (limited and findings):
                     # Preserve the old invisible/added paths and their request
                     # fingerprints. A new path needs explicit missing-text
@@ -869,16 +891,25 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                 and re.search(r"label|文字|ラベル|注釈", issue, re.I)
                                 and re.search(r"(?<![0-9０-９一二三四五六七八九十百])[1１一]件も(?:なく|ない|存在しない)|"
                                               r"(?<![0-9０-９])[0０]件|ゼロ|皆無|全欠落|存在しない", issue)]
-                            if (not collection_findings or not placeholders
+                            if (not placeholders
                                     or any(item["kind"] == "label" for item in original["diagram"]["primitives"])):
                                 return None, original_issues
+                            if not collection_findings:
+                                # Keep every established path/cache unchanged.
+                                # A direct zero-label finding need not describe
+                                # all lines with an English primitive type or
+                                # enumerate a count. Arrow-shaped placeholders
+                                # still need individual source/cue evidence.
+                                if not any(_diagram_label_absence(issue) for issue in original_review["issues"]):
+                                    return None, original_issues
+                                review_absence = True
                             # The collection observation does not make every
                             # line a label. Selection must identify actual text
                             # from source evidence and leave real geometry alone.
                             review_collection = True
                         review_linear = True
                     review_named = True
-                    request_namespace += ("-review-collection" if review_collection else
+                    request_namespace += ("-review-absence" if review_absence else "-review-collection" if review_collection else
                                           "-review-linear" if review_linear else "-review-named")
                 if limited:
                     # A collective "all added elements" finding need not name
@@ -899,8 +930,9 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     + "ID名や座標の一致だけでラベルだと推測しない。"
                     "各対象について原問題・発話・図のどの意味から文字が必要かwhyTextNeededへ具体的に記録し、"
                     "単に小さい・透明だからという根拠は不可。そのIDがvisibleIdsにあるcueだけをcueIdsへ記録する。対象は重複させない。"
-                    + ("独立検証は図形一覧全体を指摘し個別IDを列挙していません。実候補のlabelは0件で、"
-                       "可視line/polyline候補は" + str(len(placeholders)) + "件です。"
+                    + (("独立検証は図形一覧に文字要素がないと指摘しています。実候補のlabelは0件で、"
+                        if review_absence else "独立検証は図形一覧全体を指摘し個別IDを列挙していません。実候補のlabelは0件で、")
+                       + "可視line/polyline候補は" + str(len(placeholders)) + "件です。"
                        "全候補を文字と決めつけず、原画像と全cueを照合し必要な文字だけを選ぶ。個別明示の必須ID:"
                        if review_collection else "参照修復で追加された検査対象ID（文字だという根拠は各IDごとに原画像で確認する）:"
                        if limited else "検証者が明示した必須ID:") + json_bytes(named).decode()
