@@ -703,8 +703,29 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     and re.search(r"none|不可視|透明", issue, re.I)]
                 named = [identifier for identifier in placeholders if any(re.search(
                     r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
+                review_named = False
                 if not named and not (limited and findings):
-                    return None, original_issues
+                    # Preserve the old invisible/added paths and their request
+                    # fingerprints. A new path needs explicit missing-text
+                    # findings naming actual, displayed polylines; color and
+                    # length alone cannot identify a label or a legitimate arrow.
+                    fields = ("independentCheck", "officialAnswerCheck", "reasoningCheck", "readingsCheck")
+                    if (limited or original_review["approved"]
+                            or original_review["checkedSubquestionIds"] != [item["id"] for item in entry["subquestions"]]
+                            or not all(original_review[key].strip() for key in fields)):
+                        return None, original_issues
+                    findings = [issue for issue in original_review["issues"]
+                        if "polyline" in issue.lower() and re.search(r"label|文字|ラベル", issue, re.I)
+                        and re.search(r"必須|必要|未実装|欠落|不足|存在しない|存在せず|未配置|表示され(?:て)?いない", issue)]
+                    placeholders = {item["id"]: item for item in original["diagram"]["primitives"]
+                        if item["kind"] == "polyline"
+                        and any(item["id"] in cue["state"]["visibleIds"] for cue in cues.values())}
+                    named = [identifier for identifier in placeholders if any(re.search(
+                        r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
+                    if not named:
+                        return None, original_issues
+                    review_named = True
+                    request_namespace += "-review-named"
                 if limited:
                     # A collective "all added elements" finding need not name
                     # every ID. Source-grounded selection must justify each
@@ -715,14 +736,18 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     "id": {"type": "string", "enum": list(placeholders)},
                     "whyTextNeeded": STR,
                     "cueIds": arr({"type": "string", "enum": list(cues)})}))})
-                selection_prompt = ("原画像と候補データを照合し、独立検証が指摘した不可視polylineのうち、"
-                    "本来は図上に文字を表示すべき対象IDだけを特定してください。これは修復対象の識別です。"
-                    "正当な不可視アンカー・補助座標・移動基準・当たり判定は対象にしない。ID名や座標の一致だけでラベルだと推測しない。"
+                selection_prompt = (("原画像と候補データを照合し、独立検証が指摘した文字が不足するpolylineのうち、"
+                    if review_named else "原画像と候補データを照合し、独立検証が指摘した不可視polylineのうち、")
+                    + "本来は図上に文字を表示すべき対象IDだけを特定してください。これは修復対象の識別です。"
+                    + ("正当な矢印・枠線・辺・不可視アンカー・補助座標・移動基準・当たり判定は対象にしない。"
+                       if review_named else "正当な不可視アンカー・補助座標・移動基準・当たり判定は対象にしない。")
+                    + "ID名や座標の一致だけでラベルだと推測しない。"
                     "各対象について原問題・発話・図のどの意味から文字が必要かwhyTextNeededへ具体的に記録し、"
                     "単に小さい・透明だからという根拠は不可。そのIDがvisibleIdsにあるcueだけをcueIdsへ記録する。対象は重複させない。"
                     + ("参照修復で追加された検査対象ID（文字だという根拠は各IDごとに原画像で確認する）:"
                        if limited else "検証者が明示した必須ID:") + json_bytes(named).decode()
-                    + "。候補として許可された不可視primitive:" + json_bytes(list(placeholders.values())).decode()
+                    + ("。文字の必要性を調べる候補polyline:" if review_named else "。候補として許可された不可視primitive:")
+                    + json_bytes(list(placeholders.values())).decode()
                     + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                     + "。前回の独立検証:" + json_bytes(original_review).decode()
                     + "。候補:" + json_bytes(original).decode())
@@ -748,14 +773,15 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 label_schema = obj({"labels": arr({"$ref": "#/$defs/label"}),
                                     "verification": {"$ref": "#/$defs/verification"}})
                 label_schema["$defs"] = {key: copy.deepcopy(schema["$defs"][key]) for key in ("label", "verification")}
-                if limited:
+                if limited or review_named:
                     properties = label_schema["$defs"]["label"]["properties"]
                     properties["id"]["enum"] = target_ids
                     properties["fontSize"]["minimum"] = 14
                     properties["color"]["enum"] = [color for color in properties["color"]["enum"] if color != "none"]
                     properties["text"]["pattern"] = r"\S"
-                label_prompt = ("原画像と候補を照合し、指定IDの不可視文字代替polylineだけを実際のkind=labelへ修復してください。"
-                    "labelsは指定IDと完全一致する集合を各1件返す。ID追加・削除・変更は禁止。"
+                label_prompt = (("原画像と候補を照合し、指定IDの文字が不足するpolylineだけを実際のkind=labelへ修復してください。"
+                    if review_named else "原画像と候補を照合し、指定IDの不可視文字代替polylineだけを実際のkind=labelへ修復してください。")
+                    + "labelsは指定IDと完全一致する集合を各1件返す。ID追加・削除・変更は禁止。"
                     "textは原画像・数値・単位・既存発話に基づく空でない文字列、fontSizeは14以上、colorはnone以外。"
                     "x/yは実際に文字を表示する座標です。固定viewBoxと全cueの既存transforms適用後の位置を確認する。"
                     "visibleIds・highlightIds・transforms・cue本文・式・条件・答え・他のprimitive・viewBoxは変更されません。"
@@ -800,9 +826,11 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         specification + "\n独立した数学・教材検証者として原画像から全小問を別に検算し、"
                                         "条件・相似の対応・面積体積比・単位・例外・全式・数の出所・解法選択理由を確認してください。"
                                         "公式解答があれば全小問を照合し、なければその事実を明記する。全cueのかな読みを数値/点名/単位まで読む。"
-                                        "今回は識別された不可視polylineだけが同じIDのlabelへ置換されています。"
-                                        "対象識別が正当か、不可視アンカーを誤って文字化していないかも独立に再確認する。"
-                                        "実際のtext・fontSize・色・座標・全cueのvisible/highlight/transformsを照合し、"
+                                        + ("今回は識別された文字が不足するpolylineだけが同じIDのlabelへ置換されています。"
+                                           "対象識別が正当か、正当な矢印・枠線・辺・不可視アンカーを誤って文字化していないかも独立に再確認する。"
+                                           if review_named else "今回は識別された不可視polylineだけが同じIDのlabelへ置換されています。"
+                                           "対象識別が正当か、不可視アンカーを誤って文字化していないかも独立に再確認する。")
+                                        + "実際のtext・fontSize・色・座標・全cueのvisible/highlight/transformsを照合し、"
                                         "発話・静的解説・答えと一致し、移動後も文字が正しく対応するか点検する。"
                                         "他のprimitive・cue・viewBox・条件・式・答えは変更されていません。追加変更が必要なら否認する。"
                                         "全小問IDをcheckedSubquestionIdsへ。具体的な未解決事項はapproved=falseとして残す。"
