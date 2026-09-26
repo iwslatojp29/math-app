@@ -882,6 +882,7 @@ class Element {
   addEventListener(type, listener) { this.listeners[type] = listener; }
   setAttribute(name, value) { this[name] = value; }
   removeAttribute(name) { delete this[name]; }
+  remove() { this.removed = true; }
   focus() {}
   scrollIntoView() {}
   descendants() { return this.children.flatMap(child => [child, ...child.descendants()]); }
@@ -890,12 +891,17 @@ async function uiFixture({ jobs = [], files = [SOURCE], htmlFiles = [{ ...SOURCE
   const elements = new Map([...studioPage().matchAll(/<[^>]*\bid="([^"]+)"[^>]*>/g)].map(match => { const element = new Element(); const href = match[0].match(/href="([^"]+)"/); if (href) element.href = href[1]; return [match[1], element]; }));
   const calls = [];
   const copied = [];
+  const downloads = [], blobs = [], revoked = [];
+  class BrowserURL extends URL {
+    static createObjectURL(blob) { blobs.push(blob); return 'blob:mock-' + blobs.length; }
+    static revokeObjectURL(url) { revoked.push(url); }
+  }
   const timers = new Map(), listeners = {};
   let nextTimer = 0;
-  const document = { hidden: false, activeElement: null, getElementById: id => { assert(elements.has(id), 'Missing UI element: ' + id); return elements.get(id); },
-    createElement: tag => new Element(tag), querySelectorAll: () => [...elements.values()].flatMap(element => [element, ...element.descendants()]), addEventListener: (type, listener) => { listeners[type] = listener; } };
+  const document = { hidden: false, body: new Element('body'), activeElement: null, getElementById: id => { assert(elements.has(id), 'Missing UI element: ' + id); return elements.get(id); },
+    createElement: tag => { const element = new Element(tag); element.click = () => downloads.push(element); return element; }, querySelectorAll: () => [...elements.values()].flatMap(element => [element, ...element.descendants()]), addEventListener: (type, listener) => { listeners[type] = listener; } };
   const defaults = { '/session': { authenticated: true, configured: true, csrf: CSRF, email: ENV.STUDIO_OWNER_EMAIL }, '/sources?operation=extract': { files }, '/sources?operation=html': { files: htmlFiles }, '/models': models, '/jobs': { jobs }, '/logout': { ok: true } };
-  runInNewContext(script, { document, URL, URLSearchParams, AbortController, Intl, Date, Set, console,
+  runInNewContext(script, { document, URL: BrowserURL, Blob, URLSearchParams, AbortController, Intl, Date, Set, console,
     location: { origin: ENV.STUDIO_ORIGIN, pathname: '/studio', search: '', hash }, history: { replaceState() {} }, matchMedia: () => ({ matches: true }), navigator: { clipboard: { writeText: async value => copied.push(value) } },
     setTimeout: (callback, delay) => { const id = ++nextTimer; timers.set(id, { callback, delay }); return id; }, clearTimeout: id => timers.delete(id), fetch: async (url, options) => {
       const path = url.replace('/api/studio', ''); calls.push({ path, options });
@@ -904,7 +910,7 @@ async function uiFixture({ jobs = [], files = [SOURCE], htmlFiles = [{ ...SOURCE
   });
   const flush = async () => { for (let i = 0; i < 6; i++) await new Promise(resolve => setImmediate(resolve)); };
   await flush();
-  return { elements, calls, timers, copied, flush, click: async id => { await elements.get(id).listeners.click?.(); await flush(); },
+  return { elements, calls, timers, copied, downloads, blobs, revoked, flush, click: async id => { await elements.get(id).listeners.click?.(); await flush(); },
     visible: async value => { document.hidden = !value; await listeners.visibilitychange?.(); await flush(); },
     poll: async () => { const scheduled = [...timers].filter(([, timer]) => timer.delay === 10000); assert.equal(scheduled.length, 1); const [id, timer] = scheduled[0]; timers.delete(id); await timer.callback(); await flush(); } };
 }
@@ -1171,6 +1177,61 @@ test('studio old HTML failures hand off their source PDF instead of retrying the
   assert(!ui.elements.get('jobs').textContent.includes('自動再開待ち'));
   assert.equal(ui.timers.size, 0);
   assert(!ui.calls.some(call => call.options.method === 'POST'));
+});
+
+test('studio PDF download checks the response then saves one blob with visible status', async () => {
+  let release;
+  const pending = new Promise(resolve => { release = resolve; });
+  const ui = await uiFixture({ hash: '#chat&file=cut-pdf', responder: path => path.startsWith('/chat/pdf/') ? pending : null });
+  const download = ui.elements.get('download-pdf');
+  const href = download.href;
+  await download.listeners.click({ ctrlKey: true });
+  assert(!ui.calls.some(call => call.path.startsWith('/chat/pdf/')), 'modified clicks keep normal link navigation');
+  ui.elements.get('notice').textContent = '前回の取得失敗'; ui.elements.get('notice').hidden = false;
+  let prevented = 0;
+  const first = download.listeners.click({ preventDefault() { prevented++; } });
+  await ui.flush();
+  assert.equal(download['aria-disabled'], 'true');
+  assert.equal(ui.elements.get('notice').hidden, true);
+  assert.match(ui.elements.get('pdf-download-status').textContent, /取得しています/);
+  await ui.click('download-pdf');
+  const reads = ui.calls.filter(call => call.path.startsWith('/chat/pdf/'));
+  assert.equal(reads.length, 1);
+  assert.equal(reads[0].options.method, 'GET');
+  assert.equal(reads[0].options.credentials, 'same-origin');
+  release(new Response('%PDF-1.7 mock bytes', { headers: { 'Content-Type': 'application/pdf' } }));
+  await first; await ui.flush();
+  assert.equal(prevented, 1);
+  assert.equal(download.href, href);
+  assert.equal(download['aria-disabled'], 'false');
+  assert.equal(ui.downloads.length, 1);
+  assert.equal(ui.downloads[0].download, '日日の演習.pdf');
+  assert.equal(ui.downloads[0].href, 'blob:mock-1');
+  assert.equal(ui.downloads[0].removed, true);
+  assert.equal(await ui.blobs[0].text(), '%PDF-1.7 mock bytes');
+  assert.match(ui.elements.get('pdf-download-status').textContent, /取得が完了し、.*保存を開始しました/);
+  assert(!ui.elements.get('pdf-download-status').textContent.includes('保存が完了'));
+  const cleanup = [...ui.timers.values()].find(timer => timer.delay === 60000);
+  cleanup.callback(); assert.deepEqual(ui.revoked, ['blob:mock-1']);
+  assert(!ui.calls.some(call => call.options.method === 'POST'));
+});
+
+test('studio PDF download surfaces JSON, oversized and interrupted responses without saving', async () => {
+  const responses = [
+    () => Response.json({ error: 'source_changed', message: '選択したPDFが更新されています。一覧を読み直してください。' }, { status: 409 }),
+    () => new Response('%PDF', { headers: { 'Content-Type': 'application/pdf', 'Content-Length': String(100 * 1024 * 1024 + 1) } }),
+    () => new Response(new ReadableStream({ start(controller) { controller.error(new Error('PDF download could not be verified')); } }), { headers: { 'Content-Type': 'application/pdf' } }),
+  ];
+  for (const response of responses) {
+    const ui = await uiFixture({ hash: '#chat&file=cut-pdf', responder: path => path.startsWith('/chat/pdf/') ? response() : null });
+    await ui.click('download-pdf');
+    assert.match(ui.elements.get('pdf-download-status').textContent, /PDFの取得に失敗しました/);
+    assert.equal(ui.elements.get('notice').hidden, false);
+    assert.equal(ui.elements.get('download-pdf')['aria-disabled'], 'false');
+    assert.equal(ui.downloads.length, 0);
+    assert.equal(ui.blobs.length, 0);
+    assert(!ui.calls.some(call => call.options.method === 'POST'));
+  }
 });
 
 test('studio folds old HTML API errors into historical details and keeps result links visible', async () => {

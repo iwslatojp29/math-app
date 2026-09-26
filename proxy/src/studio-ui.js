@@ -21,7 +21,7 @@ const STYLES = `
 const CLIENT_SCRIPT = String.raw`(function studioClient() {
   'use strict';
   const $ = id => document.getElementById(id);
-  const state = { operation: 'extract', sources: { extract: [], html: [] }, sourceLoaded: { extract: false, html: false }, sourceRequests: {}, selectedFiles: { extract: '', html: '' }, selectedJobs: { extract: '', html: '' }, authenticated: false, csrf: '', files: [], jobs: [], jobsLoaded: false, models: null, selectedModel: 'auto', selectedJob: '', starting: new Set(), actions: new Set(), timer: null, refreshing: false, sourceError: '', jobsError: '' };
+  const state = { operation: 'extract', sources: { extract: [], html: [] }, sourceLoaded: { extract: false, html: false }, sourceRequests: {}, selectedFiles: { extract: '', html: '' }, selectedJobs: { extract: '', html: '' }, authenticated: false, csrf: '', files: [], jobs: [], jobsLoaded: false, models: null, selectedModel: 'auto', selectedJob: '', starting: new Set(), actions: new Set(), timer: null, refreshing: false, sourceError: '', jobsError: '', pdfDownloading: false };
   const labels = { queued: '順番待ち', running: '作成中', needs_attention: '確認が必要', failed: '作成できませんでした', completed: '完成', cancelled: '取り消し済み' };
   const stageLabels = { queued: '作成を待っています', download: 'PDF を取得しています', pdf_review: '冊子のページと切り出し範囲を確認しています', lesson_inventory: '全問題と小問の一覧を確認しています', lesson_generation: '全問題の講義と検算を進めています', publishing: '講義を公開して表示を確認しています', reading: 'PDF を読み込んでいます', downloading: 'PDF を取得しています', analyzing: '内容を整理しています', planning: '教材の構成を考えています', generating: '問題と解説を作成しています', validating: '内容を確認しています', rendering: '教材ファイルを仕上げています', uploading: '完成ファイルを保存しています', completed: '教材が完成しました', needs_attention: '保存できた教材を残して、確認を待っています', failed: '保存済みの段階から再試行できます', interrupted: 'クラウド処理が中断しました', cancelled: '作成を取り消しました' };
   const kindLabels = { practice: '日日の演習', advanced: '発展演習・学力コンテスト' };
@@ -156,7 +156,8 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
       $('chat-ready').hidden = !selected || !state.authenticated;
       $('chat-prompt').value = chatPrompt;
       const downloadable = Boolean(selected && text(selected.modifiedTime));
-      $('download-pdf').setAttribute('aria-disabled', String(!downloadable));
+      $('download-pdf').setAttribute('aria-disabled', String(!downloadable || state.pdfDownloading));
+      $('download-pdf').setAttribute('aria-busy', String(state.pdfDownloading));
       if (downloadable) $('download-pdf').href = '/api/studio/chat/pdf/' + encodeURIComponent(fileId(selected)) + '?modifiedTime=' + encodeURIComponent(selected.modifiedTime);
       else $('download-pdf').removeAttribute('href');
       if (selected && !downloadable) $('start-state').textContent = 'PDFの更新日時を確認できません。「画面を更新」してからダウンロードしてください。';
@@ -171,6 +172,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     const id = fileId(file);
     if (!id) return;
     state.selectedFiles[state.operation] = id;
+    if (!state.pdfDownloading) $('pdf-download-status').textContent = '';
     updateLocation();
     renderSources();
   }
@@ -259,6 +261,56 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   async function copyChatPrompt() {
     try { await navigator.clipboard.writeText($('chat-prompt').value); notice('ChatGPTに貼り付ける文面をコピーしました。PDFと指示書も添付してください。'); }
     catch { $('chat-prompt').focus(); $('chat-prompt').select(); notice('文面を選択しました。コピーしてChatGPTに貼り付けてください。'); }
+  }
+  async function downloadPdf(event) {
+    // Modified clicks retain normal link behavior; ordinary clicks save a checked blob.
+    if (event && (event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)) return;
+    event?.preventDefault();
+    const file = state.sources.html.find(item => fileId(item) === state.selectedFiles.html);
+    if (state.pdfDownloading || !state.authenticated || !file || !text(file.modifiedTime)) return;
+    const limit = 100 * 1024 * 1024;
+    const filename = name(file).replace(/[\\/\u0000-\u001f\u007f]/g, '_');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 180000);
+    state.pdfDownloading = true; renderStart();
+    notice('');
+    $('pdf-download-status').textContent = '「' + filename + '」を取得しています…';
+    try {
+      if (Number(file.size) > limit) throw new Error('PDFがダウンロードできる容量（100MiB）を超えています。');
+      const response = await fetch('/api/studio/chat/pdf/' + encodeURIComponent(fileId(file)) + '?modifiedTime=' + encodeURIComponent(file.modifiedTime), {
+        method: 'GET', credentials: 'same-origin', headers: { Accept: 'application/pdf' }, signal: controller.signal,
+      });
+      const type = response.headers.get('Content-Type') || '';
+      if (!response.ok || type.includes('json')) {
+        let value; try { value = await response.json(); } catch { value = null; }
+        if (response.status === 401) expired(value?.error);
+        throw new Error(errorMessage(value));
+      }
+      if (!/^application\/pdf(?:;|$)/i.test(type) || !response.body) throw new Error('PDFを取得できませんでした。画面を更新して再度お試しください。');
+      const reader = response.body.getReader(), chunks = [];
+      let bytes = 0;
+      try {
+        if (Number(response.headers.get('Content-Length')) > limit) throw new Error('PDFがダウンロードできる容量（100MiB）を超えています。');
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          bytes += value.byteLength;
+          if (bytes > limit) throw new Error('PDFがダウンロードできる容量（100MiB）を超えています。');
+          chunks.push(value);
+        }
+      } catch (error) { await reader.cancel().catch(() => {}); throw error; }
+      finally { reader.releaseLock(); }
+      if (!bytes) throw new Error('PDFが空のため保存できませんでした。');
+      const objectUrl = URL.createObjectURL(new Blob(chunks, { type: 'application/pdf' }));
+      const link = node('a'); link.href = objectUrl; link.download = filename; link.hidden = true;
+      document.body.append(link);
+      try { link.click(); $('pdf-download-status').textContent = '取得が完了し、「' + filename + '」の保存を開始しました。'; }
+      finally { link.remove(); setTimeout(() => URL.revokeObjectURL(objectUrl), 60000); }
+    } catch (error) {
+      const reason = error.name === 'AbortError' ? '取得に時間がかかっています。再度お試しください。' : error instanceof TypeError ? '通信中に取得を完了できませんでした。画面を更新して再度お試しください。' : error.message;
+      const message = 'PDFの取得に失敗しました。' + clean(reason);
+      $('pdf-download-status').textContent = message; notice(message, true);
+    } finally { clearTimeout(timeout); state.pdfDownloading = false; renderStart(); }
   }
   function safeUrl(value) {
     if (typeof value !== 'string' || !value.trim() || value.length > 4096) return null;
@@ -538,6 +590,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   $('operation-html').addEventListener('click', () => chooseOperation('html'));
   $('start-job').addEventListener('click', startJob);
   $('copy-chat-prompt').addEventListener('click', copyChatPrompt);
+  $('download-pdf').addEventListener('click', downloadPdf);
   $('show-running').addEventListener('click', () => { const running = state.jobs.find(active); if (running) chooseOperation(jobOperation(running)); });
   $('search').addEventListener('input', renderSources);
   $('model').addEventListener('change', event => { state.selectedModel = event.target.value; renderSources(); });
@@ -573,7 +626,7 @@ export function studioPage({ nonce = '' } = {}) {
 <div class="section-head"><p class="fine" id="account"></p><div class="job-actions"><button class="quiet" id="logout" type="button" hidden>ログアウト</button><button class="quiet" id="refresh-all" type="button">画面を更新</button></div></div>
 <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
 <section class="panel gate" id="gate"><h2 id="gate-title">接続を確認しています</h2><p id="gate-copy">保存された接続と作成履歴を読み込みます。</p><a class="primary" id="login" href="/api/studio/google/start" hidden>Google に接続する <span aria-hidden="true">→</span></a></section>
-<div class="layout" id="workspace" hidden><section class="panel" aria-labelledby="sources-title"><div class="section-head"><div><h2 id="sources-title">切り出す月間号を選ぶ</h2><p id="source-count">Google Drive の PDF</p></div></div><label class="sr-only" for="search">PDF の名前で絞り込み</label><input class="search" id="search" type="search" placeholder="PDF の名前で探す" autocomplete="off"><div class="source-list" id="sources"><p class="empty">教材を読み込んでいます…</p></div><details class="model-settings" id="model-settings"><summary>モデルを選ぶ（通常は自動）</summary><label for="model">PDFの範囲判定に使うモデル</label><select id="model" disabled><option>モデルを確認中…</option></select><p class="fine" id="model-note"></p><p class="model-notice" id="model-warning" hidden></p></details><section class="start-panel" aria-labelledby="start-title"><p class="start-label" id="start-title">選択したPDF</p><p class="selected-source" id="selected-source">PDFが選択されていません</p><p class="operation-disclosure" id="operation-disclosure"></p><button class="primary start-button" type="button" id="start-job" disabled>PDFを切り出す</button><p class="fine start-state" id="start-state" role="status">一覧からPDFを選択してください。</p><button class="quiet" type="button" id="show-running" hidden>進行中の作業を表示</button><section class="handoff-panel" id="chat-panel" hidden><div id="chat-ready" hidden><h3>2つのファイルをChatGPTに添付</h3><div class="handoff-downloads"><a class="primary" id="download-pdf" download target="_blank" rel="noopener noreferrer">PDFをダウンロード</a><a class="secondary" id="download-instructions" href="/api/studio/chat/instructions" download target="_blank" rel="noopener noreferrer">元の指示書（MD）をダウンロード</a></div><label for="chat-prompt">ChatGPTに貼り付ける文面</label><textarea class="chat-prompt" id="chat-prompt" readonly></textarea><div class="handoff-actions"><button class="secondary" type="button" id="copy-chat-prompt">文面をコピー</button><a class="primary" id="open-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く ↗</a></div><p>ChatGPTでPDFとMDを添付し、コピーした文面を送信してください。生成されたHTMLファイルをダウンロードしたら、次の取込画面へ進みます。</p></div><div class="handoff-import"><a class="secondary" href="https://iwslatojp29.github.io/math-app/math/upload.html" target="_blank" rel="noopener noreferrer">完成HTMLを取り込む ↗</a><p>完成したHTMLを選び、プレビューを確認してから保存・公開します。</p></div></section></section></section>
+<div class="layout" id="workspace" hidden><section class="panel" aria-labelledby="sources-title"><div class="section-head"><div><h2 id="sources-title">切り出す月間号を選ぶ</h2><p id="source-count">Google Drive の PDF</p></div></div><label class="sr-only" for="search">PDF の名前で絞り込み</label><input class="search" id="search" type="search" placeholder="PDF の名前で探す" autocomplete="off"><div class="source-list" id="sources"><p class="empty">教材を読み込んでいます…</p></div><details class="model-settings" id="model-settings"><summary>モデルを選ぶ（通常は自動）</summary><label for="model">PDFの範囲判定に使うモデル</label><select id="model" disabled><option>モデルを確認中…</option></select><p class="fine" id="model-note"></p><p class="model-notice" id="model-warning" hidden></p></details><section class="start-panel" aria-labelledby="start-title"><p class="start-label" id="start-title">選択したPDF</p><p class="selected-source" id="selected-source">PDFが選択されていません</p><p class="operation-disclosure" id="operation-disclosure"></p><button class="primary start-button" type="button" id="start-job" disabled>PDFを切り出す</button><p class="fine start-state" id="start-state" role="status">一覧からPDFを選択してください。</p><button class="quiet" type="button" id="show-running" hidden>進行中の作業を表示</button><section class="handoff-panel" id="chat-panel" hidden><div id="chat-ready" hidden><h3>2つのファイルをChatGPTに添付</h3><div class="handoff-downloads"><a class="primary" id="download-pdf" download target="_blank" rel="noopener noreferrer">PDFをダウンロード</a><a class="secondary" id="download-instructions" href="/api/studio/chat/instructions" download target="_blank" rel="noopener noreferrer">元の指示書（MD）をダウンロード</a></div><p class="fine" id="pdf-download-status" role="status" aria-live="polite"></p><label for="chat-prompt">ChatGPTに貼り付ける文面</label><textarea class="chat-prompt" id="chat-prompt" readonly></textarea><div class="handoff-actions"><button class="secondary" type="button" id="copy-chat-prompt">文面をコピー</button><a class="primary" id="open-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く ↗</a></div><p>ChatGPTでPDFとMDを添付し、コピーした文面を送信してください。生成されたHTMLファイルをダウンロードしたら、次の取込画面へ進みます。</p></div><div class="handoff-import"><a class="secondary" href="https://iwslatojp29.github.io/math-app/math/upload.html" target="_blank" rel="noopener noreferrer">完成HTMLを取り込む ↗</a><p>完成したHTMLを選び、プレビューを確認してから保存・公開します。</p></div></section></section></section>
 <section class="panel" id="history" aria-labelledby="jobs-title"><div class="section-head"><div><h2 id="jobs-title">PDF切り出しの履歴</h2><p id="jobs-description">PDFの作成状況と、保存したファイル</p></div><button class="quiet" id="refresh-jobs" type="button">履歴を更新</button></div><div class="job-list" id="jobs"><p class="empty">作成履歴を読み込んでいます…</p></div><p class="fine" id="poll-note">作成履歴はクラウドに保存されます。</p></section></div>
 <noscript><p class="notice">教材スタジオを利用するには JavaScript を有効にしてください。</p></noscript></main><footer class="footer"><div class="wrap">math-app · 教材スタジオ</div></footer><script${attribute}>${studioScript()}</script></body></html>`;
 }
