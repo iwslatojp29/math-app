@@ -423,6 +423,8 @@ svg{display:block}
           <div class="info-source" id="problemSource"></div>
           <div class="info-time">回答時間<strong id="elapsedDisplay">0秒</strong><span class="timer-lbl" id="tlbl">制限 1分</span></div>
           <button class="tbtn" id="resetBtn" aria-label="タイマーをやり直す">計測をやり直す</button>
+          <button class="tbtn" id="audioTestBtn">音を確認</button>
+          <p class="foot-note" id="audioStatus" role="status">画面を一度タップすると通知音が有効になります。</p>
           <h2>採点と回答時間</h2>
           <div class="history" id="hist" aria-label="採点と回答時間の記録"></div>
         </div>
@@ -14908,17 +14910,64 @@ function elapsedSec(){
 }
 
 var actx = null;
-function unlockAudio(){ try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch (e) {} }
+var audioPrimed = false, audioPreview = 0;
+function audioStatus(message){
+  var el = $('audioStatus'); if (!el) return;
+  el.textContent = message || (!state.settings.sound ? '通知音：オフ' : actx && actx.state === 'running' ? '通知音：オン（20秒ごと・時間切れ）' : '「音を確認」を押すと通知音を有効にできます。');
+}
+function unlockAudio(){
+  if (!state.settings.sound) return Promise.resolve(false);
+  try {
+    /* iPadではタッチ完了時に音声を開始する。中断後も同じ操作で復帰できる。 */
+    if (!actx || actx.state === 'closed') {
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+      actx = new (window.AudioContext || window.webkitAudioContext)(); audioPrimed = false;
+      var created = actx;
+      actx.onstatechange = function(){ if (actx === created && created.state !== 'running') audioStatus(); };
+    }
+    var ctx = actx, resuming = ctx.state !== 'running';
+    var resumed = resuming ? ctx.resume() : Promise.resolve();
+    if (!audioPrimed || resuming) {
+      /* 無音の1サンプルをユーザー操作の中で再生し、Safariの音声出力を準備する。 */
+      var source = ctx.createBufferSource();
+      source.buffer = ctx.createBuffer(1, 1, ctx.sampleRate || 44100);
+      source.connect(ctx.destination); source.onended = function(){ source.disconnect(); }; source.start(0);
+      audioPrimed = true;
+    }
+    return Promise.resolve(resumed).then(function(){ if (ctx === actx) audioStatus(); return ctx === actx && ctx.state === 'running'; }, function(){ if (ctx === actx) audioStatus(); return false; });
+  } catch (e) { audioStatus(); return Promise.resolve(false); }
+}
+function previewAudio(){
+  state.settings.sound = true; $('sound').setAttribute('aria-checked', 'true'); saveSettings();
+  /* OS復帰後にrunning表示のまま無音になるSafariでも、このボタンで作り直せる。 */
+  if (actx) { try { Promise.resolve(actx.close()).catch(function(){}); } catch (e) {} actx = null; }
+  audioPrimed = false;
+  var attempt = ++audioPreview, finished = false;
+  audioStatus('音を準備しています…');
+  var timeout = setTimeout(function(){
+    finished = true;
+    if (attempt === audioPreview) audioStatus('音を開始できませんでした。もう一度「音を確認」を押してください。');
+  }, 2000);
+  unlockAudio().then(function(ready){
+    if (finished || attempt !== audioPreview) return;
+    finished = true; clearTimeout(timeout);
+    if (!state.settings.sound) { audioStatus(); return; }
+    if (ready) { beep('limit'); audioStatus('確認音を再生しました。聞こえない場合はiPadの音量・消音設定・出力先を確認してください。'); }
+    else audioStatus('音を開始できませんでした。もう一度「音を確認」を押してください。');
+  });
+}
 function beep(kind){
   if (!state.settings.sound) return;
   try {
-    unlockAudio(); if (!actx || actx.state !== 'running') return;
+    /* タイマーから非同期再開すると、古い通知が次のタップ時にまとめて鳴るため再生しない。 */
+    if (!actx || actx.state !== 'running' || document.hidden) return;
     var now = actx.currentTime;
     (kind === 'limit' ? [0, 0.16] : [0]).forEach(function(t){
       var o = actx.createOscillator(), g = actx.createGain();
       o.type = 'sine'; o.frequency.value = 1046.5;
       g.gain.setValueAtTime(0.0001, now + t); g.gain.exponentialRampToValueAtTime(0.25, now + t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, now + t + 0.075);
       o.connect(g); g.connect(actx.destination); o.start(now + t); o.stop(now + t + 0.085);
+      o.onended = function(){ o.disconnect(); g.disconnect(); };
     });
   } catch (e) {}
 }
@@ -15092,7 +15141,8 @@ document.addEventListener('click', function(e){
     case 'exportBtn': exportRecords(); break;
     case 'importBtn': importRecords(); break;
     case 'clearBtn': clearRecords(); break;
-    case 'sound': state.settings.sound = !state.settings.sound; t.setAttribute('aria-checked', String(state.settings.sound)); saveSettings(); if (state.settings.sound) beep(); break;
+    case 'audioTestBtn': previewAudio(); break;
+    case 'sound': state.settings.sound = !state.settings.sound; t.setAttribute('aria-checked', String(state.settings.sound)); saveSettings(); if (state.settings.sound) previewAudio(); else { audioPreview++; audioStatus(); } break;
   }
 });
 $('scrim').addEventListener('click', closeSide);
@@ -15105,7 +15155,11 @@ document.addEventListener('keydown', function(e){
   else if (e.key === 'ArrowLeft') nav(-1);
   else if (e.key === 'Escape') { hideModal(); closeSide(); $('problemInfo').open = false; }
 });
-document.addEventListener('pointerdown', unlockAudio, {once: true});
+['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach(function(type){
+  document.addEventListener(type, unlockAudio, {capture: true, passive: true});
+});
+document.addEventListener('visibilitychange', function(){ if (!document.hidden && actx) unlockAudio(); });
+window.addEventListener('pageshow', function(){ if (actx) unlockAudio(); });
 
 /* ====================== 起動 ====================== */
 loadAll();

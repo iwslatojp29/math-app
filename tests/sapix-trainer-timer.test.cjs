@@ -168,8 +168,8 @@ test('beep creates one short tone for periodic/default previews and two for the 
     }
     createGain() { return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {} }; }
   }
-  const ctx = vm.createContext({ window: { AudioContext }, state: { settings: { sound: true } } });
-  vm.runInContext('var actx = null;\n' + sourceOf('unlockAudio') + '\n' + sourceOf('beep'), ctx);
+  const ctx = vm.createContext({ document: { hidden: false }, state: { settings: { sound: true } }, actx: new AudioContext() });
+  vm.runInContext(sourceOf('beep'), ctx);
   ctx.beep(); assert.equal(notes.length, 1);
   ctx.beep('tick'); assert.equal(notes.length, 2);
   ctx.beep('limit'); assert.equal(notes.length, 4);
@@ -182,4 +182,71 @@ test('beep creates one short tone for periodic/default previews and two for the 
   assert.equal(notes.length, 5, 'audio resumes with the current cue only');
   ctx.state.settings.sound = false; ctx.beep('limit');
   assert.equal(notes.length, 5);
+  ctx.state.settings.sound = true; ctx.document.hidden = true; ctx.beep('limit');
+  assert.equal(notes.length, 5, 'hidden-page cues must not accumulate');
+});
+
+function audioBoot() {
+  const contexts = [], nodes = new Map(), timeouts = new Map(); let nextId = 0;
+  for (const id of ['audioStatus', 'sound']) nodes.set(id, { textContent: '', setAttribute() {} });
+  class AudioContext {
+    constructor() { this.state = 'suspended'; this.currentTime = 0; this.destination = {}; this.primed = 0; this.notes = 0; this.resumes = 0; contexts.push(this); }
+    resume() { this.resumes++; return new Promise((resolve, reject) => { this.allow = () => { this.state = 'running'; resolve(); }; this.deny = reject; }); }
+    close() { this.state = 'closed'; return Promise.resolve(); }
+    createBuffer() { return {}; }
+    createBufferSource() { return { connect() {}, disconnect() {}, start: () => { this.primed++; } }; }
+    createOscillator() { return { frequency: {}, connect() {}, disconnect() {}, start: () => { this.notes++; }, stop() {} }; }
+    createGain() { return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {}, disconnect() {} }; }
+  }
+  const ctx = vm.createContext({ window: { webkitAudioContext: AudioContext }, navigator: { audioSession: {} }, document: { hidden: false },
+    state: { settings: { sound: true } }, $: id => nodes.get(id), saveSettings() {},
+    setTimeout(fn) { const id = ++nextId; timeouts.set(id, fn); return id; }, clearTimeout(id) { timeouts.delete(id); }
+  });
+  const begin = html.indexOf('var actx ='), end = html.indexOf('/* ====================== 解答・記録', begin);
+  vm.runInContext(html.slice(begin, end), ctx);
+  return { ctx, contexts, nodes, timeouts };
+}
+
+test('Safari is primed during the gesture and can retry after rejected activation and interruption', async () => {
+  const h = audioBoot();
+  const denied = h.ctx.unlockAudio(), audio = h.contexts[0];
+  assert.equal(audio.primed, 1, 'silent source must start synchronously before awaiting resume');
+  assert.equal(h.ctx.navigator.audioSession.type, 'playback');
+  audio.deny(new Error('gesture required')); assert.equal(await denied, false);
+  const allowed = h.ctx.unlockAudio(); audio.allow(); assert.equal(await allowed, true);
+  assert.equal(h.contexts.length, 1);
+  audio.state = 'interrupted';
+  const resumed = h.ctx.unlockAudio(); audio.allow(); assert.equal(await resumed, true);
+  assert.equal(audio.resumes, 3);
+  assert.equal(audio.notes, 0, 'unlocking must not replay missed cues');
+  h.ctx.beep('tick'); assert.equal(audio.notes, 1);
+  await h.ctx.unlockAudio(); assert.equal(audio.primed, 3, 'running context should not create more silent nodes');
+});
+
+test('explicit sound check waits for asynchronous resume and rebuilds a stale Safari context', async () => {
+  const h = audioBoot();
+  h.ctx.previewAudio(); const first = h.contexts[0];
+  assert.equal(first.notes, 0); first.allow(); await new Promise(resolve => setImmediate(resolve));
+  assert.equal(first.notes, 2);
+  h.ctx.previewAudio(); const second = h.contexts[1];
+  assert.equal(first.state, 'closed'); second.allow(); await new Promise(resolve => setImmediate(resolve));
+  assert.equal(second.notes, 2); assert.equal(h.timeouts.size, 0);
+});
+
+test('late preview after timeout or mute never replays a stale sound', async () => {
+  const h = audioBoot(); h.ctx.previewAudio();
+  const first = h.contexts[0]; [...h.timeouts.values()][0](); first.allow();
+  await new Promise(resolve => setImmediate(resolve)); assert.equal(first.notes, 0);
+  h.ctx.previewAudio(); const second = h.contexts[1]; h.ctx.state.settings.sound = false; second.allow();
+  await new Promise(resolve => setImmediate(resolve)); assert.equal(second.notes, 0);
+  assert.equal(await h.ctx.unlockAudio(), false); assert.equal(h.contexts.length, 2);
+});
+
+test('touch completion and subsequent interactions keep their audio activation listeners', () => {
+  const calls = [], ctx = vm.createContext({ document: { addEventListener: (type, fn, options) => calls.push({ type, fn, options }) }, unlockAudio() {} });
+  const start = html.indexOf("['pointerdown', 'pointerup', 'touchend', 'click', 'keydown']");
+  vm.runInContext(html.slice(start, html.indexOf("document.addEventListener('visibilitychange'", start)), ctx);
+  for (const type of ['touchend', 'pointerup', 'click', 'keydown']) {
+    const event = calls.find(x => x.type === type); assert.ok(event); assert.notEqual(event.options.once, true);
+  }
 });
