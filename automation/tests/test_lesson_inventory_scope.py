@@ -201,5 +201,151 @@ class LessonInventoryScopeTests(unittest.TestCase):
         self.assertEqual(correct["unpairedPages"][0]["reason"], fixture.solution_candidate()["unpairedPages"][0]["reason"])
 
 
+class SolutionOnlyScopeTests(unittest.TestCase):
+    def setUp(self):
+        self.base = LessonInventoryScopeTests()
+        self.base.setUp()
+        self.addCleanup(self.base.doCleanups)
+        self.fixture = self.base.fixture
+        fixture = self.fixture
+        self.target, self.neighbour = self.base.target, self.base.neighbour
+        fixture.inventory[0].update(pdfPages=[3, 4], printedPages=["3", "4"], officialSolutionPages=[3, 4])
+        fixture.inventory[1].update(pdfPages=[2], printedPages=["2"], officialSolutionPages=[2, 3])
+        fixture.fixture["problems"][0]["sourceImageIds"] = ["source-3", "source-4"]
+        fixture.fixture["problems"][1]["sourceImageIds"] = ["source-2"]
+        fixture.plan["pages"] = [{"printedPages": [str(page)]} for page in range(1, 5)]
+        with lesson_pipeline.open_pdf(fixture.pdf) as doc:
+            for page in range(2, 5):
+                doc.new_page(width=240, height=160).insert_text((15, 30), f"Synthetic source and solution page {page}")
+                fixture.images[page] = lesson_pipeline.page_image(doc, page, fixture.directory, prefix="solution-overlap")
+        self.finding = (f"前問{self.neighbour}のページ接続照合未完了。全28問一覧では原問題2・公式解答2と3だが、"
+                        "今回画像は3と4だけ。ページ3の解説がページ2の本文と解説前半に接続する確認に画像2が必要。")
+        self.management = {"solutionPageRecords": [{"checkedPdfPages": [1, 2, 3, 4], "links": [
+            {"problemId": self.target, "pdfPages": [3, 4], "evidence": "Synthetic target answer correspondence."},
+            {"problemId": self.neighbour, "pdfPages": [2, 3], "evidence": "Synthetic previous answer continues from page 2 to page 3."},
+            {"problemId": "earlier-question", "pdfPages": [1, 2], "evidence": "Synthetic unrelated earlier answer."}],
+            "unpairedPages": [], "unresolvedIssues": []}]}
+        fixture.context["page_management"] = self.management
+        self.requests, self.responses = [], []
+        self.mode = "recover"
+        fixture.structured = self.structured
+
+    def structured(self, key, prompt, schema, images=(), max_tokens=None):
+        self.requests.append([key, prompt, copy.deepcopy(schema), list(images), max_tokens])
+        value = self.base.original_structured(key, prompt, schema, images, max_tokens=max_tokens)
+        if "-" + self.target + "-" in key:
+            reviewing = key.startswith("lesson-review-")
+            if not reviewing and ("inventory-scope" not in key or self.mode == "still-unresolved"):
+                value["verification"].update(status="needs_review", unresolvedIssues=[self.finding])
+            if reviewing and self.mode == "deny-source":
+                value.update(approved=False, issues=["追加した原画像から接続の矛盾が見つかりました。"])
+        self.responses.append(copy.deepcopy(value))
+        return value
+
+    def context(self, findings=None, *, inventory=None, images=None, management=None, image_pages=None):
+        candidate = copy.deepcopy(self.fixture.fixture["problems"][0])
+        candidate["verification"].update(status="needs_review", unresolvedIssues=findings or [self.finding])
+        return lesson_pipeline.inventory_scope_context(candidate, ["候補自身の数学・読みの検証が未解決です。"],
+            self.fixture.inventory[0], inventory if inventory is not None else self.fixture.inventory,
+            image_pages if image_pages is not None else [3, 4], images if images is not None else self.fixture.images,
+            management if management is not None else self.management)
+
+    def test_previous_solution_overlap_adds_original_source_in_order_to_generation_and_independent_audit(self):
+        lesson, _ = self.fixture.generate()
+        target_requests = [item for item in self.requests if "-" + self.target + "-" in item[0]]
+        self.assertEqual(len(target_requests), 6, "Four old candidates, one scoped candidate and one independent review")
+        expected_original = [lesson_pipeline.image_data(self.fixture.images[page]) for page in [3, 4]]
+        self.assertTrue(all(item[3] == expected_original for item in target_requests[:4]))
+        for request in target_requests[4:]:
+            metadata = json.loads(request[1].rsplit("管理情報:", 1)[1])
+            self.assertEqual(metadata["primaryImagePages"], [3, 4])
+            self.assertEqual(metadata["currentImagePages"], [3, 4, 2])
+            self.assertEqual(metadata["contextOnlyImagePages"], [2])
+            self.assertEqual([item["id"] for item in metadata["samePageOtherProblems"]], [self.neighbour])
+            self.assertEqual(metadata["observedSolutionLinks"], self.management["solutionPageRecords"][0]["links"][:2])
+            self.assertEqual(request[3], [lesson_pipeline.image_data(self.fixture.images[page]) for page in [3, 4, 2]])
+            self.assertIn("実画像で確認した対応", request[1])
+            self.assertIn("再帰的に拡張しない", request[1])
+        self.assertEqual(lesson["problems"], self.fixture.fixture["problems"])
+        self.assertEqual(lesson["problems"][0]["sourceImageIds"], ["source-3", "source-4"])
+        self.assertEqual([item["id"] for item in lesson["problems"]], [self.target, self.neighbour])
+
+    def test_context_is_one_hop_preserves_primary_order_and_never_invents_solution_evidence(self):
+        indirect = copy.deepcopy(self.fixture.inventory[1])
+        indirect.update(id="earlier-question", pdfPages=[1], officialSolutionPages=[1, 2])
+        inventory = [*self.fixture.inventory, indirect]
+        before = copy.deepcopy(self.management)
+        context, shown = self.context(inventory=inventory, image_pages=[4, 3])
+        metadata = json.loads(context.rsplit("管理情報:", 1)[1])
+        self.assertEqual(shown, [4, 3, 2])
+        self.assertNotIn(1, shown)
+        self.assertIn("earlier-question", metadata["allProblemIds"])
+        self.assertNotIn("earlier-question", [item["id"] for item in metadata["samePageOtherProblems"]])
+        self.assertEqual(metadata["observedSolutionLinks"], before["solutionPageRecords"][0]["links"][:2])
+        self.assertEqual(self.management, before)
+        empty, _ = self.context(management={})
+        self.assertEqual(json.loads(empty.rsplit("管理情報:", 1)[1])["observedSolutionLinks"], [])
+
+    def test_new_connection_gate_requires_named_real_overlapping_other_problem_and_page_uncertainty(self):
+        for finding in (
+            "前問missing-idのページ接続照合未完了。画像が必要。",
+            f"前問{self.neighbour}-extraのページ接続照合未完了。画像が必要。",
+            f"前問{self.target}のページ接続照合未完了。画像が必要。",
+            f"前問{self.neighbour}の計算の答えが未確認。",
+            f"前問{self.neighbour}の画像は読める。接続の確認は完了。",
+            "対象問題の条件を判読できず答えが未解決。",
+        ):
+            with self.subTest(finding=finding):
+                self.assertIsNone(self.context([finding]))
+        nonoverlapping = copy.deepcopy(self.fixture.inventory)
+        nonoverlapping[1].update(pdfPages=[1], officialSolutionPages=[1, 2])
+        self.assertIsNone(self.context(inventory=nonoverlapping))
+        self.assertIsNotNone(self.context())
+        for relation in ("次問", "次の問題", "後の問題"):
+            with self.subTest(relation=relation):
+                self.assertEqual(self.context([f"{relation}{self.neighbour}の原画像と解説の接続照合が未完了。"])[1], [3, 4, 2])
+        # The original broad scope gate also gains the previously omitted
+        # solution-only neighbour, without changing how that gate is detected.
+        self.assertEqual(self.context(list(GLOBAL_FINDINGS))[1], [3, 4, 2])
+
+    def test_missing_previous_source_image_and_unresolved_connection_or_audit_deny_still_block(self):
+        with self.assertRaises(StudioError) as caught:
+            self.context(images={page: image for page, image in self.fixture.images.items() if page != 2})
+        self.assertEqual(caught.exception.code, "lesson_source_images")
+        for mode, reviews in [("still-unresolved", 0), ("deny-source", 2)]:
+            with self.subTest(mode=mode):
+                self.mode = mode
+                self.requests.clear()
+                with self.assertRaises(StudioError) as caught:
+                    self.fixture.generate()
+                self.assertEqual(caught.exception.code, "lesson_unresolved")
+                scoped = [item for item in self.requests if "inventory-scope" in item[0]]
+                self.assertEqual(len([item for item in scoped if not item[0].startswith("lesson-review-")]), 2)
+                self.assertEqual(len([item for item in scoped if item[0].startswith("lesson-review-")]), reviews)
+
+    def test_prior_candidates_and_completed_other_problem_reuse_cache_before_two_new_calls(self):
+        expected, _ = self.fixture.generate()
+        previous = [(request, response) for request, response in zip(self.requests, self.responses)
+                    if "inventory-scope" not in request[0]]
+        scoped_values = [response for request, response in zip(self.requests, self.responses) if "inventory-scope" in request[0]]
+        studio = MemoryStudio()
+        seed = RecordingAI(studio, [value for _, value in previous])
+        for (key, prompt, schema, images, budget), _ in previous:
+            seed.structured(key, prompt, schema, images, max_tokens=budget)
+        before = copy.deepcopy(studio.values)
+        def generate(client):
+            fixture = self.fixture
+            return lesson_pipeline.generate_lesson(fixture.pdf, Mock(structured=client.structured), studio,
+                fixture.plan, fixture.directory, "Retain all questions and mathematical conditions.", "2026年9月号",
+                fixture.root / "lesson.schema.json", generation_context=fixture.context)
+        resumed = RecordingAI(studio, scoped_values)
+        self.assertEqual(generate(resumed)[0], expected)
+        self.assertEqual(len(resumed.scripted_session.calls), 2)
+        self.assertEqual({key: studio.values[key] for key in before}, before)
+        again = RecordingAI(studio, [])
+        self.assertEqual(generate(again)[0], expected)
+        self.assertEqual(again.scripted_session.calls, [])
+
+
 if __name__ == "__main__":
     unittest.main()

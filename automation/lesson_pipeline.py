@@ -368,14 +368,28 @@ def inventory_scope_context(candidate, issues, entry, inventory, image_pages, im
             or issues[0] != "候補自身の数学・読みの検証が未解決です。"):
         return None
     findings = candidate["verification"]["unresolvedIssues"]
-    if not any("unpairedPages" in issue or (
-            re.search(r"全PDF|全ページ|全体管理|全体の管理|全問一覧|別問題|他の問題", issue)
-            and re.search(r"未確認|未解決|未完了|保持|管理|対応|続き", issue)) for issue in findings):
-        return None
     records = [{"id": item["id"], "sectionId": item["sectionId"], "number": item["number"],
                 "pdfPages": item["pdfPages"], "officialSolutionPages": item["officialSolutionPages"],
                 "subquestionIds": [sub["id"] for sub in item["subquestions"]]} for item in inventory]
-    neighbours = [item for item in records if item["id"] != entry["id"] and set(item["pdfPages"]) & set(image_pages)]
+    neighbours = [item for item in records if item["id"] != entry["id"]
+                  and set(item["pdfPages"] + item["officialSolutionPages"]) & set(image_pages)]
+    ordinary_scope = any("unpairedPages" in issue or (
+            re.search(r"全PDF|全ページ|全体管理|全体の管理|全問一覧|別問題|他の問題", issue)
+            and re.search(r"未確認|未解決|未完了|保持|管理|対応|続き", issue)) for issue in findings)
+    # A previous question's solution can be visible without its question
+    # statement. Expand the gate only for a named, actually overlapping
+    # inventory entry and an unresolved source-page connection.
+    named_connection = any(
+        re.search(r"前問|前の問題|次問|次の問題|後の問題|隣接問題|全[0-9０-９]+問一覧", issue)
+        and re.search(r"ページ|画像|本文|解説|公式解答", issue)
+        and re.search(r"接続|続き|対応|照合", issue)
+        and re.search(r"未確認|未解決|未完了|不足|必要", issue)
+        and any(re.search(r"(?<![A-Za-z0-9_-])" + re.escape(item["id"]) + r"(?![A-Za-z0-9_-])", issue)
+                for item in neighbours) for issue in findings)
+    if not ordinary_scope and not named_connection:
+        return None
+    solution_only_neighbours = [item for item in neighbours if not set(item["pdfPages"]) & set(image_pages)]
+    connection_recovery = bool(solution_only_neighbours) or (named_connection and not ordinary_scope)
     shown = image_pages + sorted({page for item in neighbours for page in
         item["pdfPages"] + item["officialSolutionPages"]} - set(image_pages))
     require(set(shown) <= set(images), "lesson_source_images", "隣接問題の続き画像を確認できません。公開を保留しました。", True)
@@ -387,6 +401,11 @@ def inventory_scope_context(candidate, issues, entry, inventory, image_pages, im
         "contextOnlyImagePages": [page for page in shown if page not in image_pages],
         "solutionPagesChecked": sorted({page for record in management for page in record["checkedPdfPages"]}),
         "observedUnpairedPages": [item for record in management for item in record["unpairedPages"] if item["pdfPage"] in shown]}
+    if connection_recovery:
+        relevant_ids = {entry["id"], *(item["id"] for item in neighbours)}
+        observed["primaryImagePages"] = list(image_pages)
+        observed["observedSolutionLinks"] = [link for record in management for link in record["links"]
+                                              if link["problemId"] in relevant_ids]
     context = ("\n【全問一覧と今回の1問の担当範囲】次は全問一覧と公式解答対応の検査工程から保持した実データです。"
         "推測したページ対応ではありません。今回の結果はtargetProblemIdだけですが、他の登録問題を削除・対象外にはしません。"
         "全PDFの全問を別々の生成で完成させて結合します。同じ原画像に写る別問題の冒頭と、今回追加した続き・解答画像を照合してください。"
@@ -398,7 +417,16 @@ def inventory_scope_context(candidate, issues, entry, inventory, image_pages, im
         "ただし一覧を盲信して前回の指摘を削除しない。原画像と照合し、対象問題自身の条件・全小問・続き・解答対応に不足や矛盾があれば"
         "必ずneeds_review/approved=falseを維持する。別問題の登録や続きが画像で確定できない場合も疑義を残す。"
         "全小問を独立に検算し、前回の具体的所見が追加証拠で解消した場合だけverified/approved=trueにする。"
-        "管理情報:" + json_bytes(observed).decode())
+        + ("同頁に別問題の公式解答・解説だけが写る場合も、追加したその問題の原問題本文・解説前半・続きの画像を照合する。"
+           "別問題のIDが一覧に登録されているという理由だけでページ接続を確認済みとせず、実画像で確認した対応を具体的に記録する。"
+           "今回照合する別問題は元画像primaryImagePagesに直接交差するsamePageOtherProblemsに固定する。"
+           "補助画像contextOnlyImagePagesに偶然写るさらに別の問題は全問一覧とその問題自身の別生成で扱い、削除・対象外にはしない。"
+           "そのさらに別の問題の画像が今回ないという理由だけで今回の担当範囲を再帰的に拡張しない。"
+           "対象問題本人とsamePageOtherProblemsのページ接続に必要な画像の不足や明確な矛盾は引き続き保留し、実在する疑義を消さない。"
+           "observedSolutionLinksは先行する独立照合で受理された対象問題と直接隣接問題の実データだけであり、"
+           "空なら根拠を創作しない。提示された画像との一致を確認して使う。"
+           if connection_recovery else "")
+        + "管理情報:" + json_bytes(observed).decode())
     return context, shown
 
 
