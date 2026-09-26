@@ -1211,9 +1211,50 @@ test('studio PDF download checks the response then saves one blob with visible s
   assert.equal(await ui.blobs[0].text(), '%PDF-1.7 mock bytes');
   assert.match(ui.elements.get('pdf-download-status').textContent, /取得が完了し、.*保存を開始しました/);
   assert(!ui.elements.get('pdf-download-status').textContent.includes('保存が完了'));
-  const cleanup = [...ui.timers.values()].find(timer => timer.delay === 60000);
-  cleanup.callback(); assert.deepEqual(ui.revoked, ['blob:mock-1']);
+  const save = ui.elements.get('save-downloaded-pdf');
+  assert.equal(save.href, 'blob:mock-1');
+  assert.equal(save.download, '日日の演習.pdf');
+  assert.equal(save.hidden, false);
+  assert.equal(save.listeners.click, undefined, 'the fallback is a native user-clickable download link');
+  assert(![...ui.timers.values()].some(timer => timer.delay === 60000), 'the save link must not expire after a minute');
+  assert.deepEqual(ui.revoked, []);
   assert(!ui.calls.some(call => call.options.method === 'POST'));
+});
+
+test('studio keeps only one fetched PDF and releases it on new download, selection and logout', async () => {
+  const ui = await uiFixture({ hash: '#chat&file=cut-pdf', htmlFiles: [{ ...SOURCE, id: 'cut-pdf' }, { ...SOURCE, id: 'other-pdf' }],
+    responder: path => path.startsWith('/chat/pdf/') ? new Response('%PDF-1.7 mock', { headers: { 'Content-Type': 'application/pdf' } }) : null });
+  const save = ui.elements.get('save-downloaded-pdf');
+  await ui.click('download-pdf');
+  assert.equal(save.href, 'blob:mock-1');
+  await ui.click('download-pdf');
+  assert.equal(save.href, 'blob:mock-2');
+  assert.deepEqual(ui.revoked, ['blob:mock-1']);
+  await ui.elements.get('sources').children[1].listeners.click();
+  assert.equal(save.hidden, true);
+  assert.equal(save.href, undefined);
+  assert.deepEqual(ui.revoked, ['blob:mock-1', 'blob:mock-2']);
+  await ui.click('download-pdf');
+  assert.equal(save.href, 'blob:mock-3');
+  await ui.click('logout');
+  assert.equal(save.hidden, true);
+  assert.equal(save.href, undefined);
+  assert.deepEqual(ui.revoked, ['blob:mock-1', 'blob:mock-2', 'blob:mock-3']);
+});
+
+test('studio does not restore a stale PDF blob after selection changes during download', async () => {
+  let release;
+  const pending = new Promise(resolve => { release = resolve; });
+  const ui = await uiFixture({ hash: '#chat&file=cut-pdf', htmlFiles: [{ ...SOURCE, id: 'cut-pdf' }, { ...SOURCE, id: 'other-pdf' }],
+    responder: path => path.startsWith('/chat/pdf/') ? pending : null });
+  const downloading = ui.click('download-pdf');
+  await ui.flush();
+  await ui.elements.get('sources').children[1].listeners.click();
+  release(new Response('%PDF-1.7 mock', { headers: { 'Content-Type': 'application/pdf' } }));
+  await downloading;
+  assert.equal(ui.blobs.length, 0);
+  assert.equal(ui.downloads.length, 0);
+  assert.equal(ui.elements.get('save-downloaded-pdf').hidden, true);
 });
 
 test('studio PDF download surfaces JSON, oversized and interrupted responses without saving', async () => {
