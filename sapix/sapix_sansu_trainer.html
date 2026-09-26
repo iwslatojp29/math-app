@@ -42,17 +42,24 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%;touch-action:manipulation}
+html{height:100dvh}
+body{margin:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%;touch-action:manipulation}
+body > a{align-self:flex-start;flex:none}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;touch-action:manipulation}
 button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 [hidden]{display:none!important}
 svg{display:block}
 
 /* ---------- app frame ---------- */
-.app{display:grid;grid-template-columns:336px minmax(0,1fr);height:100%}
+.app{display:grid;grid-template-columns:336px minmax(0,1fr);flex:1;min-height:0}
 .side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.side-scroll{flex:1;overflow-y:auto;min-height:0;padding:0 14px 14px}
-.brand{display:flex;align-items:center;gap:10px;padding:16px 18px 12px}
+.side-panes{display:grid;grid-template-rows:minmax(0,45fr) minmax(0,55fr);flex:1;min-height:0;overflow:hidden}
+.side-pane{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.side-pane + .side-pane{border-top:2px solid var(--line-strong)}
+.pane-title{flex:none;margin:0;padding:8px 20px;background:var(--panel-2);border-bottom:1px solid var(--line);font-family:var(--font-disp);font-size:13px;font-weight:700;color:var(--ink-2)}
+.side-scroll{flex:1;overflow-y:auto;min-height:0;padding:8px 14px 14px;overscroll-behavior-y:contain;scrollbar-gutter:stable}
+.side-scroll:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.brand{display:flex;flex:none;align-items:center;gap:10px;padding:16px 18px 12px}
 .brand-logo{width:34px;height:34px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-family:var(--font-disp);font-weight:900;font-size:16px;display:grid;place-items:center;letter-spacing:.02em}
 .brand h1{margin:0;font-family:var(--font-disp);font-weight:700;font-size:16px;line-height:1.2}
 .brand small{display:block;color:var(--muted);font-size:11px;font-weight:500;margin-top:2px}
@@ -337,41 +344,45 @@ svg{display:block}
       <div class="brand-logo" aria-hidden="true">算</div>
       <h1>20260926‗SAPIX間違い一覧<small>1問1分・〇△×で記録・全単元</small></h1>
     </div>
-    <div class="side-scroll">
-      <section class="side-sec">
-        <h2 class="side-title">しぼりこみ</h2>
-        <div class="chips" id="filters"></div>
+    <div class="side-panes">
+      <section class="side-pane" aria-labelledby="unitsTitle">
+        <h2 class="pane-title" id="unitsTitle">単元を選ぶ</h2>
+        <div class="side-scroll" id="selectionScroll" tabindex="0" role="region" aria-label="単元・しぼりこみ・設定">
+          <div class="unit-list" id="units"></div>
+          <section class="side-sec">
+            <h2 class="side-title">しぼりこみ</h2>
+            <div class="chips" id="filters"></div>
+          </section>
+          <section class="side-sec">
+            <h2 class="side-title">テスト範囲</h2>
+            <div class="chips testchips" id="tests"></div>
+          </section>
+          <div class="side-foot">
+            <div class="setrow"><label for="limit">制限時間</label>
+              <select id="limit">
+                <option value="30">30秒</option>
+                <option value="60" selected>1分</option>
+                <option value="90">1分30秒</option>
+                <option value="120">2分</option>
+                <option value="180">3分</option>
+              </select>
+            </div>
+            <div class="setrow"><span id="soundLbl">時間切れの音</span><button class="switch" id="sound" role="switch" aria-checked="true" aria-labelledby="soundLbl"></button></div>
+            <div class="foot-btns">
+              <button class="tbtn" id="exportBtn">記録を書き出す</button>
+              <button class="tbtn" id="importBtn">読み込む</button>
+              <button class="tbtn danger" id="clearBtn">全消去</button>
+            </div>
+            <div class="foot-note" id="recnote">記録は端末に保存されます。Googleで接続すると、同じアカウントの端末間で同期します。</div>
+          </div>
+        </div>
       </section>
-      <section class="side-sec">
-        <h2 class="side-title">テスト範囲</h2>
-        <div class="chips testchips" id="tests"></div>
+      <section class="side-pane" aria-labelledby="plistTitle">
+        <h2 class="pane-title" id="plistTitle">問題</h2>
+        <div class="side-scroll" id="problemScroll" tabindex="0" role="region" aria-label="問題一覧">
+          <div class="plist" id="plist"></div>
+        </div>
       </section>
-      <section class="side-sec">
-        <h2 class="side-title">単元</h2>
-        <div class="unit-list" id="units"></div>
-      </section>
-      <section class="side-sec">
-        <h2 class="side-title" id="plistTitle">問題</h2>
-        <div class="plist" id="plist"></div>
-      </section>
-    </div>
-    <div class="side-foot">
-      <div class="setrow"><label for="limit">制限時間</label>
-        <select id="limit">
-          <option value="30">30秒</option>
-          <option value="60" selected>1分</option>
-          <option value="90">1分30秒</option>
-          <option value="120">2分</option>
-          <option value="180">3分</option>
-        </select>
-      </div>
-      <div class="setrow"><span id="soundLbl">時間切れの音</span><button class="switch" id="sound" role="switch" aria-checked="true" aria-labelledby="soundLbl"></button></div>
-      <div class="foot-btns">
-        <button class="tbtn" id="exportBtn">記録を書き出す</button>
-        <button class="tbtn" id="importBtn">読み込む</button>
-        <button class="tbtn danger" id="clearBtn">全消去</button>
-      </div>
-      <div class="foot-note" id="recnote">記録は端末に保存されます。Googleで接続すると、同じアカウントの端末間で同期します。</div>
     </div>
   </aside>
   <div class="scrim" id="scrim"></div>
@@ -14711,11 +14722,14 @@ function stripHtml(pid, max){
 }
 function renderPlist(){
   var list = visible();
+  var previous = $plist.querySelector('.prow[aria-current="true"]');
+  var previousPid = previous && previous.getAttribute('data-pid');
+  var selectionKey = [state.unit, state.filter, state.test, state.sort].join('|');
   $plistTitle.textContent = '問題（' + list.length + '）';
   var sortbar = '<div class="sortbar"><span class="lbl">並び順</span>' +
     '<button class="sbtn" data-sort="no" aria-pressed="' + (state.sort === 'no') + '">番号順</button>' +
     '<button class="sbtn" data-sort="ng" aria-pressed="' + (state.sort === 'ng') + '">×が多い順</button></div>';
-  if (!list.length) { $plist.innerHTML = sortbar + '<div class="empty">該当する問題はありません</div>'; return; }
+  if (!list.length) { $plist.innerHTML = sortbar + '<div class="empty">該当する問題はありません</div>'; $('problemScroll').scrollTop = 0; renderPlist.selectionKey = selectionKey; return; }
   $plist.innerHTML = sortbar + list.map(function(p){
     var n = recs(p.id).length;
     return '<button class="prow" data-pid="' + esc(p.id) + '" aria-current="' + (p.id === state.pid) + '">' +
@@ -14725,8 +14739,17 @@ function renderPlist(){
   }).join('');
   /* 直近3件（左端）を見せる */
   var strips = $plist.querySelectorAll('.strip'); for (var i = 0; i < strips.length; i++) strips[i].scrollLeft = -1e6;
-  if (renderPlist.booted) { var cur = $plist.querySelector('.prow[aria-current="true"]'); if (cur && cur.scrollIntoView) { try { cur.scrollIntoView({block: 'nearest'}); } catch (e) {} } }
-  renderPlist.booted = true;
+  /* 選択が変わったときだけ問題一覧内で移動し、単元欄や同期時の閲覧位置を保つ。 */
+  if (previousPid !== state.pid || renderPlist.selectionKey !== selectionKey) {
+    var cur = $plist.querySelector('.prow[aria-current="true"]'), pane = $('problemScroll');
+    if (renderPlist.selectionKey !== selectionKey) pane.scrollTop = 0;
+    if (cur) {
+      var rowRect = cur.getBoundingClientRect(), paneRect = pane.getBoundingClientRect();
+      if (rowRect.top < paneRect.top) pane.scrollTop += rowRect.top - paneRect.top;
+      else if (rowRect.bottom > paneRect.bottom) pane.scrollTop += rowRect.bottom - paneRect.bottom;
+    }
+  }
+  renderPlist.selectionKey = selectionKey;
 }
 function renderSide(){ renderFilters(); renderTests(); renderUnits(); renderPlist(); }
 
