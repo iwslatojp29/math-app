@@ -36,6 +36,15 @@ function unique(items, label) {
 }
 function refs(values, ids, label) { for (const value of values) ensure(ids.has(value), label + ': missing reference ' + value); }
 function viewBox(box, label) { ensure(box.width > 0 && box.height > 0, label + ': viewBox must have positive dimensions'); }
+function primitiveDimension(condition, message, problemId, primitive, field, minimum, exclusive) {
+  if (condition) return;
+  // Existing repair prompts include error.message in their checkpoint key.
+  // Add precise diagnostics separately so validated responses stay reusable.
+  const error = new Error(message);
+  error.details = { problemId, primitiveId: primitive.id, kind: primitive.kind,
+    field, value: primitive[field], minimum, exclusive };
+  throw error;
+}
 
 export function validateLesson(lesson) {
   validateSchema(lesson);
@@ -90,9 +99,9 @@ export function validateLesson(lesson) {
     const cueIds = unique(cues, problem.id + ' cues');
     for (const step of problem.steps) { viewBox(step.viewBox, step.id); ensure(step.cues.length, 'Empty step ' + step.id); }
     for (const primitive of problem.diagram.primitives) {
-      for (const key of ['radius', 'fontSize', 'scale', 'height', 'strokeWidth']) if (Object.hasOwn(primitive, key)) ensure(primitive[key] > 0, 'Invalid primitive dimension');
-      if (Object.hasOwn(primitive, 'width')) ensure(primitive.width > 0, 'Invalid primitive width');
-      if (primitive.kind === 'label') ensure(primitive.fontSize >= 14, 'Diagram labels must start at 14 SVG units or larger');
+      for (const key of ['radius', 'fontSize', 'scale', 'height', 'strokeWidth']) if (Object.hasOwn(primitive, key)) primitiveDimension(primitive[key] > 0, 'Invalid primitive dimension', problem.id, primitive, key, 0, true);
+      if (Object.hasOwn(primitive, 'width')) primitiveDimension(primitive.width > 0, 'Invalid primitive width', problem.id, primitive, 'width', 0, true);
+      if (primitive.kind === 'label') primitiveDimension(primitive.fontSize >= 14, 'Diagram labels must start at 14 SVG units or larger', problem.id, primitive, 'fontSize', 14, false);
       if (primitive.kind === 'polygon') ensure(primitive.points.length >= 3, 'Polygon needs three points');
       if (primitive.kind === 'polyline') ensure(primitive.points.length >= 2, 'Polyline needs two points');
     }

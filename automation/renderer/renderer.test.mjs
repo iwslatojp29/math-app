@@ -59,6 +59,94 @@ test('duplicate primitive IDs and cyclic facts cannot produce corrupt state', ()
   assert.throws(()=>validateLesson(cycle),/cyclic/);
 });
 
+const dimensionPrimitives = [
+  {kind:'line',id:'repair-line',x1:10,y1:10,x2:30,y2:30,color:'ink',width:1,dashed:false,arrow:'none'},
+  {kind:'polyline',id:'repair-polyline',points:[{x:10,y:10},{x:30,y:30}],color:'ink',width:1,dashed:false,arrow:'none'},
+  {kind:'polygon',id:'repair-polygon',points:[{x:10,y:10},{x:30,y:10},{x:30,y:30}],stroke:'ink',fill:'blue',width:1,dashed:false},
+  {kind:'rect',id:'repair-rect',x:10,y:10,width:20,height:20,stroke:'ink',fill:'blue',strokeWidth:1},
+  {kind:'circle',id:'repair-circle',cx:20,cy:20,radius:10,stroke:'ink',fill:'blue',width:1},
+  {kind:'arc',id:'repair-arc',cx:20,cy:20,radius:10,startAngle:0,endAngle:90,color:'ink',width:1},
+  {kind:'angle',id:'repair-angle',x:20,y:20,radius:10,startAngle:0,endAngle:90,rightAngle:false,color:'ink',width:1},
+  {kind:'point',id:'repair-point',x:20,y:20,radius:2,color:'ink'},
+  {kind:'label',id:'repair-label',x:20,y:20,text:'A',color:'ink',fontSize:14,anchor:'middle'}
+];
+
+test('invalid widths retain the cached repair message and identify the exact primitive without changing data', () => {
+  for (const example of dimensionPrimitives.filter(primitive=>Object.hasOwn(primitive,'width'))) {
+    for (const width of [0,-1]) {
+      const lesson=clone(),problem=lesson.problems[0], primitive={...example,width};
+      problem.diagram.primitives.push(primitive);
+      const before=structuredClone(lesson);
+      assert.throws(()=>validateLesson(lesson),error=>{
+        assert.equal(error.message,'Invalid primitive width');
+        assert.deepEqual(error.details,{problemId:problem.id,primitiveId:primitive.id,kind:primitive.kind,
+          field:'width',value:width,minimum:0,exclusive:true});
+        return true;
+      });
+      assert.deepEqual(lesson,before,'validation must not normalize required positive widths');
+    }
+  }
+});
+
+test('all other primitive dimensions retain positivity checks and actionable field diagnostics', () => {
+  for (const example of dimensionPrimitives) {
+    for (const field of ['radius','fontSize','height','strokeWidth'].filter(key=>Object.hasOwn(example,key))) {
+      for (const value of [0,-1]) {
+        const lesson=clone(),primitive={...example,[field]:value};
+        lesson.problems[0].diagram.primitives.push(primitive);
+        assert.throws(()=>validateLesson(lesson),error=>{
+          assert.equal(error.message,'Invalid primitive dimension');
+          assert.deepEqual(error.details,{problemId:lesson.problems[0].id,primitiveId:primitive.id,kind:primitive.kind,
+            field,value,minimum:0,exclusive:true});
+          return true;
+        });
+      }
+    }
+  }
+});
+
+test('null, missing or unrelated width fields remain schema errors instead of invented dimensions', () => {
+  for (const mutate of [
+    primitive=>{ primitive.width=null; },
+    primitive=>{ delete primitive.width; },
+    primitive=>{ primitive.width='2'; },
+    primitive=>{ primitive.width=Number.NaN; }
+  ]) {
+    const lesson=clone(),primitive={...dimensionPrimitives[0]};
+    mutate(primitive); lesson.problems[0].diagram.primitives.push(primitive);
+    assert.throws(()=>validateLesson(lesson),/does not match a supported type/);
+  }
+  for (const value of [null,0,1]) {
+    const lesson=clone();
+    lesson.problems[0].diagram.primitives.push({...dimensionPrimitives.at(-1),width:value});
+    assert.throws(()=>validateLesson(lesson),/does not match a supported type/,'labels do not accept an unused width');
+  }
+});
+
+test('a missing label requires a real typed label and valid dimensions while existing geometry stays exact', () => {
+  const lesson=clone(),problem=lesson.problems[0],cue=problem.steps[0].cues[0];
+  const original=structuredClone(problem.diagram.primitives);
+  cue.state.visibleIds.push('points-3-example-title');
+  assert.throws(()=>validateLesson(lesson),/missing reference points-3-example-title/);
+  const label={...dimensionPrimitives.at(-1),id:'points-3-example-title',text:'3の倍数'};
+  problem.diagram.primitives.push(label);
+  assert.equal(validateLesson(lesson),lesson);
+  label.fontSize=13;
+  assert.throws(()=>validateLesson(lesson),error=>{
+    assert.equal(error.message,'Diagram labels must start at 14 SVG units or larger');
+    assert.deepEqual(error.details,{problemId:problem.id,primitiveId:'points-3-example-title',kind:'label',field:'fontSize',value:13,minimum:14,exclusive:false});
+    return true;
+  });
+  label.fontSize=14;
+  const line={...dimensionPrimitives[0],width:0.25};
+  problem.diagram.primitives.push(line);cue.state.visibleIds.push(line.id);
+  assert.equal(validateLesson(lesson),lesson);
+  const markup=renderScene(problem,cue,problem.steps[0].viewBox,'dimension-repair');
+  assert(markup.includes('stroke-width="0.25"'));
+  assert(markup.includes('>3の倍数</text>'));
+  assert.deepEqual(problem.diagram.primitives.slice(0,original.length),original);
+});
+
 test('typed scene and inline JSON escape markup-shaped lesson strings', async () => {
   const lesson=clone();
   const hostile='</script><script>alert("not-executable")</script><img src=x onerror=alert(1)>';

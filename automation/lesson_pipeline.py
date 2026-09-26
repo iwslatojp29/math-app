@@ -794,13 +794,33 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                     + "。構造所見:" + json_bytes(original_issues).decode() + "。修復前候補:" + json_bytes(original).decode())
                 repair_feedback, issues = "", original_issues
-                for reference_attempt in range(2):
+                invalid_added_dimensions = []
+                dimension_recovery = ""
+                for reference_attempt in range(4):
+                    if reference_attempt == 2:
+                        # Keep the original two requests/cache keys unchanged.
+                        # Only a rejected dimension in a newly added primitive
+                        # earns this separate, bounded recovery. Never widen the
+                        # edit surface to existing geometry or lecture content.
+                        if not invalid_added_dimensions:
+                            break
+                        dimension_recovery = (
+                            "\n【追加した図形の寸法修復】前回、欠落IDに追加したprimitiveが構造検査で拒否されました。"
+                            "拒否された実データ:" + json_bytes(invalid_added_dimensions).decode()
+                            + "。原画像・発話・元候補と照合し、同じ欠落IDの追加要素または既存IDへの対応だけを再提出してください。"
+                            "width・height・radius・strokeWidth・scaleは正数、labelのfontSizeは14以上が必要です。"
+                            "0や負数の絶対値化・固定値への置換・数値の推測で通過させない。原画像と表示目的で根拠を確認する。"
+                            "文字を表す要素ならkind=labelと実際のtext・位置・可視色を使い、width=0等の図形で代用しない。"
+                            "根拠を得られなければverificationをneeds_reviewとして具体的に残す。"
+                            "元のprimitive・viewBox・cue本文と参照順・transform数値・条件・式・答えは編集対象外です。"
+                            "各欠落IDをちょうど1方式で全件覆い、修復後も全小問を独立に検算します。")
+                    invalid_added_dimensions = []
                     report_phase("generating")
                     patch = None
                     try:
                         patch = request_ai.structured(
                             f"lesson-reference-repair-{plan['kind']}-{entry['id']}-{reference_attempt}" + task_suffix,
-                            reference_prompt + repair_feedback, reference_schema, inputs, max_tokens=14000)
+                            reference_prompt + repair_feedback + dimension_recovery, reference_schema, inputs, max_tokens=14000)
                         check_stop()
                         jsonschema.validate(patch, reference_schema)
                     except (StudioError, jsonschema.ValidationError) as error:
@@ -836,6 +856,17 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         issues.append(cue["id"] + ": 参照修復後のtransform対象が重複します。")
                             if not issues:
                                 issues = candidate_issues(patched, entry)
+                                if (len(issues) == 1 and (issues[0].startswith("講義の構造: Invalid primitive ")
+                                        or issues[0].startswith("講義の構造: Diagram labels must start at 14"))):
+                                    for primitive in additions:
+                                        for field in ("width", "height", "radius", "strokeWidth", "scale", "fontSize"):
+                                            if field not in primitive:
+                                                continue
+                                            value = primitive[field]
+                                            minimum = 14 if field == "fontSize" and primitive["kind"] == "label" else 0
+                                            if value <= 0 or (minimum and value < minimum):
+                                                invalid_added_dimensions.append({"id": primitive["id"], "kind": primitive["kind"],
+                                                    "field": field, "value": value, "requirement": "14以上" if minimum else "正数"})
                             if not issues:
                                 report_phase("reviewing")
                                 try:

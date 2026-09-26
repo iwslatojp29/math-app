@@ -23,6 +23,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   const operationLabels = { extract: 'PDFを切り出す', html: '解答解説HTMLを作成する' };
   const jobOperation = job => job?.operation === 'html' ? 'html' : 'extract';
   const active = job => job?.status === 'queued' || job?.status === 'running';
+  const recovering = job => ['failed', 'needs_attention'].includes(job?.status) && (job.retryable === true || job.dispatchUncertain === true);
   const text = value => typeof value === 'string' ? value : '';
   const clean = value => text(value).replace(/\b(?:sk-[A-Za-z0-9_-]{8,}|gh[opsu]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+)\b/g, '[非表示]').replace(/Bearer\s+\S+/gi, 'Bearer [非表示]').slice(0, 4000);
   const node = (tag, className, content) => { const item = document.createElement(tag); if (className) item.className = className; if (content !== undefined) item.textContent = content; return item; };
@@ -79,8 +80,9 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
   }
   function schedule() {
     clearTimeout(state.timer);
-    if (state.authenticated && !document.hidden && state.jobs.some(active)) state.timer = setTimeout(refreshJobs, 10000);
-    $('poll-note').textContent = state.jobs.some(active) ? '作成状況は 10 秒ごとに更新されます。画面を閉じても作成は続きます。' : '作成履歴はクラウドに保存されます。';
+    const watching = state.jobs.some(job => active(job) || recovering(job));
+    if (state.authenticated && !document.hidden && watching) state.timer = setTimeout(refreshJobs, 10000);
+    $('poll-note').textContent = state.jobs.some(recovering) ? '自動再開を待っています。状況は 10 秒ごとに更新されます。画面を閉じてもクラウドで再開します。' : watching ? '作成状況は 10 秒ごとに更新されます。画面を閉じても作成は続きます。' : '作成履歴はクラウドに保存されます。';
   }
   function modelReady() {
     if (!state.models || !state.authenticated || !state.jobsLoaded) return false;
@@ -235,6 +237,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     return link;
   }
   function stageText(job) {
+    if (recovering(job)) return job.dispatchUncertain ? 'クラウド処理の起動を確認しています。状況が確認できると自動で再開します。' : '保存済みの段階からクラウド処理を自動で再開します。再開状況を確認しています。';
     if (['cancelled', 'failed', 'needs_attention'].includes(job.status)) return stageLabels[job.status];
     if (text(job.message)) return clean(job.message);
     if (job.status === 'completed') return jobOperation(job) === 'html' ? '解答解説HTMLを保存し、講義を公開しました' : 'PDFを切り出し、Google Driveへ保存しました';
@@ -252,7 +255,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
         const card = node('article', 'job-card' + (active(job) ? ' active' : '') + (state.selectedJob === id ? ' selected' : ''));
         const top = node('div', 'job-top');
         const status = Object.hasOwn(labels, job.status) ? job.status : '';
-        top.append(node('span', 'badge ' + status, status === 'completed' ? (jobOperation(job) === 'html' ? 'HTML作成完了' : 'PDF保存完了') : labels[status] || '状況を確認中'), node('time', 'date', date(job.createdAt)));
+        top.append(node('span', 'badge ' + status, recovering(job) ? '自動再開待ち' : status === 'completed' ? (jobOperation(job) === 'html' ? 'HTML作成完了' : 'PDF保存完了') : labels[status] || '状況を確認中'), node('time', 'date', date(job.createdAt)));
         const title = node('button', 'job-title', jobName(job));
         title.type = 'button';
         title.dataset.focusKey = 'job:' + id;

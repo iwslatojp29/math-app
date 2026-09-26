@@ -85,7 +85,8 @@ function cleanMessage(value) {
 }
 function publicJob(job) {
   const { id, fileId, fileName, source, model, status, stage, message, progress, createdAt, updatedAt, result: output, error, runId } = job;
-  return { id, fileId, fileName, source, operation: operationOf(job), ...(job.sourceKind ? { sourceKind: job.sourceKind } : {}), model, status, stage, message, progress, createdAt, updatedAt, result: output, error, runId };
+  return { id, fileId, fileName, source, operation: operationOf(job), ...(job.sourceKind ? { sourceKind: job.sourceKind } : {}), model, status, stage, message, progress, createdAt, updatedAt, result: output, error, runId,
+    retryable: job.retryable === true, continuation: job.continuation === true, dispatchUncertain: job.dispatchUncertain === true };
 }
 const operationOf = job => job.operation === 'html' ? 'html' : 'extract';
 const runnerJob = job => ({ ...job, operation: operationOf(job) });

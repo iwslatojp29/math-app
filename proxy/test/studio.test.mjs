@@ -378,6 +378,23 @@ test('legacy completed jobs retain their artifacts and report extract without mu
   assert.deepEqual(await storage.get('job:job-test'), original);
 });
 
+test('public job responses expose only normalized recovery flags for browser polling', async () => {
+  const { state, cookie } = await fixture();
+  for (const flags of [{ retryable: true, continuation: true, dispatchUncertain: false }, { retryable: false, continuation: false, dispatchUncertain: true }, {}]) {
+    await state.saveJob(job({ status: 'failed', ...flags }));
+    await withFetch(() => { throw new Error('Polling flags must not require a provider request'); }, async () => {
+      for (const path of ['/api/studio/jobs', '/api/studio/jobs/job-test']) {
+        const response = await state.fetch(request(path, { cookie }));
+        assert.equal(response.status, 200);
+        const data = await response.json(), published = data.job || data.jobs[0];
+        for (const key of ['retryable', 'continuation', 'dispatchUncertain']) assert.equal(published[key], flags[key] === true);
+        assert.equal(published.fingerprint, undefined);
+        assert.equal(published.folders, undefined);
+      }
+    });
+  }
+});
+
 test('legacy and new extract jobs reject lesson stages, checkpoints, result HTML and publication', async () => {
   const attempts = [
     ['/api/studio/runner/jobs/job-test', 'PATCH', { stage: 'lesson_inventory' }],
@@ -875,19 +892,23 @@ class Element {
 async function uiFixture({ jobs = [], files = [SOURCE], htmlFiles = [{ ...SOURCE, id: 'cut-pdf', name: '日日の演習.pdf', sourceKind: 'practice' }], models = CATALOG, responder, script = studioScript() } = {}) {
   const elements = new Map([...studioPage().matchAll(/\bid="([^"]+)"/g)].map(match => [match[1], new Element()]));
   const calls = [];
+  const timers = new Map(), listeners = {};
+  let nextTimer = 0;
   const document = { hidden: false, activeElement: null, getElementById: id => { assert(elements.has(id), 'Missing UI element: ' + id); return elements.get(id); },
-    createElement: tag => new Element(tag), querySelectorAll: () => [...elements.values()].flatMap(element => [element, ...element.descendants()]), addEventListener() {} };
+    createElement: tag => new Element(tag), querySelectorAll: () => [...elements.values()].flatMap(element => [element, ...element.descendants()]), addEventListener: (type, listener) => { listeners[type] = listener; } };
   const defaults = { '/session': { authenticated: true, configured: true, csrf: CSRF, email: ENV.STUDIO_OWNER_EMAIL }, '/sources?operation=extract': { files }, '/sources?operation=html': { files: htmlFiles }, '/models': models, '/jobs': { jobs }, '/logout': { ok: true } };
   runInNewContext(script, { document, URL, URLSearchParams, AbortController, Intl, Date, Set, console,
     location: { origin: ENV.STUDIO_ORIGIN, pathname: '/studio', search: '', hash: '' }, history: { replaceState() {} }, matchMedia: () => ({ matches: true }),
-    setTimeout: () => 1, clearTimeout() {}, fetch: async (url, options) => {
+    setTimeout: (callback, delay) => { const id = ++nextTimer; timers.set(id, { callback, delay }); return id; }, clearTimeout: id => timers.delete(id), fetch: async (url, options) => {
       const path = url.replace('/api/studio', ''); calls.push({ path, options });
       return await responder?.(path, options) || Response.json(defaults[path] || { job: jobs.find(job => path === '/jobs/' + job.id) });
     },
   });
   const flush = async () => { for (let i = 0; i < 6; i++) await new Promise(resolve => setImmediate(resolve)); };
   await flush();
-  return { elements, calls, flush, click: async id => { await elements.get(id).listeners.click?.(); await flush(); } };
+  return { elements, calls, timers, flush, click: async id => { await elements.get(id).listeners.click?.(); await flush(); },
+    visible: async value => { document.hidden = !value; await listeners.visibilitychange?.(); await flush(); },
+    poll: async () => { const scheduled = [...timers].filter(([, timer]) => timer.delay === 10000); assert.equal(scheduled.length, 1); const [id, timer] = scheduled[0]; timers.delete(id); await timer.callback(); await flush(); } };
 }
 
 test('studio renders real pipeline outputs, partial errors, warnings and safe links', async () => {
@@ -1075,4 +1096,56 @@ test('studio refreshes an already visited HTML source list after extraction comp
   assert.match(ui.elements.get('sources').textContent, /新しく切り出したPDF.pdf/);
   assert.equal(ui.calls.filter(call => call.path === '/sources?operation=html').length, 2);
   assert(!ui.calls.some(call => call.options.method === 'POST'));
+});
+
+test('studio polls recoverable failures through automatic restart and completion', async () => {
+  for (const flags of [{ status: 'failed', retryable: true }, { status: 'failed', retryable: true, continuation: true }, { status: 'needs_attention', dispatchUncertain: true }]) {
+    let current = job(flags);
+    const ui = await uiFixture({ responder: (path, options) => path === '/jobs' && options.method !== 'POST' ? Response.json({ jobs: [current] }) : null });
+    assert.match(ui.elements.get('jobs').textContent, /自動再開待ち/);
+    assert.match(ui.elements.get('poll-note').textContent, /自動再開を待っています/);
+    for (const status of ['queued', 'running']) {
+      current = { ...current, status, retryable: false, continuation: false, dispatchUncertain: false };
+      await ui.poll();
+      assert(!ui.elements.get('jobs').textContent.includes('自動再開待ち'));
+      assert.equal([...ui.timers.values()].filter(timer => timer.delay === 10000).length, 1);
+    }
+    current = { ...current, status: 'completed' };
+    await ui.poll();
+    assert.match(ui.elements.get('jobs').textContent, /PDF保存完了/);
+    assert.equal(ui.timers.size, 0);
+    assert(!ui.calls.some(call => call.options.method === 'POST'), 'browser observation must never dispatch or retry work');
+  }
+});
+
+test('studio resumes recovery polling after browser visibility returns and stops when recovery is exhausted', async () => {
+  let current = job({ status: 'failed', retryable: true, continuation: true });
+  const ui = await uiFixture({ responder: (path, options) => path === '/jobs' && options.method !== 'POST' ? Response.json({ jobs: [current] }) : null });
+  await ui.visible(false);
+  assert.equal(ui.timers.size, 0, 'hidden documents must stop browser timers');
+  const previousReads = ui.calls.filter(call => call.path === '/jobs').length;
+  await ui.visible(true);
+  assert.equal(ui.calls.filter(call => call.path === '/jobs').length, previousReads + 1, 'returning to the page refreshes immediately');
+  assert.equal([...ui.timers.values()].filter(timer => timer.delay === 10000).length, 1);
+  current = { ...current, retryable: false };
+  await ui.poll();
+  assert.equal(ui.timers.size, 0, 'continuation alone must not imply a pending server retry');
+  assert(!ui.elements.get('jobs').textContent.includes('自動再開待ち'));
+  assert(!ui.calls.some(call => call.options.method === 'POST'));
+});
+
+test('studio does not poll terminal states or review failures without pending recovery', async () => {
+  for (const values of [
+    { status: 'failed' }, { status: 'needs_attention', retryable: false },
+    { status: 'needs_attention', continuation: true, retryable: false },
+    { status: 'completed', retryable: true, continuation: true, dispatchUncertain: true },
+    { status: 'cancelled', retryable: true, continuation: true, dispatchUncertain: true },
+  ]) {
+    const ui = await uiFixture({ jobs: [job(values)] });
+    assert.equal(ui.timers.size, 0, JSON.stringify(values));
+    await ui.visible(false);
+    await ui.visible(true);
+    assert.equal(ui.timers.size, 0, 'a visibility refresh must not start infinite polling');
+    assert(!ui.elements.get('jobs').textContent.includes('自動再開待ち'));
+  }
 });
