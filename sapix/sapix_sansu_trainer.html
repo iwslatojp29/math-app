@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="color-scheme" content="light dark">
-<title>SAPIX算数 間違え直し</title>
+<title>20260926‗SAPIX間違い一覧</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap">
 <style>
 :root{
@@ -250,6 +250,7 @@ svg{display:block}
 .recorded{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:14px;font-family:var(--font-disp);font-weight:700;font-size:14px;color:var(--ink-2)}
 .recorded .mk{width:22px;height:22px;flex:none}
 .recorded .undo{color:var(--muted);text-decoration:underline;font-weight:500;font-size:13px}
+.record .save-error{margin:12px 0 0;color:var(--ng);font-weight:700;font-size:14px;line-height:1.7}
 .nav{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 4px 0;flex-wrap:wrap}
 .nav .btn{min-height:46px;font-size:15px}
 
@@ -328,7 +329,7 @@ svg{display:block}
   <aside class="side" id="side" aria-label="メニュー">
     <div class="brand">
       <div class="brand-logo" aria-hidden="true">算</div>
-      <h1>SAPIX算数 間違え直し<small>1問1分・〇△×で記録・全単元</small></h1>
+      <h1>20260926‗SAPIX間違い一覧<small>1問1分・〇△×で記録・全単元</small></h1>
     </div>
     <div class="side-scroll">
       <section class="side-sec">
@@ -14520,13 +14521,81 @@ registerProblems([
 
 /* ====================== 状態・保存 ====================== */
 var LS_REC = 'sapix_sansu_records_v1', LS_SET = 'sapix_sansu_settings_v1';
-var state = { unit: '計算', filter: 'all', test: '*', sort: 'no', pid: null, revealed: false, justRecorded: null, records: {}, settings: {limit: 60, sound: true} };
+var state = { unit: '計算', filter: 'all', test: '*', sort: 'no', pid: null, revealed: false, justRecorded: null, records: {}, recordsError: '', recordsBlocked: false, recordsRaw: null, settings: {limit: 60, sound: true} };
 
 function loadAll(){
-  try { var r = JSON.parse(localStorage.getItem(LS_REC) || '{}'); if (r && typeof r === 'object') state.records = r; } catch (e) {}
+  try {
+    state.recordsRaw = localStorage.getItem(LS_REC);
+    var loaded = validateRecordMap(JSON.parse(state.recordsRaw == null ? '{}' : state.recordsRaw));
+    state.records = loaded.records;
+    if (loaded.invalid) throw new Error('invalid records');
+    state.recordsBlocked = false;
+    recordsError('');
+  } catch (e) {
+    state.recordsBlocked = true;
+    recordsError('保存済みの記録を完全には読み込めません。元の記録は変更していません。「記録を書き出す」で保管し、内容やブラウザの設定を確認してください。');
+  }
   try { var s = JSON.parse(localStorage.getItem(LS_SET) || '{}'); if (s && typeof s === 'object') { if (s.limit) state.settings.limit = +s.limit; if (typeof s.sound === 'boolean') state.settings.sound = s.sound; if (s.unit) state.unit = s.unit; if (s.filter) state.filter = s.filter; if (s.test) state.test = s.test; if (s.sort) state.sort = s.sort; if (s.pid) state.pid = s.pid; } } catch (e) {}
 }
-function saveRecords(){ try { localStorage.setItem(LS_REC, JSON.stringify(state.records)); return true; } catch (e) { toast('保存できませんでした（ブラウザの設定を確認）'); return false; } }
+function validRecordDate(value){
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  var y = +value.slice(0, 4), m = +value.slice(5, 7), d = +value.slice(8, 10);
+  if (y < 1 || m < 1 || m > 12 || d < 1) return false;
+  var date = new Date(0); date.setUTCFullYear(y, m - 1, d);
+  return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d;
+}
+function validateRecordMap(source){
+  var records = Object.create(null), invalid = false;
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return {records: records, invalid: true};
+  Object.keys(source).forEach(function(pid){
+    var rows = source[pid];
+    if (!pid || !Array.isArray(rows)) { invalid = true; return; }
+    records[pid] = [];
+    rows.forEach(function(row){
+      if (!row || typeof row !== 'object' || Array.isArray(row) || !validRecordDate(row.d) || typeof row.r !== 'string' || !Object.prototype.hasOwnProperty.call(MARK, row.r) ||
+          (row.s != null && (typeof row.s !== 'number' || !Number.isFinite(row.s) || row.s < 0)) ||
+          (row.over !== undefined && typeof row.over !== 'boolean')) { invalid = true; return; }
+      records[pid].push(JSON.parse(JSON.stringify(row)));
+    });
+  });
+  return {records: records, invalid: invalid};
+}
+function copyRecords(){
+  var records = Object.create(null);
+  Object.keys(state.records).forEach(function(pid){ records[pid] = state.records[pid].slice(); });
+  return records;
+}
+function recordsError(message){
+  state.recordsError = message;
+  var el = $('recordError');
+  if (el) { el.textContent = message; el.hidden = !message; }
+  var modal = $('modal'), modalError = $('modalRecordError');
+  if (message && modal && !modal.hidden) {
+    if (!modalError) { modalError = document.createElement('p'); modalError.id = 'modalRecordError'; modalError.setAttribute('role', 'alert'); $('modalText').appendChild(modalError); }
+    modalError.textContent = message;
+  } else if (modalError) modalError.remove();
+  if (message) toast(message);
+}
+function saveRecords(candidate, replaceUnreadable){
+  if (state.recordsBlocked && !replaceUnreadable) {
+    recordsError('保存済みの記録に読み取れない項目があるため、上書きしていません。「記録を書き出す」で元データを保管して確認してください。');
+    return false;
+  }
+  try {
+    var checked = validateRecordMap(candidate);
+    if (checked.invalid) throw new Error('invalid records');
+    var json = JSON.stringify(checked.records);
+    localStorage.setItem(LS_REC, json);
+    state.records = checked.records;
+    state.recordsRaw = json;
+    state.recordsBlocked = false;
+    recordsError('');
+    return true;
+  } catch (e) {
+    recordsError('記録を保存できませんでした。今回の変更は保存されていません。ブラウザの保存設定や空き容量を確認し、もう一度押してください。');
+    return false;
+  }
+}
 function saveSettings(){ try { localStorage.setItem(LS_SET, JSON.stringify({limit: state.settings.limit, sound: state.settings.sound, unit: state.unit, filter: state.filter, test: state.test, sort: state.sort, pid: state.pid})); } catch (e) {} }
 
 function recs(pid){ return state.records[pid] || []; }
@@ -14670,14 +14739,17 @@ function renderProblem(){
       '<section class="record" id="record" hidden>' +
         '<p class="q">自分で採点しよう（今日の日付で記録されます）</p>' +
         '<div class="marks">' +
-          ['o', 't', 'x'].map(function(r){ return '<button class="mbtn" data-r="' + r + '" aria-pressed="false">' + mk(r) + '<span class="cap">' + MARK[r] + ' ' + MARK_CAP[r] + '</span></button>'; }).join('') +
+          ['o', 't', 'x'].map(function(r){ return '<button type="button" class="mbtn" data-r="' + r + '" aria-pressed="false">' + mk(r) + '<span class="cap">' + MARK[r] + ' ' + MARK_CAP[r] + '</span></button>'; }).join('') +
         '</div>' +
-        '<div class="recorded" id="recorded" hidden></div>' +
+        '<div class="recorded" id="recorded" role="status" aria-live="polite" hidden></div>' +
+        '<p class="save-error" id="recordError" role="alert"' + (state.recordsError ? '' : ' hidden') + '>' + esc(state.recordsError) + '</p>' +
       '</section>' +
     '</article>' +
     '<div class="nav"><button class="btn ghost" id="prevBtn">← 前の問題</button><button class="btn" id="nextBtn">次の問題 →</button></div>';
   $content.innerHTML = html;
   state.revealed = false; state.justRecorded = null;
+  var markButtons = $content.querySelectorAll('.mbtn');
+  for (var b = 0; b < markButtons.length; b++) markButtons[b].addEventListener('click', function(e){ record(e.currentTarget.dataset.r); });
   var list = visible(), idx = -1;
   list.forEach(function(q, i){ if (q.id === p.id) idx = i; });
   $('prevBtn').disabled = idx <= 0;
@@ -14752,12 +14824,14 @@ function reveal(){
   setTimeout(function(){ var a = $('answer'); if (a && a.scrollIntoView) a.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 30);
 }
 function record(r){
-  var p = current(); if (!p) return;
-  var list = state.records[p.id] || (state.records[p.id] = []);
+  var p = current(); if (!p || !state.revealed || typeof r !== 'string' || !Object.prototype.hasOwnProperty.call(MARK, r)) return;
+  var candidate = copyRecords(), list = candidate[p.id] || (candidate[p.id] = []);
   var rec = {d: todayISO(), r: r, s: Math.round(elapsedSec()), over: T.over || undefined};
-  if (state.justRecorded != null && list[state.justRecorded]) list[state.justRecorded] = rec;
-  else { list.push(rec); state.justRecorded = list.length - 1; }
-  saveRecords();
+  var index = state.justRecorded;
+  if (index != null && list[index]) list[index] = rec;
+  else { list.push(rec); index = list.length - 1; }
+  if (!saveRecords(candidate)) return;
+  state.justRecorded = index;
   $('hist').innerHTML = historyHtml(p.id, true);
   $('hist').scrollLeft = -1e6;
   var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-r') === r));
@@ -14769,9 +14843,11 @@ function record(r){
 }
 function undoRecord(){
   var p = current(); if (!p || state.justRecorded == null) return;
-  var list = state.records[p.id] || [];
-  list.splice(state.justRecorded, 1); if (!list.length) delete state.records[p.id];
-  state.justRecorded = null; saveRecords();
+  var candidate = copyRecords(), list = candidate[p.id] || [];
+  if (!list[state.justRecorded]) return;
+  list.splice(state.justRecorded, 1); if (!list.length) delete candidate[p.id];
+  if (!saveRecords(candidate)) return;
+  state.justRecorded = null;
   $('hist').innerHTML = historyHtml(p.id);
   var btns = document.querySelectorAll('.mbtn'); for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', 'false');
   $('recorded').hidden = true; var nb = $('nextBtn'); if (nb) nb.classList.remove('primary');
@@ -14814,8 +14890,9 @@ function hideModal(){ $('modal').hidden = true; }
 
 function exportRecords(){
   var data = {app: 'sapix-sansu', version: 1, exported: new Date().toISOString(), records: state.records};
-  var json = JSON.stringify(data, null, 1);
-  showModal({title: '記録を書き出す', text: '下の文字をコピーして保存するか、ファイルとしてダウンロードしてください。別の端末の「読み込む」に貼りつけると記録を合わせられます。', textarea: true, value: json, readOnly: true, actions: [
+  var rawBackup = state.recordsBlocked && state.recordsRaw != null;
+  var json = rawBackup ? state.recordsRaw : JSON.stringify(data, null, 1);
+  showModal({title: '記録を書き出す', text: rawBackup ? '読み取れなかった項目を含む、保存済みの元データです。修正や消去の前に、下の文字をコピーするかダウンロードして保管してください。' : '下の文字をコピーして保存するか、ファイルとしてダウンロードしてください。別の端末の「読み込む」に貼りつけると記録を合わせられます。', textarea: true, value: json, readOnly: true, actions: [
     {label: 'コピー', fn: function(){
       var ta = $('modalTa');
       var done = function(){ toast('コピーしました'); };
@@ -14829,47 +14906,48 @@ function exportRecords(){
   ]});
 }
 function mergeRecords(obj){
-  var src = obj && obj.records ? obj.records : obj; if (!src || typeof src !== 'object') throw new Error('bad');
-  var added = 0;
-  Object.keys(src).forEach(function(pid){
-    if (!Array.isArray(src[pid])) return;
-    var cur = state.records[pid] || (state.records[pid] = []);
-    src[pid].forEach(function(x){
-      if (!x || !x.d || !MARK[x.r]) return;
-      var dup = cur.some(function(y){ return y.d === x.d && y.r === x.r && (y.s | 0) === (x.s | 0); });
-      if (!dup) { cur.push({d: x.d, r: x.r, s: x.s, over: x.over}); added++; }
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new Error('bad');
+  var wrapped = Object.prototype.hasOwnProperty.call(obj, 'records');
+  if (wrapped && ((obj.app !== undefined && obj.app !== 'sapix-sansu') || (obj.version !== undefined && obj.version !== 1))) throw new Error('unsupported records');
+  var checked = validateRecordMap(wrapped ? obj.records : obj);
+  if (checked.invalid) throw new Error('invalid records');
+  var candidate = copyRecords(), added = 0;
+  Object.keys(checked.records).forEach(function(pid){
+    var cur = candidate[pid] || (candidate[pid] = []);
+    checked.records[pid].forEach(function(x){
+      var dup = cur.some(function(y){ return y.d === x.d && y.r === x.r && (y.s == null ? 0 : y.s) === (x.s == null ? 0 : x.s); });
+      if (!dup) { cur.push(x); added++; }
     });
     cur.sort(function(a, b){ return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
-    if (!cur.length) delete state.records[pid];
+    if (!cur.length) delete candidate[pid];
   });
-  return added;
+  return {records: candidate, added: added};
 }
 function importRecords(){
   showModal({title: '記録を読み込む', text: '書き出した内容を貼りつけるか、ファイルを選んでください。今の記録に<b>追加</b>されます（同じ記録は重複しません）。', textarea: true, value: '', actions: [
     {label: 'ファイルを選ぶ', fn: function(){ var inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json,application/json'; inp.addEventListener('change', function(){ var f = inp.files[0]; if (!f) return; var fr = new FileReader(); fr.onload = function(){ $('modalTa').value = String(fr.result || ''); }; fr.readAsText(f); }); inp.click(); }},
     {label: '読み込む', fn: function(){
-      try { var n = mergeRecords(JSON.parse($('modalTa').value)); saveRecords(); hideModal(); ensureSelection(); renderSide(); renderProblem(); toast(n + ' 件の記録を追加しました'); }
-      catch (e) { toast('読み込めませんでした。書き出した内容をそのまま貼りつけてください'); }
+      try { var result = mergeRecords(JSON.parse($('modalTa').value)); if (!saveRecords(result.records)) return; hideModal(); ensureSelection(); renderSide(); renderProblem(); toast(result.added + ' 件の記録を追加しました'); }
+      catch (e) { recordsError('読み込めませんでした。日付・採点・所要時間・形式を確認し、書き出した内容をそのまま貼りつけてください。今の記録は変更していません。'); }
     }},
     {label: '閉じる', fn: hideModal}
   ]});
 }
 function clearRecords(){
   var n = 0; Object.keys(state.records).forEach(function(k){ n += state.records[k].length; });
-  showModal({title: '記録をすべて消去', text: 'この端末に保存されている ' + n + ' 件の記録を消します。この操作は元に<b>もどせません</b>。心配なら先に「記録を書き出す」で保存してください。', actions: [
-    {label: '消去する', danger: true, fn: function(){ state.records = {}; saveRecords(); hideModal(); ensureSelection(); renderSide(); renderProblem(); toast('記録を消去しました'); }},
+  showModal({title: '記録をすべて消去', text: 'この端末に保存されている ' + n + ' 件の記録' + (state.recordsBlocked ? 'と、読み取れない保存済みデータもすべて' : '') + 'を消します。この操作は元に<b>もどせません</b>。心配なら先に「記録を書き出す」で保存してください。', actions: [
+    {label: '消去する', danger: true, fn: function(){ if (!saveRecords({}, true)) return; hideModal(); ensureSelection(); renderSide(); renderProblem(); toast('記録を消去しました'); }},
     {label: 'やめる', fn: hideModal}
   ]});
 }
 
 document.addEventListener('click', function(e){
-  var t = e.target.closest('button, a'); if (!t) return;
+  var t = e.target && typeof e.target.closest === 'function' ? e.target.closest('button, a') : null; if (!t) return;
   if (t.dataset.filter) { setFilter(t.dataset.filter); return; }
   if (t.dataset.test) { setTest(t.dataset.test); return; }
   if (t.dataset.sort) { setSort(t.dataset.sort); return; }
   if (t.dataset.unit) { setUnit(t.dataset.unit); return; }
   if (t.dataset.pid) { selectProblem(t.dataset.pid); return; }
-  if (t.classList.contains('mbtn')) { record(t.dataset.r); return; }
   switch (t.id) {
     case 'revealBtn': reveal(); break;
     case 'pauseBtn': T.running ? timerPause() : timerStart(); break;
