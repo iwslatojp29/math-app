@@ -97,6 +97,75 @@ class ReviewNamedLabelTests(unittest.TestCase):
                 self.assertEqual(self.case.counts["targets"], 0)
                 self.case.broken["diagram"]["primitives"] = [item for item in self.case.broken["diagram"]["primitives"] if item["id"] != "hidden-extra"]
 
+    @staticmethod
+    def as_line(primitive):
+        return {**{key: value for key, value in primitive.items() if key not in ("kind", "points")},
+                "kind": "line", "x1": primitive["points"][0]["x"], "y1": primitive["points"][0]["y"],
+                "x2": primitive["points"][-1]["x"], "y2": primitive["points"][-1]["y"]}
+
+    def test_line_synonyms_repair_actual_line_or_polyline_data_and_keep_arrow(self):
+        original = copy.deepcopy(self.case.broken)
+        for term, line_ids in (("線分", {"a"}), ("折れ線", {"a", "b"}), ("line", {"b"})):
+            with self.subTest(term=term):
+                self.requests.clear()
+                self.case.counts = dict.fromkeys(self.case.counts, 0)
+                self.case.broken = copy.deepcopy(original)
+                self.case.broken["diagram"]["primitives"] = [self.as_line(item) if item["id"] in line_ids else item
+                                                            for item in self.case.broken["diagram"]["primitives"]]
+                self.case.issue = (f"必要な図中文字が全欠落している。例えばaとbは点名ではなく{term}である。"
+                                   "文字対象は実際のkind=label、非空text、fontSize14以上、可視色の文字へ修正が必要。")
+                lesson, _ = self.generate()
+                primitives = {item["id"]: item for item in lesson["problems"][0]["diagram"]["primitives"]}
+                self.assertEqual([primitives[item]["kind"] for item in ("a", "b")], ["label", "label"])
+                self.assertEqual(primitives["a-10"], self.arrow)
+                new = [item for item in self.requests if "-review-linear" in item[0]]
+                self.assertEqual(len(new), 3)
+                self.assertIn('必須ID:["a","b"]', new[0][1])
+                self.assertTrue(all("line/polyline" in item[1] for item in new))
+                properties = new[1][2]["$defs"]["label"]["properties"]
+                self.assertEqual(properties["fontSize"]["minimum"], 14)
+                self.assertEqual(properties["text"]["pattern"], r"\S")
+                self.assertNotIn("none", properties["color"]["enum"])
+                self.assertEqual(self.case.counts["patch-review"], 1)
+
+    def test_japanese_line_finding_does_not_approve_replacing_a_legitimate_arrow(self):
+        self.case.issue = "必要な図中文字が欠落。aとbもすべて線分で点名が存在しない。実際のkind=labelへ修正が必要。"
+        for problem in (self.case.original, self.case.broken):
+            problem["diagram"]["primitives"] = [self.as_line(item) if item["id"] == "a-10" or item["id"] == "a" and item["kind"] == "polyline" else item
+                                                 for item in problem["diagram"]["primitives"]]
+        def mutate(stage, count, value):
+            if stage == "targets":
+                value["targets"].append({"id": "a-10", "whyTextNeeded": "Synthetic incorrect text interpretation.",
+                    "cueIds": [self.case.original["steps"][0]["cues"][0]["id"]]})
+            elif stage == "patch":
+                value["labels"].append({**self.case.labels[0], "id": "a-10", "text": "分解"})
+            elif stage == "patch-review":
+                value.update(approved=False, issues=["a-10の線分は正当な分解矢印です。文字へ変える根拠はありません。"])
+        self.case.mutate = mutate
+        error = self.blocked()
+        self.assertEqual(self.case.counts["patch"], 2)
+        self.assertEqual(self.case.counts["patch-review"], 2)
+        self.assertIn("正当な分解矢印", " ".join(error.details))
+
+    def test_actual_lines_still_require_full_original_review_and_independent_math_approval(self):
+        self.case.issue = "必須文字aとbがlineでありラベルが不足しています。"
+        self.case.broken["diagram"]["primitives"] = [self.as_line(item) if item["id"] in ("a", "b") else item
+                                                     for item in self.case.broken["diagram"]["primitives"]]
+        for mode in ("coverage", "math"):
+            with self.subTest(mode=mode):
+                self.case.counts = dict.fromkeys(self.case.counts, 0)
+                def mutate(stage, count, value):
+                    if mode == "coverage" and stage == "review":
+                        value["checkedSubquestionIds"] = []
+                    if mode == "math" and stage == "patch-review":
+                        value.update(approved=False, issues=["原問題の条件と答えが一致せず、独立検算で否認します。"])
+                self.case.mutate = mutate
+                error = self.blocked()
+                self.assertEqual(self.case.counts["targets"], 0 if mode == "coverage" else 1)
+                self.assertEqual(self.case.counts["patch-review"], 0 if mode == "coverage" else 2)
+                if mode == "math":
+                    self.assertIn("独立検算で否認", " ".join(error.details))
+
     def test_selection_must_cover_named_id_with_actual_visible_cues_and_nonempty_evidence(self):
         for mode in ("missing", "invented", "blank", "wrong-cue"):
             with self.subTest(mode=mode):

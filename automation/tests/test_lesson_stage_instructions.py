@@ -86,6 +86,13 @@ class LessonStageInstructionsTests(unittest.TestCase):
                 self.assertIn("Legitimate invisible geometry anchors remain allowed", instructions)
                 self.assertIn("make and inspect the actual JSON change", instructions)
                 self.assertIn("claim a repair or a conversion to labels while leaving the data unchanged", instructions)
+                self.assertIn("Separate preceding stages inventory every problem", instructions)
+                self.assertIn("Requirements to include every problem apply to that final collection", instructions)
+                self.assertIn("verify every subquestion of the assigned problem", instructions)
+                self.assertIn("do not recursively demand all unrelated pages", instructions)
+                self.assertIn("Do not claim to have personally checked images or inventory evidence that was not supplied", instructions)
+                self.assertIn("compare it with the actual images rather than blindly trusting it", instructions)
+                self.assertIn("division into stages is never evidence that such an issue was resolved", instructions)
                 self.assertEqual(payload["input"], [{"role": "user", "content": [
                     {"type": "input_text", "text": PROMPT},
                     {"type": "input_image", "image_url": IMAGES[0], "detail": "high"}]}])

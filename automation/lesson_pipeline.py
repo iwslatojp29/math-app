@@ -358,47 +358,65 @@ def inventory_questions(doc, ai, plan, directory, specification, *, page_managem
     return problems, images
 
 
-def inventory_scope_context(candidate, issues, entry, inventory, image_pages, images, page_management):
+def inventory_scope_context(candidate, issues, entry, inventory, image_pages, images, page_management, *, independent_review=None):
     """Add actual whole-document evidence only after an explicit scope conflict.
 
     This is a request for fresh source-grounded verification, not an approval or
     a filter over findings. Original per-problem requests remain cache-compatible.
     """
-    if (not isinstance(candidate, dict) or not issues
-            or issues[0] != "候補自身の数学・読みの検証が未解決です。"):
+    if not isinstance(candidate, dict) or not issues:
         return None
-    findings = candidate["verification"]["unresolvedIssues"]
+    if independent_review is None:
+        if issues[0] != "候補自身の数学・読みの検証が未解決です。":
+            return None
+        findings = candidate["verification"]["unresolvedIssues"]
+    else:
+        try:
+            jsonschema.validate(independent_review, PROBLEM_REVIEW)
+        except jsonschema.ValidationError:
+            return None
+        fields = ("independentCheck", "officialAnswerCheck", "reasoningCheck", "readingsCheck")
+        if (independent_review["approved"] or not independent_review["issues"]
+                or independent_review["checkedSubquestionIds"] != [item["id"] for item in entry["subquestions"]]
+                or not all(independent_review[key].strip() for key in fields)):
+            return None
+        findings = independent_review["issues"]
     records = [{"id": item["id"], "sectionId": item["sectionId"], "number": item["number"],
                 "pdfPages": item["pdfPages"], "officialSolutionPages": item["officialSolutionPages"],
                 "subquestionIds": [sub["id"] for sub in item["subquestions"]]} for item in inventory]
     neighbours = [item for item in records if item["id"] != entry["id"]
                   and set(item["pdfPages"] + item["officialSolutionPages"]) & set(image_pages)]
-    ordinary_scope = any("unpairedPages" in issue or (
+    ordinary_findings = [bool("unpairedPages" in issue or (
             re.search(r"全PDF|全ページ|全体管理|全体の管理|全問一覧|別問題|他の問題", issue)
-            and re.search(r"未確認|未解決|未完了|保持|管理|対応|続き", issue)) for issue in findings)
+            and re.search(r"未確認|未解決|未完了|保持|管理|対応|続き", issue))) for issue in findings]
     # Keep existing gates separate so already accepted request fingerprints
     # (including the named-connection addendum) do not change. New synonyms
     # must describe document coverage, not uncertainty about a whole diagram.
-    document_scope = any(
+    document_findings = [any(
         re.search(r"(?:PDF|教材|冊子)全体|全冊子|全[0-9０-９一二三四五六七八九十百]*問(?:一覧)?|"
                   r"全体の?対象一覧|他の掲載問題|収録状況|問題一覧|ページ対応", sentence, re.I)
         and re.search(r"対象一覧|問題一覧|全[0-9０-９一二三四五六七八九十百]*問一覧|収録|掲載問題|ページ対応|残りページ", sentence)
         and re.search(r"未確認|未解決|未完了|不足|含まれない|必要", sentence)
-        for issue in findings for sentence in re.split(r"[。！？\n]", issue))
+        for sentence in re.split(r"[。！？\n]", issue)) for issue in findings]
     # A previous question's solution can be visible without its question
     # statement. Expand the gate only for a named, actually overlapping
     # inventory entry and an unresolved source-page connection.
-    named_connection = any(
+    named_findings = [bool(
         re.search(r"前問|前の問題|次問|次の問題|後の問題|隣接問題|全[0-9０-９]+問一覧", issue)
         and re.search(r"ページ|画像|本文|解説|公式解答", issue)
         and re.search(r"接続|続き|対応|照合", issue)
         and re.search(r"未確認|未解決|未完了|不足|必要", issue)
         and any(re.search(r"(?<![A-Za-z0-9_-])" + re.escape(item["id"]) + r"(?![A-Za-z0-9_-])", issue)
-                for item in neighbours) for issue in findings)
+                for item in neighbours)) for issue in findings]
+    ordinary_scope, document_scope, named_connection = map(any, (ordinary_findings, document_findings, named_findings))
+    if independent_review is not None and not all(any(flags) for flags in zip(ordinary_findings, document_findings, named_findings)):
+        # Source context cannot repair a separate mathematical rejection or
+        # missing review coverage. Preserve every original finding unchanged.
+        return None
     if not ordinary_scope and not document_scope and not named_connection:
         return None
     solution_only_neighbours = [item for item in neighbours if not set(item["pdfPages"]) & set(image_pages)]
-    connection_recovery = bool(solution_only_neighbours) or (named_connection and not ordinary_scope)
+    connection_recovery = independent_review is not None or bool(solution_only_neighbours) or (named_connection and not ordinary_scope)
     shown = image_pages + sorted({page for item in neighbours for page in
         item["pdfPages"] + item["officialSolutionPages"]} - set(image_pages))
     require(set(shown) <= set(images), "lesson_source_images", "隣接問題の続き画像を確認できません。公開を保留しました。", True)
@@ -415,6 +433,8 @@ def inventory_scope_context(candidate, issues, entry, inventory, image_pages, im
         observed["primaryImagePages"] = list(image_pages)
         observed["observedSolutionLinks"] = [link for record in management for link in record["links"]
                                               if link["problemId"] in relevant_ids]
+    if independent_review is not None:
+        observed["previousIndependentReview"] = independent_review
     context = ("\n【全問一覧と今回の1問の担当範囲】次は全問一覧と公式解答対応の検査工程から保持した実データです。"
         "推測したページ対応ではありません。今回の結果はtargetProblemIdだけですが、他の登録問題を削除・対象外にはしません。"
         "全PDFの全問を別々の生成で完成させて結合します。同じ原画像に写る別問題の冒頭と、今回追加した続き・解答画像を照合してください。"
@@ -576,6 +596,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
         def generate_one(index, request_ai, report_phase):
             entry = inventory[index]
             image_pages = sorted(set(entry["pdfPages"] + entry["officialSolutionPages"]))
+            primary_image_pages = list(image_pages)
             inputs = [image_data(images[page]) for page in image_pages]
             prompt = (specification + "\n\n対象一覧の次の1大問だけを全小問分完成させてください。"
                 "答え・数値・図・音声文・静的解説を一貫させ、原画像を照合し算数で独立に解いて検算。"
@@ -715,6 +736,71 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 feedback = "\n独立検証で以下が未解決です。原画像で修正:" + json_bytes(review).decode()
                 feedback += "\n修正対象の前回候補:" + json_bytes(candidate).decode()
 
+            scope_review_attempts = 0
+
+            def review_inventory_scope(original, original_review, original_issues, namespace):
+                """Recheck an unchanged candidate with missing inventory evidence.
+
+                This runs only after the existing requests have been consumed.
+                All late audit paths share a two-request limit per problem.
+                """
+                nonlocal scope_review_attempts
+                if scope_review_attempts >= 2:
+                    return None, original_issues
+                recovered = inventory_scope_context(original, original_issues, entry, inventory,
+                    primary_image_pages, images, page_management, independent_review=original_review)
+                if recovered is None or candidate_issues(original, entry):
+                    return None, original_issues
+                context, shown = recovered
+                review_inputs = [image_data(images[page]) for page in shown]
+                review_prompt = (specification + "\n【独立検証の担当範囲と追加証拠】次の候補データは変更していません。"
+                    "前回の独立検証が未確認とした全体一覧・収録・ページ対応について、保持済みの管理情報と追加原画像を照合してください。"
+                    "原auditの指摘を単に削除せず、原画像から対象問題の全小問を別に検算する。"
+                    "条件・全式・数量・単位・例外・解法の根拠・公式解答・図の実データ・全cueの状態と読みを再確認する。"
+                    "追加証拠によって具体的な指摘が解消した場合だけapproved=trueとし、その確認根拠を記録する。"
+                    "候補は一切修正されていないため、数学・教材・図・読みの誤りや必要な原画像の不足が残ればapproved=false。"
+                    "全小問IDを順序どおりcheckedSubquestionIdsへ記し、根拠欄を埋める。"
+                    "対象以外の問題を削除したり、全教材の講義・ブラウザ検証・実音声試聴を完了扱いにしない。"
+                    "画像順:" + str(shown) + "。対象一覧:" + json_bytes(entry).decode()
+                    + "。原独立検証:" + json_bytes(original_review).decode()
+                    + "。原所見:" + json_bytes(original_issues).decode()
+                    + "。変更していない候補:" + json_bytes(original).decode() + context)
+                feedback, issues = "", original_issues
+                while scope_review_attempts < 2:
+                    attempt = scope_review_attempts
+                    scope_review_attempts += 1
+                    report_phase("reviewing")
+                    try:
+                        audit = request_ai.structured(
+                            f"lesson-review-inventory-context-{plan['kind']}-{entry['id']}-{namespace}-{attempt}" + task_suffix,
+                            review_prompt + feedback, PROBLEM_REVIEW, review_inputs, max_tokens=14000)
+                        check_stop()
+                        jsonschema.validate(audit, PROBLEM_REVIEW)
+                    except (StudioError, jsonschema.ValidationError) as error:
+                        if isinstance(error, StudioError) and error.code != "model_schema":
+                            raise
+                        return None, [*original_issues, "追加証拠による独立検証が指定されたschemaに一致しません。"]
+                    required = [item["id"] for item in entry["subquestions"]]
+                    fields = ("independentCheck", "officialAnswerCheck", "reasoningCheck", "readingsCheck")
+                    complete = audit["checkedSubquestionIds"] == required and all(audit[key].strip() for key in fields)
+                    if audit["approved"] and not audit["issues"] and complete:
+                        verified_candidate = copy.deepcopy(original)
+                        verified_candidate["verification"] = {"status": "verified",
+                            **{key: audit[key] for key in fields}, "unresolvedIssues": []}
+                        return verified_candidate, []
+                    issues = list(audit["issues"])
+                    if not complete:
+                        issues.append("追加証拠による独立検証の全小問確認または根拠が不十分です。")
+                    if not issues:
+                        issues.append("追加証拠による独立検証で承認されませんでした。")
+                    # A mathematical rejection or incomplete audit stops here;
+                    # only a remaining scope finding can use the second check.
+                    if inventory_scope_context(original, issues, entry, inventory, primary_image_pages,
+                            images, page_management, independent_review=audit) is None:
+                        break
+                    feedback = "\n追加証拠を提示した前回の独立検証（指摘を省略しない）:" + json_bytes(audit).decode()
+                return None, [*original_issues, *issues]
+
             def repair_invisible_labels(original, original_review, original_issues, *, allowed_ids=None, request_namespace=""):
                 """Select evidenced text placeholders, then replace only their data.
 
@@ -741,6 +827,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 named = [identifier for identifier in placeholders if any(re.search(
                     r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
                 review_named = False
+                review_linear = False
                 if not named and not (limited and findings):
                     # Preserve the old invisible/added paths and their request
                     # fingerprints. A new path needs explicit missing-text
@@ -760,9 +847,24 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     named = [identifier for identifier in placeholders if any(re.search(
                         r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
                     if not named:
-                        return None, original_issues
+                        # Japanese "line segment" does not establish which
+                        # typed primitive was emitted. Keep the established
+                        # polyline path first, then inspect actual line/polyline
+                        # data under a separate request namespace.
+                        findings = [issue for issue in original_review["issues"]
+                            if re.search(r"線分|折れ線|(?<![A-Za-z])line(?![A-Za-z])", issue, re.I)
+                            and re.search(r"label|文字|ラベル", issue, re.I)
+                            and re.search(r"必須|必要|未実装|欠落|不足|存在しない|存在せず|未配置|表示され(?:て)?いない", issue)]
+                        placeholders = {item["id"]: item for item in original["diagram"]["primitives"]
+                            if item["kind"] in ("line", "polyline")
+                            and any(item["id"] in cue["state"]["visibleIds"] for cue in cues.values())}
+                        named = [identifier for identifier in placeholders if any(re.search(
+                            r"(?<![A-Za-z0-9_-])" + re.escape(identifier) + r"(?![A-Za-z0-9_-])", issue) for issue in findings)]
+                        if not named:
+                            return None, original_issues
+                        review_linear = True
                     review_named = True
-                    request_namespace += "-review-named"
+                    request_namespace += "-review-linear" if review_linear else "-review-named"
                 if limited:
                     # A collective "all added elements" finding need not name
                     # every ID. Source-grounded selection must justify each
@@ -773,7 +875,8 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     "id": {"type": "string", "enum": list(placeholders)},
                     "whyTextNeeded": STR,
                     "cueIds": arr({"type": "string", "enum": list(cues)})}))})
-                selection_prompt = (("原画像と候補データを照合し、独立検証が指摘した文字が不足するpolylineのうち、"
+                selection_prompt = (("原画像と候補データを照合し、独立検証が指摘した文字が不足するline/polylineのうち、"
+                    if review_linear else "原画像と候補データを照合し、独立検証が指摘した文字が不足するpolylineのうち、"
                     if review_named else "原画像と候補データを照合し、独立検証が指摘した不可視polylineのうち、")
                     + "本来は図上に文字を表示すべき対象IDだけを特定してください。これは修復対象の識別です。"
                     + ("正当な矢印・枠線・辺・不可視アンカー・補助座標・移動基準・当たり判定は対象にしない。"
@@ -783,7 +886,8 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     "単に小さい・透明だからという根拠は不可。そのIDがvisibleIdsにあるcueだけをcueIdsへ記録する。対象は重複させない。"
                     + ("参照修復で追加された検査対象ID（文字だという根拠は各IDごとに原画像で確認する）:"
                        if limited else "検証者が明示した必須ID:") + json_bytes(named).decode()
-                    + ("。文字の必要性を調べる候補polyline:" if review_named else "。候補として許可された不可視primitive:")
+                    + ("。文字の必要性を調べる候補line/polyline:" if review_linear else
+                       "。文字の必要性を調べる候補polyline:" if review_named else "。候補として許可された不可視primitive:")
                     + json_bytes(list(placeholders.values())).decode()
                     + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                     + "。前回の独立検証:" + json_bytes(original_review).decode()
@@ -816,7 +920,8 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     properties["fontSize"]["minimum"] = 14
                     properties["color"]["enum"] = [color for color in properties["color"]["enum"] if color != "none"]
                     properties["text"]["pattern"] = r"\S"
-                label_prompt = (("原画像と候補を照合し、指定IDの文字が不足するpolylineだけを実際のkind=labelへ修復してください。"
+                label_prompt = (("原画像と候補を照合し、指定IDの文字が不足するline/polylineだけを実際のkind=labelへ修復してください。"
+                    if review_linear else "原画像と候補を照合し、指定IDの文字が不足するpolylineだけを実際のkind=labelへ修復してください。"
                     if review_named else "原画像と候補を照合し、指定IDの不可視文字代替polylineだけを実際のkind=labelへ修復してください。")
                     + "labelsは指定IDと完全一致する集合を各1件返す。ID追加・削除・変更は禁止。"
                     "textは原画像・数値・単位・既存発話に基づく空でない文字列、fontSizeは14以上、colorはnone以外。"
@@ -829,9 +934,11 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     + "。画像順:" + str(image_pages) + "。対象一覧:" + json_bytes(entry).decode()
                     + "。前回所見:" + json_bytes(original_issues).decode() + "。修復前候補:" + json_bytes(original).decode())
                 repair_feedback, issues = "", original_issues
+                rejected_scope = None
                 for label_attempt in range(2):
                     report_phase("generating")
                     patch = None
+                    rejected_scope = None
                     try:
                         patch = request_ai.structured(f"lesson-label-repair-{plan['kind']}-{entry['id']}-{label_attempt}" + request_namespace + task_suffix,
                             label_prompt + repair_feedback + inventory_scope_recovery, label_schema, inputs, max_tokens=14000)
@@ -863,7 +970,9 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         specification + "\n独立した数学・教材検証者として原画像から全小問を別に検算し、"
                                         "条件・相似の対応・面積体積比・単位・例外・全式・数の出所・解法選択理由を確認してください。"
                                         "公式解答があれば全小問を照合し、なければその事実を明記する。全cueのかな読みを数値/点名/単位まで読む。"
-                                        + ("今回は識別された文字が不足するpolylineだけが同じIDのlabelへ置換されています。"
+                                        + ("今回は識別された文字が不足するline/polylineだけが同じIDのlabelへ置換されています。"
+                                           "対象識別が正当か、正当な矢印・枠線・辺・不可視アンカーを誤って文字化していないかも独立に再確認する。"
+                                           if review_linear else "今回は識別された文字が不足するpolylineだけが同じIDのlabelへ置換されています。"
                                            "対象識別が正当か、正当な矢印・枠線・辺・不可視アンカーを誤って文字化していないかも独立に再確認する。"
                                            if review_named else "今回は識別された不可視polylineだけが同じIDのlabelへ置換されています。"
                                            "対象識別が正当か、不可視アンカーを誤って文字化していないかも独立に再確認する。")
@@ -898,9 +1007,12 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         issues.append("文字修復後の独立検証の根拠が空欄です。")
                                     if not issues:
                                         issues = ["文字修復後の独立検証で承認されませんでした。"]
+                                    rejected_scope = (patched, audit, list(issues))
                     repair_feedback = "\n前回の文字修復の問題:" + json_bytes(_safe_lesson_details(issues)).decode()
                     if isinstance(patch, dict):
                         repair_feedback += "。前回の文字修復候補:" + json_bytes(patch).decode()
+                if rejected_scope is not None:
+                    return review_inventory_scope(*rejected_scope, "label-repair" + request_namespace)
                 return None, issues
 
             def repair_primitive_references(original, original_issues):
@@ -951,6 +1063,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                 request_schema = reference_schema
                 reference_attempts, dimension_observations = 0, []
                 rejected_added_labels = None
+                rejected_scope = None
 
                 def added_dimensions(value):
                     observations = []
@@ -1003,6 +1116,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                 properties["fontSize"]["minimum"] = 14
                     invalid_added_dimensions = []
                     rejected_added_labels = None
+                    rejected_scope = None
                     reference_attempts += 1
                     report_phase("generating")
                     patch = None
@@ -1091,6 +1205,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                                         issues.append("図の参照修復後の独立検証の根拠が空欄です。")
                                     if not issues:
                                         issues = ["図の参照修復後の独立検証で承認されませんでした。"]
+                                    rejected_scope = (patched, audit, list(issues))
                                     if (not audit["approved"] and audit["issues"] and additions
                                             and audit["checkedSubquestionIds"] == required_ids
                                             and all(audit[key].strip() for key in fields)):
@@ -1098,6 +1213,7 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     repair_feedback = "\n前回の参照修復の問題:" + json_bytes(_safe_lesson_details(issues)).decode()
                     if isinstance(patch, dict):
                         repair_feedback += "。前回の参照修復候補:" + json_bytes(patch).decode()
+                before_label_scope = scope_review_attempts
                 if rejected_added_labels is not None:
                     rejected, review, label_issues, added_ids = rejected_added_labels
                     repaired, label_issues = repair_invisible_labels(rejected, review, label_issues,
@@ -1105,13 +1221,23 @@ def generate_lesson(pdf_path, ai, studio, plan, directory, specification, year_m
                     if repaired is not None:
                         return repaired, []
                     issues = label_issues
+                if rejected_scope is not None and scope_review_attempts == before_label_scope:
+                    previous_scope_attempts = scope_review_attempts
+                    recovered, scoped_issues = review_inventory_scope(*rejected_scope, "reference-repair")
+                    if recovered is not None:
+                        return recovered, []
+                    if scope_review_attempts > previous_scope_attempts:
+                        issues = scoped_issues
                 diagnostic = "参照修復の診断: " + json_bytes({"referenceAttempts": reference_attempts,
                     "dimensionRecoveryAttempts": max(0, reference_attempts - 2),
                     "invalidAddedDimensions": dimension_observations}).decode()
                 return None, [*original_issues, *issues, diagnostic]
 
             if verified is None and last_independent_review is not None:
+                before_label_scope = scope_review_attempts
                 verified, last_issues = repair_invisible_labels(candidate, last_independent_review, last_issues)
+                if verified is None and scope_review_attempts == before_label_scope:
+                    verified, last_issues = review_inventory_scope(candidate, last_independent_review, last_issues, "candidate")
             elif verified is None:
                 verified, last_issues = repair_primitive_references(candidate, last_issues)
             if verified is None:
