@@ -102,7 +102,7 @@ class ParallelResponseSafetyTests(unittest.TestCase):
         worker = self.worker(self.parent(transport), transport, threading.Event())
         self.assertEqual(self.ask(worker), {"answer": 7})
         self.assertEqual([(method, suffix) for method, suffix, _ in transport.api_calls], [("GET", "/resp_pending")])
-        self.assertEqual(transport.values[FINGERPRINT]["result"], {"answer": 7})
+        self.assertEqual(json.loads(transport.values[FINGERPRINT]["resultJson"]), {"answer": 7})
         self.assertEqual(self.ask(worker), {"answer": 7})
         self.assertEqual(len(transport.api_calls), 1, "A second invocation must reuse the completed checkpoint")
 
@@ -126,7 +126,7 @@ class ParallelResponseSafetyTests(unittest.TestCase):
         self.assertEqual(self.ask(resumed), {"answer": 7})
         self.assertEqual([(method, suffix) for method, suffix, _ in transport.api_calls],
                          [("POST", ""), ("GET", "/resp_created_before_stop")])
-        self.assertEqual(transport.values[FINGERPRINT]["result"], {"answer": 7})
+        self.assertEqual(json.loads(transport.values[FINGERPRINT]["resultJson"]), {"answer": 7})
 
     def test_rate_limited_pending_poll_preserves_id_for_a_new_worker(self):
         transport = MemoryHTTP([
@@ -146,7 +146,7 @@ class ParallelResponseSafetyTests(unittest.TestCase):
         self.assertEqual(self.ask(resumed), {"answer": 7})
         self.assertEqual([(method, suffix) for method, suffix, _ in transport.api_calls],
                          [("GET", "/resp_pending"), ("GET", "/resp_pending")])
-        self.assertEqual(transport.values[FINGERPRINT]["result"], {"answer": 7})
+        self.assertEqual(json.loads(transport.values[FINGERPRINT]["resultJson"]), {"answer": 7})
 
 
 if __name__ == "__main__":

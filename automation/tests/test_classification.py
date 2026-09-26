@@ -180,7 +180,7 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(len(ai.scripted_session.calls), 4)
         # Use the actual ResponsesClient checkpoint implementation, including the
         # cached schema-valid but semantically incomplete initial classification.
-        self.assertTrue(any(item.get("result") == incomplete for item in self.studio.values.values()))
+        self.assertTrue(any(json.loads(item.get("resultJson", "null")) == incomplete for item in self.studio.values.values()))
         repeated, _ = self.classify(ai)
         self.assertEqual(repeated, classification)
         self.assertEqual(ai.task_keys, expected_keys * 2)

@@ -444,6 +444,15 @@ class ResponsesClient:
         fingerprint = key_for("ai", [task_key, self.model, prompt, schema,
             [hashlib.sha256(image.encode()).hexdigest() for image in images]])
         checkpoint = self.studio.checkpoint(fingerprint) or {}
+        if "resultJson" in checkpoint:
+            try:
+                if not isinstance(checkpoint["resultJson"], str):
+                    raise ValueError("Invalid stored result representation")
+                result = json.loads(checkpoint["resultJson"])
+                jsonschema.validate(result, schema)
+            except (ValueError, jsonschema.ValidationError):
+                raise StudioError("model_schema", "保存済み生成データの構造を検証できません。完成版の公開を保留しました。", True) from None
+            return result
         if "result" in checkpoint:
             jsonschema.validate(checkpoint["result"], schema)
             return checkpoint["result"]
@@ -541,12 +550,16 @@ class ResponsesClient:
                 if content.get("type") == "output_text":
                     fragments.append(content.get("text", ""))
         try:
-            result = json.loads("".join(fragments))
+            result_json = "".join(fragments)
+            result = json.loads(result_json)
             jsonschema.validate(result, schema)
         except (ValueError, jsonschema.ValidationError):
             save_state(previousResponseId=response_id, terminalStatus="invalid_schema")
             raise StudioError("model_schema", "生成データの構造を検証できません。完成版の公開を保留しました。", True) from None
-        compact = {"responseId": response_id, "result": result, "maxOutputTokens": budget,
+        # The Worker parses/stringifies checkpoints in JavaScript. Keep the
+        # validated model JSON inside a string so floats, signed zero and large
+        # integers return to Python unchanged and preserve downstream hashes.
+        compact = {"responseId": response_id, "resultJson": result_json, "maxOutputTokens": budget,
                    "budgetIncreases": increases, "diagnostics": diagnostics, "diagnosedResponseId": diagnosed_id}
         if len(json_bytes({"value": compact})) <= MAX_CHECKPOINT_BYTES:
             self.studio.checkpoint(fingerprint, compact)

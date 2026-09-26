@@ -143,7 +143,7 @@ class LessonStageInstructionsTests(unittest.TestCase):
         self.assertIn("uncertainty must remain unresolved", instructions)
         self.assertIn("needs_review or approved=false", instructions)
         self.assertIn("never auto-approve or discard genuine uncertainty", instructions)
-        self.assertEqual(next(iter(studio.values.values()))["result"], result)
+        self.assertEqual(json.loads(next(iter(studio.values.values()))["resultJson"]), result)
 
 
 if __name__ == "__main__":

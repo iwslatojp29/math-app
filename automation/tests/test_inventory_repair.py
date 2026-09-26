@@ -309,9 +309,9 @@ class InventoryRepairTests(unittest.TestCase):
                         return problems
                     expected = run()
                     target = correct if role == "candidate" else self.review()
-                    matches = [checkpoint for checkpoint in ai.studio.values.values() if checkpoint.get("result") == target]
+                    matches = [checkpoint for checkpoint in ai.studio.values.values() if json.loads(checkpoint.get("resultJson", "null")) == target]
                     self.assertEqual(len(matches), 1)
-                    matches[0]["result"] = {"private": "PRIVATE malformed cached result"}
+                    matches[0]["resultJson"] = json.dumps({"private": "PRIVATE malformed cached result"})
                     self.assertEqual(run(), expected)
                     self.assertEqual(len(ai.session_fixture.calls), 4)
                     self.assertIn("model_schema", ai.prompt(2))
