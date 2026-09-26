@@ -1212,7 +1212,7 @@ test('studio PDF download checks the response then saves one blob with visible s
   assert.match(ui.elements.get('pdf-download-status').textContent, /取得が完了し、.*保存を開始しました/);
   assert(!ui.elements.get('pdf-download-status').textContent.includes('保存が完了'));
   const save = ui.elements.get('save-downloaded-pdf');
-  assert.equal(save.href, 'blob:mock-1');
+  assert.match(save.href, /^\/api\/studio\/chat\/pdf\/cut-pdf\?modifiedTime=/);
   assert.equal(save.download, '日日の演習.pdf');
   assert.equal(save.hidden, false);
   assert.equal(save.listeners.click, undefined, 'the fallback is a native user-clickable download link');
@@ -1226,16 +1226,16 @@ test('studio keeps only one fetched PDF and releases it on new download, selecti
     responder: path => path.startsWith('/chat/pdf/') ? new Response('%PDF-1.7 mock', { headers: { 'Content-Type': 'application/pdf' } }) : null });
   const save = ui.elements.get('save-downloaded-pdf');
   await ui.click('download-pdf');
-  assert.equal(save.href, 'blob:mock-1');
+  assert.match(save.href, /^\/api\/studio\/chat\/pdf\/cut-pdf\?modifiedTime=/);
   await ui.click('download-pdf');
-  assert.equal(save.href, 'blob:mock-2');
+  assert.match(save.href, /^\/api\/studio\/chat\/pdf\/cut-pdf\?modifiedTime=/);
   assert.deepEqual(ui.revoked, ['blob:mock-1']);
   await ui.elements.get('sources').children[1].listeners.click();
   assert.equal(save.hidden, true);
   assert.equal(save.href, undefined);
   assert.deepEqual(ui.revoked, ['blob:mock-1', 'blob:mock-2']);
   await ui.click('download-pdf');
-  assert.equal(save.href, 'blob:mock-3');
+  assert.match(save.href, /^\/api\/studio\/chat\/pdf\/other-pdf\?modifiedTime=/);
   await ui.click('logout');
   assert.equal(save.hidden, true);
   assert.equal(save.href, undefined);
