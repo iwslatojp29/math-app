@@ -25,15 +25,13 @@ function validDate(date) {
 export class SapixRecords {
   constructor(owner, helpers) { this.owner = owner; this.env = owner.env; this.storage = owner.storage; Object.assign(this, helpers); }
   ownerEmail() { return this.env.SAPIX_OWNER_EMAIL || ''; }
-  configured() { return ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'STUDIO_SECRET', 'SAPIX_OWNER_EMAIL', 'STUDIO_ORIGIN', 'ALLOWED_ORIGIN'].every(name => Boolean(this.env[name])); }
+  configured() { return ['SAPIX_GOOGLE_CLIENT_ID', 'SAPIX_GOOGLE_CLIENT_SECRET', 'STUDIO_SECRET', 'SAPIX_OWNER_EMAIL', 'STUDIO_ORIGIN', 'ALLOWED_ORIGIN'].every(name => Boolean(this.env[name])); }
   validLogin(value) { return object(value) && SECRET.test(value.challenge) && typeof value.state === 'string' && /^[A-Za-z0-9_-]{22,128}$/.test(value.state); }
   async route(request, url, path) {
     if (path === '/api/sapix/auth/start' && request.method === 'GET') {
       if (!this.configured()) this.fail(503, 'not_configured');
       const login = { challenge: url.searchParams.get('challenge'), state: url.searchParams.get('state') };
       if (!this.validLogin(login)) this.fail(400, 'invalid_request');
-      const session = await this.owner.session(request);
-      if (session && session.email === this.ownerEmail()) return this.issueCode(login, session.email);
       return this.owner.oauthStart(login);
     }
     const headers = sapixCors(request, this.env);
@@ -71,7 +69,7 @@ export class SapixRecords {
     return this.owner.serial(async () => {
       await this.cleanupAuth();
       const code = this.random();
-      await this.storage.put('sapix:code:' + await this.digest(code), { challenge: login.challenge, email, expires: Date.now() + CODE_AGE });
+      await this.storage.put('sapix:code:' + await this.digest(code), { challenge: login.challenge, email, clientId: this.env.SAPIX_GOOGLE_CLIENT_ID, expires: Date.now() + CODE_AGE });
       const location = new URL(RETURN_URL);
       location.hash = new URLSearchParams({ sapix_code: code, sapix_state: login.state }).toString();
       return new Response(null, { status: 302, headers: { Location: location.href, 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' } });
@@ -87,12 +85,13 @@ export class SapixRecords {
     }
   }
   async exchange(body) {
+    if (!this.configured()) this.fail(503, 'not_configured');
     if (!exactKeys(body, ['code', 'verifier']) || typeof body.code !== 'string' || !SECRET.test(body.code) || typeof body.verifier !== 'string' || !/^[A-Za-z0-9._~-]{43,128}$/.test(body.verifier)) this.fail(400, 'invalid_request');
     const key = 'sapix:code:' + await this.digest(body.code), challenge = await this.digest(body.verifier);
     const token = this.random(), tokenKey = 'sapix:token:' + await this.digest(token), expires = Date.now() + TOKEN_AGE;
     await this.storage.transaction(async storage => {
       const code = await storage.get(key);
-      if (!code || !code.email || code.email !== this.ownerEmail() || code.expires <= Date.now() || code.challenge !== challenge) this.fail(401, 'unauthorized');
+      if (!code || !code.email || code.email !== this.ownerEmail() || !code.clientId || code.clientId !== this.env.SAPIX_GOOGLE_CLIENT_ID || code.expires <= Date.now() || code.challenge !== challenge) this.fail(401, 'unauthorized');
       await storage.delete(key);
       await storage.put(tokenKey, { email: code.email, expires });
     });

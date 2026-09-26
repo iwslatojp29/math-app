@@ -20,8 +20,8 @@ class DurableStorage {
   async transaction(action) { const previous = structuredClone(this.values); try { return await action(this); } catch(error) { this.values = previous; throw error; } }
 }
 async function setup() {
-  const {StudioState,seal} = await import('../proxy/src/studio.js');
-  const env = {GOOGLE_CLIENT_ID:'test-client', GOOGLE_CLIENT_SECRET:'test-client-secret', STUDIO_SECRET:'integration-test-secret-only', STUDIO_OWNER_EMAIL:'owner@example.test', SAPIX_OWNER_EMAIL:'owner@example.test', STUDIO_ORIGIN:'https://math-app-proxy.iwslatojp29.workers.dev', ALLOWED_ORIGIN:'https://iwslatojp29.github.io'};
+  const {StudioState,seal,unseal} = await import('../proxy/src/studio.js');
+  const env = {GOOGLE_CLIENT_ID:'test-client', GOOGLE_CLIENT_SECRET:'test-client-secret', SAPIX_GOOGLE_CLIENT_ID:'test-sapix-client', SAPIX_GOOGLE_CLIENT_SECRET:'test-sapix-secret', STUDIO_SECRET:'integration-test-secret-only', STUDIO_OWNER_EMAIL:'owner@example.test', SAPIX_OWNER_EMAIL:'owner@example.test', STUDIO_ORIGIN:'https://math-app-proxy.iwslatojp29.workers.dev', ALLOWED_ORIGIN:'https://iwslatojp29.github.io'};
   const storage = new DurableStorage(), worker = new StudioState({storage},env);
   const cookie = await seal({email:env.STUDIO_OWNER_EMAIL, csrf:'test', expires:Date.now()+60000},env.STUDIO_SECRET,'session');
   async function transport(input, init = {}) {
@@ -29,11 +29,32 @@ async function setup() {
     headers.set('Origin',env.ALLOWED_ORIGIN);
     return worker.fetch(new Request(input,{...init,headers}));
   }
+  async function navigateOwner(url) {
+    const started = await worker.fetch(new Request(url,{headers:{Cookie:'__Host-studio='+cookie}}));
+    assert.equal(started.status,302);
+    const google = new URL(started.headers.get('Location'));
+    assert.equal(google.origin,'https://accounts.google.com');
+    assert.equal(google.searchParams.get('client_id'),env.SAPIX_GOOGLE_CLIENT_ID);
+    const oauthCookie = started.headers.get('Set-Cookie').split(';')[0];
+    const oauth = await unseal(oauthCookie.slice(oauthCookie.indexOf('=')+1),env.STUDIO_SECRET,'oauth');
+    const original = globalThis.fetch;
+    globalThis.fetch = async (input,init) => {
+      if (String(input) === 'https://oauth2.googleapis.com/token') {
+        assert.equal(init.body.get('client_id'),env.SAPIX_GOOGLE_CLIENT_ID);
+        assert.equal(init.body.get('client_secret'),env.SAPIX_GOOGLE_CLIENT_SECRET);
+        return Response.json({access_token:'test-only-google-identity',expires_in:3600,scope:'openid email'});
+      }
+      assert.equal(String(input),'https://openidconnect.googleapis.com/v1/userinfo');
+      return Response.json({email:env.SAPIX_OWNER_EMAIL,email_verified:true});
+    };
+    try { return await worker.fetch(new Request(env.STUDIO_ORIGIN+'/api/studio/google/callback?state='+oauth.state+'&code=test-only-google-code',{headers:{Cookie:oauthCookie}})); }
+    finally { globalThis.fetch = original; }
+  }
   async function credential() {
     const verifier = 'integration-verifier-' + webcrypto.randomUUID() + '-long-enough';
     const challenge = createHash('sha256').update(verifier).digest('base64url');
     const state = 'integration-state-' + webcrypto.randomUUID();
-    const start = await worker.fetch(new Request(env.STUDIO_ORIGIN + '/api/sapix/auth/start?' + new URLSearchParams({challenge,state}),{headers:{Cookie:'__Host-studio='+cookie}}));
+    const start = await navigateOwner(env.STUDIO_ORIGIN + '/api/sapix/auth/start?' + new URLSearchParams({challenge,state}));
     assert.equal(start.status,302);
     const hash = new URLSearchParams(new URL(start.headers.get('Location')).hash.slice(1));
     assert.equal(hash.get('sapix_state'),state);
@@ -48,7 +69,7 @@ async function setup() {
     client.load();
     return {client,store,messages};
   }
-  return {worker,storage,env,transport,device,navigateOwner:url=>worker.fetch(new Request(url,{headers:{Cookie:'__Host-studio='+cookie}}))};
+  return {worker,storage,env,transport,device,navigateOwner};
 }
 const row = r => ({d:'2026-09-26',r,s:12});
 const grades = client => Object.values(client.getRecords()).flat().map(r => r.r).sort();

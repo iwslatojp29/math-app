@@ -7,6 +7,7 @@ import worker from '../src/index.js';
 // All accounts, credentials and storage here are isolated test fixtures.
 const ENV = {
   GOOGLE_CLIENT_ID: 'test-client', GOOGLE_CLIENT_SECRET: 'test-google-secret', STUDIO_SECRET: 'test-encryption-key',
+  SAPIX_GOOGLE_CLIENT_ID: 'test-sapix-client', SAPIX_GOOGLE_CLIENT_SECRET: 'test-sapix-secret',
   STUDIO_OWNER_EMAIL: 'owner@example.test', SAPIX_OWNER_EMAIL: 'owner@example.test', STUDIO_ORIGIN: 'https://worker.example.test',
   ALLOWED_ORIGIN: 'https://iwslatojp29.github.io', STUDIO_RUNNER_TOKEN: 'r'.repeat(43),
   UPLOAD_SECRET: 'u'.repeat(43), GITHUB_TOKEN: 'g'.repeat(43), OPENAI_API_KEY: 'unused',
@@ -38,7 +39,12 @@ async function login(f, seed = 'v') {
   const verifier = seed.repeat(43), state = seed.repeat(24), challenge = hash(verifier);
   const start = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state, challenge }), { cookie: f.cookie, origin: null }));
   assert.equal(start.status, 302);
-  const url = new URL(start.headers.get('Location')), fragment = new URLSearchParams(url.hash.slice(1));
+  const google = new URL(start.headers.get('Location'));
+  assert.equal(google.origin, 'https://accounts.google.com');
+  assert.equal(google.searchParams.get('client_id'), f.env.SAPIX_GOOGLE_CLIENT_ID);
+  const authorized = await identityCallback(f, start, f.env.SAPIX_OWNER_EMAIL);
+  assert.equal(authorized.status, 302);
+  const url = new URL(authorized.headers.get('Location')), fragment = new URLSearchParams(url.hash.slice(1));
   assert.equal(url.origin + url.pathname, TRAINER); assert.equal(fragment.get('sapix_state'), state);
   const code = fragment.get('sapix_code');
   const exchange = await f.state.fetch(request('/api/sapix/auth/exchange', { method: 'POST', body: { code, verifier } }));
@@ -85,7 +91,7 @@ test('owner login creates a PKCE-bound one-use code and hashes code/device token
 test('PKCE mismatch, expired code, forged cookie and malformed login parameters never issue usable credentials', async () => {
   const f = await fixture(), verifier = 'a'.repeat(43), state = 'b'.repeat(24);
   const path = '/api/sapix/auth/start?' + new URLSearchParams({ state, challenge: hash(verifier) });
-  const started = await f.state.fetch(request(path, { cookie: f.cookie }));
+  const started = await identityCallback(f, await f.state.fetch(request(path, { cookie: f.cookie })), f.env.SAPIX_OWNER_EMAIL);
   const code = new URLSearchParams(new URL(started.headers.get('Location')).hash.slice(1)).get('sapix_code');
   const mismatch = await f.state.fetch(request('/api/sapix/auth/exchange', { method: 'POST', body: { code, verifier: 'z'.repeat(43) } }));
   assert.equal(mismatch.status, 401);
@@ -102,7 +108,7 @@ test('PKCE mismatch, expired code, forged cookie and malformed login parameters 
 
 test('simultaneous exchange consumes the authorization code only once', async () => {
   const f = await fixture(), verifier = 'a'.repeat(43), state = 'b'.repeat(24);
-  const response = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state, challenge: hash(verifier) }), { cookie: f.cookie }));
+  const response = await identityCallback(f, await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state, challenge: hash(verifier) }), { cookie: f.cookie })), f.env.SAPIX_OWNER_EMAIL);
   const code = new URLSearchParams(new URL(response.headers.get('Location')).hash.slice(1)).get('sapix_code');
   const responses = await Promise.all(Array.from({ length: 2 }, () => f.state.fetch(request('/api/sapix/auth/exchange', { method: 'POST', body: { code, verifier } }))));
   assert.deepEqual(responses.map(value => value.status).sort(), [200, 401]);
@@ -122,6 +128,8 @@ test('grading login requests identity only, checks the owner, and leaves Drive c
   globalThis.fetch = async (url, options) => {
     if (url === 'https://oauth2.googleapis.com/token') {
       assert.equal(options.body.get('code_verifier'), oauth.verifier);
+      assert.equal(options.body.get('client_id'), ENV.SAPIX_GOOGLE_CLIENT_ID);
+      assert.equal(options.body.get('client_secret'), ENV.SAPIX_GOOGLE_CLIENT_SECRET);
       return Response.json({ access_token: 'identity-only-access', expires_in: 3600, scope: 'openid email' });
     }
     assert.equal(url, 'https://openidconnect.googleapis.com/v1/userinfo');
@@ -139,7 +147,7 @@ test('grading login requests identity only, checks the owner, and leaves Drive c
 });
 
 test('grading OAuth rejects a non-owner identity and does not create authorization codes', async () => {
-  const f = await fixture(), value = await seal({ state: 'google-state', verifier: 'fake-verifier', expires: Date.now() + 60000, sapix: { state: 's'.repeat(24), challenge: hash('v'.repeat(43)), email: ENV.SAPIX_OWNER_EMAIL } }, ENV.STUDIO_SECRET, 'oauth');
+  const f = await fixture(), value = await seal({ state: 'google-state', verifier: 'fake-verifier', expires: Date.now() + 60000, sapix: { state: 's'.repeat(24), challenge: hash('v'.repeat(43)), email: ENV.SAPIX_OWNER_EMAIL, clientId: ENV.SAPIX_GOOGLE_CLIENT_ID } }, ENV.STUDIO_SECRET, 'oauth');
   const original = globalThis.fetch;
   globalThis.fetch = async url => url.endsWith('/token') ? Response.json({ access_token: 'fake' }) : Response.json({ email: 'other@example.test', email_verified: true });
   try {
@@ -243,9 +251,15 @@ async function identityCallback(f, started, email, tokenOverrides = {}) {
   const cookie = started.headers.get('Set-Cookie').split(';')[0];
   const oauth = await unseal(cookie.slice(cookie.indexOf('=') + 1), f.env.STUDIO_SECRET, 'oauth');
   const original = globalThis.fetch;
-  globalThis.fetch = async url => url === 'https://oauth2.googleapis.com/token'
-    ? Response.json({ access_token: 'fake-identity-token', expires_in: 3600, scope: 'openid email', ...tokenOverrides })
-    : Response.json({ email, email_verified: true });
+  globalThis.fetch = async (url, options) => {
+    if (url === 'https://oauth2.googleapis.com/token') {
+      assert.equal(options.body.get('client_id'), oauth.sapix ? f.env.SAPIX_GOOGLE_CLIENT_ID : f.env.GOOGLE_CLIENT_ID);
+      assert.equal(options.body.get('client_secret'), oauth.sapix ? f.env.SAPIX_GOOGLE_CLIENT_SECRET : f.env.GOOGLE_CLIENT_SECRET);
+      return Response.json({ access_token: 'fake-identity-token', expires_in: 3600, scope: 'openid email', ...tokenOverrides });
+    }
+    assert.equal(url, 'https://openidconnect.googleapis.com/v1/userinfo');
+    return Response.json({ email, email_verified: true });
+  };
   try { return await f.state.fetch(request('/api/studio/google/callback?state=' + oauth.state + '&code=test-google-code', { headers: { Cookie: cookie } })); }
   finally { globalThis.fetch = original; }
 }
@@ -297,7 +311,7 @@ test('owner change invalidates old tokens and pending old or ownerless codes whi
   const f = await fixture(), original = await login(f);
   const existing = await write(f, original.token, [put('existing_grade'), { type: 'delete', id: 'existing_deleted' }]);
   const verifier = 'p'.repeat(43), state = 'q'.repeat(24);
-  const started = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state, challenge: hash(verifier) }), { cookie: f.cookie }));
+  const started = await identityCallback(f, await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state, challenge: hash(verifier) }), { cookie: f.cookie })), f.env.SAPIX_OWNER_EMAIL);
   const oldCode = new URLSearchParams(new URL(started.headers.get('Location')).hash.slice(1)).get('sapix_code');
   assert.equal((await f.storage.get('sapix:code:' + hash(oldCode))).email, ENV.SAPIX_OWNER_EMAIL);
   const legacyCode = 'l'.repeat(43);
@@ -356,4 +370,105 @@ test('missing grading owner fails closed instead of falling back to the Studio o
   const response = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state: 's'.repeat(24), challenge: hash('v'.repeat(43)) }), { cookie: f.cookie }));
   assert.equal(response.status, 503);
   assert.equal((await f.storage.list({ prefix: 'sapix:code:' })).size, 0);
+});
+
+test('even a same-owner Studio session cannot bypass the dedicated grading Google client', async () => {
+  const f = await fixture();
+  const response = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state: 's'.repeat(24), challenge: hash('v'.repeat(43)) }), { cookie: f.cookie }));
+  assert.equal(response.status, 302);
+  const google = new URL(response.headers.get('Location'));
+  assert.equal(google.origin, 'https://accounts.google.com');
+  assert.equal(google.searchParams.get('client_id'), f.env.SAPIX_GOOGLE_CLIENT_ID);
+  assert.equal(google.searchParams.get('scope'), 'openid email');
+  assert.equal(google.searchParams.get('access_type'), null);
+  const cookie = response.headers.get('Set-Cookie').split(';')[0];
+  const context = await unseal(cookie.slice(cookie.indexOf('=') + 1), f.env.STUDIO_SECRET, 'oauth');
+  assert.equal(context.sapix.clientId, f.env.SAPIX_GOOGLE_CLIENT_ID);
+  assert.equal((await f.storage.list({ prefix: 'sapix:code:' })).size, 0);
+});
+
+test('missing dedicated Google credentials stop new grading authorization without a Studio fallback', async () => {
+  const f = await fixture();
+  const authorized = await login(f);
+  await write(f, authorized.token, [put('preserved_when_setup_unavailable')]);
+  for (const field of ['SAPIX_GOOGLE_CLIENT_ID', 'SAPIX_GOOGLE_CLIENT_SECRET']) {
+    const initial = f.env[field]; f.env[field] = undefined;
+    const context = await seal({ state: 'pending-google-state', verifier: 'fake-verifier', expires: Date.now() + 60000, sapix: { state: 's'.repeat(24), challenge: hash('v'.repeat(43)), email: f.env.SAPIX_OWNER_EMAIL, clientId: ENV.SAPIX_GOOGLE_CLIENT_ID } }, f.env.STUDIO_SECRET, 'oauth');
+    const original = globalThis.fetch; let calls = 0;
+    globalThis.fetch = async () => { calls++; throw Error('No fallback request is allowed'); };
+    try {
+      const start = await f.state.fetch(request('/api/sapix/auth/start?' + new URLSearchParams({ state: 's'.repeat(24), challenge: hash('v'.repeat(43)) }), { cookie: f.cookie }));
+      assert.equal(start.status, 503);
+      const callback = await f.state.fetch(request('/api/studio/google/callback?state=pending-google-state&code=fake', { headers: { Cookie: '__Host-studio-oauth=' + context } }));
+      assert.equal(callback.status, 503);
+      const exchange = await f.state.fetch(request('/api/sapix/auth/exchange', { method: 'POST', body: { code: 'c'.repeat(43), verifier: 'v'.repeat(43) } }));
+      assert.equal(exchange.status, 503); assert.equal(calls, 0);
+      const studio = await f.state.fetch(request('/api/studio/google/start'));
+      assert.equal(studio.status, 302);
+      assert.equal(new URL(studio.headers.get('Location')).searchParams.get('client_id'), f.env.GOOGLE_CLIENT_ID);
+      const records = await json(f, '/api/sapix/records', { token: authorized.token });
+      assert.equal(records.entries[0].id, 'preserved_when_setup_unavailable');
+    } finally { f.env[field] = initial; globalThis.fetch = original; }
+  }
+});
+
+test('grading Google sign-in and code exchange work without company Google credentials', async () => {
+  const f = await fixture({ GOOGLE_CLIENT_ID: undefined, GOOGLE_CLIENT_SECRET: undefined, SAPIX_OWNER_EMAIL: 'child@example.test' });
+  const child = await childLogin(f);
+  assert.equal(child.email, f.env.SAPIX_OWNER_EMAIL);
+  const records = await write(f, child.token, [put('independent_client_grade')]);
+  assert.equal(records.entries.length, 1);
+  assert.equal(await f.storage.get('google'), undefined);
+  assert.equal((await f.state.fetch(request('/api/studio/google/start'))).status, 503);
+});
+
+test('client change rejects pending OAuth and exchange codes, but retains verified devices and all grades', async () => {
+  const f = await fixture(), existing = await login(f);
+  const before = await write(f, existing.token, [put('existing_private_grade'), { type: 'delete', id: 'existing_tombstone' }]);
+  const verifier = 'v'.repeat(43), parameters = new URLSearchParams({ state: 's'.repeat(24), challenge: hash(verifier) });
+  const pending = await f.state.fetch(request('/api/sapix/auth/start?' + parameters));
+  const cookie = pending.headers.get('Set-Cookie').split(';')[0];
+  const context = await unseal(cookie.slice(cookie.indexOf('=') + 1), f.env.STUDIO_SECRET, 'oauth');
+  const authorized = await identityCallback(f, pending, f.env.SAPIX_OWNER_EMAIL);
+  const code = new URLSearchParams(new URL(authorized.headers.get('Location')).hash.slice(1)).get('sapix_code');
+  const legacyCode = 'l'.repeat(43);
+  await f.storage.put('sapix:code:' + hash(legacyCode), { challenge: hash(verifier), email: f.env.SAPIX_OWNER_EMAIL, expires: Date.now() + 60000 });
+  f.env.SAPIX_GOOGLE_CLIENT_ID = 'replacement-sapix-client';
+  const original = globalThis.fetch; let calls = 0;
+  globalThis.fetch = async () => { calls++; throw Error('Old client must be rejected before contacting Google'); };
+  try {
+    for (const saved of [context, { ...context, sapix: { state: context.sapix.state, challenge: context.sapix.challenge, email: context.sapix.email } }]) {
+      const sealed = await seal(saved, f.env.STUDIO_SECRET, 'oauth');
+      const response = await f.state.fetch(request('/api/studio/google/callback?state=' + context.state + '&code=fake', { headers: { Cookie: '__Host-studio-oauth=' + sealed } }));
+      assert.equal(response.status, 403);
+    }
+    for (const pendingCode of [code, legacyCode]) {
+      const response = await f.state.fetch(request('/api/sapix/auth/exchange', { method: 'POST', body: { code: pendingCode, verifier } }));
+      assert.equal(response.status, 401);
+    }
+    assert.equal(calls, 0);
+    assert.deepEqual(await json(f, '/api/sapix/records', { token: existing.token }), before);
+  } finally { globalThis.fetch = original; }
+  assert.equal((await login(f)).email, f.env.SAPIX_OWNER_EMAIL);
+});
+
+test('a Google code rejected for its sealed flow is never retried with the other client credentials', async () => {
+  const f = await fixture({ SAPIX_OWNER_EMAIL: 'child@example.test' });
+  for (const sapix of [true, false]) {
+    const started = await f.state.fetch(request(sapix ? '/api/sapix/auth/start?' + new URLSearchParams({ state: 's'.repeat(24), challenge: hash('v'.repeat(43)) }) : '/api/studio/google/start'));
+    const cookie = started.headers.get('Set-Cookie').split(';')[0], context = await unseal(cookie.slice(cookie.indexOf('=') + 1), f.env.STUDIO_SECRET, 'oauth');
+    const original = globalThis.fetch; let calls = 0;
+    globalThis.fetch = async (url, options) => {
+      calls++; assert.equal(url, 'https://oauth2.googleapis.com/token');
+      assert.equal(options.body.get('client_id'), sapix ? f.env.SAPIX_GOOGLE_CLIENT_ID : f.env.GOOGLE_CLIENT_ID);
+      assert.equal(options.body.get('client_secret'), sapix ? f.env.SAPIX_GOOGLE_CLIENT_SECRET : f.env.GOOGLE_CLIENT_SECRET);
+      return Response.json({ error: 'invalid_grant' }, { status: 400 });
+    };
+    try {
+      const response = await f.state.fetch(request('/api/studio/google/callback?state=' + context.state + '&code=wrong-client-code', { headers: { Cookie: cookie } }));
+      assert.equal(response.status, 401); assert.equal(calls, 1);
+      assert.equal((await f.storage.list({ prefix: 'sapix:code:' })).size, 0);
+      assert.equal(await f.storage.get('google'), undefined);
+    } finally { globalThis.fetch = original; }
+  }
 });
