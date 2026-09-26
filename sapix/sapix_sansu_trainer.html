@@ -14859,7 +14859,7 @@ function reveal(){
     '<div class="ans-box"><span class="lbl">答え</span>' + p.answers.map(function(a){ return '<span class="a">' + (a.l ? '<span class="ql">' + a.l + '</span>' : '') + a.v + '</span>'; }).join('') +
     '<span class="elapsed">かかった時間 <b>' + elapsedText + '</b></span></div>' +
     '<div class="expl">' + p.expl + '</div>' + prevCallout(p) + checkCallout(p) +
-    '<div class="srcline"><span>出典：' + esc(p.src) + '</span>' + (p.img ? '<a href="' + esc(p.img) + '" target="_blank" rel="noopener">元画像</a>' : '') + '</div>';
+    '<div class="srcline"><span>出典：' + esc(p.src) + '</span>' + (p.img ? '<a href="' + esc(p.img) + '">元画像</a>' : '') + '</div>';
   $('answer').hidden = false; $('record').hidden = false; $('actions').hidden = true;
   setTimeout(function(){ var a = $('answer'); if (a && a.scrollIntoView) a.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 30);
 }
