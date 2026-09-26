@@ -376,6 +376,15 @@ def inventory_scope_context(candidate, issues, entry, inventory, image_pages, im
     ordinary_scope = any("unpairedPages" in issue or (
             re.search(r"全PDF|全ページ|全体管理|全体の管理|全問一覧|別問題|他の問題", issue)
             and re.search(r"未確認|未解決|未完了|保持|管理|対応|続き", issue)) for issue in findings)
+    # Keep existing gates separate so already accepted request fingerprints
+    # (including the named-connection addendum) do not change. New synonyms
+    # must describe document coverage, not uncertainty about a whole diagram.
+    document_scope = any(
+        re.search(r"(?:PDF|教材|冊子)全体|全冊子|全[0-9０-９一二三四五六七八九十百]*問(?:一覧)?|"
+                  r"全体の?対象一覧|他の掲載問題|収録状況|問題一覧|ページ対応", sentence, re.I)
+        and re.search(r"対象一覧|問題一覧|全[0-9０-９一二三四五六七八九十百]*問一覧|収録|掲載問題|ページ対応|残りページ", sentence)
+        and re.search(r"未確認|未解決|未完了|不足|含まれない|必要", sentence)
+        for issue in findings for sentence in re.split(r"[。！？\n]", issue))
     # A previous question's solution can be visible without its question
     # statement. Expand the gate only for a named, actually overlapping
     # inventory entry and an unresolved source-page connection.
@@ -386,7 +395,7 @@ def inventory_scope_context(candidate, issues, entry, inventory, image_pages, im
         and re.search(r"未確認|未解決|未完了|不足|必要", issue)
         and any(re.search(r"(?<![A-Za-z0-9_-])" + re.escape(item["id"]) + r"(?![A-Za-z0-9_-])", issue)
                 for item in neighbours) for issue in findings)
-    if not ordinary_scope and not named_connection:
+    if not ordinary_scope and not document_scope and not named_connection:
         return None
     solution_only_neighbours = [item for item in neighbours if not set(item["pdfPages"]) & set(image_pages)]
     connection_recovery = bool(solution_only_neighbours) or (named_connection and not ordinary_scope)

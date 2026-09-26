@@ -46,6 +46,7 @@ class LessonInventoryScopeTests(unittest.TestCase):
         self.original_structured = fixture.structured
         self.counts = {"candidate": 0, "review": 0}
         self.mode = "recover"
+        self.findings = list(GLOBAL_FINDINGS)
         fixture.structured = self.structured
 
     def structured(self, key, prompt, schema, images=(), max_tokens=None):
@@ -61,7 +62,7 @@ class LessonInventoryScopeTests(unittest.TestCase):
         scoped = "inventory-scope" in key
         if not reviewing and (not scoped or self.mode == "still-uncertain"):
             value["verification"]["status"] = "needs_review"
-            value["verification"]["unresolvedIssues"] = list(GLOBAL_FINDINGS)
+            value["verification"]["unresolvedIssues"] = list(self.findings)
             if self.mode == "runtime-first" and self.counts["candidate"] <= 4:
                 value["verification"]["unresolvedIssues"] = list(RUNTIME_LIMITATIONS)
         if reviewing and self.mode == "reject-target":
@@ -110,6 +111,67 @@ class LessonInventoryScopeTests(unittest.TestCase):
             self.assertIn("今回の添付画像の実際の順序はcurrentImagePages", request[1])
             self.assertEqual(request[3], [lesson_pipeline.image_data(self.fixture.images[page]) for page in [1, 2]])
             self.assertEqual(json.loads(request[1].rsplit("管理情報:", 1)[1])["previousScopeFindings"], GLOBAL_FINDINGS)
+
+    def test_whole_material_coverage_finding_gets_inventory_images_and_independent_review(self):
+        self.findings = [
+            "PDF全体の対象一覧と収録状況は未確認。今回の画像には前問の解説続きと、左右欄にまたがる次問がある。"
+            "他の掲載問題を含む教材全体の対象一覧・ページ対応・収録データは個別修正の照合材料に含まれない。"
+            "対象問題の確認を教材全体の収録確認の代替にせず、残りページ画像および対象一覧と照合し、"
+            "公式解答が対応しないページの根拠も別途記録する必要がある。"
+        ]
+        lesson, _ = self.fixture.generate()
+        self.assertEqual(self.counts, {"candidate": 5, "review": 1})
+        self.assertEqual(lesson["problems"], self.fixture.fixture["problems"])
+        requests = [item for item in self.requests if "-" + self.target + "-" in item[0]]
+        self.assertTrue(all(len(item[3]) == 1 for item in requests[:4]))
+        for request in requests[4:]:
+            metadata = json.loads(request[1].rsplit("管理情報:", 1)[1])
+            self.assertEqual(metadata["previousScopeFindings"], self.findings)
+            self.assertEqual(metadata["allProblemIds"], [self.target, self.neighbour])
+            self.assertEqual(metadata["contextOnlyImagePages"], [2])
+            self.assertEqual(request[3], [lesson_pipeline.image_data(self.fixture.images[page]) for page in [1, 2]])
+            self.assertIn("必ずneeds_review/approved=false", request[1])
+        self.assertTrue(requests[-1][0].startswith("lesson-review-"))
+
+    def test_document_coverage_synonyms_trigger_but_unrelated_mathematics_does_not(self):
+        positive = [
+            "PDF全体の対象一覧が未確認。", "pdf全体のページ対応が未確認。", "教材全体の収録データが不足。",
+            "冊子全体の問題一覧との照合が未完了。", "全冊子の掲載問題の確認が必要。",
+            "全28問一覧の照合が未確認。", "全２８問の収録確認が未完了。", "全二十八問の収録確認が必要。",
+            "全問の収録状況が未確認。", "全体対象一覧との照合が未解決。", "全体の対象一覧が未確認。",
+            "他の掲載問題の収録データが照合材料に含まれない。", "収録状況は未確認。",
+            "問題一覧が照合材料に含まれない。", "ページ対応が未確認。",
+        ]
+        negative = [
+            "図全体の面積が未確認。", "全体の体積比が未解決。", "問題全体の数学的正しさが未確認。",
+            "教材全体にある図の面積の計算が未確認。", "PDF全体にある整数の性質が未解決。",
+            "対象問題の与件を読めず答えが未確認。", "公式解答の計算と合わず数学的根拠が不足。",
+            "PDF全体の対象一覧と収録状況を照合済み。", "問題一覧とページ対応を確認済み。",
+            "全28問一覧は照合済み。図全体の面積が未確認。",
+            "PDF全体の収録状況は確認済み。対象問題の計算の根拠が不足。",
+            "PDF全体の公式解答の計算が対象問題の条件と一致せず未解決。", "全28問の数学的正しさが未確認。",
+        ]
+        for finding in positive + negative:
+            with self.subTest(finding=finding):
+                candidate = copy.deepcopy(self.fixture.fixture["problems"][0])
+                candidate["verification"].update(status="needs_review", unresolvedIssues=[finding])
+                actual = lesson_pipeline.inventory_scope_context(candidate,
+                    ["候補自身の数学・読みの検証が未解決です。"], self.fixture.inventory[0], self.fixture.inventory,
+                    [1], self.fixture.images, self.management)
+                if finding in positive:
+                    self.assertIsNotNone(actual)
+                    self.assertEqual(actual[1], [1, 2])
+                else:
+                    self.assertIsNone(actual)
+
+    def test_new_document_wording_does_not_bypass_target_math_rejection(self):
+        self.findings = ["PDF全体の対象一覧と収録状況は未確認。"]
+        self.mode = "reject-target"
+        with self.assertRaises(StudioError) as caught:
+            self.fixture.generate()
+        self.assertEqual(caught.exception.code, "lesson_unresolved")
+        self.assertEqual(self.counts, {"candidate": 6, "review": 2})
+        self.assertIn("対象問題自身の与件", " ".join(caught.exception.details))
 
     def test_later_global_scope_recovery_does_not_replace_six_existing_runtime_attempts(self):
         self.mode = "runtime-first"
