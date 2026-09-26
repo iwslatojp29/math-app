@@ -7,6 +7,7 @@ const STYLES = `
 @media(max-width:780px){.operation-tabs{gap:10px}.operation-tab{padding:14px 12px;gap:10px}.operation-tab strong{font-size:14px}.operation-tab small{font-size:11px}.operation-mark{width:31px;height:38px;font-size:9px}.operation-arrow{display:none}.source-list{max-height:340px}.start-panel{padding:16px}.source-meta{font-size:12px}}
 @media(max-width:520px){.operation-tabs{grid-template-columns:1fr;gap:8px;padding:8px 0 14px}.operation-tab{padding:12px 14px;border-radius:12px}.operation-tab small{display:none}.operation-tab strong{font-size:14px}.operation-mark{width:33px;height:32px}.operation-arrow{display:block;font-size:18px}.hero h1{font-size:27px}.hero{padding:28px 0 18px}.section-head{flex-wrap:wrap}.section-head h2{font-size:18px}.start-button{font-size:14px}.source-title,.job-title{font-size:14px}.operation-disclosure{font-size:12px}.job-card,#sources-title,#history{scroll-margin-top:145px}}
 
+.previous-issue{border:1px solid var(--line);background:#f1f4ef;color:var(--muted);padding:10px 12px;border-radius:9px;margin-top:12px}.previous-issue-title{font-size:12px;font-weight:650;margin:0 0 5px}.previous-issue .summary{margin:6px 0 0}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 `;
 
@@ -236,6 +237,22 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
     link.rel = 'noopener noreferrer';
     return link;
   }
+  function appendIssue(parent, job, message, details = []) {
+    if (!message && !details.length) return;
+    let container = parent;
+    const previous = active(job) || recovering(job);
+    if (previous) {
+      container = node('div', 'previous-issue');
+      container.append(node('p', 'previous-issue-title', '前回停止時の指摘（' + (recovering(job) ? '自動再開待ち' : '再開処理中') + '）'));
+      parent.append(container);
+    }
+    if (message) container.append(node('p', previous ? 'summary' : 'job-error', message));
+    if (details.length) {
+      const list = node('ul', 'summary');
+      for (const detail of details) list.append(node('li', '', detail));
+      container.append(list);
+    }
+  }
   function stageText(job) {
     if (recovering(job)) return job.dispatchUncertain ? 'クラウド処理の起動を確認しています。状況が確認できると自動で再開します。' : '保存済みの段階からクラウド処理を自動で再開します。再開状況を確認しています。';
     if (['cancelled', 'failed', 'needs_attention'].includes(job.status)) return stageLabels[job.status];
@@ -278,7 +295,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
         const model = text(job.model || job.modelId);
         if (model) card.append(node('div', 'fine', 'モデル：' + model));
         const failure = typeof job.error === 'string' ? job.error : job.error?.publicMessage || job.error?.message;
-        if (failure) card.append(node('p', 'job-error', clean(failure)));
+        if (failure) appendIssue(card, job, clean(failure));
         const result = job.result && typeof job.result === 'object' ? job.result : {};
         if (result.summary) card.append(node('p', 'summary', clean(result.summary)));
         const outputs = (Array.isArray(result.outputs) ? result.outputs : []).filter(output => output && typeof output === 'object');
@@ -294,13 +311,8 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
           if (pdf) links.append(pdf);
           if (html) links.append(html);
           if (links.childNodes.length) section.append(links);
-          if (outputError) section.append(node('p', 'job-error', outputError));
           const errorDetails = (Array.isArray(output.error?.details) ? output.error.details : []).slice(0, 8).map(detail => clean(detail).trim().slice(0, 600)).filter(Boolean);
-          if (errorDetails.length) {
-            const details = node('ul', 'summary');
-            for (const detail of errorDetails) details.append(node('li', '', detail));
-            section.append(details);
-          }
+          appendIssue(section, job, outputError, errorDetails);
           for (const missing of Array.isArray(output.missing) ? output.missing : []) if (text(missing)) section.append(node('p', 'fine', clean(missing)));
           card.append(section);
         }
@@ -310,7 +322,7 @@ const CLIENT_SCRIPT = String.raw`(function studioClient() {
         for (const error of Array.isArray(result.errors) ? result.errors : []) {
           const message = clean(typeof error === 'string' ? error : error?.message);
           if (!message || outputs.some(output => output.kind === error?.kind && clean(typeof output.error === 'string' ? output.error : output.error?.message) === message)) continue;
-          card.append(node('p', 'job-error', (Object.hasOwn(kindLabels, error?.kind) ? kindLabels[error.kind] + '：' : '') + message));
+          appendIssue(card, job, (Object.hasOwn(kindLabels, error?.kind) ? kindLabels[error.kind] + '：' : '') + message);
         }
         const actions = node('div', 'job-actions');
         if (active(job) || job.status === 'needs_attention') addAction(actions, job, 'cancel', '取り消す', 'quiet');

@@ -958,6 +958,30 @@ test('studio ignores blank and non-string review details', async () => {
   assert.equal(items[0].textContent, 'image-2: 数値が欠けています。');
 });
 
+test('studio labels saved issues as previous during restart while retaining current review errors', async () => {
+  const details = Array.from({ length: 5 }, (_, index) => '前回の指摘 ' + (index + 1));
+  for (const values of [{ status: 'queued' }, { status: 'running' }, { status: 'failed', retryable: true }, { status: 'needs_attention', dispatchUncertain: true }, { status: 'needs_attention', retryable: false }]) {
+    const saved = job({ ...values, error: '全体の停止理由', result: {
+      outputs: [{ kind: 'practice', pdf: { name: '保存済みPDF.pdf', url: 'https://example.test/saved.pdf' }, error: { message: '数学・解説の未解決の指摘があるため公開していません。', details } }],
+      errors: [{ kind: 'practice', message: '数学・解説の未解決の指摘があるため公開していません。' }, { kind: 'advanced', message: '別の保存済み指摘' }],
+    } });
+    const original = structuredClone(saved);
+    const ui = await uiFixture({ jobs: [saved] });
+    const elements = ui.elements.get('jobs').descendants();
+    const previous = values.status !== 'needs_attention' || values.dispatchUncertain;
+    assert.equal(elements.filter(element => element.className === 'previous-issue').length, previous ? 3 : 0);
+    assert.equal(elements.filter(element => element.className === 'job-error').length, previous ? 0 : 3);
+    assert.deepEqual(elements.filter(element => element.tagName === 'li').map(element => element.textContent), details);
+    assert.equal(elements.filter(element => element.tagName === 'a' && element.href === 'https://example.test/saved.pdf').length, 1);
+    assert.equal(ui.elements.get('jobs').textContent.split('数学・解説の未解決の指摘があるため公開していません。').length - 1, 1);
+    assert.equal(ui.elements.get('jobs').textContent.includes('前回停止時の指摘'), Boolean(previous));
+    const badge = elements.find(element => element.className?.startsWith('badge '));
+    assert.equal(badge.textContent, values.retryable || values.dispatchUncertain ? '自動再開待ち' : { queued: '順番待ち', running: '作成中', needs_attention: '確認が必要' }[values.status]);
+    assert.deepEqual(saved, original, 'presentation must not mutate saved issues or status');
+    assert(!ui.calls.some(call => call.options.method === 'POST'));
+  }
+});
+
 test('studio shows Japanese progress and permits selection without starting concurrent work', async () => {
   const ui = await uiFixture({ files: [SOURCE, { ...SOURCE, id: 'other', name: '2026年8月号.pdf' }], jobs: [job({ stage: 'lesson_generation' })] });
   assert.match(ui.elements.get('jobs').textContent, /全問題の講義と検算を進めています/);
