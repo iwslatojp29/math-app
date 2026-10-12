@@ -30,7 +30,7 @@ export class SapixRecords {
   async route(request, url, path) {
     if (path === '/api/sapix/auth/start' && request.method === 'GET') {
       if (!this.configured()) this.fail(503, 'not_configured');
-      const login = { challenge: url.searchParams.get('challenge'), state: url.searchParams.get('state') };
+      const login = { challenge: url.searchParams.get('challenge'), state: url.searchParams.get('state'), ...(url.searchParams.get('returnTo') === 'calculation-test' ? { returnTo: 'calculation-test' } : {}) };
       if (!this.validLogin(login)) this.fail(400, 'invalid_request');
       return this.owner.oauthStart(login);
     }
@@ -70,7 +70,7 @@ export class SapixRecords {
       await this.cleanupAuth();
       const code = this.random();
       await this.storage.put('sapix:code:' + await this.digest(code), { challenge: login.challenge, email, clientId: this.env.SAPIX_GOOGLE_CLIENT_ID, expires: Date.now() + CODE_AGE });
-      const location = new URL(RETURN_URL);
+      const location = new URL(login.returnTo === 'calculation-test' ? 'https://iwslatojp29.github.io/math-app/calculation-test/index.html' : RETURN_URL);
       location.hash = new URLSearchParams({ sapix_code: code, sapix_state: login.state }).toString();
       return new Response(null, { status: 302, headers: { Location: location.href, 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' } });
     });

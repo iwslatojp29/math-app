@@ -36,6 +36,19 @@ function client(api, options = {}) {
   return { c, store, statuses, timers };
 }
 
+test('calculation records sync across devices without entering Sapix clear operations', async () => {
+  const api = server(), shared = storage({ [Sync.authTokenKey]: JSON.stringify({token:'test-only-token',email:'test@example.invalid'}) });
+  const sapix = client(api,{storage:shared}), calc = client(api,{storage:shared,namespace:'calculation-test'});
+  sapix.c.put('p1',value('o')); calc.c.put('calc:lesson:r1-q1',{d:'2026-10-12',r:'x'});
+  await sapix.c.sync(); await calc.c.sync(); await sapix.c.sync();
+  assert.deepEqual(Object.keys(sapix.c.getRecords()),['p1']);
+  assert.deepEqual(Object.keys(calc.c.getRecords()),['calc:lesson:r1-q1']);
+  const other = client(api,{namespace:'calculation-test'}); await other.c.sync();
+  assert.deepEqual(other.c.getRecords(),calc.c.getRecords());
+  sapix.c.replaceRecords({}); await sapix.c.sync(); await other.c.sync();
+  assert.equal(other.c.getEntries().length,1);
+});
+
 test('two devices migrate the same legacy attempts once, preserving repeated identical attempts', async () => {
   const api = server(), legacy = JSON.stringify({ p1: [value('o'), value('o'), value('x')] });
   const a = client(api), b = client(api);

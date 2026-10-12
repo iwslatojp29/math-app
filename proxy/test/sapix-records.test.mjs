@@ -53,6 +53,16 @@ async function login(f, seed = 'v') {
 }
 async function json(f, path, options) { const response = await f.state.fetch(request(path, options)); assert.equal(response.status, 200, await response.clone().text()); return response.json(); }
 const put = (id, pid = 'calc-1', seq = 1, r = 'o') => ({ type: 'put', id, pid, seq, value: { d: '2026-09-26', r, s: 30, over: false } });
+
+test('calculation login returns only to its fixed index; arbitrary return targets are ignored', async () => {
+  for (const target of ['calculation-test','https://evil.example/']) {
+    const f=await fixture();
+    const start=await f.state.fetch(request('/api/sapix/auth/start?'+new URLSearchParams({state:'s'.repeat(24),challenge:hash('v'.repeat(43)),returnTo:target})));
+    const response=await identityCallback(f,start,f.env.SAPIX_OWNER_EMAIL);
+    const location=new URL(response.headers.get('Location'));
+    assert.equal(location.origin+location.pathname,target==='calculation-test'?'https://iwslatojp29.github.io/math-app/calculation-test/index.html':TRAINER);
+  }
+});
 async function write(f, token, ops) { return json(f, '/api/sapix/records', { method: 'POST', token, body: { ops } }); }
 
 test('Pages routes use the existing owner Durable Object and preflight allows only the Pages origin and required headers', async () => {

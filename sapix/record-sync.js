@@ -54,6 +54,9 @@
   }
   function create(options) {
     var o = options || {}, storage = o.storage || localStorage, session = o.sessionStorage || (typeof sessionStorage !== 'undefined' ? sessionStorage : null);
+    var calculation = o.namespace === 'calculation-test';
+    var recordsKey = calculation ? 'calculation_test_records_v1' : 'sapix_sansu_records_v2';
+    var legacyKey = calculation ? 'calculation_test_legacy_unused' : 'sapix_sansu_records_v1';
     var request = o.fetch || fetch, crypt = o.crypto || globalThis.crypto, now = o.now || Date.now;
     var schedule = o.setTimeout || setTimeout, unschedule = o.clearTimeout || clearTimeout;
     var loc = o.location || (typeof location !== 'undefined' ? location : null), hist = o.history || (typeof history !== 'undefined' ? history : null);
@@ -205,7 +208,7 @@
     function snapshot(data, sent) {
       readLatest();
       if (!data || !Number.isSafeInteger(data.revision) || data.revision < envelope.revision || !Array.isArray(data.entries) || !Array.isArray(data.deleted)) throw Error('invalid_response');
-      var next = { version: 2, revision: data.revision, entries: clone(data.entries), deleted: [...new Set(data.deleted.concat(envelope.deleted))], outbox: [] };
+      var next = { version: 2, revision: data.revision, entries: clone(data.entries).filter(function (e) { return typeof e.pid === 'string' && (e.pid.startsWith('calc:') === calculation); }), deleted: [...new Set(data.deleted.concat(envelope.deleted))], outbox: [] };
       validateEnvelope(next);
       next.entries = next.entries.filter(function (x) { return !next.deleted.includes(x.id); });
       next.outbox = envelope.outbox.filter(function (op) { return !sent.some(function (ack) { return JSON.stringify(ack) === JSON.stringify(op); }); });
@@ -260,7 +263,7 @@
       var verifier = base64url(crypt.getRandomValues(new Uint8Array(32))), state = base64url(crypt.getRandomValues(new Uint8Array(24)));
       var digest = await crypt.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
       session.setItem(pkceKey, JSON.stringify({ verifier: verifier, state: state, created: now() }));
-      loc.assign(API + '/api/sapix/auth/start?challenge=' + base64url(new Uint8Array(digest)) + '&state=' + encodeURIComponent(state));
+      loc.assign(API + '/api/sapix/auth/start?challenge=' + base64url(new Uint8Array(digest)) + '&state=' + encodeURIComponent(state) + (o.returnTo === 'calculation-test' ? '&returnTo=calculation-test' : ''));
     }
     async function finishAuth() {
       if (!loc || !loc.hash || !/sapix_(code|state|error)=/.test(loc.hash)) return false;
