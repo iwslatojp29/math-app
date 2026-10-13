@@ -190,7 +190,7 @@ async function handleFiles(files) {
       try {
         const text = await readFileAsText(file);
         const normalizedText = /<meta[^>]+charset/i.test(text) ? text : (/<head[^>]*>/i.test(text) ? text.replace(/<head([^>]*)>/i, '<head$1><meta charset="utf-8">') : '<meta charset="utf-8">\n' + text);
-        const updatedText = injectBackLink(normalizedText) + '\n<script src="../sapix/record-sync.js?v=20261012"></scr' + 'ipt><script src="../shared/calculation-records.js?v=20261014"></scr' + 'ipt>';
+        const updatedText = injectBackLink(normalizedText) + '\n<script src="../sapix/record-sync.js?v=20261012"></scr' + 'ipt><script src="../shared/calculation-records.js?v=20261014-2"></scr' + 'ipt>';
         const contentBase64 = utf8ToBase64(updatedText);
         const body = { folder: FOLDER, filename: file.name, contentBase64 };
         if (selectedSubject) body.subject = selectedSubject;
