@@ -5,286 +5,514 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>中学への算数 - コンテンツ一覧</title>
   <style>
-    body {
-      font-family: -apple-system, "Hiragino Sans", sans-serif;
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 20px;
-      background: #f5f5f5;
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: #f5f7fa; color: #233047; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif; }
+    .page { max-width: 1160px; margin: auto; padding: 24px 28px 40px; }
+    a { color: #176ac2; }
+    button { font: inherit; cursor: pointer; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #dd9c28; outline-offset: 4px; }
+    .back-link { display: inline-block; margin-bottom: 18px; text-decoration: none; font-size: 14px; font-weight: 600; }
+    .content-tabs { display: flex; gap: 6px; padding: 5px; border: 1px solid #d5e2f1; border-radius: 12px; background: #eaf1fa; }
+    .content-tabs a { flex: 1; padding: 11px 8px; border-radius: 8px; text-align: center; text-decoration: none; font-size: 14px; font-weight: 700; }
+    .content-tabs a[aria-current="page"] { color: white; background: #176ac2; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 28px 0 22px; }
+    h1 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 8px; letter-spacing: .02em; }
+    .intro { color: #657287; font-size: 14px; margin: 0; line-height: 1.7; }
+    .update-btn { flex: none; padding: 11px 21px; border: 1px solid #c8d8e6; border-radius: 9px; background: white; color: #344963; text-decoration: none; font-size: 14px; font-weight: 700; }
+    .type-toolbar { position: sticky; top: 0; z-index: 2; padding: 14px 0; margin-bottom: 14px; background: #f5f7fa; }
+    .type-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .type-button { min-height: 44px; padding: 10px 17px; border: 1px solid #d7dfe9; border-radius: 9px; color: #526178; background: white; font-size: 14px; font-weight: 700; }
+    .type-button:hover { border-color: #8aafd6; }
+    .type-button[aria-pressed="true"] { color: white; background: #176ac2; border-color: #176ac2; box-shadow: 0 2px 5px #176ac21a; }
+    .catalog-layout { display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 30px; align-items: start; }
+    .catalog-layout:has(.month-sidebar[hidden]) { display: block; }
+    .month-sidebar { position: sticky; top: 88px; max-height: calc(100dvh - 110px); overflow: auto; padding: 4px 10px 12px 0; }
+    .sidebar-label { font-size: 12px; letter-spacing: .08em; color: #758297; margin: 0 0 12px 12px; }
+    #month-list { display: grid; gap: 5px; }
+    .month-button { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 46px; padding: 12px; border: 0; border-radius: 9px; background: transparent; color: #526178; font-size: 14px; text-align: left; }
+    .month-button:hover { background: #eaf0f7; }
+    .month-button[aria-current="true"] { background: #e3eefc; color: #135caa; font-weight: 700; }
+    .month-count { font-size: 11px; font-weight: 500; color: #78899f; }
+    .results { min-width: 0; }
+    .results-header { display: flex; align-items: start; justify-content: space-between; gap: 12px; margin: 0 0 17px; padding: 4px 0 17px; border-bottom: 1px solid #dce3ec; scroll-margin-top: 88px; }
+    #results-title { margin: 0 0 7px; font-size: 22px; }
+    #results-summary { margin: 0; color: #6d7b8f; font-size: 12px; line-height: 1.6; }
+    .sort-note { flex: none; color: #718097; font-size: 12px; padding-top: 4px; }
+    .card { padding: 21px 22px 17px; margin: 0 0 12px; background: white; border: 1px solid #e0e6ee; border-radius: 12px; box-shadow: 0 2px 3px #203a5a03; }
+    .card a { display: inline-block; text-decoration: none; font-size: 16px; font-weight: 700; line-height: 1.75; overflow-wrap: anywhere; }
+    .card a:hover { text-decoration: underline; }
+    .upload-date { display: block; margin-top: 10px; color: #7a8798; font-size: 11px; line-height: 1.5; }
+    #empty-message { padding: 26px 20px; color: #68778c; background: white; border-radius: 12px; }
+    .management { margin: 28px 0 0; padding-top: 20px; border-top: 1px solid #dce3ec; display: flex; flex-wrap: wrap; gap: 12px 24px; }
+    .management a { text-decoration: none; color: #69788d; font-size: 12px; padding: 7px 0; }
+    @media (max-width: 640px) {
+      .page { padding: 18px 14px 28px; }
+      .content-tabs a { font-size: 12px; padding: 10px 4px; }
+      .page-header { margin: 24px 0 14px; gap: 10px; }
+      .intro { font-size: 12px; }
+      .update-btn { padding: 10px 12px; font-size: 12px; }
+      .type-toolbar { padding: 10px 0 12px; margin-bottom: 10px; }
+      .type-buttons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .type-button { padding: 9px 5px; font-size: 12px; }
+      .catalog-layout { grid-template-columns: 106px minmax(0, 1fr); gap: 12px; }
+      .month-sidebar { top: 126px; padding-right: 0; max-height: calc(100dvh - 148px); }
+      .sidebar-label { margin-left: 8px; font-size: 11px; }
+      .month-button { font-size: 12px; padding: 11px 8px; gap: 4px; }
+      .month-count { font-size: 10px; }
+      .results-header { display: block; margin-bottom: 12px; padding-bottom: 12px; scroll-margin-top: 126px; }
+      #results-title { font-size: 19px; }
+      #results-summary { font-size: 11px; }
+      .sort-note { display: inline-block; margin-top: 9px; padding: 0; font-size: 10px; }
+      .card { padding: 14px 13px 12px; margin-bottom: 10px; border-radius: 10px; }
+      .card a { font-size: 14px; line-height: 1.7; }
+      .upload-date { font-size: 10px; margin-top: 9px; }
     }
-    h1 {
-      color: #333;
-      border-bottom: 3px solid #2196F3;
-      padding-bottom: 10px;
-    }
-    h2 {
-      color: #555;
-      margin-top: 30px;
-    }
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 15px 0;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .card a {
-      color: #1a73e8;
-      text-decoration: none;
-      font-size: 1.1em;
-      font-weight: bold;
-    }
-    .card a:hover {
-      text-decoration: underline;
-    }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 20px;
-      color: #1a73e8;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-    .upload-btn {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 12px 24px;
-      background: #2196F3;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 1em;
-      font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .upload-btn:hover {
-      background: #1976D2;
-    }
-    .update-panel { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; border: 1px solid #dbe3dc; padding: 16px 18px; border-radius: 12px; margin: 18px 0 24px; }
-    .update-panel p { margin: 0; font-size: 14px; color: #53645c; }
-    .update-btn { display: inline-block; flex: none; background: #17644e; color: white; font-weight: bold; border-radius: 9px; padding: 12px 23px; text-decoration: none; }
-    .update-btn:hover { background: #104f3c; }
-    .update-btn:focus-visible { outline: 3px solid #e4a349; outline-offset: 4px; }
-    @media (max-width: 430px) { .update-panel { gap: 10px; padding: 14px; } .update-panel p { font-size: 12px; } }
-    .content-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 6px; margin: 0 0 24px; background: #e8f2ff; border: 1px solid #c6ddf7; border-radius: 12px; }
-    .content-tabs a { min-width: 0; padding: 12px 8px; border-radius: 8px; color: #185fa6; text-align: center; text-decoration: none; font-weight: bold; line-height: 1.4; }
-    .content-tabs a:hover { background: #d8eaff; }
-    .content-tabs a[aria-current="page"] { background: #1976D2; color: white; }
-    .content-tabs a:focus-visible { outline: 3px solid #e4a349; outline-offset: 2px; }
   </style>
 </head>
 <body>
-  <a class="back-link" href="../">← トップへ戻る</a>
-  <nav class="content-tabs" aria-label="算数の教材を切り替える">
-    <a href="../math/index.html" aria-current="page">中学への算数</a>
-    <a href="../sapix/index.html">Sapix</a>
-    <a href="../calculation-test/index.html">計算力テスト</a>
-  </nav>
-  <h1>中学への算数</h1>
-  <div class="update-panel">
-    <p>PDFの切り出しと解答解説HTMLの作成を、それぞれのボタンで実行できます。</p>
-    <a class="update-btn" href="https://math-app-proxy.iwslatojp29.workers.dev/studio">更新</a>
+  <div class="page">
+    <a class="back-link" href="../">← トップへ戻る</a>
+    <nav class="content-tabs" aria-label="算数の教材を切り替える">
+      <a href="../math/index.html" aria-current="page">中学への算数</a>
+      <a href="../sapix/index.html">Sapix</a>
+      <a href="../calculation-test/index.html">計算力テスト</a>
+    </nav>
+    <header class="page-header">
+      <div>
+        <h1>中学への算数</h1>
+        <p class="intro">種類と年月を選んで、見たい解説へ。</p>
+      </div>
+      <a class="update-btn" href="https://math-app-proxy.iwslatojp29.workers.dev/studio">教材を更新</a>
+    </header>
+    <div class="type-toolbar" hidden id="type-toolbar">
+      <div class="type-buttons" role="group" aria-label="教材の種類">
+        <button type="button" class="type-button" data-type="all" aria-pressed="true">すべて</button>
+        <button type="button" class="type-button" data-type="daily" aria-pressed="false">日日の演習</button>
+        <button type="button" class="type-button" data-type="advanced" aria-pressed="false">発展演習</button>
+        <button type="button" class="type-button" data-type="contest" aria-pressed="false">学力コンテスト</button>
+        <button type="button" class="type-button" data-type="other" aria-pressed="false">その他</button>
+      </div>
+    </div>
+    <div class="catalog-layout">
+      <aside class="month-sidebar" id="month-sidebar" hidden>
+        <h2 class="sidebar-label">年月を選ぶ</h2>
+        <nav id="month-list" aria-label="教材の年月"></nav>
+      </aside>
+      <main class="results">
+        <div class="results-header" id="results-header" hidden>
+          <div>
+            <h2 id="results-title"></h2>
+            <p id="results-summary" role="status" aria-live="polite"></p>
+          </div>
+          <span class="sort-note">アップロードが新しい順</span>
+        </div>
+        <noscript><p>すべての教材を表示しています。種類・年月での絞り込みにはJavaScriptが必要です。</p></noscript>
+        <div id="card-list">
+          <div class="card" data-uploaded-at="2026-10-12T10:35:34Z">
+            <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E7%99%BA%E5%B1%95%E6%BC%94%E7%BF%92%E3%83%BB%E5%AD%A6%E5%8A%9B%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88_%E6%80%9D%E8%80%83%E5%8A%9B%E3%82%92%E8%82%B2%E3%81%A6%E3%82%8B%E8%A7%A3%E8%AA%AC.html">2026年11月 発展演習・学力コンテスト 解答解説｜思考力を育てる解説</a>
+            <time class="upload-date" datetime="2026-10-12T10:35:34Z">アップロード 2026/10/12 19:35</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-11T10:10:00Z">
+            <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E5%AD%A6%E5%8A%9B%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88_%E9%9B%A3%E5%95%8F%E7%89%88_3%E8%A7%A3%E6%B3%95%E8%A7%A3%E8%AA%ACv2.html">2026年11月 学力コンテスト 解答解説｜難問版・3解法 v2</a>
+            <time class="upload-date" datetime="2026-10-11T10:10:00Z">アップロード 2026/10/11 19:10</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-10T17:09:18Z">
+            <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E7%99%BA%E5%B1%95%E6%BC%94%E7%BF%92%E3%83%BB%E5%AD%A6%E5%8A%9B%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88_%E9%9B%A3%E5%95%8F%E7%89%88_3%E8%A7%A3%E6%B3%95%E8%A7%A3%E8%AA%AC.html">2026年11月 発展演習・学力コンテスト 解答解説｜難問版・3解法</a>
+            <time class="upload-date" datetime="2026-10-10T17:09:18Z">アップロード 2026/10/11 02:09</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-04T10:36:05Z">
+            <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E6%95%B4%E6%95%B0_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E2%80%97v2.html">2026年11月 日日の演習・要点整理 解答解説・アニメーション｜整数 v2</a>
+            <time class="upload-date" datetime="2026-10-04T10:36:05Z">アップロード 2026/10/04 19:36</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-27T16:08:30Z">
+            <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E6%95%B4%E6%95%B0_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年11月 日日の演習・要点整理 解答解説・アニメーション｜整数</a>
+            <time class="upload-date" datetime="2026-09-27T16:08:30Z">アップロード 2026/09/28 01:08</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-10T05:15:59Z">
+            <a href="./2026%E5%B9%B410%E6%9C%88%E5%8F%B7_%E7%AB%8B%E4%BD%93%E5%9B%B3%E5%BD%A2_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年10月 日日の演習・要点整理 解答解説・アニメーション｜立体図形</a>
+            <time class="upload-date" datetime="2026-10-10T05:15:59Z">アップロード 2026/10/10 14:15</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-20T04:32:54Z">
+            <a href="./2026年10月号_立体図形_解答解説.html">2026年10月 日日の演習・要点整理 解答解説｜立体図形</a>
+            <time class="upload-date" datetime="2026-09-20T04:32:54Z">アップロード 2026/09/20 13:32</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-13T08:27:43Z">
+            <a href="./算数4題_図解と直感を育てる解答解説 (2).html">2026年10月 学力コンテスト 解答解説｜着眼点から解く・小4の既習事項を前提に</a>
+            <time class="upload-date" datetime="2026-09-13T08:27:43Z">アップロード 2026/09/13 17:27</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-13T08:27:43Z">
+            <a href="./算数4題_図解と直感を育てる解答解説 (2).html">2026年10月 学力コンテスト 解答解説｜着眼点から解く・小4の既習事項を前提に</a>
+            <time class="upload-date" datetime="2026-09-13T08:27:43Z">アップロード 2026/09/13 17:27</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-13T07:41:46Z">
+            <a href="./算数4題_図解と直感を育てる解答解説 (1).html">2026年10月 学力コンテスト 解答解説｜図で見つける解き方と直感の育て方・説明補強版</a>
+            <time class="upload-date" datetime="2026-09-13T07:41:46Z">アップロード 2026/09/13 16:41</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-12T08:13:26Z">
+            <a href="./2026年10月号学コン.html">2026年10月 学力コンテスト 解答解説｜図で見つける解き方と直感の育て方</a>
+            <time class="upload-date" datetime="2026-09-12T08:13:26Z">アップロード 2026/09/12 17:13</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-10T05:15:48Z">
+            <a href="./2026%E5%B9%B49%E6%9C%88%E5%8F%B7_%E9%80%9F%E3%81%95%E3%81%A8%E6%AF%94_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年9月 日日の演習・要点整理 解答解説・アニメーション｜速さと比</a>
+            <time class="upload-date" datetime="2026-10-10T05:15:48Z">アップロード 2026/10/10 14:15</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-20T04:32:49Z">
+            <a href="./2026年9月号_速さと比_解答解説.html">2026年9月 日日の演習・要点整理 解答解説｜速さと比</a>
+            <time class="upload-date" datetime="2026-09-20T04:32:49Z">アップロード 2026/09/20 13:32</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-08-13T07:21:16Z">
+            <a href="./中学受験算数_4題_直感的解説_ver2.html">2026年9月 学力コンテスト 解答解説｜4題の直感的な解説 v2</a>
+            <time class="upload-date" datetime="2026-08-13T07:21:16Z">アップロード 2026/08/13 16:21</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-08-13T06:36:19Z">
+            <a href="./2026年8月号_学コン.html">2026年9月 学力コンテスト 解答解説｜4題の直感的な解説</a>
+            <time class="upload-date" datetime="2026-08-13T06:36:19Z">アップロード 2026/08/13 15:36</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-08-13T05:39:59Z">
+            <a href="./中数9月号_学コン4題_直感的解説.html">2026年9月 学力コンテスト 解答解説｜4題の直感的な解説</a>
+            <time class="upload-date" datetime="2026-08-13T05:39:59Z">アップロード 2026/08/13 14:39</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-10T05:15:13Z">
+            <a href="./2026%E5%B9%B48%E6%9C%88%E5%8F%B7_%E5%9B%B3%E5%BD%A2%E3%81%A8%E6%AF%94_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年8月 日日の演習・要点整理 解答解説・アニメーション｜図形と比</a>
+            <time class="upload-date" datetime="2026-10-10T05:15:13Z">アップロード 2026/10/10 14:15</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-04T08:39:05Z">
+            <a href="./2026%E5%B9%B48%E6%9C%88%E3%83%9E%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E2%80%97%E5%95%8F%E9%A1%8C6_%E3%83%91%E3%83%B3%E3%81%AE%E9%81%B8%E3%81%B3%E6%96%B9_%E5%9B%B3%E8%A7%A3%E4%BB%98%E3%81%8D%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC.html">2026年8月 マンスリー 解答解説｜問題6 パンの選び方・図解付き</a>
+            <time class="upload-date" datetime="2026-10-04T08:39:05Z">アップロード 2026/10/04 17:39</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-20T09:01:01Z">
+            <a href="./2026%E5%B9%B48%E6%9C%88%E5%8F%B7_%E5%9B%B3%E5%BD%A2%E3%81%A8%E6%AF%94_%E8%AC%9B%E7%BE%A9%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年8月 日日の演習・要点整理 講義アニメーション｜図形と比</a>
+            <time class="upload-date" datetime="2026-09-20T09:01:01Z">アップロード 2026/09/20 18:01</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-20T04:32:43Z">
+            <a href="./2026年8月号_図形と比_解答解説.html">2026年8月 日日の演習・要点整理 解答解説｜図形と比</a>
+            <time class="upload-date" datetime="2026-09-20T04:32:43Z">アップロード 2026/09/20 13:32</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-07-11T17:06:37Z">
+            <a href="./比2_図形と比_応用問題_図解増補版.html">2026年8月 発展演習・学力コンテスト 解答解説｜図形と比 図解増補版</a>
+            <time class="upload-date" datetime="2026-07-11T17:06:37Z">アップロード 2026/07/12 02:06</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-07-11T17:06:30Z">
+            <a href="./比2_図形と比_日日の演習_図解増補版.html">2026年8月 日日の演習・要点整理 解答解説｜図形と比 図解増補版</a>
+            <time class="upload-date" datetime="2026-07-11T17:06:30Z">アップロード 2026/07/12 02:06</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-24T07:30:19Z">
+            <a href="./2026%E5%B9%B47%E6%9C%88%E5%8F%B7%E5%95%8F%E9%A1%8C30%E2%80%97%E6%B0%B4%E3%81%9D%E3%81%86%E3%81%A8%E3%83%9D%E3%83%B3%E3%83%97_%E6%AF%94%E3%81%A7%E3%82%8F%E3%81%8B%E3%82%8B%E5%9B%B3%E8%A7%A3%E8%A7%A3%E8%AA%AC.html">2026年7月 日日の演習 図解解説｜問題30 水そうとポンプ・比でわかる</a>
+            <time class="upload-date" datetime="2026-10-24T07:30:19Z">アップロード 2026/10/24 16:30</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-10T05:13:31Z">
+            <a href="./2026%E5%B9%B47%E6%9C%88%E5%8F%B7_%E6%AF%94%E3%81%AE%E3%81%82%E3%81%A4%E3%81%8B%E3%81%84%E3%81%A8%E6%96%87%E7%AB%A0%E9%A1%8C_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年7月 日日の演習・要点整理 解答解説・アニメーション｜比のあつかいと文章題</a>
+            <time class="upload-date" datetime="2026-10-10T05:13:31Z">アップロード 2026/10/10 14:13</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-26T16:59:38Z">
+            <a href="./2026%E5%B9%B47%E6%9C%88%E5%8F%B7_%E6%AF%94%E3%81%AE%E3%81%82%E3%81%A4%E3%81%8B%E3%81%84%E3%81%A8%E6%96%87%E7%AB%A0%E9%A1%8C_%E8%AC%9B%E7%BE%A9%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年7月 日日の演習・要点整理 講義アニメーション｜比のあつかいと文章題</a>
+            <time class="upload-date" datetime="2026-09-26T16:59:38Z">アップロード 2026/09/27 01:59</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-09-20T04:32:40Z">
+            <a href="./2026年7月号_比のあつかいと文章題_解答解説.html">2026年7月 日日の演習・要点整理 解答解説｜比のあつかいと文章題</a>
+            <time class="upload-date" datetime="2026-09-20T04:32:40Z">アップロード 2026/09/20 13:32</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-06-07T09:51:22Z">
+            <a href="./202607_学力コンテストv2.html">2026年7月 学力コンテスト 解答解説｜v14.0</a>
+            <time class="upload-date" datetime="2026-06-07T09:51:22Z">アップロード 2026/06/07 18:51</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-17T05:10:27Z">
+            <a href="./2026_06_zukei_all_svg_explanations_pure_svg_redrawn_related_checked.html">2026年6月 日日の演習・要点整理 全問解説｜SVG図解 改訂版（PDF図準拠・関連問題確認済み）</a>
+            <time class="upload-date" datetime="2026-05-17T05:10:27Z">アップロード 2026/05/17 14:10</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-17T04:47:13Z">
+            <a href="./2026_06_zukei_all_svg_explanations_pure_svg_redrawn.html">2026年6月 日日の演習・要点整理 全問解説｜SVG図解 改訂版（PDF図準拠）</a>
+            <time class="upload-date" datetime="2026-05-17T04:47:13Z">アップロード 2026/05/17 13:47</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-16T07:04:51Z">
+            <a href="./gakuryoku_contest_2026_06_hypothesis_svg.html">2026年6月 学力コンテスト 解答解説｜仮説選択・SVG図解版</a>
+            <time class="upload-date" datetime="2026-05-16T07:04:51Z">アップロード 2026/05/16 16:04</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-12T05:52:03Z">
+            <a href="./2026_06_zukei_all_svg_explanations.html">2026年6月 日日の演習・要点整理 全問解説｜SVG図解</a>
+            <time class="upload-date" datetime="2026-05-12T05:52:03Z">アップロード 2026/05/12 14:52</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-10T09:10:27Z">
+            <a href="./2026年6月学力コンテスト_SVG解説_v6.0.html">2026年6月 学力コンテスト 解答解説｜SVG図解 改訂2</a>
+            <time class="upload-date" datetime="2026-05-10T09:10:27Z">アップロード 2026/05/10 18:10</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-09T11:02:54Z">
+            <a href="./2026年6月学力コンテスト_2.html">2026年6月 学力コンテスト 解答解説｜仮説選択・SVG図解版</a>
+            <time class="upload-date" datetime="2026-05-09T11:02:54Z">アップロード 2026/05/09 20:02</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-09T05:11:33Z">
+            <a href="./2026年6月学力コンテスト.html">2026年6月 学力コンテスト 解答解説</a>
+            <time class="upload-date" datetime="2026-05-09T05:11:33Z">アップロード 2026/05/09 14:11</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-10-04T08:17:46Z">
+            <a href="./2026%E5%B9%B45%E6%9C%88%E5%8F%B7_%E5%92%8C%E3%81%A8%E5%B7%AE%E3%81%AE%E6%96%87%E7%AB%A0%E9%A1%8C_%E6%97%A5%E6%97%A5%E3%81%AE%E6%BC%94%E7%BF%92_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E8%AC%9B%E7%BE%A9%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年5月 日日の演習・要点整理 解答解説・講義アニメーション｜和と差の文章題</a>
+            <time class="upload-date" datetime="2026-10-04T08:17:46Z">アップロード 2026/10/04 17:17</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-18T08:49:23Z">
+            <a href="./5月号 日日の演習 問題29ｰ2.html">2026年5月 日日の演習 解答解説｜問題29 電車の運賃・センスよく解く</a>
+            <time class="upload-date" datetime="2026-04-18T08:49:23Z">アップロード 2026/04/18 17:49</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-18T08:33:20Z">
+            <a href="./5月号 日日の演習 問題29.html">2026年5月 日日の演習 解答解説｜問題29 電車の運賃・難問力がつく解説</a>
+            <time class="upload-date" datetime="2026-04-18T08:33:20Z">アップロード 2026/04/18 17:33</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-18T04:46:36Z">
+            <a href="./hibi_enshu_wa_to_sa_analysis_v14.html">2026年5月 日日の演習 解答・難問探索分析｜和と差の文章題 v14.0</a>
+            <time class="upload-date" datetime="2026-04-18T04:46:36Z">アップロード 2026/04/18 13:46</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-18T05:28:48Z">
+            <a href="./gakukon_2026_05_analysis_v14.html">2026年5月 学力コンテスト 解答・難問探索分析｜1〜4 v14.0</a>
+            <time class="upload-date" datetime="2026-04-18T05:28:48Z">アップロード 2026/04/18 14:28</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-12T11:32:04Z">
+            <a href="./2026_05_hibi_enshu_kaisetsu_v6.0.html">2026年5月 日日の演習 全問解説｜和と差の文章題 v4</a>
+            <time class="upload-date" datetime="2026-04-12T11:32:04Z">アップロード 2026/04/12 20:32</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-12T09:21:33Z">
+            <a href="./2026_05_hibi_enshu_kaisetsu_v5_0.html">2026年5月 日日の演習 全問解説｜和と差の文章題 v3</a>
+            <time class="upload-date" datetime="2026-04-12T09:21:33Z">アップロード 2026/04/12 18:21</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-12T09:19:11Z">
+            <a href="./2026_05_hibi_enshu_kaisetsu_v4.0.html">2026年5月 日日の演習 全問解説｜和と差の文章題 v2</a>
+            <time class="upload-date" datetime="2026-04-12T09:19:11Z">アップロード 2026/04/12 18:19</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-12T09:19:11Z">
+            <a href="./2026_05_hibi_enshu_kaisetsu_v4.0.html">2026年5月 日日の演習 全問解説｜和と差の文章題</a>
+            <time class="upload-date" datetime="2026-04-12T09:19:11Z">アップロード 2026/04/12 18:19</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-13T10:02:59Z">
+            <a href="./gakukon_2026_05_html_app_v3.0.html">2026年5月 学力コンテスト 解答解説｜思考プロセス強化 v3.0</a>
+            <time class="upload-date" datetime="2026-04-13T10:02:59Z">アップロード 2026/04/13 19:02</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-12T11:36:04Z">
+            <a href="./gakukon_2026_05_html_app_v2.1.html">2026年5月 学力コンテスト 解答解説｜思考プロセス強化 v2.1</a>
+            <time class="upload-date" datetime="2026-04-12T11:36:04Z">アップロード 2026/04/12 20:36</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-12T09:16:38Z">
+            <a href="./gakukon_2026_05_html_app.html">2026年5月 学力コンテスト 解答解説｜思考プロセス強化</a>
+            <time class="upload-date" datetime="2026-04-12T09:16:38Z">アップロード 2026/04/12 18:16</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-04-12T09:15:18Z">
+            <a href="./gakuryoku_contest_2026-05_v7_fixed.html">2026年5月 学力コンテスト 解答解説</a>
+            <time class="upload-date" datetime="2026-04-12T09:15:18Z">アップロード 2026/04/12 18:15</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-07-05T06:30:56Z">
+            <a href="./中数2025年11月号_P14-37_要点整理と日々の演習_完全解説.html">2025年11月 日日の演習・要点整理 解答解説｜整数(2) P14〜37 完全解説</a>
+            <time class="upload-date" datetime="2026-07-05T06:30:56Z">アップロード 2026/07/05 15:30</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-07-05T05:06:20Z">
+            <a href="./中数2025年11月号_発展演習_整数2_完全解説.html">2025年11月 発展演習 解答解説｜整数(2) 完全解説</a>
+            <time class="upload-date" datetime="2026-07-05T05:06:20Z">アップロード 2026/07/05 14:06</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-06-28T06:06:17Z">
+            <a href="./2025年11月整数.html">2025年11月 日日の演習 解答解説｜整数(2) 論理チェック済み完全詳解</a>
+            <time class="upload-date" datetime="2026-06-28T06:06:17Z">アップロード 2026/06/28 15:06</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-06-21T10:08:49Z">
+            <a href="./2025_11_hibi_no_enshu_complete_guide_detailed.html">2025年11月 日日の演習 解答解説｜整数(2) 完全・超詳解</a>
+            <time class="upload-date" datetime="2026-06-21T10:08:49Z">アップロード 2026/06/21 19:08</time>
+          </div>
+          <div class="card" data-uploaded-at="2026-05-24T16:21:32Z">
+            <a href="./Agentic_AI_完全構築ガイド.html">Agentic AI 完全構築ガイド ― ゼロから同じシステムを作る</a>
+            <time class="upload-date" datetime="2026-05-24T16:21:32Z">アップロード 2026/05/25 01:21</time>
+          </div>
+        </div>
+        <p id="empty-message" hidden>この種類・年月の教材はまだありません。</p>
+        <footer class="management">
+          <a class="upload-btn" href="./upload.html">＋ 新しいページを追加</a>
+          <a class="delete-page-btn" href="./delete.html">ページを削除</a>
+        </footer>
+      </main>
+    </div>
   </div>
-  <p>年月の新しい順に表示しています。</p>
-  <div id="card-list">
-    <h2>2026年11月</h2>
-    <div class="card">
-      <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E7%99%BA%E5%B1%95%E6%BC%94%E7%BF%92%E3%83%BB%E5%AD%A6%E5%8A%9B%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88_%E6%80%9D%E8%80%83%E5%8A%9B%E3%82%92%E8%82%B2%E3%81%A6%E3%82%8B%E8%A7%A3%E8%AA%AC.html">2026年11月 発展演習・学力コンテスト 解答解説｜思考力を育てる解説</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E5%AD%A6%E5%8A%9B%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88_%E9%9B%A3%E5%95%8F%E7%89%88_3%E8%A7%A3%E6%B3%95%E8%A7%A3%E8%AA%ACv2.html">2026年11月 学力コンテスト 解答解説｜難問版・3解法 v2</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E7%99%BA%E5%B1%95%E6%BC%94%E7%BF%92%E3%83%BB%E5%AD%A6%E5%8A%9B%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88_%E9%9B%A3%E5%95%8F%E7%89%88_3%E8%A7%A3%E6%B3%95%E8%A7%A3%E8%AA%AC.html">2026年11月 発展演習・学力コンテスト 解答解説｜難問版・3解法</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E6%95%B4%E6%95%B0_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E2%80%97v2.html">2026年11月 日日の演習・要点整理 解答解説・アニメーション｜整数 v2</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B411%E6%9C%88%E5%8F%B7_%E6%95%B4%E6%95%B0_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年11月 日日の演習・要点整理 解答解説・アニメーション｜整数</a>
-    </div>
-    <h2>2026年10月</h2>
-    <div class="card">
-      <a href="./2026%E5%B9%B410%E6%9C%88%E5%8F%B7_%E7%AB%8B%E4%BD%93%E5%9B%B3%E5%BD%A2_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年10月 日日の演習・要点整理 解答解説・アニメーション｜立体図形</a>
-    </div>
-    <div class="card">
-      <a href="./2026年10月号_立体図形_解答解説.html">2026年10月 日日の演習・要点整理 解答解説｜立体図形</a>
-    </div>
-    <div class="card">
-      <a href="./算数4題_図解と直感を育てる解答解説 (2).html">2026年10月 学力コンテスト 解答解説｜着眼点から解く・小4の既習事項を前提に</a>
-    </div>
-    <div class="card">
-      <a href="./算数4題_図解と直感を育てる解答解説 (2).html">2026年10月 学力コンテスト 解答解説｜着眼点から解く・小4の既習事項を前提に</a>
-    </div>
-    <div class="card">
-      <a href="./算数4題_図解と直感を育てる解答解説 (1).html">2026年10月 学力コンテスト 解答解説｜図で見つける解き方と直感の育て方・説明補強版</a>
-    </div>
-    <div class="card">
-      <a href="./2026年10月号学コン.html">2026年10月 学力コンテスト 解答解説｜図で見つける解き方と直感の育て方</a>
-    </div>
-    <h2>2026年9月</h2>
-    <div class="card">
-      <a href="./2026%E5%B9%B49%E6%9C%88%E5%8F%B7_%E9%80%9F%E3%81%95%E3%81%A8%E6%AF%94_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年9月 日日の演習・要点整理 解答解説・アニメーション｜速さと比</a>
-    </div>
-    <div class="card">
-      <a href="./2026年9月号_速さと比_解答解説.html">2026年9月 日日の演習・要点整理 解答解説｜速さと比</a>
-    </div>
-    <div class="card">
-      <a href="./中学受験算数_4題_直感的解説_ver2.html">2026年9月 学力コンテスト 解答解説｜4題の直感的な解説 v2</a>
-    </div>
-    <div class="card">
-      <a href="./2026年8月号_学コン.html">2026年9月 学力コンテスト 解答解説｜4題の直感的な解説</a>
-    </div>
-    <div class="card">
-      <a href="./中数9月号_学コン4題_直感的解説.html">2026年9月 学力コンテスト 解答解説｜4題の直感的な解説</a>
-    </div>
-    <h2>2026年8月</h2>
-    <div class="card">
-      <a href="./2026%E5%B9%B48%E6%9C%88%E5%8F%B7_%E5%9B%B3%E5%BD%A2%E3%81%A8%E6%AF%94_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年8月 日日の演習・要点整理 解答解説・アニメーション｜図形と比</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B48%E6%9C%88%E3%83%9E%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E2%80%97%E5%95%8F%E9%A1%8C6_%E3%83%91%E3%83%B3%E3%81%AE%E9%81%B8%E3%81%B3%E6%96%B9_%E5%9B%B3%E8%A7%A3%E4%BB%98%E3%81%8D%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC.html">2026年8月 マンスリー 解答解説｜問題6 パンの選び方・図解付き</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B48%E6%9C%88%E5%8F%B7_%E5%9B%B3%E5%BD%A2%E3%81%A8%E6%AF%94_%E8%AC%9B%E7%BE%A9%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年8月 日日の演習・要点整理 講義アニメーション｜図形と比</a>
-    </div>
-    <div class="card">
-      <a href="./2026年8月号_図形と比_解答解説.html">2026年8月 日日の演習・要点整理 解答解説｜図形と比</a>
-    </div>
-    <div class="card">
-      <a href="./比2_図形と比_応用問題_図解増補版.html">2026年8月 発展演習・学力コンテスト 解答解説｜図形と比 図解増補版</a>
-    </div>
-    <div class="card">
-      <a href="./比2_図形と比_日日の演習_図解増補版.html">2026年8月 日日の演習・要点整理 解答解説｜図形と比 図解増補版</a>
-    </div>
-    <h2>2026年7月</h2>
-    <div class="card">
-      <a href="./2026%E5%B9%B47%E6%9C%88%E5%8F%B7%E5%95%8F%E9%A1%8C30%E2%80%97%E6%B0%B4%E3%81%9D%E3%81%86%E3%81%A8%E3%83%9D%E3%83%B3%E3%83%97_%E6%AF%94%E3%81%A7%E3%82%8F%E3%81%8B%E3%82%8B%E5%9B%B3%E8%A7%A3%E8%A7%A3%E8%AA%AC.html">2026年7月 日日の演習 図解解説｜問題30 水そうとポンプ・比でわかる</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B47%E6%9C%88%E5%8F%B7_%E6%AF%94%E3%81%AE%E3%81%82%E3%81%A4%E3%81%8B%E3%81%84%E3%81%A8%E6%96%87%E7%AB%A0%E9%A1%8C_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年7月 日日の演習・要点整理 解答解説・アニメーション｜比のあつかいと文章題</a>
-    </div>
-    <div class="card">
-      <a href="./2026%E5%B9%B47%E6%9C%88%E5%8F%B7_%E6%AF%94%E3%81%AE%E3%81%82%E3%81%A4%E3%81%8B%E3%81%84%E3%81%A8%E6%96%87%E7%AB%A0%E9%A1%8C_%E8%AC%9B%E7%BE%A9%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年7月 日日の演習・要点整理 講義アニメーション｜比のあつかいと文章題</a>
-    </div>
-    <div class="card">
-      <a href="./2026年7月号_比のあつかいと文章題_解答解説.html">2026年7月 日日の演習・要点整理 解答解説｜比のあつかいと文章題</a>
-    </div>
-    <div class="card">
-      <a href="./202607_学力コンテストv2.html">2026年7月 学力コンテスト 解答解説｜v14.0</a>
-    </div>
-    <h2>2026年6月</h2>
-    <div class="card">
-      <a href="./2026_06_zukei_all_svg_explanations_pure_svg_redrawn_related_checked.html">2026年6月 日日の演習・要点整理 全問解説｜SVG図解 改訂版（PDF図準拠・関連問題確認済み）</a>
-    </div>
-    <div class="card">
-      <a href="./2026_06_zukei_all_svg_explanations_pure_svg_redrawn.html">2026年6月 日日の演習・要点整理 全問解説｜SVG図解 改訂版（PDF図準拠）</a>
-    </div>
-    <div class="card">
-      <a href="./gakuryoku_contest_2026_06_hypothesis_svg.html">2026年6月 学力コンテスト 解答解説｜仮説選択・SVG図解版</a>
-    </div>
-    <div class="card">
-      <a href="./2026_06_zukei_all_svg_explanations.html">2026年6月 日日の演習・要点整理 全問解説｜SVG図解</a>
-    </div>
-    <div class="card">
-      <a href="./2026年6月学力コンテスト_SVG解説_v6.0.html">2026年6月 学力コンテスト 解答解説｜SVG図解 改訂2</a>
-    </div>
-    <div class="card">
-      <a href="./2026年6月学力コンテスト_2.html">2026年6月 学力コンテスト 解答解説｜仮説選択・SVG図解版</a>
-    </div>
-    <div class="card">
-      <a href="./2026年6月学力コンテスト.html">2026年6月 学力コンテスト 解答解説</a>
-    </div>
-    <h2>2026年5月</h2>
-    <div class="card">
-      <a href="./2026%E5%B9%B45%E6%9C%88%E5%8F%B7_%E5%92%8C%E3%81%A8%E5%B7%AE%E3%81%AE%E6%96%87%E7%AB%A0%E9%A1%8C_%E6%97%A5%E6%97%A5%E3%81%AE%E6%BC%94%E7%BF%92_%E8%A7%A3%E7%AD%94%E8%A7%A3%E8%AA%AC%E3%83%BB%E8%AC%9B%E7%BE%A9%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3.html">2026年5月 日日の演習・要点整理 解答解説・講義アニメーション｜和と差の文章題</a>
-    </div>
-    <div class="card">
-      <a href="./5月号 日日の演習 問題29ｰ2.html">2026年5月 日日の演習 解答解説｜問題29 電車の運賃・センスよく解く</a>
-    </div>
-    <div class="card">
-      <a href="./5月号 日日の演習 問題29.html">2026年5月 日日の演習 解答解説｜問題29 電車の運賃・難問力がつく解説</a>
-    </div>
-    <div class="card">
-      <a href="./hibi_enshu_wa_to_sa_analysis_v14.html">2026年5月 日日の演習 解答・難問探索分析｜和と差の文章題 v14.0</a>
-    </div>
-    <div class="card">
-      <a href="./gakukon_2026_05_analysis_v14.html">2026年5月 学力コンテスト 解答・難問探索分析｜1〜4 v14.0</a>
-    </div>
-    <div class="card">
-      <a href="./2026_05_hibi_enshu_kaisetsu_v6.0.html">2026年5月 日日の演習 全問解説｜和と差の文章題 v4</a>
-    </div>
-    <div class="card">
-      <a href="./2026_05_hibi_enshu_kaisetsu_v5_0.html">2026年5月 日日の演習 全問解説｜和と差の文章題 v3</a>
-    </div>
-    <div class="card">
-      <a href="./2026_05_hibi_enshu_kaisetsu_v4.0.html">2026年5月 日日の演習 全問解説｜和と差の文章題 v2</a>
-    </div>
-    <div class="card">
-      <a href="./2026_05_hibi_enshu_kaisetsu_v4.0.html">2026年5月 日日の演習 全問解説｜和と差の文章題</a>
-    </div>
-    <div class="card">
-      <a href="./gakukon_2026_05_html_app_v3.0.html">2026年5月 学力コンテスト 解答解説｜思考プロセス強化 v3.0</a>
-    </div>
-    <div class="card">
-      <a href="./gakukon_2026_05_html_app_v2.1.html">2026年5月 学力コンテスト 解答解説｜思考プロセス強化 v2.1</a>
-    </div>
-    <div class="card">
-      <a href="./gakukon_2026_05_html_app.html">2026年5月 学力コンテスト 解答解説｜思考プロセス強化</a>
-    </div>
-    <div class="card">
-      <a href="./gakuryoku_contest_2026-05_v7_fixed.html">2026年5月 学力コンテスト 解答解説</a>
-    </div>
-    <h2>2025年11月</h2>
-    <div class="card">
-      <a href="./中数2025年11月号_P14-37_要点整理と日々の演習_完全解説.html">2025年11月 日日の演習・要点整理 解答解説｜整数(2) P14〜37 完全解説</a>
-    </div>
-    <div class="card">
-      <a href="./中数2025年11月号_発展演習_整数2_完全解説.html">2025年11月 発展演習 解答解説｜整数(2) 完全解説</a>
-    </div>
-    <div class="card">
-      <a href="./2025年11月整数.html">2025年11月 日日の演習 解答解説｜整数(2) 論理チェック済み完全詳解</a>
-    </div>
-    <div class="card">
-      <a href="./2025_11_hibi_no_enshu_complete_guide_detailed.html">2025年11月 日日の演習 解答解説｜整数(2) 完全・超詳解</a>
-    </div>
-    <h2>その他</h2>
-    <div class="card">
-      <a href="./Agentic_AI_完全構築ガイド.html">Agentic AI 完全構築ガイド ― ゼロから同じシステムを作る</a>
-    </div>
-  </div>
-
-  <a class="upload-btn" href="./upload.html">＋ 新しいページを追加</a>
-<a class="delete-page-btn" href="./delete.html" style="display:inline-block;margin-top:30px;margin-left:10px;padding:12px 24px;background:#e53935;color:white;text-decoration:none;border-radius:8px;font-size:1em;font-weight:bold;box-shadow:0 2px 5px rgba(0,0,0,0.2);">🗑 ページを削除</a>
-
   <script>
-    // Uploads are appended before </body>. Include them when rebuilding the
-    // monthly groups, so newly added dated pages keep the catalog in order.
+    const TYPE_LABELS = { all: 'すべて', daily: '日日の演習', advanced: '発展演習', contest: '学力コンテスト', other: 'その他' };
+
+    function describeEntry(title, uploadedAt = '') {
+      const date = title.match(/^(\d{4})年(\d{1,2})月/);
+      const month = date && Number(date[2]) >= 1 && Number(date[2]) <= 12
+        ? String(Number(date[1]) * 100 + Number(date[2])) : 'undated';
+      const heading = title.split('｜')[0];
+      const types = [];
+      if (/日日の演習|日々の演習/.test(heading)) types.push('daily');
+      if (heading.includes('発展演習')) types.push('advanced');
+      if (/学力コンテスト|学コン/.test(heading)) types.push('contest');
+      if (!types.length) types.push('other');
+      return { title, month, types, uploadedAt: validUploadDate(uploadedAt) ? uploadedAt : '' };
+    }
+
+    function validUploadDate(value) {
+      return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value));
+    }
+
+    function matchingType(entries, type) {
+      return entries.filter(entry => type === 'all' || entry.types.includes(type));
+    }
+
+    function availableMonths(entries, type) {
+      return [...new Set(matchingType(entries, type).map(entry => entry.month))]
+        .sort((a, b) => (Number(b) || 0) - (Number(a) || 0));
+    }
+
+    function readSelection(hash, entries) {
+      const params = new URLSearchParams(hash.replace(/^#/, ''));
+      const requestedType = params.get('type');
+      const type = Object.hasOwn(TYPE_LABELS, requestedType) ? requestedType : 'all';
+      const months = availableMonths(entries, type);
+      const requestedMonth = params.get('month');
+      const month = requestedMonth === 'all' || months.includes(requestedMonth)
+        ? requestedMonth : months[0] || 'all';
+      return { type, month };
+    }
+
+    function selectEntries(entries, { type, month }) {
+      return matchingType(entries, type).filter(entry => month === 'all' || entry.month === month)
+        .sort((a, b) => (Date.parse(b.uploadedAt) || 0) - (Date.parse(a.uploadedAt) || 0));
+    }
+
+    function monthLabel(month) {
+      if (month === 'all') return 'すべての年月';
+      if (month === 'undated') return '年月なし';
+      return `${Math.floor(Number(month) / 100)}年${Number(month) % 100}月`;
+    }
+
+    function uploadLabel(date) {
+      const parts = new Intl.DateTimeFormat('ja-JP', {
+        timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+      }).formatToParts(new Date(date));
+      const value = type => parts.find(part => part.type === type).value;
+      return `${value('year')}/${value('month')}/${value('day')} ${value('hour')}:${value('minute')}`;
+    }
+
+    // Newly uploaded cards from the existing uploader have no date attribute.
+    // Read their first Git commit and cache only this public timestamp locally.
+    async function lookupUploadDate(filename, request = fetch) {
+      const base = 'https://api.github.com/repos/iwslatojp29/math-app/commits';
+      const query = new URLSearchParams({ path: `math/${filename}`, per_page: '100' });
+      const first = await request(`${base}?${query}`, { credentials: 'omit' });
+      if (!first.ok) throw new Error('upload_date_unavailable');
+      let commits = await first.json();
+      const lastPage = first.headers.get('Link')?.match(/<([^>]+)>;\s*rel="last"/);
+      if (lastPage) {
+        const page = new URL(lastPage[1]).searchParams.get('page');
+        if (!/^\d+$/.test(page || '')) throw new Error('upload_date_unavailable');
+        query.set('page', page);
+        const last = await request(`${base}?${query}`, { credentials: 'omit' });
+        if (!last.ok) throw new Error('upload_date_unavailable');
+        commits = await last.json();
+      }
+      const date = Array.isArray(commits) ? commits.at(-1)?.commit?.committer?.date : '';
+      if (!validUploadDate(date)) throw new Error('upload_date_unavailable');
+      return date;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const list = document.getElementById('card-list');
-      const cards = Array.from(document.querySelectorAll('.card')).map(card => {
-        const title = card.querySelector('a').textContent;
-        const date = title.match(/^(\d{4})年(\d{1,2})月/);
-        const month = date && Number(date[2]) >= 1 && Number(date[2]) <= 12
-          ? Number(date[1]) * 100 + Number(date[2]) : 0;
-        return { card, month };
-      });
-      cards.sort((a, b) => b.month - a.month);
-      list.replaceChildren();
-      let previous;
-      for (const { card, month } of cards) {
-        if (month !== previous) {
-          const heading = document.createElement('h2');
-          heading.textContent = month
-            ? `${Math.floor(month / 100)}年${month % 100}月` : 'その他';
-          list.appendChild(heading);
-          previous = month;
+      const monthList = document.getElementById('month-list');
+      const typeButtons = Array.from(document.querySelectorAll('.type-button'));
+      const entries = Array.from(document.querySelectorAll('.card')).map(card => {
+        const link = card.querySelector('a');
+        const entry = { ...describeEntry(link.textContent, card.dataset.uploadedAt), card };
+        try { entry.filename = decodeURIComponent(link.getAttribute('href').replace(/^\.\//, '')); }
+        catch { entry.filename = ''; }
+        if (!entry.uploadedAt) {
+          try {
+            const cached = localStorage.getItem(`math-upload-v1:${entry.filename}`);
+            if (validUploadDate(cached)) entry.uploadedAt = cached;
+          } catch { /* The catalog also works with browser storage disabled. */ }
         }
+        entry.time = card.querySelector('.upload-date') || document.createElement('time');
+        entry.time.className = 'upload-date';
+        card.appendChild(entry.time);
         list.appendChild(card);
+        return entry;
+      });
+      let selection = readSelection(location.hash, entries);
+
+      function navigate(type, month) {
+        const params = new URLSearchParams({ type, month });
+        const hash = `#${params}`;
+        if (location.hash !== hash) location.hash = hash;
       }
+
+      function render() {
+        selection = readSelection(location.hash, entries);
+        const focusedMonth = document.activeElement?.dataset.month;
+        const typed = matchingType(entries, selection.type);
+        const months = availableMonths(entries, selection.type);
+        const buttons = ['all', ...months].map(month => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'month-button';
+          button.dataset.month = month;
+          button.setAttribute('aria-current', String(month === selection.month));
+          const label = document.createElement('span');
+          label.textContent = monthLabel(month);
+          const count = document.createElement('span');
+          count.className = 'month-count';
+          count.textContent = String(typed.filter(entry => month === 'all' || entry.month === month).length);
+          button.append(label, count);
+          button.addEventListener('click', () => navigate(selection.type, month));
+          return button;
+        });
+        monthList.replaceChildren(...buttons);
+        if (focusedMonth) buttons.find(button => button.dataset.month === focusedMonth)?.focus({ preventScroll: true });
+        typeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.type === selection.type)));
+        const visible = selectEntries(entries, selection);
+        const shown = new Set(visible);
+        entries.forEach(entry => {
+          entry.card.hidden = !shown.has(entry);
+          if (entry.uploadedAt) {
+            entry.time.dateTime = entry.uploadedAt;
+            entry.time.textContent = `アップロード ${uploadLabel(entry.uploadedAt)}`;
+          } else {
+            entry.time.removeAttribute('datetime');
+            entry.time.textContent = entry.dateFailed ? 'アップロード日未確認' : 'アップロード日を確認中…';
+          }
+        });
+        visible.forEach(entry => list.appendChild(entry.card));
+        document.getElementById('results-title').textContent = monthLabel(selection.month);
+        document.getElementById('results-summary').textContent = `${TYPE_LABELS[selection.type]} · ${visible.length}件`;
+        document.getElementById('empty-message').hidden = visible.length > 0;
+      }
+
+      typeButtons.forEach(button => button.addEventListener('click', () => {
+        const type = button.dataset.type;
+        const months = availableMonths(entries, type);
+        const month = selection.month === 'all' || months.includes(selection.month)
+          ? selection.month : months[0] || 'all';
+        navigate(type, month);
+      }));
+      window.addEventListener('hashchange', () => {
+        render();
+        const header = document.getElementById('results-header');
+        const toolbar = document.getElementById('type-toolbar');
+        if (header.getBoundingClientRect().top < toolbar.getBoundingClientRect().bottom) {
+          header.scrollIntoView({ block: 'start' });
+        }
+      });
+      ['type-toolbar', 'month-sidebar', 'results-header'].forEach(id => { document.getElementById(id).hidden = false; });
+      render();
+
+      // Two requests at a time; existing cards use their embedded Git dates.
+      const pending = entries.filter(entry => !entry.uploadedAt);
+      async function resolveDates() {
+        while (pending.length) {
+          const entry = pending.shift();
+          try {
+            if (!entry.filename || /[\/\\]/.test(entry.filename)) throw new Error('invalid_filename');
+            entry.uploadedAt = await lookupUploadDate(entry.filename);
+            try { localStorage.setItem(`math-upload-v1:${entry.filename}`, entry.uploadedAt); } catch {}
+          } catch { entry.dateFailed = true; }
+          render();
+        }
+      }
+      resolveDates();
+      resolveDates();
     });
+
   </script>
 </body>
 </html>
