@@ -115,3 +115,15 @@ git push origin main
 ```
 
 このタグは旧パスワードゲートと利用者による GitHub 認証入力方式も復元します。安全な追加・削除を続ける場合は、復元後も本プロキシ版の管理画面を使用してください。Worker の直前バージョンへ戻す場合は `npx wrangler rollback` を使用し、シークレットの状態も確認します。履歴書き換えは行いません。
+
+## 算数のAI質問
+
+算数一覧から教材を開くと、右下の「AIに聞く」で表示中の解説を参照した質問ができます。「話して質問」→「停止して送信」で音声を文字にし、そのままAIに質問します。文字入力と回答の読み上げも使えます。録音は最大60秒・5MiBです。
+
+Google接続は既存の所有者アカウントを使います。`returnTo=math` のPKCE認証で発行する端末トークンはAI専用で、採点記録やStudioの管理機能には使えません。質問は10回/分・160回/日/端末、全体500回/日まで（文字起こしも1回）です。会話・音声はWorkerに保存せず、Responses APIは `store:false` で呼びます。
+
+- `POST /api/math-tutor/ask`: 質問・表示中の教材・直近の会話から解説を返します。
+- `POST /api/math-tutor/transcribe`: 録音音声を文字起こしします。
+- `POST /api/math-tutor/logout`: AI専用の端末トークンを失効します。
+
+既存のWorker secret `OPENAI_API_KEY` を利用します。AI質問用に分ける場合は `MATH_TUTOR_API_KEY` を設定してください。モデルは任意のvars `MATH_TUTOR_MODEL`（既定 `gpt-5.4-mini`）と `MATH_TUTOR_TRANSCRIBE_MODEL`（既定 `gpt-transcribe`）で変更できます。APIキーは公開HTMLやJavaScriptには置きません。
