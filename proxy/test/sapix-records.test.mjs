@@ -482,3 +482,17 @@ test('a Google code rejected for its sealed flow is never retried with the other
     } finally { globalThis.fetch = original; }
   }
 });
+
+test('math Google login issues a tutor-only token that cannot read grading records', async () => {
+  const f=await fixture(),verifier='v'.repeat(43),state='m'.repeat(24);
+  const start=await f.state.fetch(request('/api/sapix/auth/start?'+new URLSearchParams({state,challenge:hash(verifier),returnTo:'math'})));
+  const authorized=await identityCallback(f,start,f.env.SAPIX_OWNER_EMAIL);
+  const target=new URL(authorized.headers.get('Location'));
+  assert.equal(target.origin+target.pathname,'https://iwslatojp29.github.io/math-app/math/index.html');
+  const code=new URLSearchParams(target.hash.slice(1)).get('sapix_code');
+  const response=await f.state.fetch(request('/api/sapix/auth/exchange',{method:'POST',body:{code,verifier}}));
+  assert.equal(response.status,200);const client=await response.json();
+  assert(await f.storage.get('math:token:'+hash(client.token)));
+  assert.equal(await f.storage.get('sapix:token:'+hash(client.token)),undefined);
+  assert.equal((await f.state.fetch(request('/api/sapix/records',{token:client.token}))).status,401);
+});
