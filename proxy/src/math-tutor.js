@@ -1,5 +1,5 @@
 const MAX_AUDIO = 5 * 1024 * 1024;
-const JSON_LIMIT = 100 * 1024;
+const JSON_LIMIT = 256 * 1024;
 const INSTRUCTIONS = `あなたは中学受験算数の親切な先生です。日本語で、小学生の既習事項を使って説明してください。
 生徒は画面の解説で分からない点を聞いています。まず疑問に直接答え、理由を小さな段階に分け、必要なら小さな数の例を示してください。
 解説の数値を自分で確かめ、誤りがあれば具体的に指摘してください。資料にない図・条件は推測せず、問題番号や条件を質問してください。
@@ -108,3 +108,4 @@ export class MathTutor {
     return this.result({ text: transcription.text.trim().slice(0, 2000) }, 200, headers);
   }
 }
+
