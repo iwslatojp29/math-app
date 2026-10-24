@@ -44,9 +44,10 @@
     .card a:hover { text-decoration: underline; }
     .upload-date { display: block; margin-top: 10px; color: #7a8798; font-size: 11px; line-height: 1.5; }
     #empty-message { padding: 26px 20px; color: #68778c; background: white; border-radius: 12px; }
-    .management { display: flex; flex-wrap: wrap; gap: 8px; }
+    .management { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
     .management a { display: flex; align-items: center; justify-content: center; min-height: 44px; text-align: center; }
     .update-btn.delete-page-btn { color: #a14545; }
+    @media (max-width: 900px) { .page-header { flex-direction: column; align-items: stretch; } }
     @media (max-width: 640px) {
       .page { padding: 18px 14px 28px; }
       .content-tabs a { font-size: 12px; padding: 10px 4px; }
@@ -87,7 +88,7 @@
       </div>
       <nav class="management" aria-label="ページの管理">
         <a class="update-btn" href="https://math-app-proxy.iwslatojp29.workers.dev/studio">教材を更新</a>
-        <a class="update-btn upload-btn" href="./upload.html">＋ 新しいページを追加</a>
+        <a class="update-btn upload-btn" href="./upload.html">＋ ページを追加</a>
         <a class="update-btn delete-page-btn" href="./delete.html">ページを削除</a>
       </nav>
     </header>
