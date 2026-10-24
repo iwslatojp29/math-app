@@ -4,6 +4,7 @@ import { updateIndex } from './index.js';
 import { SapixRecords, sapixCors } from './sapix-records.js';
 import { SapixImport } from './sapix-import.js';
 import { StudioChat } from './studio-chat.js';
+import { MathTutor } from './math-tutor.js';
 
 export const FOLDERS = Object.freeze({ source: '1xHRr5uA9idJP0H9BJcbldZiXdARDxCxi', practice: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp', advanced: '1HVHjm0QceRgUjhYIAmI7kAfafrFjp-S0', html: '1vaAx2_MJrjrqav8ySHxTsyTxrTbAIxxp' });
 const SPEC_VERSION = 'monthly-2026-09-20-v1';
@@ -21,6 +22,9 @@ const errorText = {
   not_found: '対象が見つかりません。', source_changed: '選択したPDFが更新されています。一覧を読み直してください。',
   source_too_large: 'このPDFはダウンロードできる容量（100MiB）を超えています。',
   html_chat_required: 'HTMLはChatGPTで作成します。「Chatに渡す」で切り出しPDFと指示書をダウンロードし、ChatGPTへ添付してください。完成HTMLは取り込み画面から登録できます。',
+  tutor_unavailable: 'AIの応答を取得できませんでした。少し待って、もう一度質問してください。',
+  tutor_rate_limit: '質問が続いているため、しばらく待ってからお試しください。',
+  tutor_no_speech: '音声を聞き取れませんでした。もう一度、短く話してみてください。',
   busy: '別の教材を処理しています。完了後に選択してください。', internal_error: '処理を完了できませんでした。保存済みの状態から再試行できます。',
   runner_conflict: '別のクラウド実行がこの処理を担当しています。',
   operation_mismatch: 'PDF切り出しとHTML作成は別の処理です。保存済みの成果物は保持し、選択されていない処理を停止しました。HTMLは「HTMLを作成」で既存の切り出しPDFを選んで開始してください。',
@@ -116,10 +120,13 @@ export class StudioState {
   }
   async fetch(request) {
     try { return await this.route(request); }
-    catch (error) { const safe = error instanceof StudioError ? error : new StudioError(500, 'internal_error'); return result({ error: safe.code, message: errorText[safe.code], ...(safe.diagnostic ? { diagnostic: safe.diagnostic } : {}) }, safe.status, new URL(request.url).pathname.startsWith('/api/sapix/') ? sapixCors(request, this.env) : {}); }
+    catch (error) { const safe = error instanceof StudioError ? error : new StudioError(500, 'internal_error'); return result({ error: safe.code, message: errorText[safe.code], ...(safe.diagnostic ? { diagnostic: safe.diagnostic } : {}) }, safe.status, /^\/api\/(?:sapix|math-tutor)\//.test(new URL(request.url).pathname) ? sapixCors(request, this.env) : {}); }
   }
   async route(request) {
     const url = new URL(request.url), path = url.pathname.replace(/\/$/, ''), method = request.method;
+    if (path.startsWith('/api/math-tutor/')) {
+      return new MathTutor(this, { result, fail, digest, readBody }).route(request, url, path);
+    }
     if (path === '/studio/sapix-import' || path.startsWith('/studio/api/sapix-import') || path.startsWith('/studio/runner/sapix-import/')) return this.sapixImport.route(request, url, path);
     if (path.startsWith('/api/sapix/')) return this.sapix.route(request, url, path);
     if (path === '/studio' && method === 'GET') return new Response(studioPage(), { headers: {

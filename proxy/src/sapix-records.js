@@ -30,7 +30,8 @@ export class SapixRecords {
   async route(request, url, path) {
     if (path === '/api/sapix/auth/start' && request.method === 'GET') {
       if (!this.configured()) this.fail(503, 'not_configured');
-      const login = { challenge: url.searchParams.get('challenge'), state: url.searchParams.get('state'), ...(url.searchParams.get('returnTo') === 'calculation-test' ? { returnTo: 'calculation-test' } : {}) };
+      const returnTo = url.searchParams.get('returnTo');
+      const login = { challenge: url.searchParams.get('challenge'), state: url.searchParams.get('state'), ...(['calculation-test', 'math'].includes(returnTo) ? { returnTo } : {}) };
       if (!this.validLogin(login)) this.fail(400, 'invalid_request');
       return this.owner.oauthStart(login);
     }
@@ -69,15 +70,15 @@ export class SapixRecords {
     return this.owner.serial(async () => {
       await this.cleanupAuth();
       const code = this.random();
-      await this.storage.put('sapix:code:' + await this.digest(code), { challenge: login.challenge, email, clientId: this.env.SAPIX_GOOGLE_CLIENT_ID, expires: Date.now() + CODE_AGE });
-      const location = new URL(login.returnTo === 'calculation-test' ? 'https://iwslatojp29.github.io/math-app/calculation-test/index.html' : RETURN_URL);
+      await this.storage.put('sapix:code:' + await this.digest(code), { challenge: login.challenge, email, clientId: this.env.SAPIX_GOOGLE_CLIENT_ID, expires: Date.now() + CODE_AGE, ...(login.returnTo === 'math' ? { scope: 'math-tutor' } : {}) });
+      const location = new URL(login.returnTo === 'math' ? 'https://iwslatojp29.github.io/math-app/math/index.html' : login.returnTo === 'calculation-test' ? 'https://iwslatojp29.github.io/math-app/calculation-test/index.html' : RETURN_URL);
       location.hash = new URLSearchParams({ sapix_code: code, sapix_state: login.state }).toString();
       return new Response(null, { status: 302, headers: { Location: location.href, 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' } });
     });
   }
   async cleanupAuth() {
     // Auth records are small and never touch job data or grading tombstones.
-    for (const prefix of ['sapix:code:', 'sapix:token:']) {
+    for (const prefix of ['sapix:code:', 'sapix:token:', 'math:token:']) {
       const values = await this.storage.list({ prefix, limit: 1000 });
       const expired = [...values].filter(([, value]) => value.expires <= Date.now()).map(([key]) => key);
       for (let index = 0; index < expired.length; index += 128) await this.storage.delete(expired.slice(index, index + 128));
@@ -93,7 +94,7 @@ export class SapixRecords {
       const code = await storage.get(key);
       if (!code || !code.email || code.email !== this.ownerEmail() || !code.clientId || code.clientId !== this.env.SAPIX_GOOGLE_CLIENT_ID || code.expires <= Date.now() || code.challenge !== challenge) this.fail(401, 'unauthorized');
       await storage.delete(key);
-      await storage.put(tokenKey, { email: code.email, expires });
+      await storage.put(code.scope === 'math-tutor' ? 'math:token:' + await this.digest(token) : tokenKey, { email: code.email, expires });
     });
     return { token, expiresAt: expires, email: this.ownerEmail() };
   }
