@@ -11,3 +11,8 @@ test('AI context prioritizes selected text and the visible question rather than 
  const doc={defaultView:{innerHeight:800,getSelection:()=>({toString:()=> 'なぜ3で割る？'})},querySelectorAll:()=>[offscreen,visible],body:{innerText:'全文'}};
  const text=contextFrom(doc);assert(text.includes('なぜ3で割る？'));assert(text.includes(visible.innerText));assert(!text.includes(offscreen.innerText));
 });
+test('recorded lecture questions use the visible lecture rather than the reader behind it',()=>{
+ const nodes={'.shell':{hidden:false},'.questions':{selectedOptions:[{textContent:'要点1'}]},'.conditions p':{textContent:'3本の柱'},'.caption':{textContent:'少なくとも1本は3段'},'.equation':{textContent:'27−8＝19'}};
+ const doc={getElementById:()=>({shadowRoot:{querySelector:key=>nodes[key]}}),defaultView:{getSelection:()=>null}};
+ const text=contextFrom(doc);assert(text.includes('少なくとも1本は3段'));assert(text.includes('27−8＝19'));assert(text.includes('3本の柱'));
+});

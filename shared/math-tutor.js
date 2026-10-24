@@ -14,6 +14,14 @@
   function base64url(bytes) { return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function contextFrom(doc) {
     const selection = doc.defaultView?.getSelection()?.toString().trim() || '';
+    const lecture = doc.getElementById?.('recorded-lecture-host')?.shadowRoot;
+    if (lecture?.querySelector('.shell') && !lecture.querySelector('.shell').hidden) {
+      const title = lecture.querySelector('.questions')?.selectedOptions[0]?.textContent || '';
+      const conditions = lecture.querySelector('.conditions p')?.textContent || '';
+      const caption = lecture.querySelector('.caption')?.textContent || '';
+      const equation = lecture.querySelector('.equation')?.textContent || '';
+      return `${selection ? '生徒が選択した箇所：\n' + selection.slice(0, 4000) + '\n\n' : ''}いまの講義：${title}\n問題の条件：${conditions}\n表示中の説明：${caption}\n式：${equation}`.slice(0, 23000);
+    }
     const viewHeight = doc.defaultView?.innerHeight || 800;
     const candidates = [...doc.querySelectorAll('section, article, .problem, .question, .q')].map(node => {
       const rect = node.getBoundingClientRect();
@@ -49,6 +57,7 @@
     const $ = selector => ui.querySelector(selector);
     const originalOverflow = document.body.style.overflow;
     const frame = $('iframe'); let filename = '', title = '', conversation = [], auth = null, loaded = false;
+    function pauseLecture() { try { frame.contentWindow?.dispatchEvent(new Event('math-tutor-question')); } catch {} }
     let busy = false, recorder = null, stream = null, chunks = [], timer = null, discard = false, controller = null, epoch = 0;
     const notice = text => { $('.status').textContent = text; };
     try { const saved = JSON.parse(localStorage.getItem(AUTH)); if (saved?.expiresAt > Date.now() && /^[A-Za-z0-9_-]{43}$/.test(saved.token)) auth = saved; } catch {}
@@ -58,7 +67,7 @@
       $('.mic').disabled = busy || !loaded || !auth;
       $('.scope').textContent = loaded ? `質問する教材：${title}（選択した文章・表示中の範囲を参照）` : '一覧から質問したい教材を開いてください。';
     }
-    function openChat() { $('.panel').hidden = false; $('.launcher').hidden = true; $('.launcher').setAttribute('aria-expanded', 'true'); $('.viewer').classList.add('chat-open'); controls(); }
+    function openChat() { pauseLecture(); $('.panel').hidden = false; $('.launcher').hidden = true; $('.launcher').setAttribute('aria-expanded', 'true'); $('.viewer').classList.add('chat-open'); controls(); }
     function stopAudio(cancel = false) {
       discard = cancel; clearTimeout(timer);
       if (recorder?.state === 'recording') recorder.stop();
@@ -90,6 +99,7 @@
     }
     async function ask(question) {
       if (!loaded || !auth || busy || !question.trim()) return;
+      pauseLecture();
       const context = contextFrom(frame.contentDocument);
       if (!context) { notice('解説の読み込みが終わってから、もう一度質問してください。'); return; }
       const operation = epoch; busy = true; controls(); notice('解説を確かめて、考えています…');
@@ -107,6 +117,7 @@
       if (recorder) { stopAudio(false); return; }
       if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) { notice('このブラウザでは録音を使えません。キーボードの音声入力か文字入力で質問できます。'); $('.compose textarea').focus(); return; }
       const operation = epoch; busy = true; controls();
+      pauseLecture();
       try {
         const acquired = await navigator.mediaDevices.getUserMedia({ audio: true });
         if (operation !== epoch || $('.panel').hidden) { acquired.getTracks().forEach(track => track.stop()); return; }
