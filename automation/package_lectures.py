@@ -14,20 +14,25 @@ def encode(track,bitrate=64):
     with wave.open(str(decoded),'rb') as reader:encoded_duration=reader.getnframes()/reader.getframerate()
     with wave.open(str(track),'rb') as reader:pcm_duration=reader.getnframes()/reader.getframerate()
     assert abs(encoded_duration-pcm_duration)<=0.025,(encoded_duration,pcm_duration)
-    return mp3,{'model':MODEL,'duration':encoded_duration,'bytes':mp3.stat().st_size,'sha256':hashlib.sha256(mp3.read_bytes()).hexdigest(),'gapSeconds':.5,'format':f'MP3 mono 24kHz {bitrate}kbps'}
+    return mp3,{'model':MODEL,'duration':encoded_duration,'bytes':mp3.stat().st_size,'sha256':hashlib.sha256(mp3.read_bytes()).hexdigest(),'gapSeconds':.55,'gapPolicy':'total measured silence including clip trailing/leading silence','format':f'MP3 mono 24kHz {bitrate}kbps'}
 
 def assemble(units,cache,out,name):
-    track=out/(name+'.wav');rate=24000;position=0;gap=b'\0'*(12000*2)
+    track=out/(name+'.wav');rate=24000;position=0
+    metadata=[json.loads((cache/(key(u['speechText'])+'.json')).read_text(encoding='utf-8')) for u in units]
     with wave.open(str(track),'wb') as writer:
         writer.setnchannels(1);writer.setsampwidth(2);writer.setframerate(rate)
-        for unit in units:
-            name=key(unit['speechText']);meta=json.loads((cache/(name+'.json')).read_text(encoding='utf-8'))
+        for index,(unit,meta) in enumerate(zip(units,metadata)):
+            name=key(unit['speechText'])
+            assert meta['model']==MODEL and meta['speechText']==unit['speechText']
             raw=(cache/(name+'.wav')).read_bytes()
             assert hashlib.sha256(raw).hexdigest()==meta['sha256']
             with wave.open(str(cache/(name+'.wav')),'rb') as reader:
                 frames=reader.getnframes();assert frames==meta['frames'];pcm=reader.readframes(frames)
-            unit.update(start=position/rate,speechEnd=(position+meta['speechEndFrame'])/rate,end=(position+frames+12000)/rate,audioHash=meta['sha256'])
-            writer.writeframes(pcm);writer.writeframes(gap);position+=frames+12000
+            next_leading=metadata[index+1]['speechStartFrame'] if index+1<len(metadata) else 0
+            existing_silence=frames-meta['speechEndFrame']+next_leading
+            gap_frames=max(0,round(.55*rate)-existing_silence)
+            unit.update(start=position/rate,speechStart=(position+meta['speechStartFrame'])/rate,speechEnd=(position+meta['speechEndFrame'])/rate,end=(position+frames+gap_frames)/rate,audioHash=meta['sha256'],pauseAfter=(existing_silence+gap_frames)/rate)
+            writer.writeframes(pcm);writer.writeframes(b'\0'*(gap_frames*2));position+=frames+gap_frames
     return encode(track)
 
 def reuse_audio(data,out,cache):
@@ -37,7 +42,7 @@ def reuse_audio(data,out,cache):
     previous=json.loads(path.read_text(encoding='utf-8'))
     if previous.get('audio',{}).get('model')!=MODEL or len(previous['units'])!=len(data['units']):return None
     if [(q['id'],q['units']) for q in previous['questions']]!=[(q['id'],q['units']) for q in data['questions']]:return None
-    fields=['start','speechEnd','end','audioHash','audioId']
+    fields=['start','speechStart','speechEnd','end','audioHash','audioId','pauseAfter']
     for old,unit in zip(previous['units'],data['units']):
         if old['id']!=unit['id'] or old['speechText']!=unit['speechText']:return None
         meta=json.loads((cache/(key(unit['speechText'])+'.json')).read_text(encoding='utf-8'))
@@ -97,9 +102,11 @@ def main():
             html=embed(original,data,audios,runtime)
             if len(html.encode('utf-8'))<=90*1024*1024:break
         else:raise ValueError('Standalone lesson exceeds verified publishing limit: '+data['filename'])
-        output=args.out/data['filename'];output.write_text(html,encoding='utf-8',newline='\n')
+        output=args.out/data['filename'];temporary=output.with_suffix('.html.tmp')
+        temporary.write_text(html,encoding='utf-8',newline='\n');temporary.replace(output)
         item={'filename':data['filename'],'units':len(data['units']),'duration':data['audio']['duration'],'audioManifestSha256':data['audio']['manifestSha256'],'htmlBytes':output.stat().st_size};report.append(item);print(json.dumps(item,ensure_ascii=False),flush=True)
-        (args.out/(data['filename']+'.timing.json')).write_text(json.dumps(data,ensure_ascii=False),encoding='utf-8')
+        timing=args.out/(data['filename']+'.timing.json');temporary=timing.with_suffix('.json.tmp')
+        temporary.write_text(json.dumps(data,ensure_ascii=False),encoding='utf-8');temporary.replace(timing)
     (args.out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 
 if __name__=='__main__':main()

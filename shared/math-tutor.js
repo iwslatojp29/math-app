@@ -7,6 +7,7 @@
   'use strict';
   const API = 'https://math-app-proxy.iwslatojp29.workers.dev';
   const AUTH = 'math_tutor_auth_v1', PKCE = 'math_tutor_pkce_v1';
+  const LESSON_REVISION = 'speech-20261025-v2';
   function validFilename(name) {
     return typeof name === 'string' && name.length <= 255 && /\.html$/i.test(name)
       && !/[\/\\\x00-\x1f]/.test(name) && !name.includes('..') && !['index.html', 'upload.html', 'delete.html'].includes(name.toLowerCase());
@@ -157,8 +158,9 @@
       if (requested === filename) return;
       cancelWork(); loaded = false; filename = requested; title = requested.replace(/\.html$/i, ''); conversation = []; $('.messages').replaceChildren();
       document.body.style.overflow = 'hidden';
-      $('.viewer').hidden = false; $('.viewer-title').textContent = title; $('.original').href = './' + encodeURIComponent(filename);
-      frame.src = './' + encodeURIComponent(filename); controls();
+      const lessonURL = './' + encodeURIComponent(filename) + '?v=' + LESSON_REVISION;
+      $('.viewer').hidden = false; $('.viewer-title').textContent = title; $('.original').href = lessonURL;
+      frame.src = lessonURL; controls();
     }
     frame.onload = () => {
       if (!filename) return;

@@ -25,6 +25,24 @@ def literal(source, name):
 def spoken(text):
     """Initial pronunciation pass; per-unit exceptions remain independently editable."""
     text = plain(text)
+    # Open JTalk treats spaces as pauses, even between a quantity and its particle.
+    # Lists must use punctuation; visual HTML spacing must never reach the voice.
+    text = re.sub(r'\s+', '', text)
+    text=re.sub(r'[/／](?=[（(]\d+[）)])','、',text)
+    text=text.replace('／','/').replace(',','、')
+    text=re.sub(r'(?<=[A-Za-z′])[−－–-](?=[A-Za-z′])','と',text)
+    text=re.sub(r'[A-Za-z]+(?:・[A-Za-z]+)+',lambda m:m[0].replace('・','と'),text)
+    text=re.sub(r'([A-Za-z′]+)∥([A-Za-z′]+)',r'\1と\2は平行',text)
+    text=re.sub(r'([A-Za-z′]+)⊥([A-Za-z′]+)',r'\1と\2は垂直',text)
+    text=re.sub(r'(\d+)!',r'1から\1までの積',text)
+    text=re.sub(r'([A-Za-z]+)/('+r'\d+'+r')',r'\2ぶんの\1',text)
+    text=re.sub(r'[（(](\d+)[）)]',lambda m:'小問'+m[1]+('では、' if text[m.end():m.end()+1].isdigit() else ''),text)
+    text=text.translate(str.maketrans('₀₁₂₃₄₅₆₇₈₉','0123456789'))
+    text=re.sub(r'([A-Za-z′]+|[アイウエオカキ])/(\d+)',r'\2ぶんの\1',text)
+    text=re.sub(r'([A-Za-z0-9′]+|[アイウエオカキ])/([A-Za-z′]+|[アイウエオカキ])',r'\2ぶんの\1',text)
+    text=text.translate(str.maketrans({'「':'','」':'','『':'','』':'','′':'ダッシュ','∥':'平行','⊥':'垂直','↔':'、対応して、','●':'黒丸','○':'白丸','◯':'白丸','☆':'星印','…':'など','【':'、','】':'、'}))
+    text=text.replace('（','かっこ').replace('(','かっこ').replace('）','かっことじ').replace(')','かっことじ')
+    text=text.replace('[','かっこ').replace(']','かっことじ')
     text = re.sub(r'√(\d+)\s*/\s*(\d+)',lambda m:'2乗すると'+m[1]+'になる数を、'+m[2]+'で割った値',text)
     text = re.sub(r'√(\d+)',lambda m:'2乗すると'+m[1]+'になる数',text)
     def comparison(m):
@@ -39,33 +57,44 @@ def spoken(text):
         return phrase
     text=re.sub(r'[A-Za-z0-9]+(?:[＞>＜<≥≧≤≦][A-Za-z0-9]+)+',comparison,text)
     length_units={'km':'キロメートル','cm':'センチメートル','mm':'ミリメートル','m':'メートル'}
+    text=re.sub(r'(?:(\d+)と)?(\d+)/(\d+)(km|cm|mm|m)/(秒|分|時)',lambda m:'毎'+m[5]+((m[1]+'と') if m[1] else '')+m[3]+'分の'+m[2]+length_units[m[4]],text)
     text=re.sub(r'(\d+(?:\.\d+)?)\s*(km|cm|mm|m)\s*/\s*(秒|分|時)',lambda m:'毎'+m[3]+m[1]+length_units[m[2]],text)
+    text=re.sub(r'(\d+(?:\.\d+)?)目盛り/(秒|分|時)',r'毎\2\1目盛り',text)
     replacements = {'cm³':'立方センチメートル','cm3':'立方センチメートル','cm²':'平方センチメートル','cm2':'平方センチメートル',
                     '㎠':'平方センチメートル','㎤':'立方センチメートル','km':'キロメートル','cm':'センチメートル','mm':'ミリメートル',
                     'm²':'平方メートル','m³':'立方メートル','mL':'ミリリットル','空になる':'からっぽになる','空になり':'からっぽになり',
-                    '×':' かける ','÷':' わる ','＝':' は ','=':' は ','＋':' たす ','−':' ひく ','→':'、つまり、','⇒':'、したがって、',
-                    '：':' 対 ','%':'パーセント','％':'パーセント','△':'三角形','□':'四角形','∠':'角','°':'度','≒':'およそ','≠':'と異なる'}
+                    '×':'かける','÷':'わる','＝':'は','=':'は','＋':'たす','+':'たす','−':'ひく','－':'ひく','–':'ひく','→':'、つまり、','⇒':'、したがって、',
+                    '%':'パーセント','％':'パーセント','△':'三角形','□':'四角形','∠':'角','°':'度','≒':'およそ','≠':'と異なる'}
     # A possessive の after minutes is different from a fraction denominator.
-    text = re.sub(r'(\d+)分(?=の(?:\d+/\d+倍|[^\d]))',lambda m:minute_reading(int(m[1])),text)
+    text = re.sub(r'(\d+)分(?=の(?:\d+分の|\d+/\d+倍|[^\d]))',lambda m:m[1]+'ふん',text)
     # Spell only the final time unit phonetically; retain a natural mixed script.
     text = re.sub(r'(\d+)\s*/\s*(\d+)分',lambda m:m[2]+'分の'+m[1]+'ふん',text)
     text = re.sub(r'(\d+)\s*/\s*(\d+)', lambda m:m[2]+'分の'+m[1], text)
+    text=text.replace('/','わる')
+    # A heading colon is not a ratio. A computed result is spoken as a sentence.
+    text=re.sub(r'((?:条件|小問|解法|方法|場合|答え|検算|確認|結果)(?:[0-9①-⑳]*)?)[：:]',r'\1は、',text)
+    text=re.sub(r'(?<=[A-Za-z0-9])[：:](?=[A-Za-z0-9])','対',text)
+    text=re.sub(r'[：:]','、',text)
+    text=re.sub(r'([0-9.]+(?:[＋+−－×÷][0-9.]+)+)[＝=](?=[0-9])',r'\1で',text)
     for old,new in replacements.items(): text=text.replace(old,new)
     text=re.sub(r'(?<=\d)\s*kg(?![A-Za-z])','キログラム',text)
     text=re.sub(r'(?<=\d)\s*g(?![A-Za-z])','グラム',text)
     text=re.sub(r'(?<=\d)\s*m(?![A-Za-z0-9])','メートル',text)
     text=re.sub(r'(?<=を)m(?=にそろ|へ直|に直)','メートル',text)
     text = re.sub(r'([A-Za-z0-9]+)²',r'\1の2乗',text)
-    text = re.sub(r'(?<![\d.の])(\d+(?:\.\d+)?)分(?!の)', lambda m:(m[1]+'ふん') if '.' in m[1] else minute_reading(int(m[1])), text)
+    # Keep natural mixed writing. The synthesizer dictionary joins the complete
+    # number+counter and supplies the correct time/fraction pronunciation.
     text = re.sub(r'(?<=[0-9０-９])\s*L(?![A-Za-z])', 'リットル', text)
     text = re.sub(r'(\d+)\s*\^\s*(\d+)',r'\1の\2乗',text)
     text = re.sub(r'(?<=\d)・(?=\d)','、',text)
-    text = re.sub(r'(?<=[A-Z0-9]):(?=[A-Z0-9])',' 対 ',text)
+    text=text.replace('・','、')
+    text = re.sub(r'(?<=[A-Z0-9]):(?=[A-Z0-9])','対',text)
     text = text.replace('〜','から').replace('～','から').replace('空の','からの').replace('空に','からっぽに')
     names=dict(zip('ABCDEFGHIJKLMNOPQRSTUVWXYZ',['エー','ビー','シー','ディー','イー','エフ','ジー','エイチ','アイ','ジェー','ケー','エル','エム','エヌ','オー','ピー','キュー','アール','エス','ティー','ユー','ブイ','ダブリュー','エックス','ワイ','ゼット']))
-    text = re.sub(r'[A-Za-z]+', lambda m:'、'.join(names[c.upper()] for c in m[0]), text)
+    text = re.sub(r'[A-Za-z]+', lambda m:''.join(names[c.upper()] for c in m[0]), text)
     text = text.translate(str.maketrans({chr(0x2460+i):'丸'+str(i+1) for i in range(20)}))
-    return re.sub(r'\s+', ' ', text).strip()
+    text=re.sub(r'、+','、',text).lstrip('、')
+    return re.sub(r'\s+', '', text).strip()
 
 def pronunciation_plan(text,filename,qid):
     """Explicitly interpret problem-specific notation using its own definition."""
@@ -300,5 +329,21 @@ def inventory(out):
         print(json.dumps(items[-1],ensure_ascii=False),flush=True)
     (out/'inventory.json').write_text(json.dumps(items,ensure_ascii=False,indent=2),encoding='utf-8')
 
+def refresh_speech(out):
+    """Revise existing scene plans without regenerating or altering any diagram."""
+    items=[]
+    for path in sorted(out.glob('*.json')):
+        if path.name=='inventory.json':continue
+        data=json.loads(path.read_text(encoding='utf-8'))
+        for unit in data['units']:
+            unit['speechText'],unit['pronunciations']=pronunciation_plan(unit['displayText'],data['filename'],unit['questionId'])
+        path.write_text(json.dumps(data,ensure_ascii=False),encoding='utf-8')
+        items.append({'filename':data['filename'],'questions':len(data['questions']),'units':len(data['units']),'characters':sum(len(u['speechText']) for u in data['units'])})
+    (out/'inventory.json').write_text(json.dumps(items,ensure_ascii=False,indent=2),encoding='utf-8')
+    print(json.dumps(items,ensure_ascii=False,indent=2))
+
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--extract',type=Path,required=True);args=parser.parse_args();inventory(args.extract)
+    parser=argparse.ArgumentParser();parser.add_argument('--extract',type=Path);parser.add_argument('--refresh-speech',type=Path);args=parser.parse_args()
+    if args.refresh_speech:refresh_speech(args.refresh_speech)
+    elif args.extract:inventory(args.extract)
+    else:parser.error('Specify --extract or --refresh-speech')
