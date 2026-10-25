@@ -40,9 +40,13 @@ const root=path.resolve(option('--html-dir')||'math');
   choose('.step-select','1');await Promise.resolve();assert(!ui.querySelector('audio').paused);assert.equal(ui.querySelector('audio').currentTime,data.units[first.units[1]].start);
   ui.querySelector('.play').click();choose('.step-select','0');assert(ui.querySelector('audio').paused);
   w.history.replaceState=replace;
-  for(const q of data.questions){choose('.questions',q.id);assert(ui.querySelector('audio').getAttribute('src').startsWith('data:audio/mpeg;base64,'));}
+  assert.equal(ui.querySelectorAll('.question-list button').length,data.questions.length);
+  for(const q of data.questions){ui.querySelector('.question-list button[data-question="'+q.id+'"]').click();assert.equal(ui.querySelector('.question-list button[aria-current="true"]').dataset.question,q.id);assert(ui.querySelector('audio').getAttribute('src').startsWith('data:audio/mpeg;base64,'));assert(ui.querySelector('audio').paused);}
   const last=data.questions.at(-1);choose('.questions',last.id);choose('.step-select',String(last.units.length-1));
   assert.equal(ui.querySelector('.caption').textContent,data.units[last.units.at(-1)].displayText);
+  ui.querySelector('.play').click();await Promise.resolve();assert(!ui.querySelector('audio').paused);
+  ui.querySelector('.info-open').click();assert(ui.querySelector('audio').paused);assert(!ui.querySelector('.resource-panel').hidden);
+  ui.querySelector('.info-close').click();assert(ui.querySelector('.resource-panel').hidden);assert(ui.querySelector('audio').paused);
   ui.querySelector('.play').click();await Promise.resolve();assert(!ui.querySelector('audio').paused);
   const details=[...doc.querySelectorAll('details')].map(el=>[el,el.open]);
   w.dispatchEvent(new w.Event('beforeprint'));assert(ui.querySelector('audio').paused);
