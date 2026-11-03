@@ -30,10 +30,11 @@ function harness(responses = []) {
     createElement(tag) { return new Element(tag); },
   };
   const calls = [];
-  const context = vm.createContext({document, TextEncoder, TextDecoder, Uint8Array, Set, console,
+  const context = vm.createContext({document, TextEncoder, TextDecoder, Uint8Array, Set, console, Blob, URLSearchParams,
     window: {}, btoa: text => Buffer.from(text, 'binary').toString('base64'),
     fetch: async (url, init) => {
-      calls.push({url, ...init, json: JSON.parse(init.body)});
+      const params = new URL(url).searchParams;
+      calls.push({url, ...init, json: Object.fromEntries(params), bytes: new Uint8Array(await init.body.arrayBuffer())});
       const next = responses.shift() || {status: 200, label: '解答解説'};
       if (next.wait) await next.wait;
       return {ok: next.status === 200, status: next.status,
@@ -71,13 +72,15 @@ test('file selection sends nothing; explicit publish retains scripts and adds th
   assert.match(h.get('preview-title').textContent, /解説.html/);
   await h.run('publishFiles()');
   assert.equal(h.calls.length, 1);
-  const saved = Buffer.from(h.calls[0].json.contentBase64, 'base64').toString('utf8');
+  const saved = Buffer.from(h.calls[0].bytes).toString('utf8');
   assert.equal(saved, h.run('injectBackLink')('<!doctype html><html><body><h1>3 × 4 = 12</h1><script>playAnimation()</script></body></html>'));
   assert.match(saved, /<script>playAnimation\(\)<\/script>/);
   assert.equal((saved.match(/コンテンツ一覧へ戻る/g) || []).length, 1);
   assert.equal(h.calls[0].json.folder, 'math');
   assert.equal(h.calls[0].headers.Authorization, 'Bearer test-memory-only');
   assert.equal(h.calls[0].credentials, 'omit');
+  assert.equal(h.calls[0].headers['Content-Type'], 'application/octet-stream');
+  assert.equal(Number(h.calls[0].json.bytes), Buffer.byteLength(saved));
   assert.equal(h.get('publish-btn').disabled, true);
   await h.run('publishFiles()');
   assert.equal(h.calls.length, 1, 'completed files are not uploaded again');
@@ -119,22 +122,22 @@ test('complete HTML may retain trailing comments, but trailing prose and unfinis
   await select(h, [file('comments.html', source)]);
   assert.equal(h.calls.length, 0);
   await h.run('publishFiles()');
-  assert.equal(Buffer.from(h.calls[0].json.contentBase64, 'base64').toString('utf8'), h.run('injectBackLink')(source));
+  assert.equal(Buffer.from(h.calls[0].bytes).toString('utf8'), h.run('injectBackLink')(source));
 });
 
 test('size is checked before reading and again after UTF-8 return-link insertion; original BOM survives', async () => {
   const h = harness();
   let reads = 0;
-  const oversized = {name: 'huge.html', size: 10 * 1024 * 1024 + 1, arrayBuffer() { reads++; throw new Error('must not read'); }};
+  const oversized = {name: 'huge.html', size: 90 * 1024 * 1024 + 1, arrayBuffer() { reads++; throw new Error('must not read'); }};
   const prefix = '<html><body>', suffix = '</body></html>';
-  const boundary = file('boundary.html', prefix + 'x'.repeat(10 * 1024 * 1024 - prefix.length - suffix.length) + suffix);
+  const boundary = file('boundary.html', prefix + 'x'.repeat(90 * 1024 * 1024 - prefix.length - suffix.length) + suffix);
   await select(h, [oversized, boundary]);
   assert.equal(reads, 0);
   assert.equal(h.get('publish-btn').disabled, true);
   assert.equal(h.run('entries.filter(e => e.html !== undefined).length'), 0);
   await select(h, [file('bom.html', '\uFEFF<html><body>算数</body></html>')]);
   await h.run('publishFiles()');
-  assert.equal(Buffer.from(h.calls[0].json.contentBase64, 'base64').subarray(0, 3).toString('hex'), 'efbbbf');
+  assert.equal(Buffer.from(h.calls[0].bytes).subarray(0, 3).toString('hex'), 'efbbbf');
 });
 
 test('failed authentication stops the batch; explicit retry resumes only unfinished files', async () => {
@@ -156,6 +159,8 @@ test('repeated publish while a request is pending cannot duplicate a write', asy
   await select(h, [file()]);
   const first = h.run('publishFiles()');
   await h.run('publishFiles()');
+  // Blob conversion is asynchronous; allow the request to reach the transport.
+  await new Promise(resolve => setImmediate(resolve));
   assert.equal(h.calls.length, 1);
   assert.equal(h.get('file-input').disabled, true);
   resolve(); await first;

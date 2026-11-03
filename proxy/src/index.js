@@ -1,4 +1,5 @@
 import { handleStudio } from './studio.js';
+import { RequestError as SafeError, uploadSize, githubUploadStream } from './upload-stream.js';
 export { StudioState } from './studio.js';
 
 const MAX_CONTENT_BYTES = 10 * 1024 * 1024;
@@ -7,10 +8,6 @@ const MAX_JSON_BYTES = MAX_BASE64_BYTES + 16 * 1024;
 const ATTEMPTS = 4;
 const encoder = new TextEncoder();
 const protectedFiles = new Set(['index.html', 'upload.html', 'delete.html']);
-
-class SafeError extends Error {
-  constructor(status, code) { super(code); this.status = status; this.code = code; }
-}
 
 function fail(status, code) { throw new SafeError(status, code); }
 
@@ -270,12 +267,17 @@ function githubClient(env) {
     'User-Agent': 'math-app-proxy',
     'Content-Type': 'application/json',
   };
-  return async (method, path, body) => {
+  return async (method, path, body, upload) => {
     const encodedPath = path.split('/').map(encodeURIComponent).join('/');
     const url = `https://api.github.com/repos/${env.REPO}/contents/${encodedPath}${method === 'GET' ? `?ref=${encodeURIComponent(env.BRANCH)}` : ''}`;
     let response;
-    try { response = await fetch(url, { method, headers, ...(body ? { body: JSON.stringify(body) } : {}) }); }
-    catch { fail(502, 'upstream_error'); }
+    try {
+      response = await fetch(url, { method, headers: method === 'GET' ? { ...headers, Accept: 'application/vnd.github.object+json' } : headers,
+        ...(upload ? { body: upload.readable, duplex: 'half' } : body ? { body: JSON.stringify(body) } : {}) });
+      if (upload && response.ok) await upload.completion;
+    }
+    catch { if (upload?.state.error) throw upload.state.error; fail(502, 'upstream_error'); }
+    if (upload?.state.error) throw upload.state.error;
     if (method === 'GET' && response.status === 404) return null;
     if (method !== 'GET' && [409, 422, ...(method === 'DELETE' ? [404] : [])].includes(response.status)) return { conflict: true };
     if (!response.ok) fail(502, 'upstream_error');
@@ -308,6 +310,17 @@ async function mutateFile(github, env, body, remove) {
   fail(409, 'conflict_retry');
 }
 
+async function uploadFile(github, env, body, request, size) {
+  const path = `${body.folder}/${body.filename}`;
+  const existing = await github('GET', path);
+  const metadata = { message: `Add ${body.filename}`, branch: env.BRANCH, ...(existing ? { sha: existing.sha } : {}) };
+  const upload = githubUploadStream(request.body, size, metadata);
+  const result = await github('PUT', path, null, upload);
+  // The incoming stream is consumed once. On conflict, the user can resend the
+  // original Blob; do not tee/buffer a 90 MiB request just to retry internally.
+  if (result.conflict) fail(409, 'conflict_retry');
+}
+
 async function mutateIndex(github, env, path, initial, body, label, remove) {
   let index = initial;
   for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
@@ -337,9 +350,12 @@ export default {
     } });
     try {
       if (!await authorized(request.headers.get('Authorization'), env.UPLOAD_SECRET)) fail(401, 'unauthorized');
-      const body = await readJson(request);
       const remove = path === '/api/delete';
-      validateInput(body, !remove);
+      const rawUpload = !remove && /^application\/octet-stream(?:\s*;|$)/i.test(request.headers.get('Content-Type') || '');
+      const params = new URL(request.url).searchParams;
+      const size = rawUpload ? uploadSize(request, params) : null;
+      const body = rawUpload ? { folder: params.get('folder'), filename: params.get('filename'), ...(params.has('subject') ? { subject: params.get('subject') } : {}) } : await readJson(request);
+      validateInput(body, !remove && !rawUpload);
       const github = githubClient(env);
       const indexPath = `${body.folder}/index.html`;
       const label = String(env.LABEL_WITH_EXT).toLowerCase() === 'true' ? body.filename : body.filename.replace(/\.html$/i, '');
@@ -347,7 +363,8 @@ export default {
       // after a previous file write/delete succeeded but the index request failed.
       const initial = await readIndex(github, indexPath);
       updateIndex(initial.html, body, label, remove);
-      await mutateFile(github, env, body, remove);
+      if (rawUpload) await uploadFile(github, env, body, request, size);
+      else await mutateFile(github, env, body, remove);
       const indexUpdated = await mutateIndex(github, env, indexPath, initial, body, label, remove);
       return jsonResponse(200, remove ? { ok: true } : { ok: true, file: `${body.folder}/${body.filename}`, indexUpdated, label }, allowedOrigin);
     } catch (error) {

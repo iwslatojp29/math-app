@@ -49,13 +49,13 @@ Studio の新規ジョブは `POST /api/studio/jobs` に `{fileId, model, operat
 
 SAPIX の採点記録を別端末と同期する認証・保存の説明は [SAPIX-RECORDS.md](SAPIX-RECORDS.md) を参照してください。
 
-- POST /api/commit: `{folder, filename, contentBase64, commitMessage?, subject?}`。subject は science-society のみ「理科」「社会」を指定し、省略時は「理科」です。
+- POST /api/commit?folder=...&filename=...&bytes=...&subject=...: `application/octet-stream` のUTF-8 HTMLを送ります。`bytes`は戻るリンク挿入後の実バイト数です。subject は science-society のみ「理科」「社会」を指定し、省略時は「理科」です。旧形式のJSON `{folder, filename, contentBase64, commitMessage?, subject?}` も10 MiBまで互換受付します。
 - POST /api/delete: `{folder, filename}`。
 - 許可 Origin での OPTIONS は 204。認証なし・不一致は 401、許可外 Origin は 403。その他のパスとメソッドは 404。
 
-folder は小文字の英数字・ハイフン・アンダースコアの名前で、既存の index.html が必要です。proxy / shared / .github は使えません。filename は .html で終わり、ディレクトリ区切り・..・制御文字を含められません。index.html / upload.html / delete.html は保護対象です。日本語や空白を含む教材名を利用できます。HTML本体はUTF-8で10 MiB（10,485,760バイト）以内です。ブラウザで追加する「一覧へ戻る」リンクもこの容量に含みます。送信時はbase64に符号化するため通信量は約4/3倍になりますが、HTML本体の上限は10 MiBです。ブラウザはリンク挿入後のUTF-8バイト数を確認して超過ファイルの送信を止め、Workerも容量超過時には413を返します。
+folder は小文字の英数字・ハイフン・アンダースコアの名前で、既存の index.html が必要です。proxy / shared / .github は使えません。filename は .html で終わり、ディレクトリ区切り・..・制御文字を含められません。index.html / upload.html / delete.html は保護対象です。日本語や空白を含む教材名を利用できます。HTML本体はUTF-8で90 MiB（94,371,840バイト）以内です。ブラウザで追加する「一覧へ戻る」リンクもこの容量に含みます。ブラウザはHTMLをBlobとしてそのまま送信し、base64 JSON全体を作りません。Workerは少量ずつUTF-8・実バイト数を検証し、GitHub向けのbase64 JSONをストリーミング生成します。Worker内で大きなHTMLやJSON全体を保持しません。GitHub向けの送信にはFixedLengthStreamを使います。ブラウザ・Workerとも容量超過を拒否します。旧JSON経路の上限はメモリ保護のため10 MiBのままです。
 
-GitHub のファイルと一覧は別のコミットになります。競合時は新しい SHA を取得して再試行します。通信障害などで一部だけ完了した場合は同じ追加・削除を再実行すると一覧更新を再試行できます。UI は複数ファイルを順番に処理します。
+GitHub のファイルと一覧は別のコミットになります。一覧更新・旧JSON送信の競合時は新しい SHA を取得して再試行します。新方式のHTML送信は一度だけストリームを消費するため、ファイル更新の競合時は409を返します。その場合は画面で再実行してください。通信障害などで一部だけ完了した場合は同じ追加・削除を再実行すると一覧更新を再試行できます。UI は複数ファイルを順番に処理します。
 
 ## 初回準備・デプロイ
 
