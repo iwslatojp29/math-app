@@ -63,7 +63,7 @@ test('new uploads resolve to the oldest file commit, including paginated histori
 
 test('every existing catalog card includes a real timestamp and both combined categories remain discoverable', () => {
   const cards = [...html.matchAll(/<div class="card" data-uploaded-at="([^"]+)">\s*<a href="([^"]+)">([^<]+)<\/a>\s*<time class="upload-date" datetime="([^"]+)">([^<]+)<\/time>/g)];
-  assert.equal(cards.length, 52);
+  assert.equal(cards.length, 53);
   for (const [, date, href, title, timeDate, label] of cards) {
     assert.equal(date, timeDate);
     assert.equal(context.validUploadDate(date), true);
