@@ -333,13 +333,14 @@
       </main>
     </div>
   </div>
+  <script src="../shared/material-metadata.js?v=issue-month-20261103"></script>
   <script>
     const TYPE_LABELS = { all: 'すべて', daily: '日日の演習', advanced: '発展演習', contest: '学力コンテスト', other: 'その他' };
 
-    function describeEntry(title, uploadedAt = '') {
-      const date = title.match(/^(\d{4})年(\d{1,2})月/);
-      const month = date && Number(date[2]) >= 1 && Number(date[2]) <= 12
-        ? String(Number(date[1]) * 100 + Number(date[2])) : 'undated';
+    function describeEntry(title, uploadedAt = '', filename = '', storedMonth = '') {
+      const metadata = MathAppMaterialMetadata;
+      const month = (metadata.validMonth(storedMonth) ? storedMonth : '')
+        || metadata.issueMonth(title) || metadata.issueMonth(filename) || 'undated';
       const heading = title.split('｜')[0];
       const types = [];
       if (/日日の演習|日々の演習/.test(heading)) types.push('daily');
@@ -421,9 +422,10 @@
       const typeButtons = Array.from(document.querySelectorAll('.type-button'));
       const entries = Array.from(document.querySelectorAll('.card')).map(card => {
         const link = card.querySelector('a');
-        const entry = { ...describeEntry(link.textContent, card.dataset.uploadedAt), card };
-        try { entry.filename = decodeURIComponent(link.getAttribute('href').replace(/^\.\//, '')); }
-        catch { entry.filename = ''; }
+        let filename = '';
+        try { filename = decodeURIComponent(link.getAttribute('href').replace(/^\.\//, '')); }
+        catch { /* Preserve the label's month when a legacy link is malformed. */ }
+        const entry = { ...describeEntry(link.textContent, card.dataset.uploadedAt, filename, card.dataset.issueMonth), card, filename };
         if (!entry.uploadedAt) {
           try {
             const cached = localStorage.getItem(`math-upload-v1:${entry.filename}`);

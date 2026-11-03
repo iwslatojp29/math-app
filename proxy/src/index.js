@@ -1,5 +1,6 @@
 import { handleStudio } from './studio.js';
 import { RequestError as SafeError, uploadSize, githubUploadStream } from './upload-stream.js';
+import '../../shared/material-metadata.js';
 export { StudioState } from './studio.js';
 
 const MAX_CONTENT_BYTES = 10 * 1024 * 1024;
@@ -247,6 +248,11 @@ export function updateIndex(html, { filename, folder, subject }, label, remove =
   if (cards.length) return html;
   let insertion = bodyEnd;
   let subjectAttribute = '';
+  let issueAttribute = '';
+  if (folder === 'math') {
+    const month = globalThis.MathAppMaterialMetadata.issueMonth(filename);
+    if (month) issueAttribute = ` data-issue-month="${month}"`;
+  }
   if (folder === 'science-society') {
     if (lists.length !== 1) fail(409, 'index_unavailable');
     const list = lists[0];
@@ -254,7 +260,7 @@ export function updateIndex(html, { filename, folder, subject }, label, remove =
     subjectAttribute = ` data-subject="${subject || '理科'}"`;
   }
   const href = encodeURIComponent(filename).replace(/[!'()*]/g, ch => `%${ch.charCodeAt(0).toString(16).toUpperCase()}`);
-  const card = `  <div class="card"${subjectAttribute}>\n    <a href="./${href}">${escapeHtml(label)}</a>\n  </div>\n`;
+  const card = `  <div class="card"${subjectAttribute}${issueAttribute}>\n    <a href="./${href}">${escapeHtml(label)}</a>\n  </div>\n`;
   return html.slice(0, insertion) + card + html.slice(insertion);
 }
 

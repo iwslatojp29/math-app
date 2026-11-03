@@ -42,6 +42,7 @@ function harness(responses = []) {
     },
   });
   vm.runInContext(client, context);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '../shared/material-metadata.js'), 'utf8'), context);
   context.MathAppProxy = context.window.MathAppProxy;
   vm.runInContext(script, context);
   // UI transport tests do not emulate an HTML parser; preview isolation is
@@ -96,8 +97,22 @@ test('multiple files preview individually and publish once each; filenames and A
   assert.equal(h.calls.length, 2);
   assert.match(h.get('status-list').textContent, /<img src=x onerror=alert\(1\)>/);
   const row = h.get('status-list').children[0].children[1];
-  assert.ok(row.children.every(child => child.tag === 'span'));
+  assert.ok(row.children.slice(0, 2).every(child => child.tag === 'span'));
+  assert.equal(row.children[2].tag, 'a');
+  assert.equal(row.children[2].href, './index.html#type=all&month=undated');
   assert.doesNotMatch(script, /localStorage|sessionStorage|document\.cookie/);
+});
+
+test('a December filename shows its destination before sending and links to that month after upload', async () => {
+  const h = harness();
+  await select(h, [file('算数_2026年12月号_日日の演習_図解と講義.html')]);
+  assert.equal(h.calls.length, 0);
+  assert.match(h.get('status-list').textContent, /追加先: 2026年12月/);
+  await h.run('publishFiles()');
+  assert.match(h.get('status-list').textContent, /2026年12月に追加しました/);
+  const row = h.get('status-list').children[0].children[1];
+  assert.equal(row.children[2].href, './index.html#type=all&month=202612');
+  assert.equal(row.children[2].textContent, '2026年12月の一覧を開く');
 });
 
 test('invalid UTF-8, plain text, markdown wrappers, reserved names and duplicate selections cannot upload', async () => {

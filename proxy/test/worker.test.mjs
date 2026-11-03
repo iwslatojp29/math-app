@@ -144,6 +144,19 @@ test('extension setting, Japanese and HTML-special filenames produce escaped lab
   assert.equal(backend.files.get('math/index.html').text, simpleIndex);
 });
 
+test('math upload persists the filename issue month, including a newly introduced December', async () => {
+  const backend = mockGithub();
+  const filename = '算数_2026年12月号_日日の演習.html';
+  const result = await send(commitBody(filename));
+  assert.equal(result.status, 200);
+  const index = backend.files.get('math/index.html').text;
+  assert.match(index, /class="card" data-issue-month="202612"/);
+  assert.ok(index.includes(encodeURIComponent(filename)));
+  assert.equal((await send(commitBody(filename))).status, 200);
+  assert.equal(backend.files.get('math/index.html').text, index);
+  assert.equal((index.match(/data-issue-month="202612"/g) || []).length, 1);
+});
+
 test('existing raw/encoded/entity hrefs are recognized; deletion removes duplicate nested cards intact', async () => {
   const filename = '問題 & (1).html';
   const html = `<html><body>\n<div class='card featured' data-note='>'><div><a href='./問題 &amp; (1).html'><span>旧表示名</span></a></div><p>説明</p></div>\n<div class="card"><a href="./%E5%95%8F%E9%A1%8C%20%26%20(1).html">重複</a></div>\n<div class="card"><a href="./別.html">保存</a></div>\n</body></html>`;

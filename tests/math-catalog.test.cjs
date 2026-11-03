@@ -6,6 +6,7 @@ const vm = require('node:vm');
 
 const html = fs.readFileSync(path.join(__dirname, '../math/index.html'), 'utf8');
 const context = vm.createContext({ document: { addEventListener() {} }, URL, URLSearchParams, Intl, Date });
+vm.runInContext(fs.readFileSync(path.join(__dirname, '../shared/material-metadata.js'), 'utf8'), context);
 vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], context);
 const plain = value => JSON.parse(JSON.stringify(value));
 const describe = context.describeEntry;
@@ -25,6 +26,33 @@ test('category/month navigation supports direct links and falls back to a month 
   assert.deepEqual(plain(context.readSelection('#type=contest&month=202511', entries)), { type: 'contest', month: '202511' });
   assert.deepEqual(plain(context.readSelection('#type=contest&month=all', entries)), { type: 'contest', month: 'all' });
   assert.deepEqual(plain(context.readSelection('#type=__proto__&month=bad', entries)), { type: 'all', month: '202611' });
+});
+
+test('filename issue dates support prefixes, full-width digits and common month formats', () => {
+  for (const filename of ['2026年12月号_日日の演習.html', '算数_2026年12月_図解と講義.html',
+    '算数_２０２６年１２月号.html', '2026_12_日日の演習.html', '2026-12_図形.html', '202612_図形.html']) {
+    assert.equal(context.MathAppMaterialMetadata.issueMonth(filename), '202612', filename);
+  }
+  for (const filename of ['解説.html', '2026年13月号.html', '2026年0月号.html', '2026_123_図形.html', '12026年12月.html']) {
+    assert.equal(context.MathAppMaterialMetadata.issueMonth(filename), '', filename);
+  }
+  assert.equal(describe('旧教材の表示名', '', '算数_2026年12月号.html', '202612').month, '202612');
+  // Preserve issue corrections made to legacy labels unless the uploader has
+  // explicitly stored the filename's month on the new card.
+  assert.equal(describe('2026年8月 学力コンテスト', '', '中数9月号_学コン.html').month, '202608');
+});
+
+test('a December upload creates a new sorted month and supports its direct result link', () => {
+  const entries = [describe('2026年11月 日日の演習', '2026-11-01T00:00:00Z')];
+  assert.deepEqual(plain(context.availableMonths(entries, 'all')), ['202611']);
+  entries.push(describe('算数_2026年12月号_日日の演習_図解と講義', '2026-11-03T01:00:00Z', '', '202612'));
+  assert.deepEqual(plain(context.availableMonths(entries, 'daily')), ['202612', '202611']);
+  const selection = context.readSelection('#type=all&month=202612', entries);
+  assert.equal(context.monthLabel(selection.month), '2026年12月');
+  assert.equal(context.selectEntries(entries, selection)[0].title, entries[1].title);
+  entries.push(describe('別冊_2026年12月_日日の演習', '2026-11-03T02:00:00Z', '', '202612'));
+  assert.deepEqual(plain(context.availableMonths(entries, 'all')), ['202612', '202611']);
+  assert.deepEqual(plain(context.selectEntries(entries, selection).map(entry => entry.title)), [entries[2].title, entries[1].title]);
 });
 
 test('right-hand results filter by both selections and sort by upload time across issues', () => {
