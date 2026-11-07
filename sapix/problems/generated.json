@@ -1,5 +1,2899 @@
 {
   "schemaVersion": 1,
-  "sources": [],
-  "problems": []
+  "sources": [
+    {
+      "fileId": "1wDmrpC4YU-4rsrxxVrKJ62mDQWqgVt0y",
+      "name": "計算_41A-27_P3 (2).png",
+      "modifiedTime": "2026-11-07T04:53:44.759Z",
+      "fingerprint": "sha256:4352c629cbcafab940f4aa0c32bd26b15e4ba3b22065530740eea976c0a7d4b0",
+      "problemIds": [
+        "drive-1wDmrpC4YU-4rsrxxVrKJ62mDQWqgVt0y-q1"
+      ]
+    },
+    {
+      "fileId": "1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF",
+      "name": "平均算_41A-27_P15 (3).png",
+      "modifiedTime": "2026-11-07T01:48:23.668Z",
+      "fingerprint": "sha256:c34cb82c4d73e8816e1b202be7975912f5b7ca8b38eebbca185624bc71a15a5e",
+      "problemIds": [
+        "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q1",
+        "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q2",
+        "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q3",
+        "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q4"
+      ]
+    },
+    {
+      "fileId": "1RsYc-ziGBNys3JGp9KTeImbpB9dzqgTS",
+      "name": "計算_41A-27_P18 (9)（要工夫）.png",
+      "modifiedTime": "2026-11-07T01:47:59.614Z",
+      "fingerprint": "sha256:7164aad57f922f575854c75d20ecf3991d9b658a26b78586d08d21d3dcafa1db",
+      "problemIds": [
+        "drive-1RsYc-ziGBNys3JGp9KTeImbpB9dzqgTS-q1"
+      ]
+    },
+    {
+      "fileId": "1RDGLCameHBBe7Y5OXOrAFAjRcwZcsf7R",
+      "name": "分数_41A-27_P19 (20).png",
+      "modifiedTime": "2026-11-07T01:47:45.497Z",
+      "fingerprint": "sha256:d786f329c698dadd3774e899bb5eefd147af21e72a913a725108e54485a1d60c",
+      "problemIds": [
+        "drive-1RDGLCameHBBe7Y5OXOrAFAjRcwZcsf7R-q1"
+      ]
+    },
+    {
+      "fileId": "1nZ3WuWMuA1zqyFagjSHmRz7MQgkvdNE4",
+      "name": "単位_41A-27_P19 (12).png",
+      "modifiedTime": "2026-11-07T01:47:40.000Z",
+      "fingerprint": "sha256:30d7b92780759210c82c27d048373cb1d0336f478ea82aa4349f2f26c56aae5d",
+      "problemIds": [
+        "drive-1nZ3WuWMuA1zqyFagjSHmRz7MQgkvdNE4-q1"
+      ]
+    },
+    {
+      "fileId": "1WVZpNmNtQ-HHuAYAGEeibQS0EddaDbn2",
+      "name": "単位_41A-27_P21 (40).png",
+      "modifiedTime": "2026-11-07T01:47:23.886Z",
+      "fingerprint": "sha256:7e880fe7e13f44f46e580caa28e30ebe9594bcc83b73df43e42353601f7ac6b6",
+      "problemIds": [
+        "drive-1WVZpNmNtQ-HHuAYAGEeibQS0EddaDbn2-q1"
+      ]
+    },
+    {
+      "fileId": "1KloP00U3vHEl0Hczy9ED0Z3HUL3u33fJ",
+      "name": "倍数_41A-27_P22 (45).png",
+      "modifiedTime": "2026-11-07T01:46:57.517Z",
+      "fingerprint": "sha256:22d1074fad5a1dc9f3558003aec396294520af8472186336096b454df3bcb89a",
+      "problemIds": [
+        "drive-1KloP00U3vHEl0Hczy9ED0Z3HUL3u33fJ-q1"
+      ]
+    },
+    {
+      "fileId": "1O9kBY-EVWNwy1BRz-kKFAmec11SMtbhQ",
+      "name": "数_41B-27_P16.png",
+      "modifiedTime": "2026-11-07T01:46:50.673Z",
+      "fingerprint": "sha256:1c9f54fba9bfaea63909ac647ee5787d0e812ad5ab34083a0d61bb0ec98daccc",
+      "problemIds": [
+        "drive-1O9kBY-EVWNwy1BRz-kKFAmec11SMtbhQ-q1"
+      ]
+    },
+    {
+      "fileId": "1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ",
+      "name": "平面図形_41B-27_P26 [2].png",
+      "modifiedTime": "2026-11-07T01:46:34.088Z",
+      "fingerprint": "sha256:ca26a0b712b1a6921a855fdf783ac3b5758bac12490a6bf235531d77602a0deb",
+      "problemIds": [
+        "drive-1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ-q1",
+        "drive-1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ-q2"
+      ]
+    },
+    {
+      "fileId": "13UB3ZgavlRdv0auKutaGuqyQxL9e07-L",
+      "name": "立体図形_基礎トレ_2026.10.27.png",
+      "modifiedTime": "2026-11-07T01:17:03.075Z",
+      "fingerprint": "sha256:d1b88086159749bad46e517be0b7d1f7cf20fb73e94fa8e83f2d4bd89293a6a8",
+      "problemIds": [
+        "drive-13UB3ZgavlRdv0auKutaGuqyQxL9e07-L-q1"
+      ]
+    },
+    {
+      "fileId": "1gohI1uPvK0HL0Js7haXP19kEZjjdeNf0",
+      "name": "平均算_41B-26_P26 [1].png",
+      "modifiedTime": "2026-11-01T11:23:02.777Z",
+      "fingerprint": "sha256:302ecd19c9edfb36d5d1bc22bce5adcf85758b1341febe1f842b27205a2e52ee",
+      "problemIds": [
+        "drive-1gohI1uPvK0HL0Js7haXP19kEZjjdeNf0-q1"
+      ]
+    },
+    {
+      "fileId": "1cJfgMAhj1T9W62rmIm4qOsqNBsYsfLNM",
+      "name": "計算_41A-26_P22 (49).png",
+      "modifiedTime": "2026-11-01T11:22:48.149Z",
+      "fingerprint": "sha256:1e001f213240af1a3ffcf3d6fb2c99c813de6eeef3c35a7c449a420178a79fcd",
+      "problemIds": [
+        "drive-1cJfgMAhj1T9W62rmIm4qOsqNBsYsfLNM-q1"
+      ]
+    },
+    {
+      "fileId": "1TYGm09QCcy4OIGWRlwOp37S4DlZ9zIqc",
+      "name": "計算_41A-26_P20 (30)（要計算）.png",
+      "modifiedTime": "2026-11-01T11:22:35.623Z",
+      "fingerprint": "sha256:b406b2ac6016b168b7478c96652bb7f08df59cc43fdf25e71ef165c5d312aff5",
+      "problemIds": [
+        "drive-1TYGm09QCcy4OIGWRlwOp37S4DlZ9zIqc-q1"
+      ]
+    },
+    {
+      "fileId": "1umWZASaX6EC_KvIeauzMdj6tl2sUZdFi",
+      "name": "方陣算_41A-26_P7 [2].png",
+      "modifiedTime": "2026-11-01T11:22:26.435Z",
+      "fingerprint": "sha256:ed24be8dcd7e7685581150ab39493c3657bb100bf9c5095598a0ad42a1127c71",
+      "problemIds": [
+        "drive-1umWZASaX6EC_KvIeauzMdj6tl2sUZdFi-q1"
+      ]
+    },
+    {
+      "fileId": "1XXt10gtB8ZY01PMVdRInQS4TX_9ae2sS",
+      "name": "方陣算_41B-25_P10.png",
+      "modifiedTime": "2026-11-01T11:12:27.240Z",
+      "fingerprint": "sha256:33144b06c4df315f882dc57812c6cbb587926c4d3628f41745f80f0cdb76ef30",
+      "problemIds": [
+        "drive-1XXt10gtB8ZY01PMVdRInQS4TX_9ae2sS-q1"
+      ]
+    },
+    {
+      "fileId": "1XbUEsWRrRVtQWftiafKx7XtBOyhzaVFA",
+      "name": "単位_41A-25_P22 (46).png",
+      "modifiedTime": "2026-11-01T11:05:46.050Z",
+      "fingerprint": "sha256:5dbe740012dfb82ea3880fe9d862d030b6f3fbaca4a50075295e995a1e8f0d4f",
+      "problemIds": [
+        "drive-1XbUEsWRrRVtQWftiafKx7XtBOyhzaVFA-q1"
+      ]
+    },
+    {
+      "fileId": "1HfDL4mzXGiBnezTbrFvD0S_dbaPg4l1d",
+      "name": "計算_41A-25_P22 (48).png",
+      "modifiedTime": "2026-11-01T11:05:03.700Z",
+      "fingerprint": "sha256:da2e09028e1f3091676afda8c19096232175a94651ee4ec673b29dcea684d1bb",
+      "problemIds": [
+        "drive-1HfDL4mzXGiBnezTbrFvD0S_dbaPg4l1d-q1"
+      ]
+    },
+    {
+      "fileId": "1ruTp9qMIjPV0ZD7ngjJ9xpmYV8TW2dij",
+      "name": "計算_41A-25_P22 (41).png",
+      "modifiedTime": "2026-11-01T11:04:38.478Z",
+      "fingerprint": "sha256:fb43140c2061928a26a8cfde729e097776df5d10edf60fea15b1f3de60396e17",
+      "problemIds": [
+        "drive-1ruTp9qMIjPV0ZD7ngjJ9xpmYV8TW2dij-q1"
+      ]
+    },
+    {
+      "fileId": "1bTyExRhknYY9Lh0f1JDh3zzuigLIiCNt",
+      "name": "計算_41A-25_P21 (38).png",
+      "modifiedTime": "2026-11-01T11:04:26.679Z",
+      "fingerprint": "sha256:8c8dd4c5ce86cf183dfc741d478d2263acd611f6ff6456e34f0a8fa9018d9b25",
+      "problemIds": [
+        "drive-1bTyExRhknYY9Lh0f1JDh3zzuigLIiCNt-q1"
+      ]
+    },
+    {
+      "fileId": "16Si8cwHvKpYfl6ffFLZRI0DX_rmSeT6Q",
+      "name": "計算_41A-25_P19 (18)（要工夫）.png",
+      "modifiedTime": "2026-11-01T11:04:15.382Z",
+      "fingerprint": "sha256:2931c17017fabdcd58126d78bd4c892acfbd797925e560274acbc91cea452df9",
+      "problemIds": [
+        "drive-16Si8cwHvKpYfl6ffFLZRI0DX_rmSeT6Q-q1"
+      ]
+    },
+    {
+      "fileId": "14IeQqZxfMxkzGfOX9uUYarfZmR7rDh-f",
+      "name": "単位_41A-25_P18 (7).png",
+      "modifiedTime": "2026-11-01T11:04:04.950Z",
+      "fingerprint": "sha256:cfdbc668e4b914a9eaf749cf1dbd834f7a84f0c8dabd2164b6fd6e7c1333a88e",
+      "problemIds": [
+        "drive-14IeQqZxfMxkzGfOX9uUYarfZmR7rDh-f-q1"
+      ]
+    },
+    {
+      "fileId": "1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX",
+      "name": "平面図形_41A-25_P16 (3).png",
+      "modifiedTime": "2026-11-01T11:03:53.992Z",
+      "fingerprint": "sha256:65a27620146b94115e3fc7dd7121de8fb82f0e2a643cb0a92bb857e214d4db6f",
+      "problemIds": [
+        "drive-1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX-q1",
+        "drive-1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX-q2",
+        "drive-1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX-q3"
+      ]
+    },
+    {
+      "fileId": "1pznOz4xtBXsKE5UnbG_OKARZ42yHJtlp",
+      "name": "単位_41A-25_P4 (5).png",
+      "modifiedTime": "2026-11-01T11:03:41.483Z",
+      "fingerprint": "sha256:bd14ae89a2b1050a5c191417654f6d29fba539ec529af1d4c9c4ae2871dc1821",
+      "problemIds": [
+        "drive-1pznOz4xtBXsKE5UnbG_OKARZ42yHJtlp-q1"
+      ]
+    },
+    {
+      "fileId": "1sviH-uBVBJBm_vq6FfUtRB-wM-YSlYci",
+      "name": "単位_41A-25_P4 (4).png",
+      "modifiedTime": "2026-11-01T11:03:35.719Z",
+      "fingerprint": "sha256:50df135df2c9945511d10668c0e8deb0b340cb101b3b1c7db2230c24b5b1836c",
+      "problemIds": [
+        "drive-1sviH-uBVBJBm_vq6FfUtRB-wM-YSlYci-q1"
+      ]
+    },
+    {
+      "fileId": "11ETVwx-Bm91S4mc4OOl1fsc2KN263Lw7",
+      "name": "単位_41A-25_P4 (3).png",
+      "modifiedTime": "2026-11-01T11:03:31.835Z",
+      "fingerprint": "sha256:cd3eaa973eeb8613ab8f5d7da6e89c94f2e261bf233cab546c69413662bc11ca",
+      "problemIds": [
+        "drive-11ETVwx-Bm91S4mc4OOl1fsc2KN263Lw7-q1"
+      ]
+    },
+    {
+      "fileId": "1fVF7ujLzM7A40KZCvx7AG5tOr91tLgk1",
+      "name": "単位_41A-25_P3 (4).png",
+      "modifiedTime": "2026-11-01T11:03:25.116Z",
+      "fingerprint": "sha256:24531917af1ac629bcd67f92a2ff759b414370ce8e93dfa354fbae7fe9504ae4",
+      "problemIds": [
+        "drive-1fVF7ujLzM7A40KZCvx7AG5tOr91tLgk1-q1"
+      ]
+    },
+    {
+      "fileId": "1QEoC6utBWwbqcsPuc1rsqTAtZUNva8Fb",
+      "name": "単位_41A-25_P3 (2).png",
+      "modifiedTime": "2026-11-01T11:03:18.087Z",
+      "fingerprint": "sha256:4c7741b9ac22669ceff523e873ad7d9c51637e33dace691b587c1f8e85e32890",
+      "problemIds": [
+        "drive-1QEoC6utBWwbqcsPuc1rsqTAtZUNva8Fb-q1"
+      ]
+    },
+    {
+      "fileId": "1tWx4goIq4swIkoDt7vQKvqakVUZZZaXi",
+      "name": "方陣算_41B-25_P23 [2].png",
+      "modifiedTime": "2026-11-01T11:03:08.075Z",
+      "fingerprint": "sha256:fc18e12d09004db724cd41d46655f63020062b79a1f32ce677fc418d71855304",
+      "problemIds": [
+        "drive-1tWx4goIq4swIkoDt7vQKvqakVUZZZaXi-q1"
+      ]
+    },
+    {
+      "fileId": "1FQmbM1ohLFAzNQ1cLQIdECedTYWpBSB8",
+      "name": "方陣算_41B-25_P20 [1].png",
+      "modifiedTime": "2026-11-01T11:01:03.769Z",
+      "fingerprint": "sha256:c5eddf177a13984a5c141486faf9510b1851c37956cafef6b5996bad5ad33775",
+      "problemIds": [
+        "drive-1FQmbM1ohLFAzNQ1cLQIdECedTYWpBSB8-q1"
+      ]
+    },
+    {
+      "fileId": "1VLsLRWM61wCZrJ-oDVxExysJQvn899D8",
+      "name": "方陣算_41B-25_P7 [1].png",
+      "modifiedTime": "2026-11-01T11:00:50.990Z",
+      "fingerprint": "sha256:44bacf136cc5b312f6feba9abcde38bbe4597785e689e09fe08bc66d55757bf6",
+      "problemIds": [
+        "drive-1VLsLRWM61wCZrJ-oDVxExysJQvn899D8-q1",
+        "drive-1VLsLRWM61wCZrJ-oDVxExysJQvn899D8-q2",
+        "drive-1VLsLRWM61wCZrJ-oDVxExysJQvn899D8-q3"
+      ]
+    },
+    {
+      "fileId": "1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM",
+      "name": "約数_41A-24_P15.png",
+      "modifiedTime": "2026-10-12T05:35:14.845Z",
+      "fingerprint": "sha256:330c45a5fb0f243784aef10aadd51dff7bd1eb72bdcabc49d1ae8ba2a9dc6045",
+      "problemIds": [
+        "drive-1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM-q1",
+        "drive-1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM-q2",
+        "drive-1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM-q3"
+      ]
+    },
+    {
+      "fileId": "1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e",
+      "name": "平面図形_41A-24_P16.png",
+      "modifiedTime": "2026-10-12T05:35:03.419Z",
+      "fingerprint": "sha256:8c53ec9cfc2c66b5504398d497a02b72b1d4a595b30b8069fd67b1cd3cdfe3a4",
+      "problemIds": [
+        "drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q1",
+        "drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q2",
+        "drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q3"
+      ]
+    },
+    {
+      "fileId": "1m87PTc9dZu-rn0VcFkzZAGXos1mPgTbe",
+      "name": "計算_41A-24_P19 (16)（要工夫）.png",
+      "modifiedTime": "2026-10-12T05:34:53.671Z",
+      "fingerprint": "sha256:97a73d3b8ebacbd1cf345380f80baeae04def1fa7b1d6bbdc316507a9e9300c8",
+      "problemIds": [
+        "drive-1m87PTc9dZu-rn0VcFkzZAGXos1mPgTbe-q1"
+      ]
+    },
+    {
+      "fileId": "13FMYzT-kUa0fnxAy2ylVh0djqOWar2s7",
+      "name": "計算_41A-24_P19 (37)（要工夫）.png",
+      "modifiedTime": "2026-10-12T05:34:45.529Z",
+      "fingerprint": "sha256:bec0befde8bf3032b294ee78dd087c34996a862f56a426f176c0bb1db9a001b8",
+      "problemIds": [
+        "drive-13FMYzT-kUa0fnxAy2ylVh0djqOWar2s7-q1"
+      ]
+    },
+    {
+      "fileId": "11LCbJURR5fwBDYLqnwxxop067E8tUCOe",
+      "name": "倍数_41A-24_P21 (33).png",
+      "modifiedTime": "2026-10-12T05:34:39.643Z",
+      "fingerprint": "sha256:636ca10392b0e463c742423de34ec57cd08b64228b36bf49b106a302cdcbdee2",
+      "problemIds": [
+        "drive-11LCbJURR5fwBDYLqnwxxop067E8tUCOe-q1"
+      ]
+    },
+    {
+      "fileId": "1IEKlPagVsR3T4gN6bnzcuxeyzcwVZ6Vy",
+      "name": "計算_41A-24_P22 (48)（要工夫）.png",
+      "modifiedTime": "2026-10-12T05:34:27.185Z",
+      "fingerprint": "sha256:b1d70ed576de682472e64bd452dce4258eb8fd67195bc92c9fa915a8128c4cad",
+      "problemIds": [
+        "drive-1IEKlPagVsR3T4gN6bnzcuxeyzcwVZ6Vy-q1"
+      ]
+    },
+    {
+      "fileId": "1FZKXkWRVw2ezmweaOtKeSPVUyrszs_PK",
+      "name": "計算_41A-24_P22 (45)（要工夫）.png",
+      "modifiedTime": "2026-10-12T05:34:20.458Z",
+      "fingerprint": "sha256:5cbbed554ec081bd277460afa772d5c6b8b02a685737bea9629397a021a20a53",
+      "problemIds": [
+        "drive-1FZKXkWRVw2ezmweaOtKeSPVUyrszs_PK-q1"
+      ]
+    },
+    {
+      "fileId": "1jgHeQLT93D49U-U4Di0uro3Fu7zoKxiZ",
+      "name": "単位_41A-24_P3(5).png",
+      "modifiedTime": "2026-10-12T05:34:06.637Z",
+      "fingerprint": "sha256:a15eb6b2ee43e74efd07e7f2d889d187aad5231243e77fdc2574805cf95005b8",
+      "problemIds": [
+        "drive-1jgHeQLT93D49U-U4Di0uro3Fu7zoKxiZ-q1"
+      ]
+    },
+    {
+      "fileId": "1H-x5F1z5GosmlZkaFQCdA2ivaxsSAL0A",
+      "name": "単位_41A-24_P3(3).png",
+      "modifiedTime": "2026-10-12T05:34:00.711Z",
+      "fingerprint": "sha256:d4591e41158cfb85c40ccc1464f4c6cb2a40823169dcd38b702abcb96b19981b",
+      "problemIds": [
+        "drive-1H-x5F1z5GosmlZkaFQCdA2ivaxsSAL0A-q1"
+      ]
+    },
+    {
+      "fileId": "1k1u5XyMVXGDBzEW_vh4T2G-fbIXh6Yyj",
+      "name": "分数_41B-24_P11 (4).png",
+      "modifiedTime": "2026-10-12T05:33:41.271Z",
+      "fingerprint": "sha256:3efe3d7f735e7e81a31d8f74ff0fe66e08fcb526793fa5dbe351331dedae8847",
+      "problemIds": [
+        "drive-1k1u5XyMVXGDBzEW_vh4T2G-fbIXh6Yyj-q1",
+        "drive-1k1u5XyMVXGDBzEW_vh4T2G-fbIXh6Yyj-q2"
+      ]
+    },
+    {
+      "fileId": "1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb",
+      "name": "規則性_41B-24_P17.png",
+      "modifiedTime": "2026-10-12T05:33:02.025Z",
+      "fingerprint": "sha256:4416735532cdccb0e662d937eebbed72bcadf16017aa364a5d46cad5d87771d1",
+      "problemIds": [
+        "drive-1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb-q1",
+        "drive-1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb-q2",
+        "drive-1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb-q3"
+      ]
+    },
+    {
+      "fileId": "1MOsIKTm-zGYtx5e3R8AHAKm5wr0kLHrS",
+      "name": "分数_41B-24_P25 (3).png",
+      "modifiedTime": "2026-10-12T05:32:30.024Z",
+      "fingerprint": "sha256:d39c566d2ff9fb2214e8ead6256867b1af12455c7198f0460f28d9e44df5932c",
+      "problemIds": [
+        "drive-1MOsIKTm-zGYtx5e3R8AHAKm5wr0kLHrS-q1"
+      ]
+    },
+    {
+      "fileId": "1tSwNp2TOc3CaEza5KBxctGSeTtl6rc2R",
+      "name": "倍数_授業前テ24②[1] ⑤.png",
+      "modifiedTime": "2026-10-12T05:32:05.912Z",
+      "fingerprint": "sha256:e09077e6be3237e9ea77aa5f84096abfe2ed9606593c499f3673f82e388bc6a3",
+      "problemIds": [
+        "drive-1tSwNp2TOc3CaEza5KBxctGSeTtl6rc2R-q1"
+      ]
+    },
+    {
+      "fileId": "1Spq3j3OCkxPdsFff_cTv_zQdJyfMXfwy",
+      "name": "計算_授業前テ24②[1] ④.png",
+      "modifiedTime": "2026-10-12T05:31:55.871Z",
+      "fingerprint": "sha256:45f610242e15b09f3fcadef6d526d3b083e852ffc2652dcffc8041d92c43a9d2",
+      "problemIds": [
+        "drive-1Spq3j3OCkxPdsFff_cTv_zQdJyfMXfwy-q1"
+      ]
+    },
+    {
+      "fileId": "1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow",
+      "name": "分数_デイチェ410-24[4].png",
+      "modifiedTime": "2026-10-12T05:31:46.058Z",
+      "fingerprint": "sha256:36444b7d5f70fd8b1692e9aae5e03404b7bfe0beb768d74cb5fb709f3d6ebca0",
+      "problemIds": [
+        "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q1",
+        "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q2",
+        "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q3",
+        "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q4"
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "id": "drive-1wDmrpC4YU-4rsrxxVrKJ62mDQWqgVt0y-q1",
+      "unit": "計算",
+      "title": "小数÷整数の計算（3.6÷8）",
+      "src": "計算_41A-27_P3 (2).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n3.6 ÷ 8 = □",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "0.45"
+        }
+      ],
+      "steps": [
+        {
+          "title": "整数のかけ算で考える",
+          "text": "3.6 は 0.1 が 36 個集まった数です。36 ÷ 8 を考えると、8 × 4 = 32 で 36 より小さく、8 × 5 = 40 で 36 より大きいので、36 ÷ 8 は 4 あまり 4 です。つまり商は 4.5 です。"
+        },
+        {
+          "title": "小数点の位置を決める",
+          "text": "0.1 が 36 個の数を 8 で割ったので、答えは 0.1 が 4.5 個分、つまり 0.45 になります。筆算では、3.6 の小数点の真上に商の小数点を打ち、一の位は 3 ÷ 8 で 0、十分の一の位は 36 ÷ 8 で 4（あまり 4）、百分の一の位は 40 ÷ 8 で 5 となります。"
+        },
+        {
+          "title": "検算する",
+          "text": "0.45 × 8 = 3.6 となるので、答え 0.45 は正しいです。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1wDmrpC4YU-4rsrxxVrKJ62mDQWqgVt0y/4352c629cbcafab940f4aa0c32bd26b15e4ba3b22065530740eea976c0a7d4b0.png"
+      ]
+    },
+    {
+      "id": "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q1",
+      "unit": "平均算",
+      "title": "破れた棒グラフから最も少ない人数と平均点を求める",
+      "src": "平均算_41A-27_P15 (3).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "右のグラフは、あるクラスで行われた算数のテストの結果を、各点数ごとに何人いるかを表したものです。このテストは30点満点で5点きざみに点数がつけられましたが、表の一部分が破れてしまいました。（グラフの読み取り：0点…3人、5点…4人、10点…6人、15点…8人、30点…3人。20点と25点の棒は上の部分が破れていて、見えている部分はそれぞれ5人分までです。）\n(1) クラスの人数は最も少ない場合で何人ですか。また、そのときの平均点は何点ですか。四捨五入して、小数第1位まで求めなさい。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "人数",
+          "text": "34人"
+        },
+        {
+          "label": "平均点",
+          "text": "15.1点"
+        }
+      ],
+      "steps": [
+        {
+          "title": "破れていない棒を読む",
+          "text": "棒の上まで見えているのは、0点が3人、5点が4人、10点が6人、15点が8人、30点が3人です。"
+        },
+        {
+          "title": "破れた棒は見えている分が最少",
+          "text": "20点と25点の棒は上が破れていますが、見えている部分だけで5人分あります。人数が最も少ないのは、破れた先に棒が続いていない場合なので、20点5人、25点5人とします。"
+        },
+        {
+          "title": "人数の合計",
+          "text": "3+4+6+8+5+5+3=34（人）。"
+        },
+        {
+          "title": "合計点を求める",
+          "text": "0×3=0、5×4=20、10×6=60、15×8=120、20×5=100、25×5=125、30×3=90。合計は0+20+60+120+100+125+90=515（点）。"
+        },
+        {
+          "title": "平均点",
+          "text": "平均点＝合計点÷人数＝515÷34=15.14…。四捨五入して小数第1位まで求めると15.1点。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF/c34cb82c4d73e8816e1b202be7975912f5b7ca8b38eebbca185624bc71a15a5e.png"
+      ]
+    },
+    {
+      "id": "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q2",
+      "unit": "平均算",
+      "title": "平均点と人数から20点の人数を求める（つるかめ算）",
+      "src": "平均算_41A-27_P15 (3).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "あるクラスで行われた算数のテスト（30点満点、5点きざみ）の結果を、各点数ごとの人数の棒グラフに表しましたが、表の一部分が破れてしまいました。グラフから読み取れる人数は、0点…3人、5点…4人、10点…6人、15点…8人、30点…3人で、20点と25点の人数は破れていてわかりません。\n(2) 平均点が17.2点で、クラスの人数が50人だったとすると、得点20点の人は何人いたことになりますか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "16人"
+        }
+      ],
+      "steps": [
+        {
+          "title": "クラス全体の合計点",
+          "text": "合計点＝平均点×人数なので、17.2×50=860（点）。"
+        },
+        {
+          "title": "人数のわかっている人の合計点と人数",
+          "text": "0×3+5×4+10×6+15×8+30×3=0+20+60+120+90=290（点）。人数は3+4+6+8+3=24（人）。"
+        },
+        {
+          "title": "20点と25点の人の人数と合計点",
+          "text": "人数は50−24=26（人）、合計点は860−290=570（点）。"
+        },
+        {
+          "title": "つるかめ算",
+          "text": "26人全員が25点だとすると25×26=650（点）で、実際より650−570=80（点）多い。25点の人を1人20点に変えるごとに5点減るので、20点の人は80÷5=16（人）。（25点の人は26−16=10人。検算：20×16+25×10=320+250=570。）"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF/c34cb82c4d73e8816e1b202be7975912f5b7ca8b38eebbca185624bc71a15a5e.png"
+      ]
+    },
+    {
+      "id": "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q3",
+      "unit": "平均算",
+      "title": "順位の条件からクラスの人数を求める",
+      "src": "平均算_41A-27_P15 (3).png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "あるクラスで行われた算数のテスト（30点満点、5点きざみ）の結果を、各点数ごとの人数の棒グラフに表しましたが、表の一部分が破れてしまいました。グラフから読み取れる人数は、0点…3人、5点…4人、10点…6人、15点…8人、30点…3人で、20点と25点の棒は上が破れていて人数はわかりません。\n(3) このテストに関して、さらに次の2つのことがわかりました。\n・得点25点の生徒の人数が最も多い。\n・得点30点の人は3人いるので、25点の人の成績順位は、全員4位ということになる。このようにして順位をつけると、15点の人の成績順位はちょうどクラスの人数の半分と同じ数である。\n① クラスの人数は何人ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "40人"
+        }
+      ],
+      "steps": [
+        {
+          "title": "順位のつけ方",
+          "text": "30点の人が3人いるので、次に高い25点の人は全員4位です。つまり、ある点数の人の順位は「自分より高い点数の人の人数＋1」です。"
+        },
+        {
+          "title": "15点の人の順位",
+          "text": "15点より高いのは、30点3人と、20点・25点の人です。20点と25点の人数の合計を□人とすると、15点の人の順位は3+□+1＝□+4（位）。"
+        },
+        {
+          "title": "クラスの人数の半分",
+          "text": "人数のわかっている人は3+4+6+8+3=24人なので、クラスの人数は24+□（人）。その半分は12+（□の半分）です。"
+        },
+        {
+          "title": "条件にあてはめる",
+          "text": "□+4 と 12+（□の半分）が等しいので、□の半分は12−4=8、□＝16。20点と25点の人数の合計は16人です。"
+        },
+        {
+          "title": "答え",
+          "text": "クラスの人数は24+16=40（人）。確かめ：15点の人の順位は16+4=20位で、40人の半分の20と同じ。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF/c34cb82c4d73e8816e1b202be7975912f5b7ca8b38eebbca185624bc71a15a5e.png"
+      ]
+    },
+    {
+      "id": "drive-1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF-q4",
+      "unit": "平均算",
+      "title": "最も低い場合の平均点を求める",
+      "src": "平均算_41A-27_P15 (3).png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "あるクラスで行われた算数のテスト（30点満点、5点きざみ）の結果を、各点数ごとの人数の棒グラフに表しましたが、表の一部分が破れてしまいました。グラフから読み取れる人数は、0点…3人、5点…4人、10点…6人、15点…8人、30点…3人で、20点と25点の棒は上が破れていて人数はわかりません（見えている部分はそれぞれ5人分までです）。\n(3) このテストに関して、さらに次の2つのことがわかりました。\n・得点25点の生徒の人数が最も多い。\n・得点30点の人は3人いるので、25点の人の成績順位は、全員4位ということになる。このようにして順位をつけると、15点の人の成績順位はちょうどクラスの人数の半分と同じ数である。\n（この条件から、①でクラスの人数は40人、20点と25点の人数の合計は16人とわかっています。）\n② 平均点は、最も低かった場合で何点ですか。四捨五入して、小数第1位まで求めなさい。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "16.4点"
+        }
+      ],
+      "steps": [
+        {
+          "title": "20点と25点の人数の合計",
+          "text": "①より、クラスは40人で、20点と25点の人数の合計は16人です。"
+        },
+        {
+          "title": "25点の人数の条件",
+          "text": "25点の人が最も多いので、15点の8人より多くなければなりません。よって25点は9人以上です。"
+        },
+        {
+          "title": "平均点を最も低くする",
+          "text": "合計16人のうち、点の低い20点の人をできるだけ多くすると合計点が低くなります。25点を最も少ない9人にすると、20点は16−9=7（人）。これは25点の9人より少なく、グラフで見えている20点の5人分以上なので条件に合います。"
+        },
+        {
+          "title": "合計点",
+          "text": "0×3+5×4+10×6+15×8+20×7+25×9+30×3=0+20+60+120+140+225+90=655（点）。"
+        },
+        {
+          "title": "平均点",
+          "text": "655÷40=16.375なので、四捨五入して小数第1位まで求めると16.4点。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF/c34cb82c4d73e8816e1b202be7975912f5b7ca8b38eebbca185624bc71a15a5e.png"
+      ]
+    },
+    {
+      "id": "drive-1RsYc-ziGBNys3JGp9KTeImbpB9dzqgTS-q1",
+      "unit": "計算",
+      "title": "125×32の計算（くふうして計算）",
+      "src": "計算_41A-27_P18 (9)（要工夫）.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n125×32",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "4000"
+        }
+      ],
+      "steps": [
+        {
+          "title": "125の性質に注目する",
+          "text": "125は8倍すると1000になる（125×8＝1000）ので、32を8×4に分けると計算しやすくなります。"
+        },
+        {
+          "title": "かける数を分ける",
+          "text": "32＝8×4 なので、125×32＝125×8×4 と書きかえられます。かけ算は順番を変えても答えは同じです。"
+        },
+        {
+          "title": "計算する",
+          "text": "125×8＝1000、1000×4＝4000。"
+        },
+        {
+          "title": "検算",
+          "text": "筆算で確かめると、125×30＝3750、125×2＝250、合わせて3750＋250＝4000 となり一致します。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1RsYc-ziGBNys3JGp9KTeImbpB9dzqgTS/7164aad57f922f575854c75d20ecf3991d9b658a26b78586d08d21d3dcafa1db.png"
+      ]
+    },
+    {
+      "id": "drive-1RDGLCameHBBe7Y5OXOrAFAjRcwZcsf7R-q1",
+      "unit": "分数",
+      "title": "分母のちがう分数の大小くらべ",
+      "src": "分数_41A-27_P19 (20).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる分数を答えなさい。\n\n2/5 と 3/7 では、□ の方が小さいです。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "2/5"
+        }
+      ],
+      "steps": [
+        {
+          "title": "そのままでは比べられない理由",
+          "text": "2/5 と 3/7 は分母が 5 と 7 でちがいます。分母がちがうと「1つ分の大きさ」がちがうので、分子の 2 と 3 だけを見て大小を決めることはできません。まず分母をそろえます（通分）。"
+        },
+        {
+          "title": "分母を35にそろえる",
+          "text": "5 と 7 の最小公倍数は 35 です。2/5 は分母と分子に 7 をかけて 2×7/5×7 ＝ 14/35、3/7 は分母と分子に 5 をかけて 3×5/7×5 ＝ 15/35 になります。分母と分子に同じ数をかけても分数の大きさは変わりません。"
+        },
+        {
+          "title": "分子を比べる",
+          "text": "分母がどちらも 35 になったので、分子で比べられます。14 ＜ 15 なので 14/35 ＜ 15/35、つまり 2/5 ＜ 3/7 です。"
+        },
+        {
+          "title": "答え",
+          "text": "小さい方は 2/5 です。確かめとして、ななめにかけ算をして 2×7＝14、3×5＝15 を比べても 14＜15 なので、2/5 の方が小さいとわかります。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1RDGLCameHBBe7Y5OXOrAFAjRcwZcsf7R/d786f329c698dadd3774e899bb5eefd147af21e72a913a725108e54485a1d60c.png"
+      ]
+    },
+    {
+      "id": "drive-1nZ3WuWMuA1zqyFagjSHmRz7MQgkvdNE4-q1",
+      "unit": "単位",
+      "title": "長さの単位をそろえて割り算をする",
+      "src": "単位_41A-27_P19 (12).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n\n1 km 2 m ÷ 6 = □ m",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "167"
+        }
+      ],
+      "steps": [
+        {
+          "title": "単位をmにそろえる",
+          "text": "答えの単位がmなので、まず1 km 2 mをmで表します。1 km = 1000 mなので、1 km 2 m = 1000 m + 2 m = 1002 mです。"
+        },
+        {
+          "title": "割り算をする",
+          "text": "1002 m ÷ 6 を計算します。6×100=600、6×60=360、6×7=42 で、600+360+42=1002 なので、1002 ÷ 6 = 167 です。"
+        },
+        {
+          "title": "検算する",
+          "text": "167 × 6 = 1002 となり、1002 m = 1 km 2 m に戻るので、答えは 167 m です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1nZ3WuWMuA1zqyFagjSHmRz7MQgkvdNE4/30d7b92780759210c82c27d048373cb1d0336f478ea82aa4349f2f26c56aae5d.png"
+      ]
+    },
+    {
+      "id": "drive-1WVZpNmNtQ-HHuAYAGEeibQS0EddaDbn2-q1",
+      "unit": "単位",
+      "title": "長さの単位の逆算（m と cm）",
+      "src": "単位_41A-27_P21 (40).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n□m □cm × 6 − 4cm = 8m",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□m（左の空らん）",
+          "text": "1"
+        },
+        {
+          "label": "□cm（右の空らん）",
+          "text": "34"
+        }
+      ],
+      "steps": [
+        {
+          "title": "単位をcmにそろえる",
+          "text": "1m＝100cm なので、8m＝800cm です。式は「（□m□cm）×6 − 4cm ＝ 800cm」と考えられます。"
+        },
+        {
+          "title": "かける前の長さを逆算する",
+          "text": "「×6 してから 4cm ひくと 800cm」なので、4cm をひく前は 800＋4＝804cm です。つまり（□m□cm）×6＝804cm です。"
+        },
+        {
+          "title": "6でわる",
+          "text": "804÷6＝134 なので、□m□cm は 134cm です。"
+        },
+        {
+          "title": "m と cm に分ける",
+          "text": "134cm＝100cm＋34cm＝1m34cm なので、左の□は 1、右の□は 34 です。"
+        },
+        {
+          "title": "検算",
+          "text": "1m34cm＝134cm、134×6＝804cm、804−4＝800cm＝8m となり、式に合います。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1WVZpNmNtQ-HHuAYAGEeibQS0EddaDbn2/7e880fe7e13f44f46e580caa28e30ebe9594bcc83b73df43e42353601f7ac6b6.png"
+      ]
+    },
+    {
+      "id": "drive-1KloP00U3vHEl0Hczy9ED0Z3HUL3u33fJ-q1",
+      "unit": "倍数",
+      "title": "3つの数の最小公倍数",
+      "src": "倍数_41A-27_P22 (45).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "156と104と65の最小公倍数は□です。□にあてはまる数を答えなさい。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "1560"
+        }
+      ],
+      "steps": [
+        {
+          "title": "3つの数に共通な約数で割る",
+          "text": "156、104、65はどれも13で割り切れます（156÷13=12、104÷13=8、65÷13=5）。3つとも13で割って、12、8、5になります。"
+        },
+        {
+          "title": "2つの数だけに共通な約数で割る",
+          "text": "12、8、5のうち、12と8は4で割り切れますが5は割り切れません。最小公倍数を求めるときは、2つ以上の数に共通な約数があれば、その数だけを割って残りはそのまま下ろします。12÷4=3、8÷4=2、5はそのままで、3、2、5になります。3、2、5はどの2つにも1以外の共通な約数がないので、ここで終わりです。"
+        },
+        {
+          "title": "割った数と残った数をすべてかける",
+          "text": "最小公倍数＝13×4×3×2×5＝1560です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "1560÷156=10、1560÷104=15、1560÷65=24で、どれも割り切れます。156、104、65は全部13の倍数であり、104は8の倍数、156は3の倍数、65は5の倍数なので、最小公倍数には13・8・3・5がすべて必要で、13×8×3×5=1560より小さい公倍数はありません。答えは1560です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1KloP00U3vHEl0Hczy9ED0Z3HUL3u33fJ/22d1074fad5a1dc9f3558003aec396294520af8472186336096b454df3bcb89a.png"
+      ]
+    },
+    {
+      "id": "drive-1O9kBY-EVWNwy1BRz-kKFAmec11SMtbhQ-q1",
+      "unit": "数・およその数",
+      "title": "4をかけると数字のならびが左右ぎゃくになる4けたの整数",
+      "src": "数_41B-27_P16.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1089に9をかけると9801となり、数字のならび方が左右ぎゃくになります。同じように4けたの整数に4をかけたとき、数字のならび方が左右ぎゃくになるような4けたの整数を求めましょう。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答",
+          "text": "2178"
+        }
+      ],
+      "steps": [
+        {
+          "title": "千の位の数字を考える",
+          "text": "もとの4けたの整数を「千の位ア、百の位イ、十の位ウ、一の位エ」とします。4をかけても4けたのままなので、もとの数は2499以下です。よって千の位アは1か2です。また、答えの一の位はアになりますが、4をかけた数の一の位は必ず偶数（4×エの一の位）なので、アは1ではなく2と決まります。"
+        },
+        {
+          "title": "一の位の数字を考える",
+          "text": "もとの数は2000より大きいので、4をかけた答えは8000より大きくなります。答えの千の位はエなので、エは8か9です。さらに4×エの一の位が2になる必要があり、4×8＝32、4×9＝36なので、エ＝8と決まります。ここまでで、もとの数は「2□□8」、答えは「8□□2」の形です。"
+        },
+        {
+          "title": "百の位・十の位をしぼる",
+          "text": "もとの数は2499以下なので、百の位イは4以下です。4×8＝32なので一の位から3くり上がり、答えの十の位は「4×ウ＋3」の一の位になります。これは奇数なので、イは1か3です。イ＝1なら4×ウの一の位が8となりウは2か7、イ＝3なら4×ウの一の位が0となりウは0か5です。"
+        },
+        {
+          "title": "候補をたしかめる",
+          "text": "2128×4＝8512、2308×4＝9232、2358×4＝9432はどれも数字が逆になりません。2178×4＝8712は、2178を左右ぎゃくに読んだ8712と同じになります。"
+        },
+        {
+          "title": "答え",
+          "text": "求める4けたの整数は2178です。（検算：2178×4＝8712）"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1O9kBY-EVWNwy1BRz-kKFAmec11SMtbhQ/1c9f54fba9bfaea63909ac647ee5787d0e812ad5ab34083a0d61bb0ec98daccc.png"
+      ]
+    },
+    {
+      "id": "drive-1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ-q1",
+      "unit": "平面図形",
+      "title": "おうぎ形のまわりの長さ（中心角75°・半径12cm）",
+      "src": "平面図形_41B-27_P26 [2].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "円周率を3.14として、次の図形のまわりの長さを求めましょう。\n(1) 半径12cm、中心角75°のおうぎ形。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(1)",
+          "text": "39.7cm"
+        }
+      ],
+      "steps": [
+        {
+          "title": "まわりの長さの中身を考える",
+          "text": "おうぎ形のまわりは、曲線の部分（弧）と、まっすぐな2本の半径でできています。だから「まわりの長さ＝弧の長さ＋半径×2」です。半径を忘れないように注意します。"
+        },
+        {
+          "title": "弧の長さを求める",
+          "text": "半径12cmの円の円周は 12×2×3.14＝24×3.14 です。中心角75°は円全体360°のうちの 75/360＝5/24 にあたります。弧の長さは 24×3.14×5/24＝5×3.14＝15.7(cm) です。"
+        },
+        {
+          "title": "半径2本分を加える",
+          "text": "半径は12cmが2本あるので 12×2＝24(cm)。まわりの長さは 15.7＋24＝39.7(cm) です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "弧だけの15.7cmで終わりにしないこと。半径2本を足して39.7cmが答えです。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ/ca26a0b712b1a6921a855fdf783ac3b5758bac12490a6bf235531d77602a0deb.png"
+      ]
+    },
+    {
+      "id": "drive-1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ-q2",
+      "unit": "平面図形",
+      "title": "おうぎ形のまわりの長さ（中心角234°・半径10cm）",
+      "src": "平面図形_41B-27_P26 [2].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "円周率を3.14として、次の図形のまわりの長さを求めましょう。\n(2) 半径10cm、中心角234°のおうぎ形。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(2)",
+          "text": "60.82cm"
+        }
+      ],
+      "steps": [
+        {
+          "title": "まわりの長さの中身を考える",
+          "text": "中心角が180°より大きくても、おうぎ形のまわりは弧と2本の半径でできています。「まわりの長さ＝弧の長さ＋半径×2」です。"
+        },
+        {
+          "title": "弧の長さを求める",
+          "text": "半径10cmの円の円周は 10×2×3.14＝20×3.14 です。中心角234°は円全体の 234/360＝13/20 にあたります。弧の長さは 20×3.14×13/20＝13×3.14＝40.82(cm) です。"
+        },
+        {
+          "title": "半径2本分を加える",
+          "text": "半径10cmが2本で 10×2＝20(cm)。まわりの長さは 40.82＋20＝60.82(cm) です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "13×3.14 は 10×3.14＝31.4 と 3×3.14＝9.42 を足して40.82。これに20を足して60.82cmです。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ/ca26a0b712b1a6921a855fdf783ac3b5758bac12490a6bf235531d77602a0deb.png"
+      ]
+    },
+    {
+      "id": "drive-13UB3ZgavlRdv0auKutaGuqyQxL9e07-L-q1",
+      "unit": "立体図形",
+      "title": "水そうに石をしずめたときの体積",
+      "src": "立体図形_基礎トレ_2026.10.27.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "内のりがたて25cm、横35cm、高さ60cmの直方体の水そうに、（図2）のように深さ13cmまで水を入れました。この中に石をしずめたら、水の深さが15cmになりました。石の体積は□cm³です。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "1750"
+        }
+      ],
+      "steps": [
+        {
+          "title": "水面が上がった分に注目する",
+          "text": "石を水の中にしずめると、石が入った分だけ水が押しのけられて、水面が上がります。石の体積は、水面が上がった分の水の体積と同じです。水の深さは13cmから15cmになったので、上がった高さは 15−13＝2(cm) です。"
+        },
+        {
+          "title": "底面の面積を求める",
+          "text": "水そうの内のりの底面は、たて25cm、横35cmの長方形なので、面積は 25×35＝875(cm²) です。"
+        },
+        {
+          "title": "石の体積を求める",
+          "text": "上がった分の水は、底面が875cm²で高さが2cmの直方体と同じ形なので、体積は 875×2＝1750(cm³) です。石は水の中に全部しずんでいるので、石の体積は1750cm³です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "水そうの高さは60cmで、石を入れたあとの深さ15cmは60cmより小さいので、水があふれる心配はありません。答えは1750cm³です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/13UB3ZgavlRdv0auKutaGuqyQxL9e07-L/d1b88086159749bad46e517be0b7d1f7cf20fb73e94fa8e83f2d4bd89293a6a8.png"
+      ]
+    },
+    {
+      "id": "drive-1gohI1uPvK0HL0Js7haXP19kEZjjdeNf0-q1",
+      "unit": "平均算",
+      "title": "全体の平均とB組の平均からA組の平均点を求める",
+      "src": "平均算_41B-26_P26 [1].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "ある学校の4年生は、A組が25人、B組が24人の合わせて49人います。算数のテストを行ったところ、B組の平均点が68.5点、4年生全体の平均点が66点でした。A組の平均点は何点ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "A組の平均点",
+          "text": "63.6点"
+        }
+      ],
+      "steps": [
+        {
+          "title": "4年生全体の合計点を求める",
+          "text": "平均点×人数＝合計点なので、4年生全体の合計点は 66×49＝3234（点）です。"
+        },
+        {
+          "title": "B組の合計点を求める",
+          "text": "B組の合計点は 68.5×24＝1644（点）です。"
+        },
+        {
+          "title": "A組の合計点を求める",
+          "text": "全体の合計点からB組の合計点をひくと、A組の合計点になります。3234−1644＝1590（点）。"
+        },
+        {
+          "title": "A組の平均点を求める",
+          "text": "合計点÷人数＝平均点なので、1590÷25＝63.6（点）。よってA組の平均点は63.6点です。"
+        },
+        {
+          "title": "検算",
+          "text": "63.6×25＝1590、1590＋1644＝3234、3234÷49＝66 となり、全体の平均点66点と一致します。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1gohI1uPvK0HL0Js7haXP19kEZjjdeNf0/302ecd19c9edfb36d5d1bc22bce5adcf85758b1341febe1f842b27205a2e52ee.png"
+      ]
+    },
+    {
+      "id": "drive-1cJfgMAhj1T9W62rmIm4qOsqNBsYsfLNM-q1",
+      "unit": "計算",
+      "title": "帯分数のたし算・ひき算と□を求める計算",
+      "src": "計算_41A-26_P22 (49).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "12 5/18 ＋ 17 5/12 － □ ＝ 16 7/36\n\n□にあてはまる数を求めなさい。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "13 1/2（＝13.5）"
+        }
+      ],
+      "steps": [
+        {
+          "title": "分母をそろえる",
+          "text": "18と12の最小公倍数は36なので、12 5/18 ＝ 12 10/36、17 5/12 ＝ 17 15/36 と通分します。"
+        },
+        {
+          "title": "左側のたし算を先に計算する",
+          "text": "12 10/36 ＋ 17 15/36 ＝ 29 25/36 です。つまり式は 29 25/36 － □ ＝ 16 7/36 となります。"
+        },
+        {
+          "title": "ひき算の逆算で□を求める",
+          "text": "「ある数 － □ ＝ 答え」のとき、□ ＝ ある数 － 答え です。□ ＝ 29 25/36 － 16 7/36 ＝ 13 18/36 となります。"
+        },
+        {
+          "title": "約分する",
+          "text": "18/36 ＝ 1/2 なので、□ ＝ 13 1/2 です。"
+        },
+        {
+          "title": "検算",
+          "text": "29 25/36 － 13 18/36 ＝ 16 7/36 となり、元の式の右側と一致するので正しいです。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1cJfgMAhj1T9W62rmIm4qOsqNBsYsfLNM/1e001f213240af1a3ffcf3d6fb2c99c813de6eeef3c35a7c449a420178a79fcd.png"
+      ]
+    },
+    {
+      "id": "drive-1TYGm09QCcy4OIGWRlwOp37S4DlZ9zIqc-q1",
+      "unit": "計算",
+      "title": "小数のかけ算 4.8×3.25",
+      "src": "計算_41A-26_P20 (30)（要計算）.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n4.8×3.25＝",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "15.6"
+        }
+      ],
+      "steps": [
+        {
+          "title": "計算の見通しを立てる",
+          "text": "小数のかけ算は、小数点を考えずに整数どうしの計算をしてから、小数点の位置を決めます。4.8は小数点以下1けた、3.25は小数点以下2けたなので、答えは小数点以下3けたの位置に小数点を打ちます。"
+        },
+        {
+          "title": "整数として計算する",
+          "text": "48×325を計算します。48×300＝14400、48×25＝1200なので、14400＋1200＝15600です。"
+        },
+        {
+          "title": "小数点を打つ",
+          "text": "15600の右から3けたのところに小数点を打つと15.600となり、末尾の0を取ると15.6です。"
+        },
+        {
+          "title": "別の方法で確かめる",
+          "text": "3.25＝3＋0.25と分けて考えます。4.8×3＝14.4、4.8×0.25は4.8÷4＝1.2なので、14.4＋1.2＝15.6となり、同じ答えになります。"
+        },
+        {
+          "title": "答え",
+          "text": "4.8×3.25＝15.6"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1TYGm09QCcy4OIGWRlwOp37S4DlZ9zIqc/b406b2ac6016b168b7478c96652bb7f08df59cc43fdf25e71ef165c5d312aff5.png"
+      ]
+    },
+    {
+      "id": "drive-1umWZASaX6EC_KvIeauzMdj6tl2sUZdFi-q1",
+      "unit": "方陣算",
+      "title": "正方形にならべた10円玉の総数（L字型の差で考える）",
+      "src": "方陣算_41A-26_P7 [2].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "10円玉を正方形の形にならべましたが、42まい足りなかったので、たて、横ともに1列ずつへらしたところ、7まいあまりました。10円玉は全部で何まいありますか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "583まい"
+        }
+      ],
+      "steps": [
+        {
+          "title": "2つのならべ方のちがいを考える",
+          "text": "大きい正方形にならべるには42まい足りず、たて・横を1列ずつへらした小さい正方形にならべると7まいあまります。つまり、大きい正方形に必要なまい数は、小さい正方形に必要なまい数より 42＋7＝49（まい）多いです。"
+        },
+        {
+          "title": "ちがいはL字型の部分",
+          "text": "正方形からたて1列と横1列をへらすと、へった部分はL字型になります。1辺に□まいならべる正方形なら、L字型のまい数は □＋□−1 ＝ □×2−1（まい）です（角の1まいが重なるので1をひく）。"
+        },
+        {
+          "title": "大きい正方形の1辺のまい数を求める",
+          "text": "□×2−1＝49 なので、□×2＝50、□＝25。大きい正方形は1辺25まいです。"
+        },
+        {
+          "title": "10円玉の総数を求める",
+          "text": "1辺25まいの正方形には 25×25＝625（まい）必要で、42まい足りなかったので、10円玉は 625−42＝583（まい）です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "1列ずつへらすと1辺24まいで 24×24＝576（まい）必要です。583−576＝7（まい）あまるので、条件に合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1umWZASaX6EC_KvIeauzMdj6tl2sUZdFi/ed24be8dcd7e7685581150ab39493c3657bb100bf9c5095598a0ad42a1127c71.png"
+      ]
+    },
+    {
+      "id": "drive-1XXt10gtB8ZY01PMVdRInQS4TX_9ae2sS-q1",
+      "unit": "方陣算",
+      "title": "3列の中空方陣のおはじきの数",
+      "src": "方陣算_41B-25_P10.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "右の図のような、いちばん外側の1辺が13こで、3列の中空方陣（まん中が空いた正方形のならべ方）があります。このとき、おはじきは全部で何こありますか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "120こ"
+        }
+      ],
+      "steps": [
+        {
+          "title": "図の形を確かめる",
+          "text": "いちばん外側は1辺13こ、幅3列のおはじきで囲まれ、まん中が空いています。空いている部分も正方形です。"
+        },
+        {
+          "title": "とき方①：全体から空きをひく",
+          "text": "外側いっぱいに並べたとすると 13×13＝169こ。空いている正方形の1辺は、両側の3列ずつをひいて 13−3−3＝7こなので、空きは 7×7＝49こ。よって 169−49＝120こ。"
+        },
+        {
+          "title": "とき方②：4つの同じ長方形に分ける",
+          "text": "囲みの部分を、たて3列・横（13−3）＝10この長方形4つに切り分けられます（角の3×3の部分がちょうど1つずつ入るように分ける）。1つの長方形は 10×3＝30こなので、30×4＝120こ。"
+        },
+        {
+          "title": "とき方③：1周ずつ足す",
+          "text": "外側から順に、1辺13この周は（13−1）×4＝48こ、1辺11この周は（11−1）×4＝40こ、1辺9この周は（9−1）×4＝32こ。合計 48＋40＋32＝120こ。"
+        },
+        {
+          "title": "答え",
+          "text": "3つのとき方で同じ120こになるので、おはじきは全部で120こです。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1XXt10gtB8ZY01PMVdRInQS4TX_9ae2sS/33144b06c4df315f882dc57812c6cbb587926c4d3628f41745f80f0cdb76ef30.png"
+      ]
+    },
+    {
+      "id": "drive-1XbUEsWRrRVtQWftiafKx7XtBOyhzaVFA-q1",
+      "unit": "単位",
+      "title": "かさの単位をそろえて計算する（dL・mL・L）",
+      "src": "単位_41A-25_P22 (46).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n1.5dL＋800mL＋0.3L＝□L □mL",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "L",
+          "text": "1"
+        },
+        {
+          "label": "mL",
+          "text": "250"
+        }
+      ],
+      "steps": [
+        {
+          "title": "単位をmLにそろえる",
+          "text": "かさの単位がdL・mL・Lとばらばらなので、いちばん小さい単位のmLにそろえて考えます。1L＝1000mL、1dL＝100mLです。"
+        },
+        {
+          "title": "1.5dLをmLにする",
+          "text": "1dL＝100mLなので、1.5dL＝100×1.5＝150mLです。"
+        },
+        {
+          "title": "0.3LをmLにする",
+          "text": "1L＝1000mLなので、0.3L＝1000×0.3＝300mLです。"
+        },
+        {
+          "title": "たし算をする",
+          "text": "150mL＋800mL＋300mL＝1250mLです。"
+        },
+        {
+          "title": "LとmLに分ける",
+          "text": "1250mLのうち1000mLが1Lなので、1250mL＝1L 250mLです。よって□には1Lと250mLが入ります。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1XbUEsWRrRVtQWftiafKx7XtBOyhzaVFA/5dbe740012dfb82ea3880fe9d862d030b6f3fbaca4a50075295e995a1e8f0d4f.png"
+      ]
+    },
+    {
+      "id": "drive-1HfDL4mzXGiBnezTbrFvD0S_dbaPg4l1d-q1",
+      "unit": "計算",
+      "title": "1から99までの奇数の和",
+      "src": "計算_41A-25_P22 (48).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n1＋3＋5＋7＋…＋97＋99",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "2500"
+        }
+      ],
+      "steps": [
+        {
+          "title": "どんな数をたしているか確かめる",
+          "text": "1、3、5、7、…、97、99 は、1から99までの奇数（2でわり切れない数）です。1つずつ2ずつ大きくなっています。"
+        },
+        {
+          "title": "たす数がいくつあるか数える",
+          "text": "1から100までの整数は100個あり、そのうち奇数は半分なので、1から99までの奇数は 100÷2＝50（個）あります。（99は（99＋1）÷2＝50番目の奇数です。）"
+        },
+        {
+          "title": "はじめと終わりを組にする",
+          "text": "1＋99＝100、3＋97＝100、5＋95＝100、…のように、前からと後ろからを組にすると、どの組も和が100になります。50個の数を2個ずつ組にするので、組の数は 50÷2＝25（組）です。"
+        },
+        {
+          "title": "全体の和を求める",
+          "text": "100×25＝2500。よって答えは 2500 です。"
+        },
+        {
+          "title": "検算（別の考え方）",
+          "text": "奇数を1から順にたすと、1＝1×1、1＋3＝4＝2×2、1＋3＋5＝9＝3×3 のように、たした個数×たした個数になります。50個たすので 50×50＝2500 となり、答えと合います。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1HfDL4mzXGiBnezTbrFvD0S_dbaPg4l1d/da2e09028e1f3091676afda8c19096232175a94651ee4ec673b29dcea684d1bb.png"
+      ]
+    },
+    {
+      "id": "drive-1ruTp9qMIjPV0ZD7ngjJ9xpmYV8TW2dij-q1",
+      "unit": "計算",
+      "title": "分数のかけ算を含む□の計算",
+      "src": "計算_41A-25_P22 (41).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を求めなさい。\n2 7/24 × 2 ＋ □ ＝ 5 13/18",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "1 5/36"
+        }
+      ],
+      "steps": [
+        {
+          "title": "かけ算の部分を先に計算する",
+          "text": "□をふくまない部分「2 7/24 × 2」を先に計算します。2 7/24 を仮分数にすると 55/24 なので、55/24 × 2 ＝ 110/24 ＝ 55/12 ＝ 4 7/12 です。"
+        },
+        {
+          "title": "□を求める式に直す",
+          "text": "式は「4 7/12 ＋ □ ＝ 5 13/18」になります。たし算の片方がわからないときは、答えからもう片方をひけばよいので、□ ＝ 5 13/18 － 4 7/12 です。"
+        },
+        {
+          "title": "通分してひき算する",
+          "text": "18 と 12 の最小公倍数は 36 です。5 13/18 ＝ 5 26/36、4 7/12 ＝ 4 21/36 なので、5 26/36 － 4 21/36 ＝ 1 5/36 です。"
+        },
+        {
+          "title": "検算する",
+          "text": "4 7/12 ＋ 1 5/36 ＝ 4 21/36 ＋ 1 5/36 ＝ 5 26/36 ＝ 5 13/18 となり、もとの式の右辺と一致するので正しいです。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1ruTp9qMIjPV0ZD7ngjJ9xpmYV8TW2dij/fb43140c2061928a26a8cfde729e097776df5d10edf60fea15b1f3de60396e17.png"
+      ]
+    },
+    {
+      "id": "drive-1bTyExRhknYY9Lh0f1JDh3zzuigLIiCNt-q1",
+      "unit": "計算",
+      "title": "帯分数のたし算・ひき算（分母4・5・15）",
+      "src": "計算_41A-25_P21 (38).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n3 1/4 ＋ 2/5 － 1 1/15 ＝",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "2 7/12"
+        }
+      ],
+      "steps": [
+        {
+          "title": "分母をそろえる",
+          "text": "4、5、15の最小公倍数は60なので、分母を60にそろえます。3 1/4＝3 15/60、2/5＝24/60、1 1/15＝1 4/60 となります。"
+        },
+        {
+          "title": "たし算をする",
+          "text": "3 15/60＋24/60＝3 39/60 です。分子どうしをたすだけで、帯分数の整数部分3はそのままです。"
+        },
+        {
+          "title": "ひき算をする",
+          "text": "3 39/60－1 4/60 は、整数部分3－1＝2、分数部分39/60－4/60＝35/60 なので、2 35/60 になります。"
+        },
+        {
+          "title": "約分する",
+          "text": "35と60の最大公約数は5なので、35/60＝7/12。よって答えは 2 7/12 です。"
+        },
+        {
+          "title": "検算",
+          "text": "仮分数で確かめると 195/60＋24/60－64/60＝155/60＝31/12＝2 7/12 となり、一致します。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1bTyExRhknYY9Lh0f1JDh3zzuigLIiCNt/8c8dd4c5ce86cf183dfc741d478d2263acd611f6ff6456e34f0a8fa9018d9b25.png"
+      ]
+    },
+    {
+      "id": "drive-16Si8cwHvKpYfl6ffFLZRI0DX_rmSeT6Q-q1",
+      "unit": "計算",
+      "title": "小数のたし算（くふうして計算）",
+      "src": "計算_41A-25_P19 (18)（要工夫）.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n7.6＋3.68＋2.4",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "13.68"
+        }
+      ],
+      "steps": [
+        {
+          "title": "計算しやすい組み合わせを見つける",
+          "text": "7.6 と 2.4 は小数第一位どうしが 6 と 4 で、たすと 10 になります。たし算は順番を入れかえても答えは変わらないので、先に 7.6＋2.4 を計算します。"
+        },
+        {
+          "title": "きりのよい数をつくる",
+          "text": "7.6＋2.4＝10.0＝10 です。"
+        },
+        {
+          "title": "残りをたす",
+          "text": "10＋3.68＝13.68 です。"
+        },
+        {
+          "title": "検算",
+          "text": "順番どおりに計算しても、7.6＋3.68＝11.28、11.28＋2.4＝13.68 となり同じ答えになります。したがって答えは 13.68 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/16Si8cwHvKpYfl6ffFLZRI0DX_rmSeT6Q/2931c17017fabdcd58126d78bd4c892acfbd797925e560274acbc91cea452df9.png"
+      ]
+    },
+    {
+      "id": "drive-14IeQqZxfMxkzGfOX9uUYarfZmR7rDh-f-q1",
+      "unit": "単位",
+      "title": "重さの単位の換算（gとkg）",
+      "src": "単位_41A-25_P18 (7).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n□ g ＋ 0.3 kg ＝ 1 kg",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "700"
+        }
+      ],
+      "steps": [
+        {
+          "title": "単位をgにそろえる",
+          "text": "1 kg = 1000 g なので、0.3 kg は 1000 g の 0.3 倍で 300 g です。また右辺の 1 kg は 1000 g です。"
+        },
+        {
+          "title": "□を求める",
+          "text": "□ g ＋ 300 g ＝ 1000 g なので、□ = 1000 − 300 = 700 です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "700 g ＋ 300 g ＝ 1000 g ＝ 1 kg となり、式が成り立ちます。答えは 700 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/14IeQqZxfMxkzGfOX9uUYarfZmR7rDh-f/cfdbc668e4b914a9eaf749cf1dbd834f7a84f0c8dabd2164b6fd6e7c1333a88e.png"
+      ]
+    },
+    {
+      "id": "drive-1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX-q1",
+      "unit": "平面図形",
+      "title": "図形Aを4個つないだ木わくの内部の面積",
+      "src": "平面図形_41A-25_P16 (3).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1辺の長さが1cmの正方形を5個、十字形に並べ、その外側の頂点を結んでできた八角形を図形Aと呼びます（図形Aは、長さ1cmの辺4本と、正方形の対角線にあたるななめの辺4本をもつ）。4個の図形Aを、1cmの辺どうしがくっつくように縦と横にそれぞれ2個ずつ並べた状態を〈図2〉とします。〈図2〉では中央にななめの辺4本で囲まれた正方形のすき間ができます。〈図2〉の外側を木の板で囲い、辺がぴったりくっつくように作った木わくが〈図3〉です。木わくの厚さは考えないものとします。\n(1) 〈図3〉の木わくの内部の面積は何cm²ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(1)",
+          "text": "30cm²"
+        }
+      ],
+      "steps": [
+        {
+          "title": "図形Aの面積を求める",
+          "text": "十字形は1cm²の正方形5個なので5cm²。十字形の4つのくぼみに頂点を結ぶ線を引くと、直角をはさむ2辺が1cmの直角二等辺三角形が4個でき、1個の面積は1×1÷2=0.5cm²。よって図形Aの面積は 5+0.5×4=7cm²。"
+        },
+        {
+          "title": "図形A4個分の面積",
+          "text": "7×4=28cm²。"
+        },
+        {
+          "title": "中央のすき間の面積",
+          "text": "4個の図形Aが集まる中央には、ななめの辺4本で囲まれた正方形ができる。この正方形の対角線は1cmの辺2本分、つまり2cm。ひし形（正方形）の面積は対角線×対角線÷2なので 2×2÷2=2cm²。"
+        },
+        {
+          "title": "木わくの内部の面積",
+          "text": "木わくは外側の辺にぴったりくっついているので、内部は図形A4個と中央のすき間を合わせたもの。28+2=30cm²。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX/65a27620146b94115e3fc7dd7121de8fb82f0e2a643cb0a92bb857e214d4db6f.png"
+      ]
+    },
+    {
+      "id": "drive-1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX-q2",
+      "unit": "平面図形",
+      "title": "図形Aを縦2個・横50個並べた木わくの内部の面積",
+      "src": "平面図形_41A-25_P16 (3).png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1辺の長さが1cmの正方形を5個、十字形に並べ、その外側の頂点を結んでできた八角形を図形Aと呼びます（図形Aは、長さ1cmの辺4本と、正方形の対角線にあたるななめの辺4本をもつ）。図形Aの面積は7cm²です。図形Aを1cmの辺どうしがくっつくように縦横に並べると、図形Aが4個集まるところごとに、ななめの辺4本で囲まれた面積2cm²の正方形のすき間ができます（4個を縦横2個ずつ並べて外側の辺がぴったりくっつく木わくで囲むと、木わくの内部の面積は7×4+2=30cm²です）。木わくの厚さは考えないものとします。\n(2) 100個の図形Aを1cmの辺どうしがくっつくように、縦に2個、横に50個並べた状態で、外側の辺がぴったりくっつくような木わくを準備をします。木わくの内部の面積は何cm²ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(2)",
+          "text": "798cm²"
+        }
+      ],
+      "steps": [
+        {
+          "title": "図形A100個分の面積",
+          "text": "図形A1個の面積は7cm²なので、7×100=700cm²。"
+        },
+        {
+          "title": "すき間の数を数える",
+          "text": "すき間は図形Aが4個（縦2個×横2個）集まるところにできる。縦2個の間の境目は1本、横50個の間の境目は50−1=49本なので、4個が集まる場所は1×49=49か所。"
+        },
+        {
+          "title": "すき間の面積の合計",
+          "text": "すき間1か所は対角線2cmの正方形で 2×2÷2=2cm²。49か所で 2×49=98cm²。"
+        },
+        {
+          "title": "木わくの内部の面積",
+          "text": "外側の辺はすべて木わくにぴったりくっつくので、内部は図形A100個とすき間の合計。700+98=798cm²。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX/65a27620146b94115e3fc7dd7121de8fb82f0e2a643cb0a92bb857e214d4db6f.png"
+      ]
+    },
+    {
+      "id": "drive-1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX-q3",
+      "unit": "平面図形",
+      "title": "図形Aをななめの辺でつないで縦10個・横10個並べた木わくの内部の面積",
+      "src": "平面図形_41A-25_P16 (3).png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1辺の長さが1cmの正方形を5個、十字形に並べ、その外側の頂点を結んでできた八角形を図形Aと呼びます（図形Aは、長さ1cmの辺4本と、正方形の対角線にあたるななめの辺4本をもち、1cmの辺とななめの辺が交互に並んでいます）。図形Aの面積は7cm²です。木わくの厚さは考えないものとします。\n(3) 100個の図形Aを1cmでないほうの辺（ななめの辺）どうしがくっつくように、縦に10個、横に10個並べた状態で、外側の辺がぴったりくっつくような木わくを準備をします。木わくの内部の面積は何cm²ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(3)",
+          "text": "781cm²"
+        }
+      ],
+      "steps": [
+        {
+          "title": "図形A100個分の面積",
+          "text": "図形A1個の面積は、正方形5個の5cm²と、くぼみにできる直角二等辺三角形4個分2cm²を合わせた7cm²。100個で 7×100=700cm²。"
+        },
+        {
+          "title": "ななめの辺でくっつけたときの形を考える",
+          "text": "図形Aを45度かたむけて見ると、ななめの辺が縦・横の向きになり、1cmの辺がななめになる。この向きでななめの辺どうしをくっつけると、図形Aが縦10個・横10個の格子状に並ぶ。"
+        },
+        {
+          "title": "すき間の形と面積",
+          "text": "図形Aが4個集まるところには、1cmの辺4本で囲まれた正方形のすき間ができる。この正方形は1辺1cmなので面積は1×1=1cm²。"
+        },
+        {
+          "title": "すき間の数",
+          "text": "縦10個の間の境目は9本、横10個の間の境目は9本なので、4個が集まる場所は9×9=81か所。すき間の合計は1×81=81cm²。"
+        },
+        {
+          "title": "木わくの内部の面積",
+          "text": "外側の辺はすべて木わくにぴったりくっつくので、内部は図形A100個とすき間の合計。700+81=781cm²。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX/65a27620146b94115e3fc7dd7121de8fb82f0e2a643cb0a92bb857e214d4db6f.png"
+      ]
+    },
+    {
+      "id": "drive-1pznOz4xtBXsKE5UnbG_OKARZ42yHJtlp-q1",
+      "unit": "単位",
+      "title": "mLをcm³に直す",
+      "src": "単位_41A-25_P4 (5).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n\n(5) 2900mL = □ cm³",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "2900"
+        }
+      ],
+      "steps": [
+        {
+          "title": "1mLと1cm³の関係を思い出す",
+          "text": "1mLは、1辺が1cmの立方体の体積と同じ量です。つまり 1mL = 1cm³ です。"
+        },
+        {
+          "title": "そのまま数を置きかえる",
+          "text": "1mL = 1cm³ なので、mLの数とcm³の数は同じになります。2900mL = 2900cm³ です。"
+        },
+        {
+          "title": "確かめる",
+          "text": "1L = 1000mL = 1000cm³ なので、2900mL = 2.9L = 2900cm³ となり、答えは 2900 で合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1pznOz4xtBXsKE5UnbG_OKARZ42yHJtlp/bd14ae89a2b1050a5c191417654f6d29fba539ec529af1d4c9c4ae2871dc1821.png"
+      ]
+    },
+    {
+      "id": "drive-1sviH-uBVBJBm_vq6FfUtRB-wM-YSlYci-q1",
+      "unit": "単位",
+      "title": "m³をkLになおす",
+      "src": "単位_41A-25_P4 (4).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n(4) 15 m³ = □ kL",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "15"
+        }
+      ],
+      "steps": [
+        {
+          "title": "1 m³は何cm³か考える",
+          "text": "1 m³は、1辺が1 m（=100 cm）の立方体の体積です。100 cm×100 cm×100 cm＝1000000 cm³なので、1 m³＝1000000 cm³です。"
+        },
+        {
+          "title": "cm³をL（リットル）になおす",
+          "text": "1 cm³＝1 mL、1000 mL＝1 Lです。1000000 cm³＝1000000 mL＝1000 Lなので、1 m³＝1000 Lです。"
+        },
+        {
+          "title": "LをkLになおす",
+          "text": "1 kL（キロリットル）＝1000 Lです。1 m³＝1000 L＝1 kLとなり、m³とkLは同じ大きさの単位だとわかります。"
+        },
+        {
+          "title": "15 m³をkLで表す",
+          "text": "1 m³＝1 kLなので、15 m³＝15 kLです。答えは15です。（手書きの0.000015は間違いで、mLなどを使わない限り小数にはなりません。）"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1sviH-uBVBJBm_vq6FfUtRB-wM-YSlYci/50df135df2c9945511d10668c0e8deb0b340cb101b3b1c7db2230c24b5b1836c.png"
+      ]
+    },
+    {
+      "id": "drive-11ETVwx-Bm91S4mc4OOl1fsc2KN263Lw7-q1",
+      "unit": "単位",
+      "title": "cm³からdLへの単位換算",
+      "src": "単位_41A-25_P4 (3).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n830cm³ ＝ □ dL",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "8.3"
+        }
+      ],
+      "steps": [
+        {
+          "title": "cm³とmL・dLの関係を確かめる",
+          "text": "1cm³ は 1mL と同じかさです。また 1dL ＝ 100mL なので、1dL ＝ 100cm³ です。"
+        },
+        {
+          "title": "830cm³ をmLで表す",
+          "text": "830cm³ ＝ 830mL です。"
+        },
+        {
+          "title": "mLをdLになおす",
+          "text": "100mL が 1dL なので、830mL は 830÷100 ＝ 8.3 より 8.3dL です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "8.3dL ＝ 8.3×100mL ＝ 830mL ＝ 830cm³ となり、もとの数と合います。答えは 8.3dL です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/11ETVwx-Bm91S4mc4OOl1fsc2KN263Lw7/cd3eaa973eeb8613ab8f5d7da6e89c94f2e261bf233cab546c69413662bc11ca.png"
+      ]
+    },
+    {
+      "id": "drive-1fVF7ujLzM7A40KZCvx7AG5tOr91tLgk1-q1",
+      "unit": "単位",
+      "title": "kL を m³ に直す",
+      "src": "単位_41A-25_P3 (4).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "(4) 3 kL ＝ □ m³",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "3"
+        }
+      ],
+      "steps": [
+        {
+          "title": "1 L と 1 m³ の関係を思い出す",
+          "text": "1 L は 1 辺 10 cm の立方体の体積で、10 cm × 10 cm × 10 cm ＝ 1000 cm³ です。1 m³ は 1 辺 100 cm の立方体の体積で、100 cm × 100 cm × 100 cm ＝ 1000000 cm³ です。1000000 ÷ 1000 ＝ 1000 なので、1 m³ ＝ 1000 L です。"
+        },
+        {
+          "title": "1 kL と 1 m³ の関係を確かめる",
+          "text": "k（キロ）は 1000 倍を表すので、1 kL ＝ 1000 L です。手順1より 1000 L ＝ 1 m³ なので、1 kL ＝ 1 m³ になります。"
+        },
+        {
+          "title": "3 kL を m³ に直す",
+          "text": "1 kL ＝ 1 m³ だから、3 kL ＝ 3 m³ です。したがって □ にあてはまる数は 3 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1fVF7ujLzM7A40KZCvx7AG5tOr91tLgk1/24531917af1ac629bcd67f92a2ff759b414370ce8e93dfa354fbae7fe9504ae4.png"
+      ]
+    },
+    {
+      "id": "drive-1QEoC6utBWwbqcsPuc1rsqTAtZUNva8Fb-q1",
+      "unit": "単位",
+      "title": "m³からcm³への単位換算",
+      "src": "単位_41A-25_P3 (2).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n0.4 m³ = □ cm³",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "400000"
+        }
+      ],
+      "steps": [
+        {
+          "title": "1 m³は何cm³かを考える",
+          "text": "1 m = 100 cm なので、1 m³ は 1辺が100 cm の立方体の体積です。100 cm × 100 cm × 100 cm = 1000000 cm³ になります。つまり 1 m³ = 1000000 cm³ です。"
+        },
+        {
+          "title": "0.4 m³をcm³になおす",
+          "text": "0.4 m³ は 1 m³ の 0.4 倍なので、1000000 cm³ × 0.4 = 400000 cm³ です。"
+        },
+        {
+          "title": "確かめる",
+          "text": "400000 cm³ ÷ 1000000 cm³ = 0.4 となり、もとの 0.4 m³ と一致します。答えは 400000 cm³ です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1QEoC6utBWwbqcsPuc1rsqTAtZUNva8Fb/4c7741b9ac22669ceff523e873ad7d9c51637e33dace691b587c1f8e85e32890.png"
+      ]
+    },
+    {
+      "id": "drive-1tWx4goIq4swIkoDt7vQKvqakVUZZZaXi-q1",
+      "unit": "方陣算",
+      "title": "方陣算（正方形にならべると足りない・あまる）",
+      "src": "方陣算_41B-25_P23 [2].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "10円玉を正方形の形にならべようとしたところ、29まい足りなかったため、たて、横ともに1列ずつへらしたところ、今度は6まいあまりました。10円玉は全部で何まいありますか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "295まい"
+        }
+      ],
+      "steps": [
+        {
+          "title": "2つの正方形の差を考える",
+          "text": "もとの正方形（1辺□まい）から、たて・横を1列ずつへらした正方形（1辺（□−1）まい）をつくると、へった部分は右と下にそった「L字」の形になります。このL字の部分のまい数は、□＋□−1＝□×2−1（まい）です（かどの1まいが重なるので1をひく）。"
+        },
+        {
+          "title": "L字のまい数を求める",
+          "text": "大きい正方形では29まい足りず、小さい正方形では6まいあまります。足りない29まいと、あまった6まいを合わせた29＋6＝35（まい）が、L字の部分のまい数になります。"
+        },
+        {
+          "title": "もとの正方形の1辺を求める",
+          "text": "□×2−1＝35 なので、□×2＝36、□＝18。もとの正方形は1辺18まいです。"
+        },
+        {
+          "title": "10円玉の全部のまい数を求める",
+          "text": "18×18＝324（まい）ならべるには29まい足りないので、10円玉は324−29＝295（まい）。確かめ：1辺17まいの正方形は17×17＝289（まい）で、295−289＝6（まい）あまるので、条件に合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1tWx4goIq4swIkoDt7vQKvqakVUZZZaXi/fc18e12d09004db724cd41d46655f63020062b79a1f32ce677fc418d71855304.png"
+      ]
+    },
+    {
+      "id": "drive-1FQmbM1ohLFAzNQ1cLQIdECedTYWpBSB8-q1",
+      "unit": "方陣算",
+      "title": "正方形にならべたご石を1列ずつふやす",
+      "src": "方陣算_41B-25_P20 [1].png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "ご石を1辺が5こになるように正方形の形にならべました。この正方形のたて、横ともに1列ずつふやすためには、ご石は何こ必要ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答",
+          "text": "11こ"
+        }
+      ],
+      "steps": [
+        {
+          "title": "はじめのご石の数",
+          "text": "1辺が5この正方形なので、ご石は 5×5=25（こ）ならんでいます。"
+        },
+        {
+          "title": "ふやしたあとの正方形",
+          "text": "たてと横を1列ずつふやすと、1辺が 5+1=6（こ）の正方形になります。ご石は 6×6=36（こ）になります。"
+        },
+        {
+          "title": "必要なご石の数",
+          "text": "ふやすのに必要なご石は、36−25=11（こ）です。"
+        },
+        {
+          "title": "別の考え方（たしかめ）",
+          "text": "右に1列（5こ）、下に1列（5こ）をたし、右下の角に1こ必要なので、5+5+1=11（こ）。同じ答えになります。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1FQmbM1ohLFAzNQ1cLQIdECedTYWpBSB8/c5eddf177a13984a5c141486faf9510b1851c37956cafef6b5996bad5ad33775.png"
+      ]
+    },
+    {
+      "id": "drive-1VLsLRWM61wCZrJ-oDVxExysJQvn899D8-q1",
+      "unit": "方陣算",
+      "title": "列をふやす② 1(1) 1列ずつふやすのに必要な人数",
+      "src": "方陣算_41B-25_P7 [1].png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "何人かの生徒を正方形の形にならべましたが、27人あまりました。そこで、さらにたて、横ともに1列ずつふやそうとしたところ、今度は2人足りなくなりました。\n（1）たて、横ともに1列ずつふやすためには何人必要ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "29人"
+        }
+      ],
+      "steps": [
+        {
+          "title": "あまりと不足を整理する",
+          "text": "はじめの正方形にならべると27人あまっています。たて・横に1列ずつふやそうとすると、あまっていた27人を全部使っても、さらに2人足りません。"
+        },
+        {
+          "title": "必要な人数を求める",
+          "text": "1列ずつふやすのに必要な人数は、あまっていた27人と、足りなかった2人を合わせた人数です。27＋2＝29（人）"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1VLsLRWM61wCZrJ-oDVxExysJQvn899D8/44bacf136cc5b312f6feba9abcde38bbe4597785e689e09fe08bc66d55757bf6.png"
+      ]
+    },
+    {
+      "id": "drive-1VLsLRWM61wCZrJ-oDVxExysJQvn899D8-q2",
+      "unit": "方陣算",
+      "title": "列をふやす② 1(2) はじめの正方形の1辺の人数",
+      "src": "方陣算_41B-25_P7 [1].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "何人かの生徒を正方形の形にならべましたが、27人あまりました。そこで、さらにたて、横ともに1列ずつふやそうとしたところ、今度は2人足りなくなりました。（たて、横ともに1列ずつふやすためには27＋2＝29人必要です。）\n（2）はじめにならべた正方形のいちばん外側の1辺にいる生徒は何人ですか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "14人"
+        }
+      ],
+      "steps": [
+        {
+          "title": "1列ずつふやすのに必要な人数",
+          "text": "あまり27人と不足2人を合わせて、たて・横に1列ずつふやすには27＋2＝29（人）必要です。"
+        },
+        {
+          "title": "ふやす部分の形を考える",
+          "text": "1辺が□人の正方形の右に1列（□人）、下に1列（□人）をつけ足し、角に1人を置くと、1辺が□＋1人の正方形になります。つまり、ふやす人数は□＋□＋1（人）です。"
+        },
+        {
+          "title": "1辺の人数を求める",
+          "text": "□＋□＋1＝29 なので、□＋□＝29－1＝28、□＝28÷2＝14（人）。はじめの正方形の1辺は14人です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1VLsLRWM61wCZrJ-oDVxExysJQvn899D8/44bacf136cc5b312f6feba9abcde38bbe4597785e689e09fe08bc66d55757bf6.png"
+      ]
+    },
+    {
+      "id": "drive-1VLsLRWM61wCZrJ-oDVxExysJQvn899D8-q3",
+      "unit": "方陣算",
+      "title": "列をふやす② 1(3) 生徒の人数",
+      "src": "方陣算_41B-25_P7 [1].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "何人かの生徒を正方形の形にならべましたが、27人あまりました。そこで、さらにたて、横ともに1列ずつふやそうとしたところ、今度は2人足りなくなりました。（はじめにならべた正方形のいちばん外側の1辺にいる生徒は14人です。）\n（3）生徒は全部で何人いますか。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "223人"
+        }
+      ],
+      "steps": [
+        {
+          "title": "はじめの正方形にならんだ人数",
+          "text": "1辺が14人の正方形なので、ならんでいる人数は14×14＝196（人）です。"
+        },
+        {
+          "title": "あまりを加える",
+          "text": "27人あまっているので、生徒は全部で196＋27＝223（人）です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "1列ずつふやすと1辺が15人になり、15×15＝225（人）必要です。225－223＝2（人）足りなくなるので、問題の条件に合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1VLsLRWM61wCZrJ-oDVxExysJQvn899D8/44bacf136cc5b312f6feba9abcde38bbe4597785e689e09fe08bc66d55757bf6.png"
+      ]
+    },
+    {
+      "id": "drive-1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM-q1",
+      "unit": "約数",
+      "title": "分数の割り算の答えが整数になる数を数える（性質A）",
+      "src": "約数_41A-24_P15.png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "3つの式 1/6÷カ=ア、2/6÷カ=イ、4/6÷カ=ウ のカに、1/360、2/360、3/360、……、358/360、359/360 の359個の数のうちのどれかを入れて、その答えア、イ、ウを計算します。\n359個の数のうち、次の性質Aを持つものはいくつありますか。\n性質A：その数をカに入れると、アは整数になる。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(1)",
+          "text": "12個"
+        }
+      ],
+      "steps": [
+        {
+          "title": "カを□/360とおいてアを計算する",
+          "text": "カ=□/360（□は1から359までの整数）とすると、ア=1/6÷□/360=1/6×360/□=60/□ になります。分数で割ることは、分母と分子を入れかえた分数をかけることと同じです。"
+        },
+        {
+          "title": "アが整数になる条件を考える",
+          "text": "60/□ が整数になるのは、□が60の約数のときです。□は1から359までなので、60の約数はすべてこの範囲に入っています。"
+        },
+        {
+          "title": "60の約数を数える",
+          "text": "60=2×2×3×5 なので、約数は 1、2、3、4、5、6、10、12、15、20、30、60 の12個です。（60=1×60=2×30=3×20=4×15=5×12=6×10 と組にして数えても12個です。）"
+        },
+        {
+          "title": "答え",
+          "text": "性質Aを持つ数は 12個 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM/330c45a5fb0f243784aef10aadd51dff7bd1eb72bdcabc49d1ae8ba2a9dc6045.png"
+      ]
+    },
+    {
+      "id": "drive-1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM-q2",
+      "unit": "約数",
+      "title": "アは整数にならずイだけ整数になる数を数える（性質B）",
+      "src": "約数_41A-24_P15.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "3つの式 1/6÷カ=ア、2/6÷カ=イ、4/6÷カ=ウ のカに、1/360、2/360、3/360、……、358/360、359/360 の359個の数のうちのどれかを入れて、その答えア、イ、ウを計算します。\n359個の数のうち、次の性質Bを持つものはいくつありますか。\n性質B：その数をカに入れると、アは整数にならないが、イは整数になる。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(2)",
+          "text": "4個"
+        }
+      ],
+      "steps": [
+        {
+          "title": "カを□/360とおいてア、イを計算する",
+          "text": "カ=□/360（□は1から359までの整数）とすると、ア=1/6×360/□=60/□、イ=2/6×360/□=120/□ になります。"
+        },
+        {
+          "title": "イが整数になる□を調べる",
+          "text": "120/□ が整数になるのは□が120の約数のときです。120=2×2×2×3×5 なので、約数は 1、2、3、4、5、6、8、10、12、15、20、24、30、40、60、120 の16個で、すべて359以下です。"
+        },
+        {
+          "title": "アが整数になる□を除く",
+          "text": "60/□ が整数になるのは□が60の約数のときで、1、2、3、4、5、6、10、12、15、20、30、60 の12個です。60の約数はすべて120の約数でもあるので、120の約数のうち60の約数でないものを数えればよいことになります。"
+        },
+        {
+          "title": "数える",
+          "text": "16個−12個=4個。実際に残るのは 8、24、40、120 の4個です。たとえば□=8のとき、ア=60÷8=7.5（整数でない）、イ=120÷8=15（整数）となり、性質Bに合います。"
+        },
+        {
+          "title": "答え",
+          "text": "性質Bを持つ数は 4個 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM/330c45a5fb0f243784aef10aadd51dff7bd1eb72bdcabc49d1ae8ba2a9dc6045.png"
+      ]
+    },
+    {
+      "id": "drive-1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM-q3",
+      "unit": "約数",
+      "title": "ア、イは整数にならずウだけ整数になる数を数える（性質C）",
+      "src": "約数_41A-24_P15.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "3つの式 1/6÷カ=ア、2/6÷カ=イ、4/6÷カ=ウ のカに、1/360、2/360、3/360、……、358/360、359/360 の359個の数のうちのどれかを入れて、その答えア、イ、ウを計算します。\n359個の数のうち、次の性質Cを持つものはいくつありますか。\n性質C：その数をカに入れると、ア、イは整数にならないが、ウは整数になる。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "(3)",
+          "text": "4個"
+        }
+      ],
+      "steps": [
+        {
+          "title": "カを□/360とおいてア、イ、ウを計算する",
+          "text": "カ=□/360（□は1から359までの整数）とすると、ア=60/□、イ=120/□、ウ=4/6×360/□=240/□ になります。"
+        },
+        {
+          "title": "ウが整数になる□を調べる",
+          "text": "240/□ が整数になるのは□が240の約数のときです。240=2×2×2×2×3×5 なので、約数は 1、2、3、4、5、6、8、10、12、15、16、20、24、30、40、48、60、80、120、240 の20個で、すべて359以下です。"
+        },
+        {
+          "title": "ア、イが整数になる□を除く",
+          "text": "60の約数は120の約数でもあるので、アが整数になれば必ずイも整数になります。よって「ア、イが整数にならない」は「イが整数にならない」、つまり「□が120の約数でない」と同じことです。120の約数は16個あり、すべて240の約数です。"
+        },
+        {
+          "title": "数える",
+          "text": "20個−16個=4個。実際に残るのは 16、48、80、240 の4個です。たとえば□=16のとき、ア=60÷16=3.75、イ=120÷16=7.5（どちらも整数でない）、ウ=240÷16=15（整数）となり、性質Cに合います。"
+        },
+        {
+          "title": "答え",
+          "text": "性質Cを持つ数は 4個 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1dZ0mPXMSDKWu8U25sOh_cKtaZczf4UoM/330c45a5fb0f243784aef10aadd51dff7bd1eb72bdcabc49d1ae8ba2a9dc6045.png"
+      ]
+    },
+    {
+      "id": "drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q1",
+      "unit": "平面図形",
+      "title": "2つの印に近い範囲の面積（図2）",
+      "src": "平面図形_41A-24_P16.png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1辺の長さが8mの正方形の形をした広場がある。広場には図のように1mごとに線がひかれており、いくつかの印が線の交わるところに置いてある。広場の中のある地点からそれぞれの印にまっすぐ行くとするとき、印Aが他の印よりも一番近い広場の部分の面積をⒶとする。たとえば図1のように2つの印A，Bを置いたとき（Aは左から2m・下から5mの交点、Bは左から4m・下から5mの交点）、Ⓐはかげのついた部分（左端から3mまでの縦長の長方形）の面積で、24m²となる。このとき、かげのついた部分のある地点からAまでの距離は、そこからBまでの距離より短くなる。ただし、印の大きさは考えないものとする。\n(1) 図2のように、2つの印A，Bを置いたとき、面積Ⓐを求めなさい。〔図2：8m×8mの広場で、Aは左から2m・下から2mの交点、Bは左から4m・下から4mの交点に置かれている。〕",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "Ⓐ",
+          "text": "18 m²"
+        }
+      ],
+      "steps": [
+        {
+          "title": "AとBから同じ距離の線を考える",
+          "text": "AとBは、右に2m・上に2mずれた位置にあるので、AとBのちょうど真ん中は左から3m・下から3mの点です。AとBから同じ距離になる地点は、この真ん中の点を通り、ABに直角に交わるななめの直線上に並びます。ABは右上がりのななめなので、この直線は右下がりのななめになります。"
+        },
+        {
+          "title": "境目の直線が広場のふちと交わる点",
+          "text": "この右下がりの直線は、真ん中の点(左から3m・下から3m)から右に1m進むごとに下に1m下がるので、下のふちでは左から6mの点、左のふちでは下から6mの点を通ります。確かめ：下のふちの左から6mの点は、Aから右に4m・下に2m、Bから右に2m・下に4mなので、どちらへの距離も同じ（4×4+2×2＝2×2+4×4＝20）です。"
+        },
+        {
+          "title": "Aに近い部分の形と面積",
+          "text": "Aはこの直線の左下側にあるので、Aに一番近い部分は、広場の左下のすみを頂点とする直角三角形で、2辺の長さはどちらも6mです。面積は 6×6÷2＝18(m²) です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e/8c53ec9cfc2c66b5504398d497a02b72b1d4a595b30b8069fd67b1cd3cdfe3a4.png"
+      ]
+    },
+    {
+      "id": "drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q2",
+      "unit": "平面図形",
+      "title": "3つの印に近い範囲の面積（図3）",
+      "src": "平面図形_41A-24_P16.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1辺の長さが8mの正方形の形をした広場がある。広場には図のように1mごとに線がひかれており、いくつかの印が線の交わるところに置いてある。広場の中のある地点からそれぞれの印にまっすぐ行くとするとき、印Aが他の印よりも一番近い広場の部分の面積をⒶとする。たとえば図1のように2つの印A，Bを置いたとき（Aは左から2m・下から5mの交点、Bは左から4m・下から5mの交点）、Ⓐはかげのついた部分（左端から3mまでの縦長の長方形）の面積で、24m²となる。このとき、かげのついた部分のある地点からAまでの距離は、そこからBまでの距離より短くなる。ただし、印の大きさは考えないものとする。\n(2) 図3のように、3つの印A，B，Cを置いたとき、面積Ⓐを求めなさい。〔図3：8m×8mの広場で、Aは左から3m・下から2mの交点、Bは左から3m・下から4mの交点、Cは左から5m・下から4mの交点に置かれている。〕",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "Ⓐ",
+          "text": "16.5 m²"
+        }
+      ],
+      "steps": [
+        {
+          "title": "AとBの境目",
+          "text": "AとBは同じ縦の線上にあり、Aが下から2m、Bが下から4mなので、AとBから同じ距離の地点は、ちょうど真ん中の「下から3m」の横の線上に並びます。Aに近いのはこの線より下の部分です。"
+        },
+        {
+          "title": "AとCの境目",
+          "text": "Cは、Aから右に2m・上に2mの位置にあります。AとCのちょうど真ん中は左から4m・下から3mの点で、AとCから同じ距離の地点は、この点を通りACに直角な右下がりのななめの直線上に並びます。この直線は右に1m進むごとに1m下がるので、下のふちでは左から7mの点を通ります（左から7mの点はAから右4m・下2m、Cから右2m・下4mで、距離が同じ）。Aに近いのはこの直線の左下側です。"
+        },
+        {
+          "title": "Aに一番近い部分の形",
+          "text": "Aに一番近い部分は、「下から3mの横の線より下」で、かつ「ななめの直線の左下側」の部分です。これは、下の辺が左端から左から7mまでの7m、上の辺（下から3mの横の線上）が左端から左から4mまでの4m、高さが3mの台形になります。ななめの直線と横の線が交わる点は、左から4m・下から3mの点です。なお、BとCの境目はこの台形の外側にあるので、面積には関係しません。"
+        },
+        {
+          "title": "面積を求める",
+          "text": "台形の面積は (7＋4)×3÷2＝16.5(m²) です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e/8c53ec9cfc2c66b5504398d497a02b72b1d4a595b30b8069fd67b1cd3cdfe3a4.png"
+      ]
+    },
+    {
+      "id": "drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q3",
+      "unit": "平面図形",
+      "title": "3つの印に近い範囲の面積（図4）",
+      "src": "平面図形_41A-24_P16.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1辺の長さが8mの正方形の形をした広場がある。広場には図のように1mごとに線がひかれており、いくつかの印が線の交わるところに置いてある。広場の中のある地点からそれぞれの印にまっすぐ行くとするとき、印Aが他の印よりも一番近い広場の部分の面積をⒶとする。たとえば図1のように2つの印A，Bを置いたとき（Aは左から2m・下から5mの交点、Bは左から4m・下から5mの交点）、Ⓐはかげのついた部分（左端から3mまでの縦長の長方形）の面積で、24m²となる。このとき、かげのついた部分のある地点からAまでの距離は、そこからBまでの距離より短くなる。ただし、印の大きさは考えないものとする。\n(3) 図4のように、3つの印A，B，Cを置いたとき、面積Ⓐを求めなさい。〔図4：8m×8mの広場で、Aは左から5m・下から7mの交点、Bは左から3m・下から5mの交点、Cは左から3m・下から3mの交点に置かれている。〕",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "Ⓐ",
+          "text": "17 m²"
+        }
+      ],
+      "steps": [
+        {
+          "title": "AとBの境目",
+          "text": "Bは、Aから左に2m・下に2mの位置にあります。AとBのちょうど真ん中は左から4m・下から6mの点で、AとBから同じ距離の地点は、この点を通りABに直角な右下がりのななめの直線上に並びます。右に1m進むごとに1m下がるので、上のふちでは左から2mの点、右のふちでは下から2mの点を通ります。Aに近いのはこの直線の右上側で、その部分は右上のすみを直角の頂点とする直角三角形（2辺が6mと6m）で、面積は 6×6÷2＝18(m²) です。"
+        },
+        {
+          "title": "AとCの境目",
+          "text": "Cは、Aから左に2m・下に4mの位置にあります。AとCのちょうど真ん中は左から4m・下から5mの点です。ACは「右に2m進むと上に4m」の向きなので、それに直角な線は「右に2m進むと下に1m」の向きになります。真ん中の点から右に2m・下に1mで左から6m・下から4mの点、さらに右に2m・下に1mで右のふちの下から3mの点を通ります。確かめ：右のふちの下から3mの点は、Aから右3m・下4m、Cから右5m・下0mで、3×3+4×4＝25＝5×5 となり距離が同じです。Aに近いのはこの直線の上側です。"
+        },
+        {
+          "title": "重なる部分を考える",
+          "text": "AとBの境目の直線は右のふちの下から2mの点を通り、AとCの境目の直線は右のふちの下から3mの点を通り、2本の直線は左から6m・下から4mの点で交わります。ステップ1の直角三角形のうち、AとCの境目の直線より下にある部分（右のふちの下から2mの点、下から3mの点、左から6m・下から4mの点を頂点とする小さな三角形）はCの方が近いので取り除きます。この小さな三角形は、右のふちにそった辺が1m、そこから左への高さが2mなので、面積は 1×2÷2＝1(m²) です。なお、BとCの境目（下から4mの横の線）はこの範囲の外側なので関係しません。"
+        },
+        {
+          "title": "面積を求める",
+          "text": "Aに一番近い部分の面積は 18－1＝17(m²) です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e/8c53ec9cfc2c66b5504398d497a02b72b1d4a595b30b8069fd67b1cd3cdfe3a4.png"
+      ]
+    },
+    {
+      "id": "drive-1m87PTc9dZu-rn0VcFkzZAGXos1mPgTbe-q1",
+      "unit": "計算",
+      "title": "125×41×8 の工夫した計算",
+      "src": "計算_41A-24_P19 (16)（要工夫）.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n125×41×8＝",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "41000"
+        }
+      ],
+      "steps": [
+        {
+          "title": "計算しやすい組み合わせを見つける",
+          "text": "かけ算は順番を入れかえても答えは変わりません。125と8をかけると125×8＝1000になり、きりのよい数になるので、先に125×8を計算します。"
+        },
+        {
+          "title": "順番を入れかえて計算する",
+          "text": "125×41×8＝(125×8)×41＝1000×41 と考えます。"
+        },
+        {
+          "title": "答えを求める",
+          "text": "1000×41＝41000 なので、答えは41000です。"
+        },
+        {
+          "title": "検算",
+          "text": "順に計算しても確かめられます。125×41＝5125、5125×8＝41000 となり、同じ答えになります。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1m87PTc9dZu-rn0VcFkzZAGXos1mPgTbe/97a73d3b8ebacbd1cf345380f80baeae04def1fa7b1d6bbdc316507a9e9300c8.png"
+      ]
+    },
+    {
+      "id": "drive-13FMYzT-kUa0fnxAy2ylVh0djqOWar2s7-q1",
+      "unit": "計算",
+      "title": "5つの数の和を5でわる計算（くふうして計算）",
+      "src": "計算_41A-24_P19 (37)（要工夫）.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n（935＋934＋933＋932＋936）÷5＝",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "934"
+        }
+      ],
+      "steps": [
+        {
+          "title": "かっこの中の数を見る",
+          "text": "かっこの中の5つの数を小さい順にならべると 932、933、934、935、936 です。932から936までの連続した5つの整数になっています。"
+        },
+        {
+          "title": "まん中の数を基準にする",
+          "text": "5つの数は、まん中の934を基準にすると、934−2、934−1、934、934＋1、934＋2 と表せます。−2と＋2、−1と＋1はたすと0になるので、5つの数の合計は 934×5 になります。"
+        },
+        {
+          "title": "和を5でわる",
+          "text": "合計は 934×5 だから、これを5でわると 934×5÷5＝934 です。"
+        },
+        {
+          "title": "検算",
+          "text": "ふつうにたすと 935＋934＋933＋932＋936＝4670、4670÷5＝934 となり、答えが合っています。答えは 934 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/13FMYzT-kUa0fnxAy2ylVh0djqOWar2s7/bec0befde8bf3032b294ee78dd087c34996a862f56a426f176c0bb1db9a001b8.png"
+      ]
+    },
+    {
+      "id": "drive-11LCbJURR5fwBDYLqnwxxop067E8tUCOe-q1",
+      "unit": "倍数",
+      "title": "3つの数の最小公倍数",
+      "src": "倍数_41A-24_P21 (33).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "72と180と210の最小公倍数は［　　］です。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "2520"
+        }
+      ],
+      "steps": [
+        {
+          "title": "それぞれの数を素数の積に分ける",
+          "text": "72＝2×2×2×3×3、180＝2×2×3×3×5、210＝2×3×5×7 です。"
+        },
+        {
+          "title": "最小公倍数の作り方",
+          "text": "最小公倍数は、3つの数のどれにも割り切れる最も小さい数なので、それぞれの素数について、3つの数の中で最も多く現れる個数だけをかけ合わせます。2は最も多くて3個（72）、3は最も多くて2個（72と180）、5は1個（180と210）、7は1個（210）です。"
+        },
+        {
+          "title": "かけ合わせる",
+          "text": "2×2×2×3×3×5×7＝8×9×35＝72×35＝2520 です。"
+        },
+        {
+          "title": "連除法での確かめ",
+          "text": "3つ並べて2で割ると36,90,105、3で割ると12,30,35。ここで3つ共通の約数はなくなりますが、最小公倍数のときは2つだけに共通する数でも割り続け、割れない数はそのまま下ろします。2で12と30を割って6,15,35、3で6と15を割って2,5,35、5で5と35を割って2,1,7。割った数と残った数を全部かけると 2×3×2×3×5×2×1×7＝2520 です。"
+        },
+        {
+          "title": "検算",
+          "text": "2520÷72＝35、2520÷180＝14、2520÷210＝12 とどれも割り切れ、35と14と12に共通の約数は1だけなので、これより小さい公倍数はありません。よって答えは2520です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/11LCbJURR5fwBDYLqnwxxop067E8tUCOe/636ca10392b0e463c742423de34ec57cd08b64228b36bf49b106a302cdcbdee2.png"
+      ]
+    },
+    {
+      "id": "drive-1IEKlPagVsR3T4gN6bnzcuxeyzcwVZ6Vy-q1",
+      "unit": "計算",
+      "title": "同じ数でわる計算をまとめる工夫",
+      "src": "計算_41A-24_P22 (48)（要工夫）.png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n941÷12＋888÷12＋31÷12＝",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "155"
+        }
+      ],
+      "steps": [
+        {
+          "title": "ステップ1：同じ数でわっていることに気づく",
+          "text": "941÷12、888÷12、31÷12 は、どれも「12でわる」計算です。1つずつ計算すると 941÷12 などはわり切れず小数になってしまうので、そのまま計算するのは大変です。同じ数でわる計算をたし合わせるときは、「わられる数を先にたしてから、まとめて1回わる」ことができます（例：6÷2＋4÷2 は 3＋2＝5 で、(6＋4)÷2＝10÷2＝5 と同じ）。"
+        },
+        {
+          "title": "ステップ2：わられる数をまとめてたす",
+          "text": "941÷12＋888÷12＋31÷12＝(941＋888＋31)÷12 と書きかえます。かっこの中を計算すると、941＋888＝1829、1829＋31＝1860 になります。（941＋31＝972 を先にたして、972＋888＝1860 としてもよいです。）"
+        },
+        {
+          "title": "ステップ3：まとめて12でわる",
+          "text": "1860÷12 を計算します。12×100＝1200、1860－1200＝660、12×55＝660 なので、100＋55＝155 です。たしかめ：12×155＝1860 となり合っています。よって答えは 155 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1IEKlPagVsR3T4gN6bnzcuxeyzcwVZ6Vy/b1d70ed576de682472e64bd452dce4258eb8fd67195bc92c9fa915a8128c4cad.png"
+      ]
+    },
+    {
+      "id": "drive-1FZKXkWRVw2ezmweaOtKeSPVUyrszs_PK-q1",
+      "unit": "計算",
+      "title": "等差の数の和（くふうして計算）",
+      "src": "計算_41A-24_P22 (45)（要工夫）.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の計算をしなさい。\n11＋18＋25＋32＋39＋46＋53＝",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "答え",
+          "text": "224"
+        }
+      ],
+      "steps": [
+        {
+          "title": "数の並び方に気づく",
+          "text": "11、18、25、32、39、46、53 は、となり合う数の差がすべて 7 です（11→18、18→25、…）。同じ差で並ぶ 7 個の数のたし算なので、くふうして計算できます。"
+        },
+        {
+          "title": "両はしから組にする",
+          "text": "11＋53＝64、18＋46＝64、25＋39＝64 と、両はしから順に組にすると、どの組も 64 になります。残るのは真ん中の 32 だけです。"
+        },
+        {
+          "title": "まとめて計算する",
+          "text": "64 が 3 組で 64×3＝192。これに真ん中の 32 を足して、192＋32＝224。"
+        },
+        {
+          "title": "別の考え方で確かめる",
+          "text": "同じ差で並ぶ奇数個の数の合計は「真ん中の数×個数」になります。真ん中の数は 32、個数は 7 個なので 32×7＝224。順番にたしても 11＋18＝29、29＋25＝54、54＋32＝86、86＋39＝125、125＋46＝171、171＋53＝224 となり、一致します。答えは 224 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1FZKXkWRVw2ezmweaOtKeSPVUyrszs_PK/5cbbed554ec081bd277460afa772d5c6b8b02a685737bea9629397a021a20a53.png"
+      ]
+    },
+    {
+      "id": "drive-1jgHeQLT93D49U-U4Di0uro3Fu7zoKxiZ-q1",
+      "unit": "単位",
+      "title": "面積の単位換算（cm²→m²→a）",
+      "src": "単位_41A-24_P3(5).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n90000000 cm² = □ m² = □ a",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "m²",
+          "text": "9000"
+        },
+        {
+          "label": "a",
+          "text": "90"
+        }
+      ],
+      "steps": [
+        {
+          "title": "cm²とm²の関係を確かめる",
+          "text": "1 m は 100 cm なので、1 m² は 100 cm × 100 cm = 10000 cm² です。つまり cm² を m² に直すには 10000 でわります（0 を 4 つ取ります）。"
+        },
+        {
+          "title": "cm²をm²に直す",
+          "text": "90000000 cm² ÷ 10000 = 9000 m²。90000000 は 9 のあとに 0 が 7 つあるので、0 を 4 つ取ると 9000 になります。"
+        },
+        {
+          "title": "m²とaの関係を確かめる",
+          "text": "1 a は 10 m × 10 m = 100 m² です。つまり m² を a に直すには 100 でわります（0 を 2 つ取ります）。"
+        },
+        {
+          "title": "m²をaに直す",
+          "text": "9000 m² ÷ 100 = 90 a。"
+        },
+        {
+          "title": "検算",
+          "text": "90 a = 90 × 100 = 9000 m²、9000 m² = 9000 × 10000 = 90000000 cm² となり、もとの数にもどるので正しいです。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1jgHeQLT93D49U-U4Di0uro3Fu7zoKxiZ/a15eb6b2ee43e74efd07e7f2d889d187aad5231243e77fdc2574805cf95005b8.png"
+      ]
+    },
+    {
+      "id": "drive-1H-x5F1z5GosmlZkaFQCdA2ivaxsSAL0A-q1",
+      "unit": "単位",
+      "title": "ha を m² に直す",
+      "src": "単位_41A-24_P3(3).png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を答えなさい。\n2.4ha = □ m²",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "24000"
+        }
+      ],
+      "steps": [
+        {
+          "title": "1ha は何 m² かを思い出す",
+          "text": "1ha（ヘクタール）は 1辺が 100m の正方形の面積です。100m × 100m = 10000m² なので、1ha = 10000m² です。"
+        },
+        {
+          "title": "2.4ha を m² に直す",
+          "text": "1ha が 10000m² なので、2.4ha は 10000m² の 2.4 倍です。10000 × 2.4 = 24000 となり、2.4ha = 24000m² です。"
+        },
+        {
+          "title": "確かめ",
+          "text": "2ha = 20000m²、0.4ha = 4000m² と分けて考えても、20000 + 4000 = 24000m² になり、答えは 24000 で合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1H-x5F1z5GosmlZkaFQCdA2ivaxsSAL0A/d4591e41158cfb85c40ccc1464f4c6cb2a40823169dcd38b702abcb96b19981b.png"
+      ]
+    },
+    {
+      "id": "drive-1k1u5XyMVXGDBzEW_vh4T2G-fbIXh6Yyj-q1",
+      "unit": "分数",
+      "title": "半紙35まいの重さ",
+      "src": "分数_41B-24_P11 (4).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "84まいで300gの半紙を、35まい重ねて重さを量ると□gです。□にあてはまる数を答えなさい。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "125（g）"
+        }
+      ],
+      "steps": [
+        {
+          "title": "1まいあたりの重さを考える",
+          "text": "84まいで300gなので、1まいの重さは 300÷84＝300/84＝25/7（g）です。約分は 300と84 を12でわって 25/7 にしています。"
+        },
+        {
+          "title": "35まい分の重さを求める",
+          "text": "35まいの重さは 25/7×35＝25×5＝125（g）です。（35÷7＝5 なので、25を5倍します。）"
+        },
+        {
+          "title": "別の考え方で確かめる",
+          "text": "35まいは84まいの 35/84＝5/12 にあたります。300×5/12＝300÷12×5＝25×5＝125（g）で同じになります。"
+        },
+        {
+          "title": "答え",
+          "text": "125g"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1k1u5XyMVXGDBzEW_vh4T2G-fbIXh6Yyj/3efe3d7f735e7e81a31d8f74ff0fe66e08fcb526793fa5dbe351331dedae8847.png"
+      ]
+    },
+    {
+      "id": "drive-1k1u5XyMVXGDBzEW_vh4T2G-fbIXh6Yyj-q2",
+      "unit": "分数",
+      "title": "みんなが食べたミートボールの重さ",
+      "src": "分数_41B-24_P11 (4).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "45こ700gのミートボールを、3人で6こずつ食べると、みんなの食べたミートボールは合計□gです。□にあてはまる数を答えなさい。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "280（g）"
+        }
+      ],
+      "steps": [
+        {
+          "title": "食べた個数を求める",
+          "text": "3人が6こずつ食べるので、食べた個数は 6×3＝18（こ）です。"
+        },
+        {
+          "title": "18こは全体のどれだけにあたるか考える",
+          "text": "45このうちの18こなので、18/45＝2/5（18と45を9でわる）にあたります。"
+        },
+        {
+          "title": "重さを求める",
+          "text": "全体700gの 2/5 なので、700×2/5＝700÷5×2＝140×2＝280（g）です。"
+        },
+        {
+          "title": "別の考え方で確かめる",
+          "text": "1こあたりの重さは 700÷45＝140/9（g）。18こ分は 140/9×18＝140×2＝280（g）で同じになります。"
+        },
+        {
+          "title": "答え",
+          "text": "280g"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1k1u5XyMVXGDBzEW_vh4T2G-fbIXh6Yyj/3efe3d7f735e7e81a31d8f74ff0fe66e08fcb526793fa5dbe351331dedae8847.png"
+      ]
+    },
+    {
+      "id": "drive-1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb-q1",
+      "unit": "規則性",
+      "title": "ご石をとなり合った2こずつ動かして白黒を分ける（1回目）",
+      "src": "規則性_41B-24_P17.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1から10の番号のついたます目があります。このます目の中に、白石と黒石が4こずつ、下の図の（はじめ）のようにこうごにならんでいます。今、となり合った2こをそのままの向きであいている場所にうつします。次に、またとなり合った2こをそのままの向きであいている場所にうつします。これを4回くり返して、図の（さいご）のように3番のます目から、黒石が4こ、白石が4こならぶようにします。1回目、2回目、3回目のます目にはどのようにご石がならんでいるかを答えましょう。\n\n（はじめ）1番から10番：○ ● ○ ● ○ ● ○ ● 空 空\n（さいご）1番から10番：空 空 ● ● ● ● ○ ○ ○ ○\n\n（例）（はじめ）○●○●○●○● 空 空 → （1回目）○● 空 空 ○●○●○●：3番4番の○●を9番10番に入れました。このとき、9番10番に●○のように、逆に入れてはいけません。\n\n【この小問】今回は「1回目」だけを答えてください。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "1回目",
+          "text": "1番から順に：○ 空 空 ● ○ ● ○ ● ● ○（2番3番の●○を9番10番にうつす）"
+        }
+      ],
+      "steps": [
+        {
+          "title": "ルールと目標を確かめる",
+          "text": "動かせるのは「となり合った2こ」だけで、向き（左右の順）を変えずに、あいている2ますへ入れます。はじめは1番から○●○●○●○●で9番10番があき、さいごは1番2番があいて3番から●●●●○○○○になればよいので、4回の移動でこの形をつくります。"
+        },
+        {
+          "title": "さいごの形から考える（4回目の移動）",
+          "text": "さいごは1番2番があいています。あいているますは「最後に石を取った場所」なので、4回目は1番2番にあった2こを動かしたことになります。さいごの7番から10番は○○○○なので、4回目は1番2番の○○を8番9番（または同じ色の2ます）に入れたと考えると、3回目の終わりは○○●●●●○ 空 空 ○ の形が候補になります。"
+        },
+        {
+          "title": "1回目：2番3番を9番10番へ",
+          "text": "はじめ○●○●○●○● 空 空 から、2番3番の●○を向きそのまま9番10番に入れます。すると 1番から ○ 空 空 ● ○ ● ○ ● ● ○ になります。9番10番が●○になっていることを確かめましょう（逆向きの○●にしてはいけません）。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb/4416735532cdccb0e662d937eebbed72bcadf16017aa364a5d46cad5d87771d1.png"
+      ]
+    },
+    {
+      "id": "drive-1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb-q2",
+      "unit": "規則性",
+      "title": "ご石をとなり合った2こずつ動かして白黒を分ける（2回目）",
+      "src": "規則性_41B-24_P17.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1から10の番号のついたます目があります。このます目の中に、白石と黒石が4こずつ、下の図の（はじめ）のようにこうごにならんでいます。今、となり合った2こをそのままの向きであいている場所にうつします。次に、またとなり合った2こをそのままの向きであいている場所にうつします。これを4回くり返して、図の（さいご）のように3番のます目から、黒石が4こ、白石が4こならぶようにします。1回目、2回目、3回目のます目にはどのようにご石がならんでいるかを答えましょう。\n\n（はじめ）1番から10番：○ ● ○ ● ○ ● ○ ● 空 空\n（さいご）1番から10番：空 空 ● ● ● ● ○ ○ ○ ○\n\n（例）（はじめ）○●○●○●○● 空 空 → （1回目）○● 空 空 ○●○●○●：3番4番の○●を9番10番に入れました。このとき、9番10番に●○のように、逆に入れてはいけません。\n\n【この小問】今回は「2回目」だけを答えてください。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "2回目",
+          "text": "1番から順に：○ ○ ● ● 空 空 ○ ● ● ○（5番6番の○●を2番3番にうつす）"
+        }
+      ],
+      "steps": [
+        {
+          "title": "ルールと目標を確かめる",
+          "text": "動かせるのは「となり合った2こ」だけで、向き（左右の順）を変えずに、あいている2ますへ入れます。はじめは1番から○●○●○●○●で9番10番があき、さいごは1番2番があいて3番から●●●●○○○○になればよいので、4回の移動でこの形をつくります。"
+        },
+        {
+          "title": "さいごの形から考える（4回目の移動）",
+          "text": "さいごは1番2番があいています。あいているますは「最後に石を取った場所」なので、4回目は1番2番にあった2こを動かしたことになります。さいごの7番から10番は○○○○なので、4回目は1番2番の○○を8番9番（または同じ色の2ます）に入れたと考えると、3回目の終わりは○○●●●●○ 空 空 ○ の形が候補になります。"
+        },
+        {
+          "title": "1回目：2番3番を9番10番へ",
+          "text": "はじめ○●○●○●○● 空 空 から、2番3番の●○を向きそのまま9番10番に入れます。すると 1番から ○ 空 空 ● ○ ● ○ ● ● ○ になります。9番10番が●○になっていることを確かめましょう（逆向きの○●にしてはいけません）。"
+        },
+        {
+          "title": "2回目：5番6番を2番3番へ",
+          "text": "1回目のあと、あいているのは2番3番です。5番6番の○●をそのまま2番3番に入れると、1番から ○ ○ ● ● 空 空 ○ ● ● ○ になります。左に○○●●ができて、さいごの形に近づきます。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb/4416735532cdccb0e662d937eebbed72bcadf16017aa364a5d46cad5d87771d1.png"
+      ]
+    },
+    {
+      "id": "drive-1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb-q3",
+      "unit": "規則性",
+      "title": "ご石をとなり合った2こずつ動かして白黒を分ける（3回目）",
+      "src": "規則性_41B-24_P17.png",
+      "stars": 3,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1から10の番号のついたます目があります。このます目の中に、白石と黒石が4こずつ、下の図の（はじめ）のようにこうごにならんでいます。今、となり合った2こをそのままの向きであいている場所にうつします。次に、またとなり合った2こをそのままの向きであいている場所にうつします。これを4回くり返して、図の（さいご）のように3番のます目から、黒石が4こ、白石が4こならぶようにします。1回目、2回目、3回目のます目にはどのようにご石がならんでいるかを答えましょう。\n\n（はじめ）1番から10番：○ ● ○ ● ○ ● ○ ● 空 空\n（さいご）1番から10番：空 空 ● ● ● ● ○ ○ ○ ○\n\n（例）（はじめ）○●○●○●○● 空 空 → （1回目）○● 空 空 ○●○●○●：3番4番の○●を9番10番に入れました。このとき、9番10番に●○のように、逆に入れてはいけません。\n\n【この小問】今回は「3回目」だけを答えてください。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "3回目",
+          "text": "1番から順に：○ ○ ● ● ● ● ○ 空 空 ○（8番9番の●●を5番6番にうつす）"
+        }
+      ],
+      "steps": [
+        {
+          "title": "ルールと目標を確かめる",
+          "text": "動かせるのは「となり合った2こ」だけで、向き（左右の順）を変えずに、あいている2ますへ入れます。はじめは1番から○●○●○●○●で9番10番があき、さいごは1番2番があいて3番から●●●●○○○○になればよいので、4回の移動でこの形をつくります。"
+        },
+        {
+          "title": "さいごの形から考える（4回目の移動）",
+          "text": "さいごは1番2番があいています。あいているますは「最後に石を取った場所」なので、4回目は1番2番にあった2こを動かしたことになります。さいごの7番から10番は○○○○なので、4回目は1番2番の○○を8番9番（または同じ色の2ます）に入れたと考えると、3回目の終わりは○○●●●●○ 空 空 ○ の形が候補になります。"
+        },
+        {
+          "title": "1回目：2番3番を9番10番へ",
+          "text": "はじめ○●○●○●○● 空 空 から、2番3番の●○を向きそのまま9番10番に入れます。すると 1番から ○ 空 空 ● ○ ● ○ ● ● ○ になります。9番10番が●○になっていることを確かめましょう（逆向きの○●にしてはいけません）。"
+        },
+        {
+          "title": "2回目：5番6番を2番3番へ",
+          "text": "1回目のあと、あいているのは2番3番です。5番6番の○●をそのまま2番3番に入れると、1番から ○ ○ ● ● 空 空 ○ ● ● ○ になります。左に○○●●ができて、さいごの形に近づきます。"
+        },
+        {
+          "title": "3回目：8番9番を5番6番へ",
+          "text": "あいているのは5番6番です。8番9番の●●をそのまま5番6番に入れると、1番から ○ ○ ● ● ● ● ○ 空 空 ○ になります。3番から6番に●が4こならびました。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb/4416735532cdccb0e662d937eebbed72bcadf16017aa364a5d46cad5d87771d1.png"
+      ]
+    },
+    {
+      "id": "drive-1MOsIKTm-zGYtx5e3R8AHAKm5wr0kLHrS-q1",
+      "unit": "分数",
+      "title": "分数のわり算の□を求める",
+      "src": "分数_41B-24_P25 (3).png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "次の□にあてはまる数を求めなさい。\n\n(3) 57/85 ÷ □ ＝ 95/119",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "21/25"
+        }
+      ],
+      "steps": [
+        {
+          "title": "□の求め方を考える",
+          "text": "「わられる数 ÷ □ ＝ 商」の形なので、□（わる数）は「わられる数 ÷ 商」で求められます。たとえば 6 ÷ □ ＝ 2 なら □ ＝ 6 ÷ 2 ＝ 3 となるのと同じ考え方です。よって □ ＝ 57/85 ÷ 95/119 です。"
+        },
+        {
+          "title": "分数のわり算を かけ算になおす",
+          "text": "分数でわるときは、わる数の分母と分子を入れかえてかけます。□ ＝ 57/85 × 119/95 となります。"
+        },
+        {
+          "title": "約分してから計算する",
+          "text": "57 ＝ 3×19、85 ＝ 5×17、119 ＝ 7×17、95 ＝ 5×19 です。分子の 19 と分母の 19、分母の 17 と分子の 17 が約分できるので、57/85 × 119/95 ＝ (3×7)/(5×5) ＝ 21/25 になります。"
+        },
+        {
+          "title": "検算する",
+          "text": "57/85 ÷ 21/25 ＝ 57/85 × 25/21 ＝ (3×19×25)/(5×17×3×7) ＝ (19×5)/(17×7) ＝ 95/119 となり、もとの式と合います。答えは □ ＝ 21/25 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1MOsIKTm-zGYtx5e3R8AHAKm5wr0kLHrS/d39c566d2ff9fb2214e8ead6256867b1af12455c7198f0460f28d9e44df5932c.png"
+      ]
+    },
+    {
+      "id": "drive-1tSwNp2TOc3CaEza5KBxctGSeTtl6rc2R-q1",
+      "unit": "倍数",
+      "title": "1から200までの13の倍数の個数",
+      "src": "倍数_授業前テ24②[1] ⑤.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "1から200までに、13の倍数は□こあります。□にあてはまる数を答えなさい。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "15"
+        }
+      ],
+      "steps": [
+        {
+          "title": "考え方",
+          "text": "13の倍数は 13×1、13×2、13×3、… と13をかけていった数です。1から200までに13の倍数が何個あるかは、200を13でわった商（あまりは考えない）で求められます。200÷13の商が、200以下でいちばん大きい13の倍数が13×何 になるかを表すからです。"
+        },
+        {
+          "title": "わり算で求める",
+          "text": "200÷13 を計算します。13×15=195、13×16=208 なので、200÷13=15 あまり5 です。"
+        },
+        {
+          "title": "答え",
+          "text": "13×15=195 が200以下で最大の13の倍数なので、13の倍数は 13、26、…、195 の15個あります。答えは 15 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1tSwNp2TOc3CaEza5KBxctGSeTtl6rc2R/e09077e6be3237e9ea77aa5f84096abfe2ed9606593c499f3673f82e388bc6a3.png"
+      ]
+    },
+    {
+      "id": "drive-1Spq3j3OCkxPdsFff_cTv_zQdJyfMXfwy-q1",
+      "unit": "計算",
+      "title": "帯分数と分数のたし算（通分）",
+      "src": "計算_授業前テ24②[1] ④.png",
+      "stars": 1,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "④ 2 7/15 ＋ 2/3 ＝ □\n（2と15分の7 たす 3分の2 の答えを□に書きます。）",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "□",
+          "text": "3 2/15（3と15分の2。仮分数で表すと 47/15）"
+        }
+      ],
+      "steps": [
+        {
+          "title": "分母をそろえる",
+          "text": "15 と 3 の最小公倍数は 15 です。2/3 の分母を 15 にするには、分母と分子に 5 をかけて 2/3 ＝ 10/15 にします。"
+        },
+        {
+          "title": "分数部分をたす",
+          "text": "2 7/15 ＋ 10/15 の分数部分をたすと、7/15 ＋ 10/15 ＝ 17/15 です。整数部分はそのまま 2 なので、2 17/15 になります。"
+        },
+        {
+          "title": "くり上げて帯分数に直す",
+          "text": "17/15 は 1 より大きい（17 ＞ 15）ので、17/15 ＝ 1 2/15 とくり上げます。すると 2 ＋ 1 2/15 ＝ 3 2/15 です。"
+        },
+        {
+          "title": "検算",
+          "text": "3 2/15 を仮分数にすると 47/15。もとの式も仮分数で計算すると 37/15 ＋ 10/15 ＝ 47/15 なので、答えは 3 2/15 で合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1Spq3j3OCkxPdsFff_cTv_zQdJyfMXfwy/45f610242e15b09f3fcadef6d526d3b083e852ffc2652dcffc8041d92c43a9d2.png"
+      ]
+    },
+    {
+      "id": "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q1",
+      "unit": "分数",
+      "title": "条件に合う分数のます埋め（たし算とかけ算）（ア）",
+      "src": "分数_デイチェ410-24[4].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "右の図の6このどのますにも、分数が入ります。図は次のようにならんでいます。いちばん上の段には、たての列①に 1/4 が入っています。横の列あには、たての列①にア、たての列②にイが入っています。横の列いには、たての列①にウ、たての列②に 1/5、たての列③にエが入っています。下の文を読んで、じょうけんに合うように、あいているますア、イ、ウ、エにあてはまる数を答えましょう。\n■じょうけん1：たての列①にある3このますの数（1/4、ア、ウ）をたすと1です。\n■じょうけん2：たての列②にある2このますの数（イ、1/5）をたすと1です。\n■じょうけん3：横の列あにある2このますの数（ア、イ）をかけると 1/2 です。\n■じょうけん4：横の列いにある3このますの数（ウ、1/5、エ）をかけると 1/45 です。\n\n【この小問】今回は「ア」だけを答えてください。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "ア",
+          "text": "5/8"
+        }
+      ],
+      "steps": [
+        {
+          "title": "すぐに決まるますをさがす",
+          "text": "4つのじょうけんのうち、分かっている数が1つだけで、あいているますが1つだけなのはじょうけん2です。たての列②は イ と 1/5 の2つで、たすと1なので、イ = 1 − 1/5 = 4/5 です。"
+        },
+        {
+          "title": "じょうけん3でアを求める",
+          "text": "横の列あは ア と イ で、かけると 1/2 です。イ = 4/5 と分かったので、ア × 4/5 = 1/2 です。かけ算の答えを、かけた数でわると元の数にもどるので、ア = 1/2 ÷ 4/5 = 1/2 × 5/4 = 5/8 です。たしかめ：5/8 × 4/5 = 20/40 = 1/2 で合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow/36444b7d5f70fd8b1692e9aae5e03404b7bfe0beb768d74cb5fb709f3d6ebca0.png"
+      ]
+    },
+    {
+      "id": "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q2",
+      "unit": "分数",
+      "title": "条件に合う分数のます埋め（たし算とかけ算）（イ）",
+      "src": "分数_デイチェ410-24[4].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "右の図の6このどのますにも、分数が入ります。図は次のようにならんでいます。いちばん上の段には、たての列①に 1/4 が入っています。横の列あには、たての列①にア、たての列②にイが入っています。横の列いには、たての列①にウ、たての列②に 1/5、たての列③にエが入っています。下の文を読んで、じょうけんに合うように、あいているますア、イ、ウ、エにあてはまる数を答えましょう。\n■じょうけん1：たての列①にある3このますの数（1/4、ア、ウ）をたすと1です。\n■じょうけん2：たての列②にある2このますの数（イ、1/5）をたすと1です。\n■じょうけん3：横の列あにある2このますの数（ア、イ）をかけると 1/2 です。\n■じょうけん4：横の列いにある3このますの数（ウ、1/5、エ）をかけると 1/45 です。\n\n【この小問】今回は「イ」だけを答えてください。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "イ",
+          "text": "4/5"
+        }
+      ],
+      "steps": [
+        {
+          "title": "すぐに決まるますをさがす",
+          "text": "4つのじょうけんのうち、分かっている数が1つだけで、あいているますが1つだけなのはじょうけん2です。たての列②は イ と 1/5 の2つで、たすと1なので、イ = 1 − 1/5 = 4/5 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow/36444b7d5f70fd8b1692e9aae5e03404b7bfe0beb768d74cb5fb709f3d6ebca0.png"
+      ]
+    },
+    {
+      "id": "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q3",
+      "unit": "分数",
+      "title": "条件に合う分数のます埋め（たし算とかけ算）（ウ）",
+      "src": "分数_デイチェ410-24[4].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "右の図の6このどのますにも、分数が入ります。図は次のようにならんでいます。いちばん上の段には、たての列①に 1/4 が入っています。横の列あには、たての列①にア、たての列②にイが入っています。横の列いには、たての列①にウ、たての列②に 1/5、たての列③にエが入っています。下の文を読んで、じょうけんに合うように、あいているますア、イ、ウ、エにあてはまる数を答えましょう。\n■じょうけん1：たての列①にある3このますの数（1/4、ア、ウ）をたすと1です。\n■じょうけん2：たての列②にある2このますの数（イ、1/5）をたすと1です。\n■じょうけん3：横の列あにある2このますの数（ア、イ）をかけると 1/2 です。\n■じょうけん4：横の列いにある3このますの数（ウ、1/5、エ）をかけると 1/45 です。\n\n【この小問】今回は「ウ」だけを答えてください。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "ウ",
+          "text": "1/8"
+        }
+      ],
+      "steps": [
+        {
+          "title": "すぐに決まるますをさがす",
+          "text": "4つのじょうけんのうち、分かっている数が1つだけで、あいているますが1つだけなのはじょうけん2です。たての列②は イ と 1/5 の2つで、たすと1なので、イ = 1 − 1/5 = 4/5 です。"
+        },
+        {
+          "title": "じょうけん3でアを求める",
+          "text": "横の列あは ア と イ で、かけると 1/2 です。イ = 4/5 と分かったので、ア × 4/5 = 1/2 です。かけ算の答えを、かけた数でわると元の数にもどるので、ア = 1/2 ÷ 4/5 = 1/2 × 5/4 = 5/8 です。たしかめ：5/8 × 4/5 = 20/40 = 1/2 で合っています。"
+        },
+        {
+          "title": "じょうけん1でウを求める",
+          "text": "たての列①は 1/4、ア、ウ で、たすと1です。ア = 5/8 なので、ウ = 1 − 1/4 − 5/8 です。分母を8にそろえると、8/8 − 2/8 − 5/8 = 1/8 です。よって ウ = 1/8 です。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow/36444b7d5f70fd8b1692e9aae5e03404b7bfe0beb768d74cb5fb709f3d6ebca0.png"
+      ]
+    },
+    {
+      "id": "drive-1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow-q4",
+      "unit": "分数",
+      "title": "条件に合う分数のます埋め（たし算とかけ算）（エ）",
+      "src": "分数_デイチェ410-24[4].png",
+      "stars": 2,
+      "tests": [
+        "11月マンスリー"
+      ],
+      "question": "右の図の6このどのますにも、分数が入ります。図は次のようにならんでいます。いちばん上の段には、たての列①に 1/4 が入っています。横の列あには、たての列①にア、たての列②にイが入っています。横の列いには、たての列①にウ、たての列②に 1/5、たての列③にエが入っています。下の文を読んで、じょうけんに合うように、あいているますア、イ、ウ、エにあてはまる数を答えましょう。\n■じょうけん1：たての列①にある3このますの数（1/4、ア、ウ）をたすと1です。\n■じょうけん2：たての列②にある2このますの数（イ、1/5）をたすと1です。\n■じょうけん3：横の列あにある2このますの数（ア、イ）をかけると 1/2 です。\n■じょうけん4：横の列いにある3このますの数（ウ、1/5、エ）をかけると 1/45 です。\n\n【この小問】今回は「エ」だけを答えてください。",
+      "subquestions": [],
+      "answers": [
+        {
+          "label": "エ",
+          "text": "8/9"
+        }
+      ],
+      "steps": [
+        {
+          "title": "すぐに決まるますをさがす",
+          "text": "4つのじょうけんのうち、分かっている数が1つだけで、あいているますが1つだけなのはじょうけん2です。たての列②は イ と 1/5 の2つで、たすと1なので、イ = 1 − 1/5 = 4/5 です。"
+        },
+        {
+          "title": "じょうけん3でアを求める",
+          "text": "横の列あは ア と イ で、かけると 1/2 です。イ = 4/5 と分かったので、ア × 4/5 = 1/2 です。かけ算の答えを、かけた数でわると元の数にもどるので、ア = 1/2 ÷ 4/5 = 1/2 × 5/4 = 5/8 です。たしかめ：5/8 × 4/5 = 20/40 = 1/2 で合っています。"
+        },
+        {
+          "title": "じょうけん1でウを求める",
+          "text": "たての列①は 1/4、ア、ウ で、たすと1です。ア = 5/8 なので、ウ = 1 − 1/4 − 5/8 です。分母を8にそろえると、8/8 − 2/8 − 5/8 = 1/8 です。よって ウ = 1/8 です。"
+        },
+        {
+          "title": "じょうけん4でエを求める",
+          "text": "横の列いは ウ、1/5、エ で、かけると 1/45 です。まず ウ × 1/5 = 1/8 × 1/5 = 1/40 です。1/40 × エ = 1/45 なので、エ = 1/45 ÷ 1/40 = 1/45 × 40 = 40/45 = 8/9 です。たしかめ：1/8 × 1/5 × 8/9 = 8/360 = 1/45 で合っています。"
+        }
+      ],
+      "sourceImages": [
+        "assets/drive/1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow/36444b7d5f70fd8b1692e9aae5e03404b7bfe0beb768d74cb5fb709f3d6ebca0.png"
+      ]
+    }
+  ]
 }
