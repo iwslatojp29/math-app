@@ -55,9 +55,9 @@ svg{display:block}
 /* ---------- app frame ---------- */
 .app{display:grid;grid-template-columns:336px minmax(0,1fr);grid-template-rows:minmax(0,1fr);flex:1;min-height:0;isolation:isolate}
 .side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.side-panes{display:grid;grid-template-rows:minmax(0,45fr) minmax(0,55fr);flex:1;min-height:0;overflow:hidden}
+.side-panes{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}.side-pane{flex:1}.side-pane[hidden]{display:none}.side-tabs{display:flex;flex:none;gap:6px;padding:10px 14px 6px;border-bottom:1px solid var(--line)}.side-tab{flex:1;min-height:44px;border:1px solid var(--line);border-radius:9px;background:var(--panel-2);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}.side-tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}.side-tab:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .side-pane{display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.side-pane + .side-pane{border-top:2px solid var(--line-strong)}
+
 .pane-title{flex:none;margin:0;padding:8px 20px;background:var(--panel-2);border-bottom:1px solid var(--line);font-family:var(--font-disp);font-size:13px;font-weight:700;color:var(--ink-2)}
 .side-scroll{flex:1;overflow-y:auto;min-height:0;padding:8px 14px 14px;overscroll-behavior-y:contain;scrollbar-gutter:stable}
 .side-scroll:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
@@ -373,8 +373,12 @@ svg{display:block}
         <div class="foot-btns"><button type="button" class="tbtn" id="cloudConnect">Googleで接続</button><button type="button" class="tbtn" id="cloudDisconnect" hidden>接続を解除</button></div>
       </div></details>
     </section>
+    <div class="side-tabs" role="tablist" aria-label="一覧の切り替え">
+      <button class="side-tab" id="unitsTab" type="button" role="tab" aria-selected="true" aria-controls="unitsPane">単元</button>
+      <button class="side-tab" id="problemsTab" type="button" role="tab" aria-selected="false" aria-controls="problemsPane" tabindex="-1">問題</button>
+    </div>
     <div class="side-panes">
-      <section class="side-pane" aria-labelledby="unitsTitle">
+      <section class="side-pane" id="unitsPane" role="tabpanel" aria-labelledby="unitsTab">
         <h2 class="pane-title" id="unitsTitle">単元を選ぶ</h2>
         <div class="side-scroll" id="selectionScroll" tabindex="0" role="region" aria-label="単元・しぼりこみ・設定">
           <p class="unit-note" id="catalogStatus" role="status" hidden></p>
@@ -407,7 +411,7 @@ svg{display:block}
           </div>
         </div>
       </section>
-      <section class="side-pane" aria-labelledby="plistTitle">
+      <section class="side-pane" id="problemsPane" role="tabpanel" aria-labelledby="problemsTab" hidden>
         <h2 class="pane-title" id="plistTitle">問題</h2>
         <div class="side-scroll" id="problemScroll" tabindex="0" role="region" aria-label="問題一覧">
           <div class="plist" id="plist"></div>
@@ -14758,7 +14762,7 @@ var $filters = $('filters'), $units = $('units'), $plist = $('plist'), $plistTit
 var FILTERS = [{k: 'all', l: 'すべて'}, {k: 'recorded', l: '記録あり'}, {k: 'none', l: '未実施'}, {k: 't', l: '△の問題', m: 't'}, {k: 'x', l: '×の問題', m: 'x'}];
 
 function showRecordedProblems(){
-  state.unit = '*'; state.test = '*'; state.filter = 'recorded';
+  state.unit = '*'; state.test = '*'; state.filter = 'recorded'; showSidePane('problems');
   ensureSelection(); renderSide(); renderProblem(); saveSettings();
 }
 
@@ -14802,6 +14806,7 @@ function renderPlist(){
   var previousPid = previous && previous.getAttribute('data-pid');
   var selectionKey = [state.unit, state.filter, state.test, state.sort].join('|');
   $plistTitle.textContent = '問題（' + list.length + '）';
+  $('problemsTab').textContent = '問題（' + list.length + '）';
   var sortbar = '<div class="sortbar"><span class="lbl">並び順</span>' +
     '<button class="sbtn" data-sort="no" aria-pressed="' + (state.sort === 'no') + '">番号順</button>' +
     '<button class="sbtn" data-sort="ng" aria-pressed="' + (state.sort === 'ng') + '">×が多い順</button></div>';
@@ -14828,6 +14833,23 @@ function renderPlist(){
   }
   renderPlist.selectionKey = selectionKey;
 }
+function showSidePane(name, focus){
+  var units = name === 'units';
+  $('unitsPane').hidden = !units; $('problemsPane').hidden = units;
+  ['units', 'problems'].forEach(function(key){
+    var tab = $(key + 'Tab'), active = key === name;
+    tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1;
+    if (active && focus) tab.focus();
+  });
+}
+['units', 'problems'].forEach(function(name){
+  $(name + 'Tab').addEventListener('click', function(){ showSidePane(name); });
+  $(name + 'Tab').addEventListener('keydown', function(event){
+    if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].indexOf(event.key) < 0) return;
+    event.preventDefault(); event.stopPropagation();
+    showSidePane(event.key === 'Home' ? 'units' : event.key === 'End' ? 'problems' : name === 'units' ? 'problems' : 'units', true);
+  });
+});
 function renderSide(){ renderFilters(); renderTests(); renderUnits(); renderPlist(); }
 
 function historyHtml(pid, newest){
@@ -15098,7 +15120,7 @@ function nav(delta){
   selectProblem(list[n].id);
 }
 function refreshAll(){ saveSettings(); ensureSelection(); renderSide(); renderProblem(); }
-function setUnit(u){ state.unit = u; refreshAll(); }
+function setUnit(u){ state.unit = u; showSidePane('problems'); refreshAll(); }
 function setFilter(f){ state.filter = f; refreshAll(); }
 function setTest(t){ state.test = t; if (state.unit !== '*' && !problemsOf(state.unit).length) state.unit = '*'; refreshAll(); }
 function setSort(s){ state.sort = s; saveSettings(); renderSide(); renderTop(); var p = current(); if (p) { var list = visible(), idx = list.indexOf(p); $('prevBtn').disabled = idx <= 0; $('nextBtn').disabled = idx < 0 || idx >= list.length - 1; } }

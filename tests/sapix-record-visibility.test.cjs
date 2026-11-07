@@ -100,13 +100,14 @@ test('record shortcut removes stale unit and test restrictions, selects a record
       ctx.state.pid = 'parent::part:(1)'; calls.push('select');
     },
     renderSide() { calls.push('side'); }, renderProblem() { calls.push('problem'); },
+    showSidePane(name) { assert.equal(name, 'problems'); calls.push('tab'); },
     saveSettings() { calls.push('save'); }, openSide() { calls.push('open'); },
     closeSide() { throw Error('record shortcut must leave its problem list visible'); }
   });
   vm.runInContext(sourceOf('showRecordedProblems'), ctx);
   ctx.showRecordedProblems();
   assert.equal(ctx.state.pid, 'parent::part:(1)');
-  for (const action of ['select', 'side', 'problem', 'save']) assert.equal(calls.filter(call => call === action).length, 1, action);
+  for (const action of ['select', 'side', 'problem', 'save', 'tab']) assert.equal(calls.filter(call => call === action).length, 1, action);
   assert.equal(ctx.state.records, records);
 });
 
