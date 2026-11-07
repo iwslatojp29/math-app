@@ -1,8 +1,8 @@
 (function(root, factory){
   'use strict';
-  if (typeof module === 'object' && module.exports) module.exports = factory();
-  else root.SapixGeneratedProblems = factory();
-})(typeof globalThis !== 'undefined' ? globalThis : this, function(){
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./generated-presentation.js'));
+  else root.SapixGeneratedProblems = factory(root.SapixGeneratedPresentation);
+})(typeof globalThis !== 'undefined' ? globalThis : this, function(Presentation){
   'use strict';
   var CATALOG_URL = './problems/generated.json';
   var MAX_BYTES = 8 * 1024 * 1024;
@@ -97,17 +97,17 @@
   }
   // Only these fixed templates create HTML. Catalog strings never supply markup or CSS.
   function compileProblem(problem, no){
-    return {
+    var compiled = {
       id: problem.id, unit: problem.unit, no: no, title: problem.title, src: problem.src, stars: problem.stars, tests: problem.tests.slice(),
       body: paragraphs(problem.question),
       questions: problem.subquestions.map(function(item){ return {l: escapeHtml(item.label), t: lines(item.text)}; }),
       answers: problem.answers.map(function(item){ return {l: escapeHtml(item.label), v: lines(item.text)}; }),
       expl: problem.steps.map(function(step){ return (step.title ? '<h3>' + escapeHtml(step.title) + '</h3>' : '') + paragraphs(step.text); }).join(''),
       img: problem.sourceImages[0],
-      figure: '<div style="width:300px;max-width:100%">' + problem.sourceImages.map(function(path, index){
-        return '<a href="' + path + '" style="display:block"><img src="' + path + '" alt="' + escapeHtml(problem.title) + '：問題の元画像 ' + (index + 1) + '" decoding="async" style="display:block;width:100%;height:auto"></a><div class="figcap">元画像 ' + (index + 1) + '（タップで拡大）</div>';
-      }).join('') + '</div>'
+      sourceImages: problem.sourceImages.slice(),
+      figure: ''
     };
+    return Presentation ? Presentation.enhance(problem, compiled) : compiled;
   }
   function compileCatalog(catalog, options){
     options = options || {};

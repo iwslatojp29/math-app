@@ -282,6 +282,18 @@ svg{display:block}
 .mk circle,.mk polygon,.mk line{stroke:currentColor;fill:none}
 
 
+/* 追加教材も、写真でなく書き起こした問題・図を使う。 */
+.nov-equation{font-family:var(--font-disp);font-size:22px;line-height:2.3;padding:12px 0;font-weight:700;overflow-wrap:anywhere}
+.nov-problem .fig-full{margin:14px auto;max-width:100%}
+.nov-problem .figsvg{display:block;width:100%;height:auto;overflow:visible}
+.nov-problem .blank{display:inline-block;min-width:1.15em;color:var(--accent);text-align:center}
+.nov-conditions{margin:10px 0;padding-left:1.5em;font-size:17px;line-height:2.1}
+.nov-answer{white-space:normal;overflow-wrap:anywhere}
+.nov-problem .frac,.nov-explanation .frac,.nov-answer .frac{vertical-align:middle;text-indent:0;flex-shrink:0}
+.nov-problem .mixed,.nov-explanation .mixed,.nov-answer .mixed{vertical-align:middle;text-indent:0}
+.nov-answer .figsvg{width:285px;max-width:100%;height:auto;display:block}
+.nov-explanation .fig-full{margin:12px 0}
+.nov-explanation p{overflow-wrap:anywhere}
 /* 分数・数式 */
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-0.45em;margin:0 .15em;font-size:.82em;line-height:1.2;font-family:var(--font-disp);font-weight:700}
 .frac .num{border-bottom:1.6px solid currentColor;padding:0 .25em}
@@ -467,7 +479,8 @@ svg{display:block}
 
 <script src="./record-sync.js?v=20261012"></script>
 <script src="./problem-parts.js?v=20260926-1"></script>
-<script src="./generated-problems.js?v=20260926-1"></script>
+<script src="./generated-presentation.js?v=20261107-clean"></script>
+<script src="./generated-problems.js?v=20261107-clean"></script>
 <script>
 (function(){
 'use strict';
@@ -15066,7 +15079,7 @@ function reveal(){
     '<div class="ans-box"><span class="lbl">答え</span>' + p.answers.map(function(a){ return '<span class="a">' + (a.l ? '<span class="ql">' + a.l + '</span>' : '') + a.v + '</span>'; }).join('') +
     '<span class="elapsed">かかった時間 <b>' + elapsedText + '</b></span></div>' +
     '<div class="expl">' + p.expl + '</div>' + prevCallout(p) + checkCallout(p) +
-    '<div class="srcline"><span>出典：' + esc(p.src) + '</span>' + (p.img ? '<a href="' + esc(p.img) + '">元画像</a>' : '') + '</div>';
+    '<div class="srcline"><span>出典：' + esc(p.src) + '</span>' + (p.sourceImages ? p.sourceImages.map(function(path,i){return '<a href="'+esc(path)+'">元画像'+(p.sourceImages.length>1?' '+(i+1):'')+'を見る</a>';}).join(' ') : (p.img ? '<a href="' + esc(p.img) + '">元画像</a>' : '')) + '</div>';
   $('answer').hidden = false; $('record').hidden = false; $('actions').hidden = true;
   setTimeout(function(){ var a = $('answer'); if (a && a.scrollIntoView) a.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 30);
 }

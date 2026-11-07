@@ -56,6 +56,41 @@ test('the published catalog validates against the original problem IDs', () => {
   assert.doesNotThrow(() => Catalog.validateCatalog(catalog, originalData().problems));
 });
 
+test('November exercises use clean typesetting/SVG, retaining all grading IDs and source links', () => {
+  const catalog=JSON.parse(fs.readFileSync(path.join(__dirname,'../sapix/problems/generated.json'),'utf8'));
+  const compiled=Catalog.compileCatalog(catalog).problems;
+  assert.deepEqual(compiled.map(p=>p.id),catalog.problems.map(p=>p.id));
+  for(const p of compiled){
+    assert.ok(!/<img\b|data:image|assets\/drive\//i.test(p.body+p.figure+p.expl));
+    assert.deepEqual(p.sourceImages,catalog.problems.find(row=>row.id===p.id).sourceImages);
+    assert.ok(p.body.includes('nov-problem'));
+  }
+  for(const prefix of ['1ILEre5IpJ4VF-VyjsRuyLy2TD7wkMQsF','1OPVUJ4q1vHEhtGIUhSznwTnO8RnYzZbJ','1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e','1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX','1k1zv0VGGzd5IVQK2OM_3kPtZPGKcOZAb','1PpUHjBiv88JCvMy_hlt5QAN_y0_gbZow']){
+    compiled.filter(p=>p.id.startsWith('drive-'+prefix+'-')).forEach(p=>assert.match(p.body+p.figure,/<svg/));
+  }
+  const area=compiled.find(p=>p.id==='drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q3');
+  assert.match(area.figure,/Aは左から5m、下から7m/);
+  assert.match(area.figure,/Bは左から3m、下から5m/);
+  assert.match(area.answers[0].v,/17 m²/);
+  const fraction=compiled.find(p=>p.id==='drive-1RDGLCameHBBe7Y5OXOrAFAjRcwZcsf7R-q1');
+  assert.match(fraction.body,/class="frac"/);
+  const wood=compiled.find(p=>p.id==='drive-1qdKmVaRd5rxS0tJaZtx6xqZ0eKKTn6jX-q2');
+  assert.ok(!wood.body.includes('7cm²')&&!wood.body.includes('面積2cm²'));
+});
+
+test('redrawn nearest-point solution polygons have the independently checked areas',()=>{
+  const c=JSON.parse(fs.readFileSync(path.join(__dirname,'../sapix/problems/generated.json'),'utf8'));
+  const all=Catalog.compileCatalog(c).problems;
+  const area=points=>Math.abs(points.reduce((sum,p,i)=>{const n=points[(i+1)%points.length];return sum+p[0]*n[1]-p[1]*n[0];},0))/2;
+  for(const [q,expected] of [[1,18],[2,16.5],[3,17]]){
+    const p=all.find(p=>p.id==='drive-1VMz4T8SW4U7E0VGUKAAyz5l-r_T75c6e-q'+q);
+    const match=/<polygon class="soft" points="([^"]+)"/.exec(p.expl);assert.ok(match);
+    const points=match[1].split(' ').map(pair=>pair.split(',').map(Number));
+    assert.equal(area(points)/(29*29),expected);
+    if(q===3){const cut=/<polygon class="soft2" points="([^"]+)"/.exec(p.expl);assert.ok(cut);assert.equal(area(cut[1].split(' ').map(p=>p.split(',').map(Number)))/(29*29),1);}
+  }
+});
+
 test('compiled additions retain stable IDs and append numbering, units and test tags without changing the base', () => {
   const catalog = fixture();
   const original = {id: 'legacy#1', unit: '平面図形', no: 1};
@@ -84,25 +119,26 @@ test('fixed templates escape all model-supplied markup while retaining paragraph
   problem.subquestions = [{label: attack, text: attack}];
   problem.steps = [{title: attack, text: attack}];
   const result = Catalog.compileCatalog(catalog).problems[0];
-  for (const markup of [result.body, result.expl, result.answers[0].l, result.answers[0].v, result.questions[0].l, result.questions[0].t, result.figure]) {
+  for (const markup of [result.body, result.expl, result.answers[0].l, result.answers[0].v, result.questions[0].l, result.questions[0].t]) {
     assert.ok(!markup.includes('<script') && !markup.includes('</script>') && !markup.includes('<svg'));
     assert.ok(!markup.includes('<img src=x'));
     assert.ok(markup.includes('&lt;img src=x onerror=&quot;window.hacked=1&quot;&gt;'));
     assert.ok(markup.includes('&amp;') && markup.includes('&#39;'));
   }
-  assert.match(result.body, /<br>next<\/p><p>paragraph<\/p>$/);
-  assert.equal((result.figure.match(/<img /g) || []).length, 1);
-  assert.ok(result.figure.includes(`src="${imagePath}"`));
-  assert.ok(result.figure.includes(`href="${imagePath}"`));
+  assert.match(result.body, /<br>next<\/p><p>paragraph<\/p>/);
+  assert.equal(result.figure, '');
+  assert.deepEqual(result.sourceImages, [imagePath]);
 });
 
-test('multiple source images are visible and link to their exact Pages paths', () => {
+test('multiple original photos remain available as reference paths without appearing in the exercise', () => {
   const catalog = fixture();
   const second = imagePath.replace('a'.repeat(64) + '.png', 'b'.repeat(64) + '.webp');
   catalog.problems[0].sourceImages.push(second);
   const result = Catalog.compileCatalog(catalog).problems[0];
-  assert.equal((result.figure.match(/<img /g) || []).length, 2);
-  assert.ok(result.figure.includes(`href="${second}"`));
+  assert.equal(result.figure, '');
+  assert.deepEqual(result.sourceImages, [imagePath,second]);
+  assert.ok(!result.body.includes('<img'));
+  assert.ok(!result.expl.includes('<img'));
   assert.equal(result.img, imagePath);
 });
 
