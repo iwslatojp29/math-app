@@ -6,6 +6,10 @@ SAPIX の「更新」から `/studio/sapix-import` を開き、候補を選ん�
 
 追加教材も問題画面へ元写真を直接表示しません。`sapix/generated-presentation.js` が数式を組版し、確認済みの棒グラフ・図形・マス図などをSVGで再描画します。元画像は従来と同じく、解答・解説の末尾にある参照リンクからだけ開きます。図を新しく追加する場合は、印刷された寸法・角度・点の位置と照合し、書き込みや前問の答えを問題画面に混ぜないでください。問題IDは採点履歴に使うため、表示修正時にも保持します。
 
+11月分の教材表示は、旧教材の実物を見本にしたレビュー済みの文章データ `sapix/november-lesson-data.js` と、固定の構成を持つ `sapix/reproducible-lessons.js` を使用します。すだれ算・筆算は旧教材と同一の `sapix/teaching-tools.js` で描き、文章と式を分けて「考え方 → 計算 → たしかめ → ポイント → 前回の解答」の順に配置します。解答欄の鉛筆の答案と赤の訂正を区別し、不鮮明な答案・赤で上書きされた答案は推測で前回の解答へ入れません。前回の解答は、現在の採点履歴とは別の資料由来の情報です。
+
+教材表示を追加・再生成する際は、旧 `約数_41A-16_P9(4)(5)#2` の最小公倍数など、完成済みの実例と原画像をモデルへ提示し、問題条件・正解・IDを固定したまま文章データを作成します。モデル出力にHTMLやSVGの実行コードを任せず、共通の描画部品へ渡します。文章が正しくても、すだれ算や図・ポイントが欠けていれば表示の完成とは扱いません。`tests/sapix-teaching-style.test.cjs` は旧部品との一致、2数だけ共通因数が残るすだれ算、11月63問の網羅性、答案の読み違い、ブラウザ依存ファイルの順序を検証します。最後にPC・タブレット・スマートフォンの実画面と公開ページも確認します。
+
 対象は固定 Drive フォルダ `1f1AhUw8Yciyye8V1_eZbvTBGlpQU0EyO` とその子フォルダにある PDF・PNG・JPEG・WebP です。初回の日時判定は **2026年9月24日 0:00 JST 以降のファイル作成日時**を使います。古いファイルを移動した日時は判定できません。取り込み台帳の Drive ID で再取り込みを防ぎます。
 
 一度に10ファイルまで選択できます。最新の利用可能な Claude Fable を Models API で調べ、確認時のモデルと資料の版をジョブへ固定します。`sapix-import.yml` が小問ごとに抽出・検算し、固定テンプレートに渡す JSON と画像を単一コミットで追加します。秘密値・中間結果・元 PDF を Actions artifact に残しません。原画像は公開される教材の出典画像として保存します。
@@ -16,7 +20,7 @@ SAPIX の「更新」から `/studio/sapix-import` を開き、候補を選ん�
 
 ```sh
 python -m unittest discover -s automation/tests -p test_sapix_import.py
-node --test tests/sapix-generated-problems.test.cjs tests/sapix-problem-parts.test.cjs
+node --test tests/sapix-generated-problems.test.cjs tests/sapix-problem-parts.test.cjs tests/sapix-teaching-style.test.cjs
 node --test proxy/test/sapix-import.test.mjs
 ```
 

@@ -294,6 +294,8 @@ svg{display:block}
 .nov-answer .figsvg{width:285px;max-width:100%;height:auto;display:block}
 .nov-explanation .fig-full{margin:12px 0}
 .nov-explanation p{overflow-wrap:anywhere}
+.nov-explanation .calc{white-space:normal;display:inline-block;max-width:100%;overflow-wrap:anywhere}
+.callout.nov-previous>div>span{white-space:normal!important}
 /* 分数・数式 */
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-0.45em;margin:0 .15em;font-size:.82em;line-height:1.2;font-family:var(--font-disp);font-weight:700}
 .frac .num{border-bottom:1.6px solid currentColor;padding:0 .25em}
@@ -479,8 +481,11 @@ svg{display:block}
 
 <script src="./record-sync.js?v=20261012"></script>
 <script src="./problem-parts.js?v=20260926-1"></script>
-<script src="./generated-presentation.js?v=20261107-clean"></script>
-<script src="./generated-problems.js?v=20261107-clean"></script>
+<script src="./teaching-tools.js?v=20261107b"></script>
+<script src="./november-lesson-data.js?v=20261107b"></script>
+<script src="./reproducible-lessons.js?v=20261107b"></script>
+<script src="./generated-presentation.js?v=20261107b"></script>
+<script src="./generated-problems.js?v=20261107b"></script>
 <script>
 (function(){
 'use strict';
@@ -15062,7 +15067,7 @@ function prevCallout(p){
   var items = (p.prev || []).map(function(x){
     return '<span style="white-space:nowrap">' + (x.l ? x.l + ' ' : '') + x.a + ' ' + (x.ok ? '<b style="color:var(--ok)">〇</b>' : '<b style="color:var(--ng)">×</b>' + (x.c ? '<span style="color:var(--muted)">（正解 ' + x.c + '）</span>' : '')) + '</span>';
   }).join('　');
-  return '<div class="callout miss"><span class="t">前回の解答</span>' + (items ? '<div>' + items + '</div>' : '') + (p.note ? '<div style="margin-top:6px">' + p.note + '</div>' : '') + '</div>';
+  return '<div class="callout miss' + (p.lessonRevision ? ' nov-previous' : '') + '"><span class="t">前回の解答</span>' + (items ? '<div>' + items + '</div>' : '') + (p.note ? '<div style="margin-top:6px">' + p.note + '</div>' : '') + '</div>';
 }
 function checkCallout(p){
   if (!p.check) return '';

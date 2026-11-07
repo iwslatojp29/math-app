@@ -1,9 +1,9 @@
 /* Authored, clean teaching diagrams. Source photographs are reference-only.
    Stable problem IDs and grading data are never changed by this presentation. */
 (function(root,factory){
-  if(typeof module==='object'&&module.exports) module.exports=factory();
-  else root.SapixGeneratedPresentation=factory();
-})(typeof globalThis!=='undefined'?globalThis:this,function(){
+  if(typeof module==='object'&&module.exports) module.exports=factory(require('./reproducible-lessons.js'));
+  else root.SapixGeneratedPresentation=factory(root.SapixReproducibleLessons);
+})(typeof globalThis!=='undefined'?globalThis:this,function(Lessons){
   'use strict';
   function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function fraction(n,d){return '<span class="frac" aria-label="'+esc(d)+'分の'+esc(n)+'"><span class="num">'+esc(n)+'</span><span class="den">'+esc(d)+'</span></span>';}
@@ -184,6 +184,7 @@
       if(file==='1umWZASaX6EC_KvIeauzMdj6tl2sUZdFi'||file==='1tWx4goIq4swIkoDt7vQKvqakVUZZZaXi')solution=lshape(false,true);
     }
     if(solution)out.expl='<h3>図で考えよう</h3>'+solution+out.expl;
+    if(Lessons)out=Lessons.render(p,out,{format:format,solution:solution});
     out.body='<div class="nov-problem">'+out.body+'</div>';
     out.answers=out.answers.map(a=>({l:a.l,v:'<span class="nov-answer">'+a.v+'</span>'}));
     out.expl='<div class="nov-explanation">'+out.expl+'</div>';
